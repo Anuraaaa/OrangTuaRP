@@ -94,6 +94,7 @@ enum E_LOGLEVEL
 #include <mapandreas>
 #include <notify>
 #include <actor_plus>
+#include <LiveCam>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);

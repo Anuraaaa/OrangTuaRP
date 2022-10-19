@@ -39145,3 +39145,122 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [23:08:05] [CMD] Havoc_Redmond: /veh sulta
 [23:08:05] *** Streamer Plugin: Streamer_SetFloatData: Invalid ID specified.
 [23:08:06] [CMD] Havoc_Redmond: /destroyveh
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[23:45:23] password = ""  (string)
+[23:45:23] weburl = "www.sa-mp.com"  (string)
+[23:45:23] 
+[23:45:23] Server Plugins
+[23:45:23] --------------
+[23:45:23]  Loading plugin: crashdetect
+[23:45:23]   CrashDetect plugin 4.20
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: pawnraknet
+[23:45:23] [Pawn.RakNet] plugin v1.5.1 loading...
+[23:45:23] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: streamer
+[23:45:23] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: sscanf
+[23:45:23] 
+[23:45:23]  ===============================
+[23:45:23] 
+[23:45:23]       sscanf plugin loaded.     
+[23:45:23] 
+[23:45:23]          Version: 2.13.1
+[23:45:23] 
+[23:45:23]    (c) 2022 Alex "Y_Less" Cole  
+[23:45:23] 
+[23:45:23]  ===============================
+[23:45:23] 
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: mysql
+[23:45:23]  >> plugin.mysql: R41-4 successfully loaded.
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: samp_bcrypt
+[23:45:23] [SampBcrypt] [info]: Version: 0.3.4
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: samp-compat
+[23:45:23]   -- samp-compat for 0.3.7-R2 initialized
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: chrono
+[23:45:23]   Loaded.
+[23:45:23]  Loading plugin: mapandreas
+[23:45:23]   Loaded.
+[23:45:23]  Loaded 9 plugins.
+
+[23:45:23] 
+[23:45:23] Filterscripts
+[23:45:23] ---------------
+[23:45:23]   Loading filterscript 'PLE.amx'...
+[23:45:23]  
+[23:45:23]  ========================================== 
+[23:45:23]  |                                        | 
+[23:45:23]  |    Generating code, this may take a    | 
+[23:45:23]  |           little bit of time.          | 
+[23:45:23]  |                                        | 
+[23:45:23]  |             Please wait...             | 
+[23:45:23]  |                                        | 
+[23:45:23]  ========================================== 
+[23:45:23]  |                                        | 
+[23:45:23]  | Note that this code generation works   | 
+[23:45:23]  | best with the JIT plugin, which you    | 
+[23:45:23]  | are not currently using.  Get it here: | 
+[23:45:23]  |                                        | 
+[23:45:23]  |        https://git.io/jit-plugin       | 
+[23:45:23]  |                                        | 
+[23:45:23]  ========================================== 
+[23:45:23]  
+[23:45:23]  
+[23:45:23]  
+[23:45:23]  
+[23:45:23]  ========================================== 
+[23:45:23]  |                                        | 
+[23:45:23]  |         YSI version 5.05.0301          | 
+[23:45:23]  |         By Alex "Y_Less" Cole          | 
+[23:45:23]  |                                        | 
+[23:45:23]  | Unable to check the latest YSI version | 
+[23:45:23]  | - please watch the forums and github:  | 
+[23:45:23]  |                                        | 
+[23:45:23]  |   https://git.io/5.x                   | 
+[23:45:23]  |                                        | 
+[23:45:23]  ========================================== 
+[23:45:23]  
+[23:45:23] 
+
+[23:45:23] ======================================================================================
+[23:45:23] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[23:45:23] ||  			   	       Version 1.0				    ||
+[23:45:23] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[23:45:23] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[23:45:23] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[23:45:23] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[23:45:23] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[23:45:23] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[23:45:23] ||										    ||
+[23:45:23] =======================================================================================
+[23:45:23]   Loaded 1 filterscripts.
+
