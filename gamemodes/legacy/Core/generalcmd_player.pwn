@@ -34,6 +34,27 @@ CMD:selltostate(playerid, params[]) {
 	return 1;
 }
 
+CMD:dice(playerid, params[])
+{
+    static
+        dice;
+
+    if(sscanf(params, "d", dice))
+        return SendSyntaxMessage(playerid, "/dice [1,2,3,4]");
+
+    if(dice < 1 || dice > 4)
+        return SendErrorMessage(playerid, "Invalid dice value.");
+
+    switch(dice)
+    {
+        case 1: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d.", ReturnName(playerid), (random(6) + 1));
+        case 2: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1));
+        case 3: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1));
+        case 4: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1), (random(6) + 1));
+    }
+    return 1;
+}
+
 CMD:rcp(playerid, params[]) {
 
 	new vehicleid = GetPlayerVehicleID(playerid);
