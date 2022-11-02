@@ -84,7 +84,7 @@ CMD:taxi(playerid, params[])
 			SetPlayerColor(playerid, COLOR_YELLOW);
 			SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You're now onduty as {FFFF00}Taxi Driver {FFFFFF}you will receive any calls.");
 			CreateTaxi(playerid);
-			PlayerTextDrawSetString(playerid, FARETD[playerid], "Fare: ~g~$0.50");
+			PlayerTextDrawSetString(playerid, FARETD[playerid], "Fare: ~g~$2,50");
 		}
 		else
 		{

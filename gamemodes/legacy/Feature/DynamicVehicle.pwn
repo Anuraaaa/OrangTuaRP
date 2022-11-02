@@ -81,55 +81,97 @@ Vehicle_SyncText(vehicleid, idx) {
 	if(!IsValidDynamicObject(VehicleData[vehicleid][vToy][idx]))
 		return 0;
 
+	print("Sync Text called");
+	SetDynamicObjectMaterial(VehicleData[vehicleid][vToy][idx], 0, VehicleData[vehicleid][vToyID][idx], "none", "none", RGBAToARGB(ColorList[VehicleData[vehicleid][vToyColor][idx]]));
 	SetDynamicObjectMaterialText(VehicleData[vehicleid][vToy][idx], 0, "ANJING", 130, "Arial", VehicleData[vehicleid][vToySize][idx], 1, RGBAToARGB(VehicleData[vehicleid][vToyColor][idx]), 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 	return 1;
 }
-Vehicle_EditObject(playerid, vehicleid, idx)
+Vehicle_ObjectEdit(playerid, vehicleid, slot, bool:text = false)
 {
-    if(Iter_Contains(Vehicle, vehicleid))
-    {
-        SetVehicleZAngle(vehicleid, 0.0);
+	if(Iter_Contains(Vehicle, vehicleid))
+	{
+        if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+            DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
 
-        if(IsValidDynamicObject(VehicleData[vehicleid][vToy][idx]))
-            DestroyDynamicObject(VehicleData[vehicleid][vToy][idx]);
+        new 
+            Float:x,
+            Float:y,
+            Float:z,
+            Float:rx = VehicleObjects[vehicleid][slot][vehObjectPosRX],
+            Float:ry = VehicleObjects[vehicleid][slot][vehObjectPosRY],
+            Float:rz = VehicleObjects[vehicleid][slot][vehObjectPosRZ]
+        ;
 
-		VehicleData[vehicleid][vToy][idx] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+        GetVehiclePos(vehicleid, x, y, z);
+        VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
+        VehicleObjects[vehicleid][slot][vehObject] = CreateDynamicObject(VehicleObjects[vehicleid][slot][vehObjectModel], x, y, z, rx, ry, rz);   
 
-        new Float:x, Float:y, Float:z;
-        GetVehiclePos(vehicleid, x,y,z);
-        VehicleData[vehicleid][vToy][idx] = CreateDynamicObject(VehicleData[vehicleid][vToyID][idx], x, y, z, 0.0, 0.0, 0.0);
-
-		if(VehicleData[vehicleid][vToyType][idx] == VEHICLE_TOY_TEXT) {
-			Vehicle_SyncText(vehicleid, idx);
-		}
-        Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vehicleid][vToy][idx], E_STREAMER_DRAW_DISTANCE, 15.0);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vehicleid][vToy][idx], E_STREAMER_STREAM_DISTANCE, 15.0);
-
-        PlayerData[playerid][pEditType] = EDIT_VEHICLE;
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 15);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 15);
+        
         PlayerData[playerid][pEditing] = vehicleid;
-
-        EditDynamicObject(playerid, VehicleData[vehicleid][vToy][idx]);
+        PlayerData[playerid][pListitem] = slot;
+        PlayerData[playerid][pEditType] = EDIT_VEHICLE;
+        if(text) 
+        {
+            Vehicle_ObjectTextSync(vehicleid, slot);
+        }
+        EditDynamicObject(playerid, VehicleObjects[vehicleid][slot][vehObject]);
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
-stock Vehicle_RemoveObject(vehicleid) {
+FUNC::Vehicle_ObjectDB(vehicleid, slot)
+{
+	if(VehicleObjects[vehicleid][slot][vehObjectExists] == false)
+		return 0;
 
-	for(new idx = 0; idx < 5; idx ++)
+	VehicleObjects[vehicleid][slot][vehObjectID] = cache_insert_id();
+
+
+	Vehicle_ObjectSave(vehicleid, slot);
+	return 1;
+}
+
+GetVehObjectNameByModel(model)
+{
+    new
+        name[32];
+
+    for (new i = 0; i < sizeof(BodyWork); i ++) if(BodyWork[i][Model] == model) {
+        strcat(name, BodyWork[i][Name]);
+
+        break;
+    }
+    return name;
+}
+
+Vehicle_RemoveObject(vehicleid) {
+
+
+	for(new slot = 0; slot < MAX_VEHICLE_OBJECT; slot++)
 	{
-		if(IsValidDynamicObject(VehicleData[vehicleid][vToy][idx])) {
+		if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+			DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
 
-			DestroyDynamicObject(VehicleData[vehicleid][vToy][idx]);
-			VehicleData[vehicleid][vToy][idx] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
-		}
+		VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
+
+		VehicleObjects[vehicleid][slot][vehObjectModel] = 0;
+		VehicleObjects[vehicleid][slot][vehObjectExists] = false;
+		
+		VehicleObjects[vehicleid][slot][vehObjectColor] = 1;
+
+		VehicleObjects[vehicleid][slot][vehObjectPosX] = VehicleObjects[vehicleid][slot][vehObjectPosY] = VehicleObjects[vehicleid][slot][vehObjectPosZ] = 0.0;
+		VehicleObjects[vehicleid][slot][vehObjectPosRX] = VehicleObjects[vehicleid][slot][vehObjectPosRY] = VehicleObjects[vehicleid][slot][vehObjectPosRZ] = 0.0;
 	}
+	for(new idx = 0; idx < 3; idx++) {
 
-	for(new idx = 0; idx < 2; idx++) {
-		if(IsValidDynamicObject(VehicleData[vehicleid][vNeonObject][idx])) {
-			DestroyDynamicObject(VehicleData[vehicleid][vNeonObject][idx]);
-			VehicleData[vehicleid][vNeonObject][idx] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+		for(new i = 0; i < 2; i++) {
+			if(IsValidDynamicObject(NeonObject[vehicleid][idx][i])) {
+				DestroyDynamicObject(NeonObject[vehicleid][idx][i]);
+				NeonObject[vehicleid][idx][i] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+			}
 		}
 	}
 	return 1;
@@ -154,7 +196,7 @@ stock Vehicle_Delete(vid, bool:database = false)
 	if(!Iter_Contains(Vehicle, vid))
 		return 0;
 
-	Vehicle_RemoveCrate(vid);
+	Vehicle_RemoveObject(vid);
 
 	if(VehicleData[vid][vTireLock]) {
 		stop VehicleData[vid][vTireLockTimer];
@@ -196,6 +238,28 @@ stock Vehicle_Delete(vid, bool:database = false)
 	return 1;
 }
 
+ShowVehicleAttachmentMenu(playerid, vehicleid) {
+
+	new string[512];
+	for (new i = 0; i < MAX_VEHICLE_OBJECT; i++)
+	{
+		if(VehicleObjects[vehicleid][i][vehObjectExists])
+		{
+			if(VehicleObjects[vehicleid][i][vehObjectType] == OBJECT_TYPE_BODY) {
+				
+				format(string, sizeof(string), "%s"WHITE"%d). %s\n", string, i + 1, GetVehObjectNameByModel(VehicleObjects[vehicleid][i][vehObjectModel]), VehicleObjects[vehicleid][i][vehObjectModel]);
+			}
+			else {
+				format(string, sizeof(string), "%s"WHITE"%d). %s\n", string, i + 1, VehicleObjects[vehicleid][i][vehObjectText]);
+			}
+		}
+		else  {
+			format(string, sizeof(string), "%s"GREY"Empty slot\n", string);
+		}
+	}
+	ShowPlayerDialog(playerid, DIALOG_MODSHOP, DIALOG_STYLE_LIST, "Vehicle Attachment", string, "Select", "Close");
+	return 1;
+}
 Vehicle_Count(playerid)
 {
 	new Cache:execute, total = 0;
@@ -483,6 +547,7 @@ stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, co
 		VehicleData[vehicleid][vEngineUpgrade] = 0;
 		VehicleData[vehicleid][vBodyUpgrade] = 0;
 		VehicleData[vehicleid][vGarageID] = -1;
+		VehicleData[vehicleid][vNeonStatus] = false;
 		
 		Vehicle_SetState(vehicleid, VEHICLE_STATE_SPAWNED);
 		Vehicle_SetType(vehicleid, VEHICLE_TYPE_ADMIN);
@@ -507,7 +572,7 @@ stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, co
 		if(database)
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `vehicle` (`vehModel`) VALUES('%d')", VehicleData[vehicleid][vModel]), "Vehicle_OnVehicleCreated", "d", vehicleid);
 	
-		foreach(new i : Vehicle) if(IsVehicleInRangeOfVehicle(i, vehicleid, 7.0, false) && (Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL)) {
+		foreach(new i : Vehicle) if(IsVehicleInRangeOfVehicle(i, vehicleid, 5.0, false) && (Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL)) {
 
 			if(vehicleid == i)
 				continue;
@@ -899,25 +964,6 @@ Vehicle_SyncObject(vehicleid, slot)
     return 0;
 }
 
-stock Vehicle_AttachObject(i) {
-
-	if(!IsValidVehicle(i))	
-		return 0;
-		
-	for(new idx = 0; idx < 5; idx ++)
-	{
-		if(VehicleData[i][vToyID][idx] != 0)
-		{
-			VehicleData[i][vToy][idx] = CreateDynamicObject(VehicleData[i][vToyID][idx], VehicleData[i][vToyPosX][idx], VehicleData[i][vToyPosY][idx], VehicleData[i][vToyPosZ][idx], VehicleData[i][vToyRotX][idx], VehicleData[i][vToyRotY][idx], VehicleData[i][vToyRotZ][idx],  -1, -1, -1, 50.0, 0.0);
-			
-			if(VehicleData[i][vToyType][idx] == VEHICLE_TOY_TEXT) {
-				Vehicle_SyncText(i, idx);
-			}
-			AttachDynamicObjectToVehicle(VehicleData[i][vToy][idx], i, VehicleData[i][vToyPosX][idx], VehicleData[i][vToyPosY][idx], VehicleData[i][vToyPosZ][idx], VehicleData[i][vToyRotX][idx], VehicleData[i][vToyRotY][idx], VehicleData[i][vToyRotZ][idx]);
-		}
-	}
-	return 1;
-}
 FUNC::OnVehicleLoaded() {
 
 	new count = cache_num_rows(), str[156];
@@ -1062,6 +1108,8 @@ FUNC::OnVehicleLoaded() {
 				cache_get_value_name_int(z, "vehBodyUpgrade", VehicleData[i][vBodyUpgrade]);
 				cache_get_value_name_int(z, "vehEngineUpgrade", VehicleData[i][vEngineUpgrade]);
 
+				cache_get_value_name_int(z, "vehNeon", VehicleData[i][vNeonColor]);
+
 				mysql_tquery(sqlcon, sprintf("SELECT * FROM `crates` WHERE `Vehicle` = '%d'", VehicleData[i][vID]), "OnLoadCrate", "d", i);
 
 				SetVehicleNumberPlate(i, VehicleData[i][vPlate]);
@@ -1075,8 +1123,6 @@ FUNC::OnVehicleLoaded() {
 
 				UpdateVehicleDamageStatus(i, VehicleData[i][vDamage][0], VehicleData[i][vDamage][1], VehicleData[i][vDamage][2], VehicleData[i][vDamage][3]);
 				LockVehicle(i, VehicleData[i][vLocked]);
-
-				Vehicle_AttachObject(i);
 
 				VehicleData[i][vKillerID] = INVALID_PLAYER_ID;
 
@@ -1103,7 +1149,9 @@ FUNC::OnVehicleLoaded() {
 				mysql_format(sqlcon, str, sizeof(str), "SELECT * FROM `carstorage` WHERE `ID` = '%d' LIMIT 7", VehicleData[i][vID]);
 				mysql_tquery(sqlcon, str, "OnLoadCarStorage", "d", i);
 
-				foreach(new vehicleid : Vehicle) if(IsVehicleInRangeOfVehicle(vehicleid, i, 7.0, false) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)) {
+				mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle_object` WHERE `vehicle`='%d' ORDER BY `id` DESC LIMIT 5", VehicleData[i][vID]), "Vehicle_ObjectLoad", "d", i);
+
+				foreach(new vehicleid : Vehicle) if(IsVehicleInRangeOfVehicle(vehicleid, i, 5.0, false) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)) {
 
 					if(vehicleid == i)
 						continue;
@@ -1128,9 +1176,9 @@ FUNC::OnVehicleLoaded() {
 	return 1;
 }
 
-NotifyVehicleOwner(vehicleid, text[]) { 
+NotifyVehicleOwner(vehicleid, text[], color = -1) { 
 	foreach(new i : Player) if(Vehicle_IsOwner(i, vehicleid)) {
-		SendClientMessage(i, -1, text);
+		SendClientMessage(i, color, text);
 		break;
 	}
 	return 1;
@@ -1267,7 +1315,8 @@ stock Vehicle_Save(vehicleid, bool:extraid = false)
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehRentalTime`='%d', ", cQuery, VehicleData[vehicleid][vRentTime]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehInsurance`='%d', ", cQuery, VehicleData[vehicleid][vInsurance]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehInsuranced`='%d', ", cQuery, VehicleData[vehicleid][vInsuranced]);
-		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehInsuTime`='%d' ", cQuery, VehicleData[vehicleid][vInsuTime]);
+		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehInsuTime`='%d', ", cQuery, VehicleData[vehicleid][vInsuTime]);
+		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehNeon`='%d' ", cQuery, VehicleData[vehicleid][vNeonColor]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%sWHERE `vehID` = '%d' LIMIT 1;", cQuery, VehicleData[vehicleid][vID]);
 		mysql_tquery(sqlcon, cQuery);
 	}
@@ -1352,7 +1401,7 @@ stock IsVehicleSupportsNeonLights(modelid){
 	return !(NeonOffsetData[modelid][NeonX] == 0.0 && NeonOffsetData[modelid][NeonY] == 0.0 && NeonOffsetData[modelid][NeonZ] == 0.0);
 }
 
-stock Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED){
+stock Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED, slotid = 0){
 
 	if(!IsValidVehicle(vehicleid)) 
 		return 0;
@@ -1363,24 +1412,20 @@ stock Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED){
 	modelid -= 400;
 	
 	for(new i = 0; i < 2; i++) {
-		if(IsValidDynamicObject(VehicleData[vehicleid][vNeonObject][i])) {
-			DestroyDynamicObject(VehicleData[vehicleid][vNeonObject][i]);
-			VehicleData[vehicleid][vNeonObject][i] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+		if(IsValidDynamicObject(NeonObject[vehicleid][slotid][i])) {
+			DestroyDynamicObject(NeonObject[vehicleid][slotid][i]);
+			NeonObject[vehicleid][slotid][i] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
 		}
 	}
 	
 	if(!enable) 
-		return 1;
+		return 0;
 
-	if(18647 <= color <= 18652)
-	{
-		VehicleData[vehicleid][vNeonObject][0] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
-		VehicleData[vehicleid][vNeonObject][1] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
-		AttachDynamicObjectToVehicle(VehicleData[vehicleid][vNeonObject][0],vehicleid,NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
-		AttachDynamicObjectToVehicle(VehicleData[vehicleid][vNeonObject][1],vehicleid,-NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
-		return 1;
-	}
-	return 0;
+	NeonObject[vehicleid][slotid][0] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
+	NeonObject[vehicleid][slotid][1] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
+	AttachDynamicObjectToVehicle(NeonObject[vehicleid][slotid][0],vehicleid,NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
+	AttachDynamicObjectToVehicle(NeonObject[vehicleid][slotid][1],vehicleid,-NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
+	return 1;
 }
 
 
@@ -1549,4 +1594,235 @@ public OnCarStorageAdd(carid, itemid)
 {
 	CarStorage[carid][itemid][cItemID] = cache_insert_id();
 	return 1;
+}
+
+FUNC::Vehicle_ObjectLoad(vehicleid)
+{
+	if(cache_num_rows())
+	{
+		for(new slot = 0; slot != cache_num_rows(); slot++)
+        { 
+            if(!VehicleObjects[vehicleid][slot][vehObjectExists])
+            {
+                VehicleObjects[vehicleid][slot][vehObjectExists] = true;
+
+                cache_get_field_content(slot, "text", VehicleObjects[vehicleid][slot][vehObjectText], 32);
+                cache_get_field_content(slot, "font", VehicleObjects[vehicleid][slot][vehObjectFont], 32);			
+
+                VehicleObjects[vehicleid][slot][vehObjectID] 		        = cache_get_field_int(slot, "id");
+                VehicleObjects[vehicleid][slot][vehObjectVehicleIndex] 		= cache_get_field_int(slot, "vehicle");
+                VehicleObjects[vehicleid][slot][vehObjectType] 		    	= cache_get_field_int(slot, "type");
+                VehicleObjects[vehicleid][slot][vehObjectModel] 		    = cache_get_field_int(slot, "model");
+				VehicleObjects[vehicleid][slot][vehObjectColor]				= cache_get_field_int(slot, "color");
+
+                VehicleObjects[vehicleid][slot][vehObjectFontColor] 	    = cache_get_field_int(slot, "fontcolor");
+                VehicleObjects[vehicleid][slot][vehObjectFontSize] 	    	= cache_get_field_int(slot, "fontsize");
+
+                VehicleObjects[vehicleid][slot][vehObjectPosX] 				= cache_get_field_float(slot, "x");
+                VehicleObjects[vehicleid][slot][vehObjectPosY] 				= cache_get_field_float(slot, "y");
+                VehicleObjects[vehicleid][slot][vehObjectPosZ] 				= cache_get_field_float(slot, "z");
+
+                VehicleObjects[vehicleid][slot][vehObjectPosRX] 		    = cache_get_field_float(slot, "rx");
+                VehicleObjects[vehicleid][slot][vehObjectPosRY] 		    = cache_get_field_float(slot, "ry");
+                VehicleObjects[vehicleid][slot][vehObjectPosRZ] 		    = cache_get_field_float(slot, "rz");
+
+                Vehicle_AttachObject(vehicleid, slot);
+            }
+        }
+	}
+	return 1;
+}
+
+Vehicle_ObjectSave(vehicleid, slot)
+{
+	if(VehicleObjects[vehicleid][slot][vehObjectExists])
+    {
+        new query[500];
+
+        mysql_format(sqlcon, query, sizeof(query), "UPDATE `vehicle_object` SET `model`='%d', `color`='%d',`type`='%d', `x`='%f',`y`='%f',`z`='%f', `rx`='%f',`ry`='%f',`rz`='%f'",
+            VehicleObjects[vehicleid][slot][vehObjectModel],
+            VehicleObjects[vehicleid][slot][vehObjectColor],
+            VehicleObjects[vehicleid][slot][vehObjectType],
+            VehicleObjects[vehicleid][slot][vehObjectPosX], 
+            VehicleObjects[vehicleid][slot][vehObjectPosY], 
+            VehicleObjects[vehicleid][slot][vehObjectPosZ], 
+            VehicleObjects[vehicleid][slot][vehObjectPosRX],
+            VehicleObjects[vehicleid][slot][vehObjectPosRY], 
+            VehicleObjects[vehicleid][slot][vehObjectPosRZ]
+        );
+
+        mysql_format(sqlcon, query, sizeof(query), "%s, `text`='%e',`font`='%e', `fontsize`='%d',`fontcolor`='%d' WHERE `id`='%d' AND `vehicle` = '%d'",
+            query, 
+            VehicleObjects[vehicleid][slot][vehObjectText], 
+            VehicleObjects[vehicleid][slot][vehObjectFont], 
+            VehicleObjects[vehicleid][slot][vehObjectFontSize], 
+            VehicleObjects[vehicleid][slot][vehObjectFontColor], 
+            VehicleObjects[vehicleid][slot][vehObjectID],
+			VehicleObjects[vehicleid][slot][vehObjectVehicleIndex]
+        );
+        
+        mysql_tquery(sqlcon, query);
+    }
+	return 1;
+}
+
+Vehicle_ObjectAdd(playerid, vehicleid, model, type)
+{
+    if(Iter_Contains(Vehicle, vehicleid))
+	{
+
+		for(new slot = 0; slot < MAX_VEHICLE_OBJECT; slot++)
+		{ 
+			if(VehicleObjects[vehicleid][slot][vehObjectExists] == false)
+			{
+				VehicleObjects[vehicleid][slot][vehObjectExists] = true;
+
+				VehicleObjects[vehicleid][slot][vehObjectType] = type;
+				VehicleObjects[vehicleid][slot][vehObjectVehicleIndex] = VehicleData[vehicleid][vID];
+				VehicleObjects[vehicleid][slot][vehObjectModel] = model;		
+
+				VehicleObjects[vehicleid][slot][vehObjectColor] = 0;
+
+				VehicleObjects[vehicleid][slot][vehObjectPosX] = 0.0;
+				VehicleObjects[vehicleid][slot][vehObjectPosY] = 0.0;
+				VehicleObjects[vehicleid][slot][vehObjectPosZ] = 0.0;
+
+				VehicleObjects[vehicleid][slot][vehObjectPosRX] = 0.0;
+				VehicleObjects[vehicleid][slot][vehObjectPosRY] = 0.0;
+				VehicleObjects[vehicleid][slot][vehObjectPosRZ] = 0.0;
+
+				if(VehicleObjects[vehicleid][slot][vehObjectType] == OBJECT_TYPE_TEXT)
+				{
+					format(VehicleObjects[vehicleid][slot][vehObjectText], 32, "TEXT");
+					format(VehicleObjects[vehicleid][slot][vehObjectFont], 24, "Arial");
+					VehicleObjects[vehicleid][slot][vehObjectFontColor] = 1;
+					VehicleObjects[vehicleid][slot][vehObjectFontSize] = 24; 
+					Vehicle_ObjectUpdate(vehicleid, slot);
+					Vehicle_AttachObject(vehicleid, slot);
+					Vehicle_ObjectSave(vehicleid, slot);
+				}
+
+				if(VehicleObjects[vehicleid][slot][vehObjectType] == OBJECT_TYPE_BODY)
+					Vehicle_ObjectEdit(playerid, vehicleid, slot);
+
+				mysql_tquery(sqlcon, sprintf("INSERT INTO `vehicle_object` (`vehicle`) VALUES ('%d')", VehicleObjects[vehicleid][slot][vehObjectVehicleIndex]), "Vehicle_ObjectDB", "dd", vehicleid, slot);
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+Vehicle_AttachObject(vehicleid, slot)
+{
+    if(Iter_Contains(Vehicle, vehicleid))
+	{
+        new
+            model       = VehicleObjects[vehicleid][slot][vehObjectModel],
+            Float:x     = VehicleObjects[vehicleid][slot][vehObjectPosX],
+            Float:y     = VehicleObjects[vehicleid][slot][vehObjectPosY],
+            Float:z     = VehicleObjects[vehicleid][slot][vehObjectPosZ],
+            Float:rx    = VehicleObjects[vehicleid][slot][vehObjectPosRX],
+            Float:ry    = VehicleObjects[vehicleid][slot][vehObjectPosRY],
+            Float:rz    = VehicleObjects[vehicleid][slot][vehObjectPosRZ],
+            Float:vposx,
+            Float:vposy,
+            Float:vposz
+        ;
+
+        if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+            DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
+
+        VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
+
+        GetVehiclePos(vehicleid, vposx, vposy, vposz);
+
+        VehicleObjects[vehicleid][slot][vehObject] = CreateDynamicObject(model, vposx, vposy, vposz, rx, ry, rz);
+
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 50.0);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 50.0);
+
+        if(VehicleObjects[vehicleid][slot][vehObjectType] == OBJECT_TYPE_BODY)
+        {
+            Vehicle_ObjectColorSync(vehicleid, slot);
+        }
+        else 
+        {
+            Vehicle_ObjectTextSync(vehicleid, slot);
+        }
+
+        AttachDynamicObjectToVehicle(VehicleObjects[vehicleid][slot][vehObject], vehicleid, x, y, z, rx, ry, rz);
+        // printf("Vehicle ID : %d Vehicle ID 2 : %d Slot : %d Real X : %.2f Y: %.2f Z: %.2f RX : %.2f RY : %.2f RZ : %.2f", vehicleid, VehicleData[vehicleid][vehVehicleID], slot, x, y, z, rx, ry, rz);
+        Vehicle_ObjectUpdate(vehicleid, slot);
+        return 1;
+    }
+    return 0;
+}
+Vehicle_ObjectColorSync(vehicleid, slot)
+{
+    if(Iter_Contains(Vehicle, vehicleid))
+	{
+        SetDynamicObjectMaterial(VehicleObjects[vehicleid][slot][vehObject], 0, VehicleObjects[vehicleid][slot][vehObjectModel], "none", "none", RGBAToARGB(ColorList[VehicleObjects[vehicleid][slot][vehObjectColor]]));
+        Vehicle_ObjectSave(vehicleid, slot);
+	    return 1;
+    }
+    return 0;
+}
+Vehicle_ObjectTextSync(vehicleid, slot)
+{
+    if(Iter_Contains(Vehicle, vehicleid))
+	{
+        SetDynamicObjectMaterialText(VehicleObjects[vehicleid][slot][vehObject], 0, VehicleObjects[vehicleid][slot][vehObjectText], 130, VehicleObjects[vehicleid][slot][vehObjectFont], VehicleObjects[vehicleid][slot][vehObjectFontSize], 1, RGBAToARGB(ColorList[VehicleObjects[vehicleid][slot][vehObjectFontColor]]), 0, OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
+        Vehicle_ObjectSave(vehicleid, slot);
+        return 1;
+    }
+    return 0;
+}
+Vehicle_ObjectUpdate(vehicleid, slot)
+{   
+	if(Iter_Contains(Vehicle, vehicleid))
+	{
+        new
+            Float:x     = VehicleObjects[vehicleid][slot][vehObjectPosX],
+            Float:y     = VehicleObjects[vehicleid][slot][vehObjectPosY],
+            Float:z     = VehicleObjects[vehicleid][slot][vehObjectPosZ],
+            Float:rx    = VehicleObjects[vehicleid][slot][vehObjectPosRX],
+            Float:ry    = VehicleObjects[vehicleid][slot][vehObjectPosRY],
+            Float:rz    = VehicleObjects[vehicleid][slot][vehObjectPosRZ]
+        ;
+
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_X, x);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_Y, y);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_Z, z);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_X, rx);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_Y, ry);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_Z, rz);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 15);
+        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 15);
+        return 1;
+    }
+    return 0;
+}
+
+Vehicle_ObjectDelete(vehicleid, slot)
+{
+    if(Iter_Contains(Vehicle, vehicleid))
+	{
+        if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+            DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
+
+        VehicleObjects[vehicleid][slot ][vehObject] = INVALID_OBJECT_ID;
+
+        VehicleObjects[vehicleid][slot][vehObjectModel] = 0;
+        VehicleObjects[vehicleid][slot][vehObjectExists] = false;
+
+        VehicleObjects[vehicleid][slot][vehObjectColor] = 0;
+
+
+        VehicleObjects[vehicleid][slot][vehObjectPosX] = VehicleObjects[vehicleid][slot][vehObjectPosY] = VehicleObjects[vehicleid][slot][vehObjectPosZ] = 0.0;
+        VehicleObjects[vehicleid][slot][vehObjectPosRX] = VehicleObjects[vehicleid][slot][vehObjectPosRY] = VehicleObjects[vehicleid][slot][vehObjectPosRZ] = 0.0;
+        mysql_tquery(sqlcon, sprintf("DELETE FROM `vehicle_object` WHERE `id` = '%d'", VehicleObjects[vehicleid][slot][vehObjectID]));
+        return 1;
+    }
+    return 0;
 }

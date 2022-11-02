@@ -1,6 +1,6 @@
 task MinuteUpdate[60000]()
 {
-	forex(i, MAX_WEED) if(WeedData[i][weedExists])
+	for(new i = 0; i < MAX_WEED; i++) if(WeedData[i][weedExists])
 	{
 		if(WeedData[i][weedGrow] < MAX_GROW)
 		{

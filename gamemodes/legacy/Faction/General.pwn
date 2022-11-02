@@ -627,6 +627,8 @@ CMD:detain(playerid, params[])
 
 		RemovePlayerFromVehicle(userid);
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s opens the door and pulls %s out the vehicle.", ReturnName(playerid), ReturnName(userid));
+	
+		defer CuffPlayerBack[2000](userid);
 	}
 	else
 	{
@@ -658,5 +660,24 @@ CMD:factions(playerid, params[])
 		format(str, sizeof(str), "%s{FFFFFF}[ID: %d] {%06x}%s\n", str, i, FactionData[i][factionColor] >>> 8, FactionData[i][factionName]);
 	}
 	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Faction List", str, "Close", "");
+	return 1;
+}
+
+
+timer CuffPlayerBack[1000](userid) {
+	if(PlayerData[userid][pCuffed]) {
+		SetPlayerSpecialAction(userid, SPECIAL_ACTION_CUFFED);
+
+		for(new i=MAX_PLAYER_ATTACHED_OBJECTS-1; i!=0; i--)
+		{
+			if(!IsPlayerAttachedObjectSlotUsed(userid, i))
+			{
+				SetPlayerArmedWeapon(userid, 0);
+				SetPVarInt(userid, "Cuff_Index", i);
+				SetPlayerAttachedObject(userid, i, 19418, 6, -0.027999, 0.051999, -0.030000, -18.699926, 0.000000, 104.199928, 1.489999, 3.036000, 1.957999);
+				break;
+			}
+		}
+	}
 	return 1;
 }

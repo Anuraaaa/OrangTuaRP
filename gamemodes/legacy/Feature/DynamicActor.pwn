@@ -18,7 +18,7 @@ enum E_ACTOR_DATA
 	actorGettingRob
 };
 
-new ActorData[MAX_ACTORS][E_ACTOR_DATA];
+new ActorData[MAX_ACTOR][E_ACTOR_DATA];
 new Iterator:DynamicActor<MAX_ACTOR>,
 	g_PlayerRobbingActor[MAX_PLAYERS],
 	Timer:g_PlayerRobbingActorTimer[MAX_PLAYERS];
@@ -218,7 +218,7 @@ CMD:createactor(playerid, params[])
 	if(id == INVALID_ITERATOR_SLOT)
 		return SendErrorMessage(playerid, "You cannot create more actor's!");
 
-	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has created actorid %d with name %s", PlayerData[playerid][pUCP], id, name);
+	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has created actorid %d with name %s", GetUsername(playerid), id, name);
 	SetPlayerPos(playerid, x + 1, y, z);
 	return 1;
 }
@@ -368,6 +368,7 @@ public OnPlayerTargetActor(playerid, actorid, weaponid) {
 
 				bizid = Actor_ReturnBusinessID(idx);
 				SendFactionMessageEx(FACTION_POLICE, -1, ""LIGHTBLUE"[ALARM] "YELLOW"%s "WHITE"Business alarm is triggered, business is under robbery.", BizData[bizid][bizName]);
+			
 			}
 		}
 	}

@@ -16,13 +16,12 @@ Report_Show(playerid) {
 		return SendErrorMessage(playerid, "Tidak ada pending report saat ini.");
 
 	new str[2012], count = 0;
-	format(str, sizeof(str), "Reporter\tReason\tIssued\n");
 	foreach(new i : Report) 
 	{
-		format(str, sizeof(str), "%s%d) %s(%d)\t%s\t%s\n", str, i + 1, GetName(ReportData[i][reportOwner]), ReportData[i][reportOwner], ReportData[i][reportText], GetDuration(gettime() - ReportData[i][reportTime]));
+		format(str, sizeof(str), "%s[%s] %s: %s\n", str, GetName(ReportData[i][reportOwner]), GetDuration(gettime() - ReportData[i][reportTime]), ReportData[i][reportText]);
 		ListedReport[playerid][count++] = i;
 	}
-	ShowPlayerDialog(playerid, DIALOG_REPORTS, DIALOG_STYLE_TABLIST_HEADERS, "Listed Report", str, "Select",  "Close");
+	ShowPlayerDialog(playerid, DIALOG_REPORTS, DIALOG_STYLE_LIST, "Listed Report", str, "Select",  "Close");
 	return 1;
 }
 

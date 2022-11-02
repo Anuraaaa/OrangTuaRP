@@ -174,7 +174,7 @@ CMD:usepoint(playerid, params[]) {
 	if(!GetPlayerVIPLevel(playerid))
         return SendErrorMessage(playerid, "Hanya donater yang bisa mengakses command ini.");
 
-    ShowPlayerDialog(playerid, DIALOG_VIP_POINT, DIALOG_STYLE_LIST, "Donater Point", "Custom phone number (100 Point)\nCustom mask (150 Point)", "Select", "Close");
+    ShowPlayerDialog(playerid, DIALOG_VIP_POINT, DIALOG_STYLE_LIST, "Donater Point", "Custom phone number (100 Point)\nCustom mask (150 Point)\nRequest Gate (250 Point)", "Select", "Close");
     return 1;
 }
 

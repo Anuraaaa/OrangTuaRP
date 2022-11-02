@@ -356,6 +356,7 @@ stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z)
 {
 	TogglePlayerControllable(playerid, false);
 	SetPlayerPos(playerid, x, y, z);
+	GameTextForPlayer(playerid, "Rendering objects...", 2000, 3);
 	SetTimerEx("UnFreeze", 2000, false, "d", playerid);
 
 	return 1;
@@ -532,6 +533,8 @@ stock HideCharacterSetup(playerid)
 	PlayerTextDrawHide(playerid, FINISHSETUP[playerid]);	
 	return 1;
 }
+
+
 /*----- [ Textdraw Login ]
 stock ShowCharacterSetup(playerid)
 {
@@ -636,7 +639,7 @@ timer KickTimer[300](playerid)
     return 0;
 }
 
-stock Database_Connect()
+Database_Connect()
 {
     mysql_log(ERROR | WARNING);
     sqlcon = mysql_connect_file();
@@ -1040,10 +1043,36 @@ timer ToggleFreeze[5000](playerid)
 	return 1;
 }
 
-stock LoadRemoveBuilding(playerid)
+LoadRemoveBuilding(playerid)
 {
 	RemoveVendingMachines(playerid);
 
+	/* Excel */
+	RemoveBuildingForPlayer(playerid, 9316, -2484.909, 2356.770, 6.726, 0.250);
+	RemoveBuildingForPlayer(playerid, 9428, -2484.909, 2356.770, 6.726, 0.250);
+	RemoveBuildingForPlayer(playerid, 9299, -2514.909, 2357.050, 8.484, 0.250);
+	RemoveBuildingForPlayer(playerid, 9374, -2514.909, 2357.050, 8.484, 0.250);
+	RemoveBuildingForPlayer(playerid, 1227, -2520.719, 2353.129, 4.757, 0.250);
+	RemoveBuildingForPlayer(playerid, 1227, -2524.060, 2353.129, 4.757, 0.250);
+	RemoveBuildingForPlayer(playerid, 1227, -2527.239, 2353.129, 4.757, 0.250);
+	RemoveBuildingForPlayer(playerid, 1227, -2503.070, 2364.219, 4.757, 0.250);
+	RemoveBuildingForPlayer(playerid, 1227, -2503.050, 2368.050, 4.757, 0.250);
+	RemoveBuildingForPlayer(playerid, 1440, -2506.699, 2369.659, 4.390, 0.250);
+	RemoveBuildingForPlayer(playerid, 1440, -2503.310, 2341.370, 4.453, 0.250);
+	RemoveBuildingForPlayer(playerid, 9314, -2493.860, 2363.429, 14.875, 0.250);
+	RemoveBuildingForPlayer(playerid, 9301, -2530.350, 2346.199, 7.968, 0.250);
+	RemoveBuildingForPlayer(playerid, 9373, -2530.350, 2346.199, 7.968, 0.250);
+	RemoveBuildingForPlayer(playerid, 1689, -2544.550, 2348.020, 13.242, 0.250);
+	RemoveBuildingForPlayer(playerid, 1617, -2539.620, 2352.340, 11.148, 0.250);
+	RemoveBuildingForPlayer(playerid, 1617, -2548.989, 2352.340, 11.148, 0.250);
+	RemoveBuildingForPlayer(playerid, 9315, -2519.629, 2356.020, 3.929, 0.250);
+	RemoveBuildingForPlayer(playerid, 9375, -2519.629, 2356.020, 3.929, 0.250);
+	/* DPC */
+	RemoveBuildingForPlayer(playerid, 16390, 704.531, 1977.869, 6.523, 0.250);
+	RemoveBuildingForPlayer(playerid, 16388, 694.414, 1973.839, 4.531, 0.250);
+	RemoveBuildingForPlayer(playerid, 16626, 694.414, 1973.839, 4.531, 0.250);
+	RemoveBuildingForPlayer(playerid, 16389, 704.414, 1978.699, 3.929, 0.250);
+	RemoveBuildingForPlayer(playerid, 16624, 704.414, 1978.699, 3.929, 0.250);
 	/* Midday HS */
 	RemoveBuildingForPlayer(playerid, 3310, -2159.198, -2543.979, 31.656, 0.250);
 	RemoveBuildingForPlayer(playerid, 3325, -2159.198, -2543.979, 31.656, 0.250);
@@ -2000,6 +2029,8 @@ stock SendClientMessageToAllEx(color, const text[], {Float, _}:...)
 }
 
 DestroyVehicleEx(vehicleid) {
+
+	/*
 	foreach(new i : Player) {
 		new labelid;
 
@@ -2011,7 +2042,7 @@ DestroyVehicleEx(vehicleid) {
 		if(labelid == vehicleid) {
 			DestroyDynamic3DTextLabel(PlayerData[i][pAdoLabel]);
 		}
-	}
+	}*/
 	return DestroyVehicle(vehicleid);
 }
 stock ReturnDate()
@@ -2299,6 +2330,7 @@ stock RemovePlayerADO(playerid)
 {
 	if(IsValidDynamic3DTextLabel(PlayerData[playerid][pAdoLabel]))
 		DestroyDynamic3DTextLabel(PlayerData[playerid][pAdoLabel]);
+		
 	return 1;
 }
 

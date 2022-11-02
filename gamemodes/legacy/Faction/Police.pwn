@@ -101,7 +101,7 @@ CMD:cuff(playerid, params[])
             SetPlayerArmedWeapon(userid, 0);
             SetPVarInt(userid, "Cuff_Index", i);
             SetPlayerAttachedObject(userid, i, 19418, 6, -0.027999, 0.051999, -0.030000, -18.699926, 0.000000, 104.199928, 1.489999, 3.036000, 1.957999);
-            return 1;
+            break;
         }
     }
     return 1;

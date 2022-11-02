@@ -266,10 +266,14 @@ stock Trash_InitPlayer(playerid)
 	return 1;
 }
 
-stock Trash_ResetPlayer(playerid, removeUI = 0)
+Trash_ResetPlayer(playerid, removeUI = 0)
 {
-	if(IsPlayerAttachedObjectSlotUsed(playerid, ATTACHMENT_INDEX)) RemovePlayerAttachedObject(playerid, ATTACHMENT_INDEX);
-	if(IsValidDynamicCP(TrashCP[playerid])) DestroyDynamicCP(TrashCP[playerid]);
+	if(IsPlayerAttachedObjectSlotUsed(playerid, ATTACHMENT_INDEX)) 
+		RemovePlayerAttachedObject(playerid, ATTACHMENT_INDEX);
+		
+	if(IsValidDynamicCP(TrashCP[playerid])) 
+		DestroyDynamicCP(TrashCP[playerid]);
+
 	HasTrash[playerid] = false;
 	TrashCP[playerid] = -1;
 

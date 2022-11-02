@@ -427,6 +427,9 @@ stock House_CountVehicle(id)
 	return HouseData[id][houseVehInside];
 }
 
+ShowHouseMenu(playerid) {
+	return ShowPlayerDialog(playerid, DIALOG_HOUSE_MENU, DIALOG_STYLE_LIST, "House Menu", "Manage Furniture\nAccess Storage\nKey Management", "Select", "Close");
+}
 FUNC::OnHouseCreated(houseid)
 {
 	if (houseid == -1 || !HouseData[houseid][houseExists])
@@ -944,13 +947,14 @@ CMD:house(playerid, params[])
 	else if(!strcmp(type, "menu", true))
 	{
 		id = House_Inside(playerid);
+
 		if(House_Inside(playerid) == -1)
 			return SendErrorMessage(playerid, "You must inside your own house!");
 
-		if(!House_IsOwner(playerid, id))
+		if(!House_HaveAccess(playerid, id))
 			return SendErrorMessage(playerid, "You must inside your own house!");
 
-		ShowPlayerDialog(playerid, DIALOG_HOUSE_MENU, DIALOG_STYLE_LIST, "House Menu", "Furniture\nStorage\nHouse Key", "Select", "Close");
+		ShowHouseMenu(playerid);
 	}
 	return 1;
 }

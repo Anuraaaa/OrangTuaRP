@@ -8,9 +8,10 @@ enum adData
 	advertName[32],
 	advertTime,
 };
-new AdvertData[MAX_ADVERT][adData];
+new AdvertData[MAX_ADVERT][adData],
+	AdvertText[MAX_PLAYERS][128];
 
-stock Advert_Show(playerid)
+Advert_Show(playerid)
 {
 	new list[2012];
 	format(list, sizeof(list), "Owner\tAdvertisement\n");
@@ -22,7 +23,7 @@ stock Advert_Show(playerid)
 	return 1;
 }
 
-stock Advert_Count()
+Advert_Count()
 {
 	new count = 0;
 	for(new i = 0; i < MAX_ADVERT; i ++) if(AdvertData[i][advertExists])
@@ -31,7 +32,7 @@ stock Advert_Count()
 	}
 	return count;
 }
-stock Advert_CountPlayer(playerid)
+Advert_CountPlayer(playerid)
 {
 	new count = 0;
 	for(new i = 0; i < MAX_ADVERT; i ++) if(AdvertData[i][advertExists])
@@ -43,22 +44,22 @@ stock Advert_CountPlayer(playerid)
 	}
 	return count;
 }
-stock Advert_Create(playerid, text[])
+Advert_Create(number, text[], pid, name[])
 {
 	for(new i = 0; i < MAX_ADVERT; i ++) if(!AdvertData[i][advertExists])
 	{
 	    AdvertData[i][advertExists] = true;
-	    AdvertData[i][advertOwner] = PlayerData[playerid][pID];
+	    AdvertData[i][advertOwner] = pid;
 	    format(AdvertData[i][advertText], 128, text);
-	    format(AdvertData[i][advertName], 32, GetName(playerid));
-	    AdvertData[i][advertNumber] = PlayerData[playerid][pPhoneNumber];
-	    AdvertData[i][advertTime] = 2;
+	    format(AdvertData[i][advertName], 32, name);
+	    AdvertData[i][advertNumber] = number;
+	    AdvertData[i][advertTime] = RandomEx(1, 3);
 	    return i;
 	}
 	return -1;
 }
 
-stock Advert_Delete(adid)
+Advert_Delete(adid)
 {
 	if (adid != -1 && AdvertData[adid][advertExists])
 	{
@@ -72,6 +73,9 @@ CMD:ad(playerid, params[])
 {
 	if(!IsPlayerInRangeOfPoint(playerid, 5.0, -192.3483, 1338.7361, 1500.9823))
 	    return SendErrorMessage(playerid, "You only can perform this inside San Fierro News!");
+
+	if(Faction_CountDuty(FACTION_NEWS) > 0)
+		return SendErrorMessage(playerid, "Tidak bisa digunakan jika ada SFN duty! RP dengan member SFN untuk membuat ads.");
 
 	if(Advert_CountPlayer(playerid) > 0)
 	    return SendErrorMessage(playerid, "You already have a pending advertisement, you must wait first.");
@@ -95,7 +99,38 @@ CMD:ad(playerid, params[])
 	    return SendErrorMessage(playerid, "You need $%s to make advertisement", FormatNumber(strlen(params)*50));
 
 	GiveMoney(playerid, -strlen(params)*50);
-	Advert_Create(playerid, params);
+	Advert_Create(PlayerData[playerid][pPhoneNumber], params, PlayerData[playerid][pID], GetName(playerid, false));
 	SendClientMessage(playerid, COLOR_SERVER, "ADS: {FFFFFF}Your advertisement will be appear 2 minutes from now.");
 	return 1;
+}
+
+CMD:postad(playerid, params[]) {
+	if(GetFactionType(playerid) != FACTION_NEWS)
+		return SendErrorMessage(playerid, "Kamu bukan anggota dari San Fierro News!");
+
+	if(!IsPlayerInRangeOfPoint(playerid, 13.0, -192.3483, 1338.7361, 1500.9823))
+	    return SendErrorMessage(playerid, "Kamu hanya dapat menggunakannya di Advertisement Desk!");
+
+	new targetid;
+
+	if(sscanf(params, "u", targetid))
+		return SendSyntaxMessage(playerid, "/postad [playerid/PartOfName]");
+
+	if(!IsPlayerNearPlayer(playerid, targetid, 6.0) || targetid == INVALID_PLAYER_ID)
+		return SendErrorMessage(playerid, "You have specified invalid player.");
+
+	if(!PlayerHasItem(targetid, "Cellphone"))
+		return SendErrorMessage(playerid, "That player doesn't have a cellphone!");
+
+	if(PlayerData[targetid][pPhoneNumber] == 0)
+		return SendErrorMessage(playerid, "That player doesn't have a phone number.");
+
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have given "CYAN"advertisement letter "WHITE"to "YELLOW"%s", ReturnName(targetid));
+	SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have been given an "CYAN"advertisement letter "WHITE"from "YELLOW"%s", ReturnName(playerid));
+
+	ShowPlayerDialog(targetid, DIALOG_ADS_TEXT, DIALOG_STYLE_INPUT, "Advertisement", "Silahkan masukkan apa yang akan kamu iklankan:\n(maksimal 128 karakter)", ">>>", "Close");
+	PlayerData[targetid][pTarget] = playerid;
+
+	return 1;
+
 }

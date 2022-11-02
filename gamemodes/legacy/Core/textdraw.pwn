@@ -1821,7 +1821,7 @@ stock CreatePlayerHUD(playerid)
 	PlayerTextDrawSetProportional(playerid, TAXIBOX[playerid], 1);
 	PlayerTextDrawSetSelectable(playerid, TAXIBOX[playerid], 0);
 
-	FARETD[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 233.000000, "Fare: $1.00");
+	FARETD[playerid] = CreatePlayerTextDraw(playerid, 5.000000, 233.000000, "Fare: $2,50");
 	PlayerTextDrawFont(playerid, FARETD[playerid], 2);
 	PlayerTextDrawLetterSize(playerid, FARETD[playerid], 0.208333, 1.449999);
 	PlayerTextDrawTextSize(playerid, FARETD[playerid], 400.000000, 17.000000);

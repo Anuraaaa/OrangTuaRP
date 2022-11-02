@@ -48,7 +48,7 @@ public OnPlayerTeleport(playerid, Float:distance) {
     if(!PlayerData[playerid][pAdmin] && !PlayerData[playerid][pKicked]) {
 
         if(++tele_warn[playerid] >= 3) {
-            SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) {FF6347}(Teleport Hack)", GetName(playerid), PlayerData[playerid][pUCP]);
+            SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(Teleport Hack)", GetName(playerid), PlayerData[playerid][pUCP], ReturnIP(playerid));
             SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Teleport Hack).");
             KickEx(playerid);
         }
@@ -69,7 +69,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(code == 15) {
 
                 if(GetPlayerWeapon(playerid) > 0)
-                    SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(GetPlayerWeapon(playerid)));
+                    SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnIP(playerid), ReturnWeaponName(GetPlayerWeapon(playerid)));
                 
                 SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (%s).", GetCodeAC(code));
                 ResetWeapons(playerid);
@@ -78,7 +78,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
             else if(code == 13) {
 
-                SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) {FF6347}(Armour hack)", GetName(playerid, false), GetUsername(playerid));
+                SendAdminMessage(COLOR_LIGHTRED, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(Armour hack)", GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid));
                 SetPlayerArmour(playerid, 0.0);
                 if(++g_ArmourHack[playerid] >= 3) {
                     SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (%s).", GetCodeAC(code));
@@ -94,9 +94,11 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 }
                 else
                 {       
+                    Log_Write("Logs/anticheat_log.txt", "[%s] Cheat detected on %s (%s) [%s] - %s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code));
                     SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (%s).", GetCodeAC(code));
                     SQL_SaveCharacter(playerid);
                     AntiCheatKickWithDesync(playerid, code);
+                    
 
                 }
             }
@@ -146,7 +148,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 		}
 		if (AC_GetPlayerSpeed(playerid) > 200.0 && PlayerData[playerid][pAdmin] < 1)
 		{
-            SendAdminMessage(X11_TOMATO, "AdmWarning: Cheat detected on {FFFF00}%s (%s) {FF6347}(%s)", GetName(playerid, false), GetUsername(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack"));
+            SendAdminMessage(X11_TOMATO, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(%s)", GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack"));
 		    SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Speedhack).");
             KickEx(playerid);
 		}

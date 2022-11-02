@@ -116,7 +116,6 @@ FUNC::TimeRepairTire(playerid, vehicleid)
 
 FUNC::SprayTimer(playerid)
 {
-	new modelid = PlayerData[playerid][pColor];
 	new vehicleid = PlayerData[playerid][pVehicle];
 	new nearest = GetNearestVehicle(playerid, 4.5);
 	if(PlayerData[playerid][pSpraying] && CheckPlayerJob(playerid, JOB_MECHANIC))
@@ -139,10 +138,10 @@ FUNC::SprayTimer(playerid)
 		else if(PlayerData[playerid][pColoring] >= 15)
 		{
  		    SendServerMessage(playerid, "Kamu berhasil mengganti warna kendaraan!");
-			VehicleData[vehicleid][vColor][0] = modelid;
-			VehicleData[vehicleid][vColor][1] = modelid;
+			VehicleData[vehicleid][vColor][0] = PlayerData[playerid][pColor1];
+			VehicleData[vehicleid][vColor][1] = PlayerData[playerid][pColor2];
 			
-			ChangeVehicleColor(vehicleid, modelid, modelid);
+			ChangeVehicleColor(vehicleid, PlayerData[playerid][pColor1], PlayerData[playerid][pColor2]);
 			ShowMessage(playerid, "Vehicle ~y~Resprayed!", 3);
 			PlayerPlaySound(playerid,1133,0.0,0.0,0.0);
 			Inventory_Remove(playerid, "Component", 30);
@@ -198,11 +197,94 @@ stock GetComponent(playerid)
 	return Inventory_Count(playerid, "Component");
 }
 
+FUNC::OnExaminingVehicle(playerid) {
+
+	new vehicleid = PlayerData[playerid][pVehicle], ws_id = -1, string[352];
+
+	if(!IsValidVehicle(vehicleid))
+		return SendErrorMessage(playerid, "The vehicle that you examine is no longer valid.");
+
+	if(GetNearestVehicle(playerid, 5.0) != vehicleid) 
+		return SendErrorMessage(playerid, "The vehicle that you examine is no longer near you.");
+
+	new Float:health;
+	new panels, doors, light, tires;
+
+	GetVehicleHealth(vehicleid, health);
+	if(health > 1000.0) health = 1000.0;
+	if(health > 0.0) health *= -1;
+
+	GetVehicleDamageStatus(vehicleid, panels, doors, light, tires);
+	new cpanels = panels / 1000000;
+	new lights = light / 2;
+	new pintu;
+	if(doors != 0) pintu = 5;
+	if(doors == 0) pintu = 0;
+	PlayerData[playerid][pMechPrice][0] = floatround(health, floatround_round) / 10 + 100;
+	PlayerData[playerid][pMechPrice][1] = cpanels + lights + pintu + 10;
+
+	if((ws_id = Workshop_Nearest(playerid, 20.0)) != -1) {
+
+		if(!Workshop_HaveAccess(playerid, ws_id))
+			return SendErrorMessage(playerid, "Kamu tidak memiliki akses workshop ini.");
+			
+		if(vehicleid == INVALID_VEHICLE_ID)
+			return SendErrorMessage(playerid, "You're not in range of any vehicles!");
+
+		if(!GetHoodStatus(vehicleid) && !IsABike(vehicleid))
+			return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
+
+		StartPlayerLoadingBar(playerid, 100, "Examining_vehicle...", 30, "OnExaminingVehicle");
+
+		format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component\nTune Vehicle\t\t50 Component\nSet Paintjob\t\t30 Component\nInstall Nitro\t\t150 Component\nUninstall Modification\nUpgrade Engine\t350 Component\nUpgrade Body\t\t350 Component\nInstall Neon\t\t200 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
+		ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+	}
+	else {
+
+		if(IsPlayerInDynamicArea(playerid, AreaData[areaMechanic]) || IsPlayerInDynamicArea(playerid, AreaData[areaMechanicBoat])) {
+
+			if(!PlayerData[playerid][pJobduty])
+				return SendErrorMessage(playerid, "You must mechanic duty to use this command.");
+
+			if(vehicleid == INVALID_VEHICLE_ID)
+				return SendErrorMessage(playerid, "You're not in range of any vehicles!");
+
+			if(!GetHoodStatus(vehicleid) && IsFourWheelVehicle(vehicleid))
+				return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
+
+			format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
+			ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+		}
+		else {
+
+			new vehicle_tow = INVALID_VEHICLE_ID;
+
+			if((vehicle_tow = IsPlayerNearTowTruck(playerid)) == INVALID_VEHICLE_ID) 
+				return SendErrorMessage(playerid, "Kamu tidak berada di workshop, mechanic center atau disekitar towtruck.");
+
+			vehicleid = GetVehicleNearExceptThisVehicle(playerid, vehicle_tow);
+
+			if(vehicleid == INVALID_VEHICLE_ID)
+				return SendErrorMessage(playerid, "You're not in range of any vehicles!");
+
+			if(!GetHoodStatus(vehicleid) && IsFourWheelVehicle(vehicleid))
+				return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
+
+
+			format(string, sizeof(string), "Repair Engine\t\t%d Component", PlayerData[playerid][pMechPrice][0]);
+			ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+
+		}
+	}
+	return 1;
+
+}
 CMD:mech(playerid, params[])
 {
 	new 
 		ws_id = -1,
-		vehicleid = INVALID_VEHICLE_ID;
+		vehicleid = INVALID_VEHICLE_ID,
+		text[144];
 
 	if(!CheckPlayerJob(playerid, JOB_MECHANIC))
 	    return SendErrorMessage(playerid, "You must be a Mechanic!");
@@ -220,22 +302,6 @@ CMD:mech(playerid, params[])
 		    return SendErrorMessage(playerid, "You can't do this at the moment.");
 
 		vehicleid = GetNearestVehicle(playerid, 4.0);
-		new Float:health;
-		new panels, doors, light, tires;
-
-		GetVehicleHealth(vehicleid, health);
-		if(health > 1000.0) health = 1000.0;
-		if(health > 0.0) health *= -1;
-
-		GetVehicleDamageStatus(vehicleid, panels, doors, light, tires);
-	    new cpanels = panels / 1000000, string[312];
-	    new lights = light / 2;
-	    new pintu;
-	    if(doors != 0) pintu = 5;
-	    if(doors == 0) pintu = 0;
-	    PlayerData[playerid][pMechPrice][0] = floatround(health, floatround_round) / 10 + 100;
-	    PlayerData[playerid][pMechPrice][1] = cpanels + lights + pintu + 10;
-
 
 		if((ws_id = Workshop_Nearest(playerid, 20.0)) != -1) {
 
@@ -246,12 +312,19 @@ CMD:mech(playerid, params[])
 				return SendErrorMessage(playerid, "You're not in range of any vehicles!");
 
 			if(!GetHoodStatus(vehicleid) && !IsABike(vehicleid))
-				return SendErrorMessage(playerid, "The Hood must be Opened.");
+				return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
 
-			format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component\nTune Vehicle\t\t50 Component\nSet Paintjob\t\t30 Component\nInstall Nitro\t\t150 Component\nUninstall Modification\nUpgrade Engine\t350 Component\nUpgrade Body\t\t350 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
-			ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+			StartPlayerLoadingBar(playerid, 200, "Examining_vehicle...", 30, "OnExaminingVehicle");
 
 			PlayerData[playerid][pVehicle] = vehicleid;
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Kamu mulai memeriksa kendaraan "YELLOW"%s"WHITE".", GetVehicleName(vehicleid));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Jangan terlalu jauh dari kendaraan atau kamu akan "RED"gagal"WHITE"!");
+
+			if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) {
+
+				format(text, sizeof(text), "VEHICLE: "WHITE"Kendaraan "CYAN"%s "WHITE"milikmu sedang diperiksa oleh mekanik "YELLOW"%s"WHITE".", GetVehicleName(vehicleid), ReturnName(playerid));
+				NotifyVehicleOwner(vehicleid, text, X11_LIGHTBLUE);
+			}
 		}
 		else {
 
@@ -264,12 +337,18 @@ CMD:mech(playerid, params[])
 					return SendErrorMessage(playerid, "You're not in range of any vehicles!");
 
 				if(!GetHoodStatus(vehicleid) && IsFourWheelVehicle(vehicleid))
-					return SendErrorMessage(playerid, "The Hood must be Opened.");
-
-				format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
-				ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+					return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
 
 				PlayerData[playerid][pVehicle] = vehicleid;
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Kamu mulai memeriksa kendaraan "YELLOW"%s"WHITE".", GetVehicleName(vehicleid));
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Jangan terlalu jauh dari kendaraan atau kamu akan "RED"gagal"WHITE"!");
+				StartPlayerLoadingBar(playerid, 200, "Examining_vehicle...", 30, "OnExaminingVehicle");
+
+				if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) {
+
+					format(text, sizeof(text), "VEHICLE: "WHITE"Kendaraan "CYAN"%s "WHITE"milikmu sedang diperiksa oleh mekanik "YELLOW"%s"WHITE".", GetVehicleName(vehicleid), ReturnName(playerid));
+					NotifyVehicleOwner(vehicleid, text, X11_LIGHTBLUE);
+				}
 			}
 			else {
 
@@ -284,12 +363,18 @@ CMD:mech(playerid, params[])
 					return SendErrorMessage(playerid, "You're not in range of any vehicles!");
 
 				if(!GetHoodStatus(vehicleid) && IsFourWheelVehicle(vehicleid))
-					return SendErrorMessage(playerid, "The Hood must be Opened.");
-
-				format(string, sizeof(string), "Repair Engine\t\t%d Component", PlayerData[playerid][pMechPrice][0]);
-				ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+					return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu~r~!", 3, 1);
 
 				PlayerData[playerid][pVehicle] = vehicleid;	
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Kamu mulai memeriksa kendaraan "YELLOW"%s"WHITE".", GetVehicleName(vehicleid));
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Jangan terlalu jauh dari kendaraan atau kamu akan "RED"gagal"WHITE"!");
+				StartPlayerLoadingBar(playerid, 200, "Examining_vehicle...", 30, "OnExaminingVehicle");
+
+				if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) {
+
+					format(text, sizeof(text), "VEHICLE: "WHITE"Kendaraan "CYAN"%s "WHITE"milikmu sedang diperiksa oleh mekanik "YELLOW"%s"WHITE".", GetVehicleName(vehicleid), ReturnName(playerid));
+					NotifyVehicleOwner(vehicleid, text, X11_LIGHTBLUE);
+				}
 			}
 		}
 	}
@@ -301,18 +386,18 @@ CMD:mech(playerid, params[])
 	    if(!PlayerData[playerid][pJobduty])
 	    {
 			if(!IsPlayerInDynamicArea(playerid, AreaData[areaMechanic]) && !IsPlayerInDynamicArea(playerid, AreaData[areaMechanicBoat]))
-				return SendErrorMessage(playerid, "You're not at Mechanic Area!");
+				return SendErrorMessage(playerid, "Kamu tidak berada pada area mekanik!");
 
 				
 	    	PlayerData[playerid][pJobduty] = true; 
 	    	SetPlayerColor(playerid, COLOR_LIGHTGREEN);
-	    	SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You're now onduty as a {FFFF00}Mechanic");
+	    	SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}Kamu sekarang on-duty sebagai "YELLOW"Mechanic "WHITE"kamu akan mendapatkan panggilan dari "YELLOW"143");
 	    }
 	    else
 	    {
 	    	PlayerData[playerid][pJobduty] = false;
 	    	SetPlayerColor(playerid, COLOR_WHITE);
-	    	SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You're now no longer onduty as {FFFF00}Mechanic");
+	    	SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}Kamu tidak lagi on-duty sebagai "YELLOW"Mechanic");
 	    }
 	}
     return 1;
@@ -327,7 +412,7 @@ hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 		{
 			PlayerData[playerid][pJobduty] = false;
 			SetPlayerColor(playerid, COLOR_WHITE);
-			SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You are no longer on-duty as {FFFF00}Mechanic");
+			SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}Kamu tidak lagi on-duty sebagai "YELLOW"Mechanic "WHITE"karena keluar dari area mekanik.");
 		}
 	}
 }

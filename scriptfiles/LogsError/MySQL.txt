@@ -2117,4 +2117,27 @@ Query: UPDATE `vehicle` SET `vehState` = 0 `vehID` = 16399
 [2022-10-19 12:49]
 Error ID: 1054
 Callback: 
-Query: UPDATE `characters` SET `PosX`='-1610.380005', `PosY`='1230.670044', `PosZ`='7.046843', `Health`='100.000000', `World`='0', `Interior`='0', `Age`='0', `Origin`='USA', `Gender`='1', `Skin`='2', `Accent`='None', `Hunger`='49', `Thirst`='49', `AdminLevel`='7', `InBiz`='-1', `InHouse`='-1', `Money`='331580', `Family`='-1', `FamilyRank`='0', `Faction`='0', `FactionRank`='12', `FactionID`='2', `Job`='5', `Job2`='0', `FactionSkin`='276', `Onduty`='0', `Number`='45512', `Armor`='0.000000', `Salary`='0', `Bank`='5467234', `Arrest`='0', `JailTime`='0', `JailReason`='', `JailBy`='', `InDoor`='-1', `Injured`='0', `Coin`='0', `Credit`='35', `BusDelay`='0', `Head`='100.000000', `Torso`='100.000000', `RightArm`='57.099998', `LeftArm`='100.000000', `RightLeg`='100.000000', `LeftLeg`='100.000000', `Groin`='100.000000', `Healthy`='100.000000', `SweeperDelay`='0', `MowerDelay`='0', `TrashmasterDelay`='0', `MaskID`='62001', `Birthdate`='09/03/1999', `Exp`='21', `Level`='8', `Hour`='89', `Second`='15', `Paycheck`='1387', `Minute`='15', `Channel`='991', `FishDelay`='0', `Funds`='0', `Quitjob`='0', `DrivingLicense`='1', `LumberLicense`='0', `HaulingLicense`='0', `LastLogin`='1666158574', `InFlat`='-1', `IDCard`='1', `IDCardExpired`='0', `MineDelay`='0', `FactionHour`='0', `FactionMinute`='17', `FactionSecond`='7', `HaulingDelay`='0', `MarryWith`='', `MarryDate`='', `Fish1` = '0.0', `FishName1` = 'Empty', `Fish2` = '0.0', `FishName2` = 'Empty', `Fish3` = '0.0', `FishName3` = 'Empty', `Fish4` = '0.0', `FishName4` = 'Empty', `Fish5` = '0.0', `FishName5` = 'Empty', `Fish6` = '0.0', `FishName6` = 'Empty', `Fish7` = '0.0', `FishName7` = 'Empty', `Fish8` = '0.0', `FishName8` = 'Empty', `Fish9` = '0.0', `FishName9` = 'Empty', `Fish10` = '0.0', `FishName10` = 'Empty', `Gun1` = '0', `Ammo1` = '0', `Durability1` = '0', `HighVelocity1` = '0', `Gun2` = '0', `Ammo2` = '0', `Durability2` = '0', `HighVelocity2` = '0', `Gun3` = '0', `Ammo3` = '0', `Durability3` = '0', `HighVelocity3` = '0', `Gun4`
+Query: UPDATE `characters` SET `PosX`='-1610.380005', `PosY`='1230.670044', `PosZ`='7.046843', `Health`='100.000000', `World`='0', `Interior`='0', `Age`='0', `Origin`='USA', `Gender`='1', `Skin`='2', `Accent`='None', `Hunger`='49', `Thirst`='49', `AdminLevel`='7', `InBiz`='-1', `InHouse`='-1', `Money`='331580', `Family`='-1', `FamilyRank`='0', `Faction`='0', `FactionRank`='12', `FactionID`='2', `Job`='5', `Job2`='0', `FactionSkin`='276', `Onduty`='0', `Number`='45512', `Armor`='0.000000', `Salary`='0', `Bank`='5467234', `Arrest`='0', `JailTime`='0', `JailReason`='', `JailBy`='', `InDoor`='-1', `Injured`='0', `Coin`='0', `Credit`='35', `BusDelay`='0', `Head`='100.000000', `Torso`='100.000000', `RightArm`='57.099998', `LeftArm`='100.000000', `RightLeg`='100.000000', `LeftLeg`='100.000000', `Groin`='100.000000', `Healthy`='100.000000', `SweeperDelay`='0', `MowerDelay`='0', `TrashmasterDelay`='0', `MaskID`='62001', `Birthdate`='09/03/1999', `Exp`='21', `Level`='8', `Hour`='89', `Second`='15', `Paycheck`='1387', `Minute`='15', `Channel`='991', `FishDelay`='0', `Funds`='0', `Quitjob`='0', `DrivingLicense`='1', `LumberLicense`='0', `HaulingLicense`='0', `LastLogin`='1666158574', `InFlat`='-1', `IDCard`='1', `IDCardExpired`='0', `MineDelay`='0', `FactionHour`='0', `FactionMinute`='17', `FactionSecond`='7', `HaulingDelay`='0', `MarryWith`='', `MarryDate`='', `Fish1` = '0.0', `FishName1` = 'Empty', `Fish2` = '0.0', `FishName2` = 'Empty', `Fish3` = '0.0', `FishName3` = 'Empty', `Fish4` = '0.0', `FishName4` = 'Empty', `Fish5` = '0.0', `FishName5` = 'Empty', `Fish6` = '0.0', `FishName6` = 'Empty', `Fish7` = '0.0', `FishName7` = 'Empty', `Fish8` = '0.0', `FishName8` = 'Empty', `Fish9` = '0.0', `FishName9` = 'Empty', `Fish10` = '0.0', `FishName10` = 'Empty', `Gun1` = '0', `Ammo1` = '0', `Durability1` = '0', `HighVelocity1` = '0', `Gun2` = '0', `Ammo2` = '0', `Durability2` = '0', `HighVelocity2` = '0', `Gun3` = '0', `Ammo3` = '0', `Durability3` = '0', `HighVelocity3` = '0', `Gun4`[2022-10-25 18:10]
+Error ID: 1364
+Callback: OnHouseCreated
+Query: INSERT INTO `houses` (`houseOwner`) VALUES(0)
+[!] Field 'houseOwnerName' doesn't have a default value
+
+[2022-10-26 16:04]
+Error ID: 1364
+Callback: OnPlayerCharacterCreated
+Query: INSERT INTO `characters` (`Name`, `UCP`, `Registered`, `PosX`, `PosY`, `PosZ`, `Skin`) VALUES('Roberto_Pagelaran', 'vyn', '1666775089', '-1415.916870', '-300.172699', '14.148400', '2')
+[!] Field 'JailReason' doesn't have a default value
+
+[2022-10-28 14:07]
+Error ID: 1364
+Callback: OnHouseCreated
+Query: INSERT INTO `houses` (`houseOwner`) VALUES(0)
+[!] Field 'houseOwnerName' doesn't have a default value
+
+[2022-10-28 14:09]
+Error ID: 1364
+Callback: OnWorkshopCreated
+Query: INSERT INTO `workshop` (`Price`) VALUES(0)
+[!] Field 'OwnerName' doesn't have a default value
+

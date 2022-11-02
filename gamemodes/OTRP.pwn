@@ -86,6 +86,7 @@ enum E_LOGLEVEL
 #include <chrono>
 #include <multicp>
 #include <eSelection>
+#include <eSelectionv2>
 #include <components>
 #include <tp>
 
@@ -370,6 +371,10 @@ enum E_PLAYER_DATA
 	pFactionMinute,
 	pFactionSecond,
 	pHaulingDelay,
+	bool:pCallNews,
+	pColor1,
+	pColor2,
+	pLastNumber
 
 };
 
@@ -389,7 +394,8 @@ new LoginTimer[MAX_PLAYERS],
 new
     MarryWith[MAX_PLAYERS][24],
     MarryDate[MAX_PLAYERS][28];
-new MarryOffer[MAX_PLAYERS];
+new MarryOffer[MAX_PLAYERS],
+	DivorceOffer[MAX_PLAYERS];
 
 new EnterVehicle[MAX_PLAYERS];
 new Float:Destination[MAX_PLAYERS][3];
@@ -557,8 +563,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosX][slot] = VehicleData[vid][vToyPosX][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_X, VehicleData[vid][vToyPosX][slot]);
+			VehicleObjects[vid][slot][vehObjectPosX] = VehicleObjects[vid][slot][vehObjectPosX] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_X, VehicleObjects[vid][slot][vehObjectPosX]);
 		}
 		else
 		{
@@ -580,8 +586,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosX][slot] = VehicleData[vid][vToyPosX][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_X, VehicleData[vid][vToyPosX][slot]);
+			VehicleObjects[vid][slot][vehObjectPosX] = VehicleObjects[vid][slot][vehObjectPosX] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT,VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_X, VehicleObjects[vid][slot][vehObjectPosX]);
 		}
 		else
 		{
@@ -603,8 +609,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosY][slot] = VehicleData[vid][vToyPosY][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_Y, VehicleData[vid][vToyPosY][slot]);
+			VehicleObjects[vid][slot][vehObjectPosY] = VehicleObjects[vid][slot][vehObjectPosY] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_Y, VehicleObjects[vid][slot][vehObjectPosY]);
 		}
 		else
 		{
@@ -626,8 +632,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosY][slot] = VehicleData[vid][vToyPosY][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_Y, VehicleData[vid][vToyPosY][slot]);
+			VehicleObjects[vid][slot][vehObjectPosY] = VehicleObjects[vid][slot][vehObjectPosY] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_Y, VehicleObjects[vid][slot][vehObjectPosY]);
 
 		}
 		else
@@ -650,8 +656,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosZ][slot] = VehicleData[vid][vToyPosZ][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_Z, VehicleData[vid][vToyPosZ][slot]);
+			VehicleObjects[vid][slot][vehObjectPosZ] = VehicleObjects[vid][slot][vehObjectPosZ] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_Z, VehicleObjects[vid][slot][vehObjectPosZ]);
 
 		}
 		else
@@ -674,8 +680,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyPosZ][slot] = VehicleData[vid][vToyPosZ][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_OFFSET_Z, VehicleData[vid][vToyPosZ][slot]);
+			VehicleObjects[vid][slot][vehObjectPosZ] = VehicleObjects[vid][slot][vehObjectPosZ] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_OFFSET_Z, VehicleObjects[vid][slot][vehObjectPosZ]);
 		}
 		else
 		{
@@ -697,8 +703,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotX][slot] = VehicleData[vid][vToyRotX][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_X, VehicleData[vid][vToyRotX][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRX] = VehicleObjects[vid][slot][vehObjectPosRX] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_X, VehicleObjects[vid][slot][vehObjectPosRX]);
 		}
 		else
 		{
@@ -720,8 +726,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotX][slot] = VehicleData[vid][vToyRotX][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_X, VehicleData[vid][vToyRotX][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRX] = VehicleObjects[vid][slot][vehObjectPosRX] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_X, VehicleObjects[vid][slot][vehObjectPosRX]);
 		}
 		else
 		{
@@ -743,8 +749,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotY][slot] = VehicleData[vid][vToyRotY][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_Y, VehicleData[vid][vToyRotY][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRY] = VehicleObjects[vid][slot][vehObjectPosRY] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_Y, VehicleObjects[vid][slot][vehObjectPosRY]);
 		}
 		else
 		{
@@ -766,8 +772,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotY][slot] = VehicleData[vid][vToyRotY][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_Y, VehicleData[vid][vToyRotY][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRY] = VehicleObjects[vid][slot][vehObjectPosRY] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_Y, VehicleObjects[vid][slot][vehObjectPosRY]);
 		}
 		else
 		{
@@ -789,8 +795,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotZ][slot] = VehicleData[vid][vToyRotZ][slot] + 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_Z, VehicleData[vid][vToyRotZ][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRZ] = VehicleObjects[vid][slot][vehObjectPosRZ] + 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_Z, VehicleObjects[vid][slot][vehObjectPosRZ]);
 		}
 		else
 		{
@@ -812,8 +818,8 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
 	{
 		if(IsPlayerInAnyVehicle(playerid))
 		{
-			VehicleData[vid][vToyRotZ][slot] = VehicleData[vid][vToyRotZ][slot] - 0.2;
-			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vid][vToy][slot], E_STREAMER_ATTACH_R_Z, VehicleData[vid][vToyRotZ][slot]);
+			VehicleObjects[vid][slot][vehObjectPosRZ] = VehicleObjects[vid][slot][vehObjectPosRZ] - 0.2;
+			Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vid][slot][vehObject], E_STREAMER_ATTACH_R_Z, VehicleObjects[vid][slot][vehObjectPosRZ]);
 		}
 		else
 		{
@@ -875,7 +881,7 @@ public OnPlayerCommandReceived(playerid, cmdtext[])
 
 public OnPlayerCommandPerformed(playerid, cmdtext[], success)
 {
-	printf("[CMD] %s: %s", GetName(playerid), cmdtext);
+	printf("[CMD] %s: %s", GetName(playerid, false), cmdtext);
 	
 	if(!IsPlayerSpawned(playerid))
 		return 0;
@@ -927,6 +933,8 @@ public OnPlayerConnect(playerid)
     }
 
 	ResetPlayerStatistics(playerid);
+	PreloadAnimations(playerid);
+	ResetFlyModeData(playerid);
 
 	if(!IsNameUsed(playerid, GetName(playerid))) {
 
@@ -1132,7 +1140,7 @@ public OnPlayerDisconnect(playerid, reason)
 		"Leaving",
 		"Kicked/Banned"
 	};
-	SendNearbyMessage(playerid, 15.0, COLOR_GREY, "%s has disconnected from server (%s)", ReturnName(playerid), reason_text[reason]);
+	SendNearbyMessage(playerid, 15.0, COLOR_GREY, "* %s has disconnected from server (%s)", ReturnName(playerid), reason_text[reason]);
 
 	CallLocalFunction("OnPlayerDisconnectEx", "d", playerid);
 
@@ -1162,6 +1170,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		PlayerTextDrawHide(playerid, CapacityText[playerid]);
 		HidePlayerProgressBar(playerid, CapacityBar[playerid]);
 
+		Trash_ResetPlayer(playerid);
 		new vehicleid = PlayerData[playerid][pLastVehicleID];
 		if(OnMower[playerid] && IsMowerVehicle(vehicleid))
 		{
@@ -1198,7 +1207,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu gagal dalam tes mengemudi karena mencoba keluar dari kendaraan!");
 		}
 	}
-	Trash_ResetPlayer(playerid);
 	if(newstate == PLAYER_STATE_DRIVER)
 	{
 	    new vehicleid = GetPlayerVehicleID(playerid);
@@ -1280,7 +1288,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	    {
 		    if(LoadedTrash[vehicleid] > 9)
 		    {
-				SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}You can sell your trash bags to recycling factories marked by a truck icon.");
+				SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu dapat menjual semua kantong sampah pada tanda truk di-peta.");
 				
 				for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
 				{
@@ -1294,8 +1302,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		    }
 		    else
 		    {
-		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}You can collect trash and sell them at recycling factories.");
-		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Find trash cans or dumpsters and use '/pickup'.");
+		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu dapat mengumpulkan kantong sampah lalu menjualnya ke pabrik daur ulang.");
+		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Cari tempat sampah lalu ambil kantong sampah dengan "YELLOW"/pickup");
 		    	
 				for(new i = 0; i < MAX_TRASH; i++) if(TrashData[i][TrashExists] && TrashData[i][TrashLevel] > 0)
 				{					
@@ -1313,7 +1321,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 			else {
 				RemovePlayerFromVehicle(playerid);
-				SendErrorMessage(playerid, "You can't enter this. (Faction-vehicle)!");
+				SendErrorMessage(playerid, "You are not allowed to drive this vehicle. (Faction vehicle)!");
 			}
 		}
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) 
@@ -1334,7 +1342,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			{
 				CreateTaxi(playerid);
 				PlayerData[playerid][pFareTimer] = SetTimerEx("UpdateFare", 7000, true, "ii", playerid, driverid);
-				SendClientMessageEx(driverid, COLOR_SERVER, "TAXI: {FFFFFF}%s has entering your taxi.", ReturnName(playerid));
+				SendClientMessageEx(driverid, COLOR_SERVER, "TAXI: "YELLOW"%s "WHITE"telah memasuki taksimu.", ReturnName(playerid));
 				PlayerData[playerid][pInTaxi] = true;
 				PlayerData[playerid][pTaxiVehicleID] = vehicleid;
 			}
@@ -1342,8 +1350,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				GiveMoney(playerid, -100, "Bayar bus");
 				GiveMoney(driverid, 100, "Dari penumpang bus");
 
-				SendServerMessage(driverid, "%s telah menjadi penumpang di Bus-mu dan membayar $1.00", ReturnName(playerid));
-				SendServerMessage(playerid, "Uang-mu dikurangi $1.00 karena menjadi penumpang di Bus.");
+				SendServerMessage(driverid, ""YELLOW"%s "WHITE"telah menjadi penumpang di Bus-mu dan membayar "GREEN"$1.00", ReturnName(playerid));
+				SendServerMessage(playerid, "Uang-mu dikurangi "GREEN"$1.00 "WHITE"karena menjadi penumpang di Bus.");
 			}
 		}
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) 
@@ -1459,12 +1467,76 @@ public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid) {
 	foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) 
 	{
 		PlayerSpectatePlayer(i, playerid);
-		break;
+	}
+	return 1;
+}
+
+public CustomSelectionResponse(playerid, extraid, modelid, response) 
+{
+	if((response) && (extraid == MODEL_SELECTION_FURNITURE)) 
+	{
+		new furniture;
+
+		new
+		    Float:x,
+		    Float:y,
+		    Float:z,
+		    Float:angle;
+
+        GetPlayerPos(playerid, x, y, z);
+        GetPlayerFacingAngle(playerid, angle);
+
+        x += 3.0 * floatsin(-angle, degrees);
+        y += 3.0 * floatcos(-angle, degrees);
+
+		new price = Furniture_ReturnPrice(PlayerData[playerid][pListitem]);
+
+		if (GetMoney(playerid) < price)
+			return SendErrorMessage(playerid, "You have insufficient funds for the purchase.");
+
+		if(House_Inside(playerid) != -1)
+			furniture = Furniture_Add(HouseData[House_Inside(playerid)][houseID], GetFurnitureNameByModel(modelid), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), modelid, FURNITURE_TYPE_HOUSE, x, y, z, 0.0, 0.0, angle);
+		else
+			furniture = Furniture_Add(FlatData[Flat_Inside(playerid)][flatID], GetFurnitureNameByModel(modelid), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), modelid, FURNITURE_TYPE_FLAT, x, y, z, 0.0, 0.0, angle);
+		
+		if(furniture == INVALID_ITERATOR_SLOT)
+			return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak furniture! (Laporkan kepada developer untuk meningkatkan limit)");
+
+		GiveMoney(playerid, -price, "Membeli furniture");
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Kamu berhasil membeli "YELLOW"%s "WHITE"dengan harga "GREEN"$%s", GetFurnitureNameByModel(modelid), FormatNumber(price));
+		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
+	}
+	if ((response) && (extraid == MODEL_SELECTION_MODSHOP))
+	{
+		if(IsValidVehicle(PlayerData[playerid][pVehicle])) {
+			new 
+				price = 8000,
+				vehicleid
+			;
+
+			if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+				return SendErrorMessage(playerid, "You need to be inside vehicle as driver");
+
+			vehicleid = PlayerData[playerid][pVehicle];
+
+			if(GetMoney(playerid) < 8000)
+				return SendErrorMessage(playerid, "Kamu membutuhkan $80,00 untuk membeli vehicle attachments.");
+
+			if(Vehicle_ObjectAdd(playerid, vehicleid, modelid, OBJECT_TYPE_BODY)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Berhasil membeli attachment kendaraan "YELLOW"(%s)", GetVehObjectNameByModel(modelid));
+			else SendErrorMessage(playerid, "Tidak ada slot attachment untuk kendaraan ini lagi.");
+
+			new str[96];
+			format(str, sizeof(str), "bought vehicle attachment \"%s\"", GetVehObjectNameByModel(modelid));
+
+			GiveMoney(playerid, -price, str);
+			SendClientMessage(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Gunakan "GREEN"/v attachment "WHITE"untuk mengatur!");
+		}
 	}
 	return 1;
 }
 public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 {
+	/*
 	if ((response) && (extraid == MODEL_SELECTION_FURNITURE))
 	{
 		new furniture;
@@ -1495,9 +1567,9 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 			return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak furniture! (Laporkan kepada developer untuk meningkatkan limit)");
 
 		GiveMoney(playerid, -price, "Membeli furniture");
-		SendServerMessage(playerid, "You have purchased a \"%s\" for %s.", GetFurnitureNameByModel(modelid), FormatNumber(price));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Kamu berhasil membeli "YELLOW"%s "WHITE"dengan harga "GREEN"$%s", GetFurnitureNameByModel(modelid), FormatNumber(price));
 		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-	}
+	}*/
 	if((response) && (extraid == MODEL_SELECTION_ROADBLOCK)) {
 		
 			static
@@ -1516,6 +1588,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 				SendErrorMessage(playerid, "Roadblock sudah mencapai batas maksimal ("#MAX_DYNAMIC_ROADBLOCK" roadblock).");
 			}
 	}
+	/*
 	if ((response) && (extraid == MODEL_SELECTION_MODSHOP))
 	{
 	    if(GetMoney(playerid) < 8000)
@@ -1546,6 +1619,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 			SendServerMessage(playerid, "Use {FFFF00}/v attachment {FFFFFF}to manage vehicle attachment!");
 		}
 	}
+	*/
 	if ((response) && (extraid == MODEL_SELECTION_FACTION_SKINS))
 	{
 	    ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_SKIN, DIALOG_STYLE_LIST, "Edit Skin", "Add by Model ID\nAdd by Thumbnail\nClear Slot", "Select", "Cancel");
@@ -1585,20 +1659,33 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 		    return SendErrorMessage(playerid, "There is no model in the selected slot.");
 
   		SetFactionSkin(playerid, modelid);
-		SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has changed their uniform.", ReturnName(playerid));
+		SendNearbyMessage(playerid, 10.0,X11_PLUM, "* %s has changed their uniform.", ReturnName(playerid));
 	}
 
-	if ((response) && (extraid == MODEL_SELECTION_COLOR))
+	if ((response) && (extraid == MODEL_SELECTION_COLOR_1))
 	{
-	    new vehicleid = PlayerData[playerid][pVehicle];
+		PlayerData[playerid][pColor1] = modelid;
 
-        if (vehicleid == INVALID_VEHICLE_ID)
+		static
+			colors[256];
+
+		for (new i = 0; i < sizeof(colors); i ++)
+		{
+			colors[i] = i;
+		}
+		ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR_2, colors);
+
+		SendClientMessage(playerid, X11_LIGHTBLUE, "MECH-HINT: "WHITE"Silahkan pilih warna kedua untuk dicat ke kendaraan.");
+	}
+	if((response) && (extraid == MODEL_SELECTION_COLOR_2)) {
+
+        if (PlayerData[playerid][pVehicle] == INVALID_VEHICLE_ID)
 		    return SendErrorMessage(playerid, "You are not standing near any vehicle.");
 
-        PlayerData[playerid][pColor] = modelid;
+        PlayerData[playerid][pColor2] = modelid;
 
 		GiveWeaponToPlayer(playerid, 41, 3000, 3000);
-        SendServerMessage(playerid, "Spray the vehicle using Spraycan towards the vehicle!");
+        SendServerMessage(playerid, "Semprot kendaraan menggunakan "RED"kaleng cat "WHITE"yang telah diberikan!");
 		PlayerData[playerid][pSpraying] = true;
 	}
 	if ((response) && (extraid == MODEL_SELECTION_ADD_SKIN))
@@ -1725,38 +1812,30 @@ public OnPlayerEnterDynamicArea(playerid, STREAMER_TAG_AREA:areaid)
 	return 1;
 }
 
-hook OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid) {
-
-    foreach(new i : Player) if(PlayerData[i][pSpectator] != INVALID_PLAYER_ID && PlayerData[i][pSpectator] == playerid) {
-        SetPlayerInterior(i, GetPlayerInterior(playerid));
-        SetPlayerVirtualWorld(i, GetPlayerVirtualWorld(playerid));
-    }
-	return 1;
-}
 public OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
 {
 	for(new i = 0; i < MAX_VENDOR; i++) if(checkpointid == VendorData[i][vendorCP])
 	{
-		ShowMessage(playerid, "Press ~y~H ~w~to start food vendor.", 2);
+		ShowMessage(playerid, "~g~INFO: ~w~Tekan ~y~H ~w~untuk bekerja food vendor.", 2);
 	}
 	if(checkpointid == TrashCP[playerid])
 	{
 		new vehicleid = PlayerData[playerid][pTrashVehicleID];
 
 	    if(!HasTrash[playerid]) 
-			return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}You're not carrying a trash bag.");
+			return SendErrorMessage(playerid, "Kamu sedang tidak membawa kantong sampah.");
 
 	    if(LoadedTrash[vehicleid] >= TRASH_LIMIT) 
-			return SendClientMessage(playerid, 0xE74C3CFF, "ERROR: {FFFFFF}This vehicle is full, you can't load any more trash.");
+			return SendErrorMessage(playerid, "Trashmaster ini tidak dapat menampung lebih banyak kantong sampah.");
 
 	    LoadedTrash[vehicleid]++;
 		ApplyAnimation(playerid, "GRENADE", "WEAPON_throwu", 4.1, 0, 0, 0, 0, 0);
-		SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}You've collected a trash bag.");
+		SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu berhasil memasukkan "RED"kantong sampah "WHITE"pada trashmaster.");
 
 		if(TRASH_LIMIT - LoadedTrash[vehicleid] > 0)
 		{
 			new string[96];
-			format(string, sizeof(string), "TRASHMASTER: {FFFFFF}You can load {F39C12}%d {FFFFFF}more trash bags to this vehicle.", TRASH_LIMIT - LoadedTrash[vehicleid]);
+			format(string, sizeof(string), "TRASHMASTER: {FFFFFF}Kamu dapat memasukkan {F39C12}%d {FFFFFF}kantong sampah lagi pada trashmaster.", TRASH_LIMIT - LoadedTrash[vehicleid]);
 			SendClientMessage(playerid, COLOR_JOB, string);
 		}
 
@@ -1794,7 +1873,7 @@ public OnPlayerEnterCheckpoint(playerid)
 
 			PlayerData[playerid][pLicense][0] = true;
 			
-			SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu berhasil menyelesaikan Driving Test!");
+			SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu berhasil menyelesaikan Driving Test! selamat kamu mendapatkan lisensi mengemudimu.");
 			DisablePlayerCheckpoint(playerid);
 
 			PlayerData[playerid][pOnTest] = false;
@@ -1917,36 +1996,47 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
             }
 			else if(PlayerData[playerid][pEditType] == EDIT_VEHICLE) {
 
-				new Float:pos[4],
-					slot = PlayerData[playerid][pListitem];
+                new 
+                    vehicleid = PlayerData[playerid][pEditing],
+                    slot = PlayerData[playerid][pListitem],
+                    Float:vx,
+                    Float:vy,
+                    Float:vz,
+                    Float:va,
+                    Float:real_x,
+                    Float:real_y,
+                    Float:real_z,
+                    Float:real_a
+                ;
 
-				GetVehiclePos(id,pos[0],pos[1],pos[2]);
-				GetVehicleZAngle(id,pos[3]);
+                GetVehiclePos(vehicleid, vx, vy, vz);
+                GetVehicleZAngle(vehicleid, va);
 
-				new Float:new_pos[4];
-				new_pos[0] = x - pos[0];
-				new_pos[1] = y - pos[1];
-				new_pos[2] = z - pos[2];
-				new_pos[3] = rz - pos[3];
+                real_x = x - vx;
+                real_y = y - vy;
+                real_z = z - vz;
+                real_a = rz - va;
 
-				new Float:final_pos[2];
-				final_pos[0] = (new_pos[0] * floatcos(new_pos[3],degrees)) + (new_pos[1] * floatsin(new_pos[3],degrees));
-				final_pos[1] = (new_pos[1] * floatcos(new_pos[3],degrees)) - (new_pos[0] * floatsin(new_pos[3],degrees));
+				new Float:v_size[3];
+				GetVehicleModelInfo(GetVehicleModel(vehicleid), VEHICLE_MODEL_INFO_SIZE, v_size[0], v_size[1], v_size[2]);
+				if(	(real_x >= v_size[0] || -v_size[0] >= real_x) || 
+					(real_y >= v_size[1] || -v_size[1] >= real_y) ||
+					(real_z >= v_size[2] || -v_size[2] >= real_z))
+				{
+					ShowMessage(playerid, "Posisi ~y~object ~w~terlalu jauh dari kendaraan!", 4, 1);
+                    return 1;
+				}
 
-				VehicleData[id][vToyPosX][slot] = final_pos[0];
-				VehicleData[id][vToyPosY][slot] = final_pos[1];
-				VehicleData[id][vToyPosZ][slot] = new_pos[2];
-				VehicleData[id][vToyRotX][slot] = rx;
-				VehicleData[id][vToyRotY][slot] = ry;
-				VehicleData[id][vToyRotZ][slot] = new_pos[3];
+                VehicleObjects[vehicleid][slot][vehObjectPosX] = real_x;                
+                VehicleObjects[vehicleid][slot][vehObjectPosY] = real_y;
+                VehicleObjects[vehicleid][slot][vehObjectPosZ] = real_z;
+                VehicleObjects[vehicleid][slot][vehObjectPosRX] = rx;
+                VehicleObjects[vehicleid][slot][vehObjectPosRY] = ry;
+                VehicleObjects[vehicleid][slot][vehObjectPosRZ] = real_a;
 
-				Vehicle_SyncObject(id, slot);
-
-				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-				
-				SendServerMessage(playerid, "You have changed Vehicle Object position index %d", slot);
-
-				Vehicle_Save(id);
+                Vehicle_ObjectUpdate(vehicleid, slot);
+                Vehicle_AttachObject(vehicleid, slot);
+                Vehicle_ObjectSave(vehicleid, slot);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_TAG)
 			{
@@ -2107,7 +2197,7 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
             AccData[playerid][id][accScale][2] = (fScaleZ > 3.0) ? (3.0) : (fScaleZ);
             Aksesoris_Attach(playerid, id);
             PlayerData[playerid][pAksesoris] = -1;
-            SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESORY","Accessory saved!");
+            SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESORY","Aksesoris pada slot "YELLOW"%d "WHITE"berhasil disimpan.", id);
         }
 		EditingWeapon[playerid] = 0;
     }
@@ -2141,19 +2231,39 @@ public OnPlayerUpdate(playerid)
 			KickEx(playerid);
 		}
 	}
-	/*
-	if (TP_AwaitingTime[playerid] != 0)
+	if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
 	{
-		if ((NetStats_GetConnectedTime(playerid) > TP_AwaitingTime[playerid]) || (TP_GetDistanceFromAwaiting(playerid) < 0.2))
-		{
-			TogglePlayerControllable(playerid, 1);
-			Streamer_ToggleItemUpdate(playerid, STREAMER_TYPE_OBJECT, true);
-			Streamer_Update(playerid,STREAMER_TYPE_OBJECT);
+		new keys,ud,lr;
+		GetPlayerKeys(playerid,keys,ud,lr);
+		
 
-			TP_AwaitingPos[playerid][0] = -1.0;
-			TP_AwaitingTime[playerid] = 0;
+		if(noclipdata[playerid][flmode] && (GetTickCount() - noclipdata[playerid][lastmove] > 100))
+		{
+		    // If the last move was > 100ms ago, process moving the object the players camera is attached to
+		    MoveCamera(playerid);
 		}
-	}*/
+
+		// Is the players current key state different than their last keystate?
+		if(noclipdata[playerid][udold] != ud || noclipdata[playerid][lrold] != lr)
+		{
+			if((noclipdata[playerid][udold] != 0 || noclipdata[playerid][lrold] != 0) && ud == 0 && lr == 0)
+			{   // All keys have been released, stop the object the camera is attached to and reset the acceleration multiplier
+				StopDynamicObject(noclipdata[playerid][flyobject]);
+				noclipdata[playerid][flmode]      = 0;
+				noclipdata[playerid][accelmul]  = 0.0;
+			}
+			else
+			{   // Indicates a new key has been pressed
+
+			    // Get the direction the player wants to move as indicated by the keys
+				noclipdata[playerid][flmode] = GetMoveDirectionFromKeys(ud, lr);
+
+				// Process moving the object the players camera is attached to
+				MoveCamera(playerid);
+			}
+		}
+		noclipdata[playerid][udold] = ud; noclipdata[playerid][lrold] = lr; // Store current keys pressed for comparison next update
+	}
 	if(StretcherHolding[playerid])
 	{
 		new Float:zX, Float:zY, Float:zZ, Float:Ang;
@@ -2261,6 +2371,45 @@ public OnPlayerUpdate(playerid)
 }
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(dialogid == DIALOG_ADS_POST) {
+
+		new targetid = PlayerData[playerid][pTarget];
+		if(response) {
+
+			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || targetid == INVALID_PLAYER_ID)
+				return SendErrorMessage(playerid, "The advertisement poster is no longer near you.");
+
+			SendClientMessage(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "GREEN"approved");
+			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "GREEN"approved "WHITE"the advertisement.");
+
+			Advert_Create(PlayerData[targetid][pPhoneNumber], AdvertText[targetid], PlayerData[targetid][pID], GetName(targetid, false));
+		}
+		else {
+			SendClientMessage(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "RED"denied");
+			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "RED"denied "WHITE"the advertisement.");
+		}
+	}
+	if(dialogid == DIALOG_ADS_TEXT) {
+		if(response) {
+			if(strlen(inputtext) > 128)
+				return ShowPlayerDialog(playerid, DIALOG_ADS_TEXT, DIALOG_STYLE_INPUT, "Advertisement", "Silahkan masukkan apa yang akan kamu iklankan:\n(maksimal 128 karakter)", ">>>", "Close");
+
+			new targetid = PlayerData[playerid][pTarget];
+
+			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || targetid == INVALID_PLAYER_ID)
+				return SendErrorMessage(playerid, "The SFN Staff is no longer near you.");
+
+			format(AdvertText[playerid], 128, "%s", inputtext);
+
+			new string[256];
+			format(string, sizeof(string), ""GREEN"Waiting for approval..\n\n"WHITE"Advertisement:\n%s\nPhNumber: %d\n\n\nDid you approve this advertisement to be published?", inputtext, PlayerData[playerid][pPhoneNumber]);
+			ShowPlayerDialog(targetid, DIALOG_ADS_POST, DIALOG_STYLE_MSGBOX, "Advertisement Post", string, "Approve", "Denied");
+
+			PlayerData[targetid][pTarget] = playerid;
+
+			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have written the advertisement, waiting for approval.");
+		}
+	}
 	if(dialogid == DIALOG_VEHMENU) {
 		if(response) {
 			if(listitem == 0) {
@@ -2271,6 +2420,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 2) {
 				cmd_v(playerid, "light");
+			}
+			if(listitem == 3) {
+				cmd_v(playerid, "neon");
 			}
 		}
 	}
@@ -2302,8 +2454,37 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowEditTextDraw(playerid);
 
 				SendServerMessage(playerid, "You are now in editing mode of furniture index id: %d", id);
-
 			}
+
+			if(listitem == 3) {
+
+				if(GetComponent(playerid) < 10)
+					return SendErrorMessage(playerid, "Kamu membutuhkan 10 component untuk re-texture.");
+
+				ShowPlayerDialog(playerid, DIALOG_FURNITURE_TEXTURE, DIALOG_STYLE_INPUT, "Custom Texture", ""LIGHTBLUE"Masukkan texture object dengan format berikut: [modelid] [TXD Name] [texture]\n(contoh): "YELLOW"10101 2notherbuildsfe Bow_Abpave_Gen\n\n"WHITE"Kamu dapat mencari texture pada beberapa link berikut ini:\n"GREEN"- https://samp-textures.iamaul.me/\n- https://textures.xyin.ws/\n- https://www.gtxd.net/", "Set", "Cancel");
+			}
+		}
+	}
+	if(dialogid == DIALOG_FURNITURE_TEXTURE) {
+		if(response) {
+			new id = PlayerData[playerid][pEditing],
+				modelid, txdname[24], txtname[24];
+
+			if(sscanf(inputtext, "ds[24]s[24]", modelid, txdname, txtname)) {
+				return ShowPlayerDialog(playerid, DIALOG_FURNITURE_TEXTURE, DIALOG_STYLE_INPUT, "Custom Texture", ""LIGHTBLUE"Masukkan texture object dengan format berikut: [modelid] [TXD Name] [texture]\n(contoh): "YELLOW"10101 2notherbuildsfe Bow_Abpave_Gen\n\n"WHITE"Kamu dapat mencari texture pada beberapa link berikut ini:\n"GREEN"- https://samp-textures.iamaul.me/\n- https://textures.xyin.ws/\n- https://www.gtxd.net/", "Set", "Cancel");
+			}
+
+			Inventory_Remove(playerid, "Component", 10);
+
+			FurnitureData[id][furnitureTextureModelid] = modelid;
+			format(FurnitureData[id][furnitureTextureName], 24, txtname);
+			format(FurnitureData[id][furnitureTextureTXDName], 24, txdname);
+
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Used "YELLOW"10 "WHITE"Component for re-texturing the %s.", FurnitureData[id][furnitureName], id);
+
+			Furniture_Sync(id);
+
+			Furniture_Save(id);
 		}
 	}
 	if(dialogid == DIALOG_CHANGEPASS)
@@ -2468,7 +2649,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            Vehicle_Save(carid);
 				Vehicle_WeaponStorage(playerid, carid);
 
-				Log_Write("Logs/veh_storage_log.txt", "[%s] %s has stored a \"%s\" to Vehicle ID: %d.", ReturnDate(), ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]), VehicleData[carid][vID]);
+				Log_Write("Logs/veh_storage_log.txt", "[%s] %s has stored a \"%s\" to Vehicle ID: %d.", ReturnDate(), GetName(playerid, false), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]), VehicleData[carid][vID]);
 			}
 			else
 			{
@@ -2831,8 +3012,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new string[24], gstr[256];
-			PlayerData[playerid][pAksesoris] = ListedAcc[playerid][listitem];
+			PlayerData[playerid][pAksesoris] = listitem;
 
+			if(!AccData[playerid][listitem][accExists])
+				return SendErrorMessage(playerid, "Tidak ada aksesoris pada slot ini.");
+				
 			format(string,sizeof(string),"Edit Accessory (#%d)",PlayerData[playerid][pAksesoris]);
 			format(gstr, sizeof(gstr), "Place %s\nChange Bone\nChange Placement\nChange Coordinate\nRemove from list", IsPlayerAttachedObjectSlotUsed(playerid, PlayerData[playerid][pAksesoris]) ? ("Off") : ("On"));
 			ShowPlayerDialog(playerid, DIALOG_ACCESSORY, DIALOG_STYLE_LIST, string, gstr, "Select", "Exit");
@@ -3139,8 +3323,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 2: {
 
-					if(PlayerData[playerid][pCoin] < 200)
+					if(PlayerData[playerid][pCoin] < 250)
 						return SendErrorMessage(playerid, "Kamu tidak memiliki cukup Donater Point.");
+
+					SendAdminMessage(X11_TOMATO, "DonaterInfo: %s(%s) has requested \"Custom Gate\" (costs 250 point)", GetName(playerid, false), GetUsername(playerid));
+					SendServerMessage(playerid, "You have requested a custom gate, please wait for high admin to respond.");
 				}
 			}
 		}
@@ -3171,7 +3358,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_HOUSE_KEY) {
 		if(!response)
-			return cmd_house(playerid, "menu");
+			return ShowHouseMenu(playerid);
 
 		new id = House_Inside(playerid);
 
@@ -3342,9 +3529,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return 0;
 
 		switch(listitem) {
-			case 0: Flat_ShowKeyMenu(playerid, Flat_Inside(playerid));
-			case 1: Flat_OpenStorage(playerid, Flat_Inside(playerid));
-			case 2: ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "Flat Furniture", "Furniture list\nPurchase furniture\nRemove all furniture", "Select", "Close");
+			case 0: {
+
+				if(!Flat_IsOwner(playerid, Flat_Inside(playerid)))
+					return SendErrorMessage(playerid, "Only owner can access this option.");
+
+				Flat_ShowKeyMenu(playerid, Flat_Inside(playerid));
+			}
+			case 1: {
+
+				if(!Flat_IsOwner(playerid, Flat_Inside(playerid)))
+					return SendErrorMessage(playerid, "Only owner can access this option.");
+
+				Flat_OpenStorage(playerid, Flat_Inside(playerid));
+			}
+			case 2: ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture", "Select", "Close");
 		}
 	}
 	if(dialogid == DIALOG_ECONOMY_MOWER) {
@@ -4139,44 +4338,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response) {
 			if(listitem == 0) 
 			{
-
-				SendErrorMessage(playerid, "Sistem ini masih dalam perkembangan.");
-				/*
-				if(GetMoney(playerid) < 10000)
-					return SendErrorMessage(playerid, "You need $100.00 to purchase attachment's");
-					
-				new Float:pX, Float:pY, Float:pZ, Float:pA;
-
-				new vehicleid = PlayerData[playerid][pVehicle];
-
-				GetVehiclePos(vehicleid, pX, pY, pZ);
-				GetVehicleZAngle(vehicleid, pA);
-				VehicleData[vehicleid][vToyID][PlayerData[playerid][pListitem]] = 18661;
-
-				format(vehicleToyText[vehicleid][PlayerData[playerid][pListitem]], 24, "TEXT");
-				format(vehicleToyFont[vehicleid][PlayerData[playerid][pListitem]], 16, "Arial");
-				VehicleData[vehicleid][vToyType][PlayerData[playerid][pListitem]] = VEHICLE_TOY_TEXT;
-				VehicleData[vehicleid][vToySize][PlayerData[playerid][pListitem]] = 24;
-				VehicleData[vehicleid][vToyColor][PlayerData[playerid][pListitem]] = 1;
-
-				VehicleData[vehicleid][vToyPosX][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToyPosY][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToyPosZ][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToyRotX][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToyRotY][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToyRotZ][PlayerData[playerid][pListitem]] = 0.00000;
-				VehicleData[vehicleid][vToy][PlayerData[playerid][pListitem]] = CreateDynamicObject(18661,pX, pY, pZ,0,0,pA);
-				AttachDynamicObjectToVehicle(VehicleData[vehicleid][vToy][PlayerData[playerid][pListitem]], vehicleid, 0, 0, 0, 0, 0, 0);
-
-				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-				GiveMoney(playerid, -10000, "Membeli att kendaraan");
-				SendServerMessage(playerid, "You have successfully purchased vehicle attachment for slot %d! (material text)", PlayerData[playerid][pListitem] + 1);
-				SendServerMessage(playerid, "Use {FFFF00}/v attachment {FFFFFF}to manage vehicle attachment!");
-
-				Vehicle_SyncText(vehicleid, PlayerData[playerid][pListitem]);*/
+				if(Vehicle_ObjectAdd(playerid, PlayerData[playerid][pVehicle], 18661, OBJECT_TYPE_TEXT)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Attachment "YELLOW"sticker "WHITE"ditambahkan! gunakan "GREEN"/v attachment "WHITE"untuk mengatur.");
+				else SendErrorMessage(playerid, "Tidak ada slot attachment untuk kendaraan ini lagi!");
 			}
 			if(listitem == 1) {
-				ShowModelSelectionMenu(playerid, "Vehicle Attachment(s)", MODEL_SELECTION_MODSHOP, g_Modshop, sizeof(g_Modshop), 0.0, 0.0, 0.0);
+
+				new models[175] = {-1, ...},
+					count =  0;
+
+				for (new i; i < sizeof(BodyWork); i++)
+				{
+					models[count++] = BodyWork[i][Model];
+				}
+				ShowCustomSelection(playerid, "Purchase Modification", MODEL_SELECTION_MODSHOP, models, count);
 			}
 		}
 	}
@@ -4185,16 +4359,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 	        if(!IsPlayerInAnyVehicle(playerid))
-	            return SendErrorMessage(playerid, "You're no longer inside a Valid Player Vehicle.");
+	            return SendErrorMessage(playerid, "Kamu harus mengemudikan kendaraan terlebih dahulu.");
 	            
 			PlayerData[playerid][pListitem] = listitem;
-			if(!VehicleData[PlayerData[playerid][pVehicle]][vToyID][listitem])
-			{
-				ShowPlayerDialog(playerid, DIALOG_MODSHOP_SELECT, DIALOG_STYLE_LIST, "Mod Type", "Text "GOLD"(Donater Only) [ STILL DISABLED ]\nObject", "Select", "Close");
+			new vehicleid = PlayerData[playerid][pVehicle];
+
+			if(VehicleObjects[vehicleid][listitem][vehObjectExists]) {
+				ShowPlayerDialog(playerid, DIALOG_MODEDIT, DIALOG_STYLE_LIST, "Attachment > Edit", "Adjust Position "YELLOW"(click n drag)\n"WHITE"Adjust Position "YELLOW"(clickable textdraw)\n"WHITE"Change text >> (text only)\nChange font >> (text only)\nChange color >> (text only)\nChange size >> (text only)\n"RED"Delete attachment", "Select", "Close");
 			}
-			else
-			{
-				ShowPlayerDialog(playerid, DIALOG_MODEDIT, DIALOG_STYLE_LIST, "Edit Vehicle Attachment(s)", "Edit Position ({FFFF00}TextDraw Click{FFFFFF})\nEdit Position ({FFFF00}Swipe Object{FFFFFF})\nChange text name\nChange fontface\nChange text color\nChange text size\n{FF0000}Remove Attachment", "Select", "Close");
+			else {
+				ShowPlayerDialog(playerid, DIALOG_MODSHOP_SELECT, DIALOG_STYLE_LIST, "Attachment > Add", "Sticker >> "GOLD"(donater only)\n"WHITE"Object [ price: $80,00 ]", "Select", "Close");
 			}
 		}
 	}
@@ -4204,13 +4378,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return 0;
 
 		if(isnull(inputtext))
-			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Modshop - Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
+			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Edit attachment > Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
 		
 		if(strlen(inputtext) > 24)
-			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Modshop - Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
+			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Edit attachment > Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
 
-		format(vehicleToyText[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]], 24, "%s", inputtext);
-		Vehicle_SyncText(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectText], 32, "%s", inputtext);
+		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
 	}	
 	if(dialogid == DIALOG_MODSHOP_SET_FONT) {
 
@@ -4218,19 +4392,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return 0;
 
 		if(isnull(inputtext))
-			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_FONT, DIALOG_STYLE_INPUT, "Modshop - Font", "Masukkan font face untuk modshop text:\n\nDefault: Arial", "Set", "Close");
+			return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_FONT, DIALOG_STYLE_INPUT, "Edit attachment > Font", "Masukkan font face untuk modshop text:\n\nDefault: Arial", "Set", "Close");
 
-		format(vehicleToyFont[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]], 16, "%s", inputtext);
-		Vehicle_SyncText(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFont], 32, "%s", inputtext);
+		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
 	}
 	if(dialogid == DIALOG_MODSHOP_SET_COLOR) {
 		if(response) {
 
 			if(!(0 <= strval(inputtext) <= sizeof(ColorList)-1))
-				return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_COLOR, DIALOG_STYLE_INPUT, "Modshop - Color", color_string, "Update", "Close");
+				return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_COLOR, DIALOG_STYLE_INPUT, "Edit attachment > Color", color_string, "Update", "Close");
 			
-			VehicleData[PlayerData[playerid][pVehicle]][vToyColor][PlayerData[playerid][pListitem]] = strval(inputtext);
-			Vehicle_SyncText(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontColor] = strval(inputtext);
+			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
 
 		}
 	}
@@ -4238,11 +4412,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response) {
 
 			if(!(0 < strval(inputtext) <= 200))
-				return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_SIZE, DIALOG_STYLE_INPUT, "Modshop - Size", "Masukkan ukuran text untuk modshop text:\n\nNote: min 24 max 200", "Set", "Close");
+				return ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_SIZE, DIALOG_STYLE_INPUT, "Edit attachment > Size", "Masukkan ukuran text untuk modshop text:\n\nNote: min 24 max 200", "Set", "Close");
 
-			VehicleData[PlayerData[playerid][pVehicle]][vToySize][PlayerData[playerid][pListitem]] = strval(inputtext);
-
-			Vehicle_SyncText(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontSize] = strval(inputtext);
+			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
 		}
 	}
 	if(dialogid == DIALOG_MODEDIT)
@@ -4264,59 +4437,51 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 1:
 				{
+					if(VehicleObjects[vehicleid][slot][vehObjectType] == OBJECT_TYPE_BODY) {
+						Vehicle_ObjectEdit(playerid, vehicleid, slot, false);
+					}
+					else {
+						Vehicle_ObjectEdit(playerid, vehicleid, slot, true);
+					}
 
-					Vehicle_EditObject(playerid, GetPlayerVehicleID(playerid), PlayerData[playerid][pListitem]);
-				    //EditVehicleObject(playerid, GetPlayerVehicleID(playerid), VehicleData[PlayerData[playerid][pVehicle]][vToy][PlayerData[playerid][pListitem]]);
 				}
 				case 2:
 				{
-					if(VehicleData[vehicleid][vToyType][slot] != VEHICLE_TOY_TEXT)
-						return SendErrorMessage(playerid, "Tipe mod harus material text!");
+					if(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectType] != OBJECT_TYPE_TEXT)
+						return SendErrorMessage(playerid, "Tipe attachment harus sticker!");
 
-					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Modshop - Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
+					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_TEXT, DIALOG_STYLE_INPUT, "Edit attachment > Text", "Masukkan text untuk modshop text:\n\nNote: Max 24 character!", "Set", "Close");
 				}
 				case 3: {
 
-					if(VehicleData[vehicleid][vToyType][slot] != VEHICLE_TOY_TEXT)
-						return SendErrorMessage(playerid, "Tipe mod harus material text!");
+					if(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectType]!= OBJECT_TYPE_TEXT)
+						return SendErrorMessage(playerid, "Tipe attachment harus sticker!");
 
-					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_FONT, DIALOG_STYLE_INPUT, "Modshop - Font", "Masukkan font face untuk modshop text:\n\nDefault: Arial", "Set", "Close");
+					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_FONT, DIALOG_STYLE_INPUT, "Edit attachment > Font", "Masukkan font face untuk modshop text:\n\nDefault: Arial", "Set", "Close");
 				}
 				case 4: {
 
-					if(VehicleData[vehicleid][vToyType][slot] != VEHICLE_TOY_TEXT)
-						return SendErrorMessage(playerid, "Tipe mod harus material text!");
+					if(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectType] != OBJECT_TYPE_TEXT)
+						return SendErrorMessage(playerid, "Tipe attachment harus sticker!");
 
-					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_COLOR, DIALOG_STYLE_INPUT, "Modshop - Color", color_string, "Update", "Close");
+					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_COLOR, DIALOG_STYLE_INPUT, "Edit attachment > Color", color_string, "Update", "Close");
 				}
 				case 5: {
 
-					if(VehicleData[vehicleid][vToyType][slot] != VEHICLE_TOY_TEXT)
-						return SendErrorMessage(playerid, "Tipe mod harus material text!");
+					if(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectType] != OBJECT_TYPE_TEXT)
+						return SendErrorMessage(playerid, "Tipe attachment harus sticker!");
 
-					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_SIZE, DIALOG_STYLE_INPUT, "Modshop - Size", "Masukkan ukuran text untuk modshop text:\n\nNote: min 24 max 200", "Set", "Close");
+					ShowPlayerDialog(playerid, DIALOG_MODSHOP_SET_SIZE, DIALOG_STYLE_INPUT, "Edit attachment > Size", "Masukkan ukuran text untuk modshop text:\n\nNote: min 24 max 200", "Set", "Close");
 				}
 				case 6:
 				{
 				    new veh = PlayerData[playerid][pVehicle];
 
 					if(!IsValidVehicle(veh))
-						return SendErrorMessage(playerid, "Vehicle no longer valid.");
+						return SendErrorMessage(playerid, "Kendaraan tidak lagi valid.");
 
-				    if(IsValidDynamicObject(VehicleData[veh][vToy][PlayerData[playerid][pListitem]])) {
-
-				    	DestroyDynamicObject(VehicleData[veh][vToy][PlayerData[playerid][pListitem]]);
-					}
-
-					VehicleData[veh][vToy][PlayerData[playerid][pListitem]] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
-				    VehicleData[veh][vToyID][PlayerData[playerid][pListitem]] = 0;
-					VehicleData[veh][vToyPosX][PlayerData[playerid][pListitem]] = 0.000;
-                	VehicleData[veh][vToyPosY][PlayerData[playerid][pListitem]] = 0.000;
-                	VehicleData[veh][vToyPosZ][PlayerData[playerid][pListitem]] = 0.000;
-                	VehicleData[veh][vToyRotX][PlayerData[playerid][pListitem]] = 0.000;
-                	VehicleData[veh][vToyRotY][PlayerData[playerid][pListitem]] = 0.000;
-                	VehicleData[veh][vToyRotZ][PlayerData[playerid][pListitem]] = 0.000;
-                	SendServerMessage(playerid, "You've successfully removed accessory Slot: %d", PlayerData[playerid][pListitem] + 1);
+					Vehicle_ObjectDelete(veh, PlayerData[playerid][pListitem]);
+					SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Attachment pada slot %d berhasil dihapus.", PlayerData[playerid][pListitem]);
 				}
 			}
 		}
@@ -4365,12 +4530,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    }
 		    PlayerData[playerid][pListitem] = listitem;
 
-			if (listitem == 3) {
+			ShowCustomSelection(playerid, "Purchase Furniture", MODEL_SELECTION_FURNITURE, items, count);
+			/*if (listitem == 3) {
+				
 				ShowModelSelectionMenu(playerid, "Furniture", MODEL_SELECTION_FURNITURE, items, count, -12.0, 0.0, 0.0);
 			}
 			else {
 			    ShowModelSelectionMenu(playerid, "Furniture", MODEL_SELECTION_FURNITURE, items, count);
-			}
+			}*/
 		}
 	}
 	if(dialogid == DIALOG_FURNITURE_LIST)
@@ -4379,7 +4546,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			PlayerData[playerid][pEditing] = ListedFurniture[playerid][listitem];
 
-			ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, "Furniture Option(s)", "Remove furniture\nEdit position (click n drag)\nEdit position (click textdraw)", "Select", "Close");
+			ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, sprintf("Furniture Option(s) - %s", FurnitureData[PlayerData[playerid][pEditing]][furnitureName]), "Remove furniture\nEdit position (click n drag)\nEdit position (click textdraw)\n"RED"(beta) "WHITE"Change Texture", "Select", "Close");
 		}
 	}
 	if(dialogid == DIALOG_FLAT_FURNITURE)
@@ -4388,21 +4555,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-			    new count = 0, string[1012], flatid = Flat_Inside(playerid), real_count;
-			    format(string, sizeof(string), "Model Name\tModel ID\tDistance\n");
+			    new count = 0, string[2012], flatid = Flat_Inside(playerid), real_count;
 				foreach(new i : Furniture) if (FurnitureData[i][furnitureProperty] == FlatData[flatid][flatID] && FurnitureData[i][furniturePropertyType] == FURNITURE_TYPE_FLAT)
 				{
 					if(real_count >= Flat_LimitFurniture(flatid))
 						break;
 						
 					ListedFurniture[playerid][count++] = i;
-					format(string, sizeof(string), "%s%s\t%d\t%.2f meters\n", string, FurnitureData[i][furnitureName], FurnitureData[i][furnitureModel], GetPlayerDistanceFromPoint(playerid, FurnitureData[i][furniturePos][0], FurnitureData[i][furniturePos][1], FurnitureData[i][furniturePos][2]));
+					format(string, sizeof(string), "%s%s (%.2f meters)\n", string, FurnitureData[i][furnitureName], GetPlayerDistanceFromPoint(playerid, FurnitureData[i][furniturePos][0], FurnitureData[i][furniturePos][1], FurnitureData[i][furniturePos][2]));
 				
 					real_count++;
 				}
 				if (count)
 				{
-					ShowPlayerDialog(playerid, DIALOG_FURNITURE_LIST, DIALOG_STYLE_TABLIST_HEADERS, "Furniture List", string, "Select", "Cancel");
+					ShowPlayerDialog(playerid, DIALOG_FURNITURE_LIST, DIALOG_STYLE_LIST, sprintf("Furniture List (%d/%d)", Flat_FurnitureCount(flatid), Flat_LimitFurniture(flatid)), string, "Select", "Cancel");
 			 	}
 			 	else SendErrorMessage(playerid, "There is no furniture on this flat!"), cmd_flat(playerid, "menu");
 			}
@@ -4454,8 +4620,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-			    new count = 0, string[1512], houseid = House_Inside(playerid), real_count = 0;
-			    format(string, sizeof(string), "Model Name\tModel ID\tDistance\n");
+			    new count = 0, string[2012], houseid = House_Inside(playerid), real_count = 0;
 				foreach(new i : Furniture) if (FurnitureData[i][furnitureProperty] == HouseData[houseid][houseID] && FurnitureData[i][furniturePropertyType] == FURNITURE_TYPE_HOUSE)
 				{
 
@@ -4463,13 +4628,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						break;
 
 					ListedFurniture[playerid][count++] = i;
-					format(string, sizeof(string), "%s%s\t%d\t%.2f meters\n", string, FurnitureData[i][furnitureName], FurnitureData[i][furnitureModel], GetPlayerDistanceFromPoint(playerid, FurnitureData[i][furniturePos][0], FurnitureData[i][furniturePos][1], FurnitureData[i][furniturePos][2]));
+					format(string, sizeof(string), "%s%s (%.2f meters)\n", string, FurnitureData[i][furnitureName], GetPlayerDistanceFromPoint(playerid, FurnitureData[i][furniturePos][0], FurnitureData[i][furniturePos][1], FurnitureData[i][furniturePos][2]));
 				
 					real_count++;
 				}
 				if (count)
 				{
-					ShowPlayerDialog(playerid, DIALOG_FURNITURE_LIST, DIALOG_STYLE_TABLIST_HEADERS, "Furniture List", string, "Select", "Cancel");
+					ShowPlayerDialog(playerid, DIALOG_FURNITURE_LIST, DIALOG_STYLE_LIST, sprintf("Furniture List (%d/%d)", House_FurnitureCount(houseid), House_LimitFurniture(houseid)), string, "Select", "Cancel");
 			 	}
 			 	else SendErrorMessage(playerid, "There is no furniture on this house!"), cmd_house(playerid, "menu");
 			}
@@ -4510,7 +4675,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					Iter_SafeRemove(Furniture, next, i);
 				}
 				SendServerMessage(playerid, "You have removed all furniture on this house!");
-				cmd_house(playerid, "menu");
+				ShowHouseMenu(playerid);
 			}
 		}
 	}
@@ -4520,13 +4685,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-				ShowPlayerDialog(playerid, DIALOG_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Furniture list\nPurchase furniture\nRemove all furniture", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\nSelect Furniture "YELLOW"(only pc)\n"RED"Reset all furniture", "Select", "Close");
 			}
 			if(listitem == 1)
 			{
+				if(!House_IsOwner(playerid, House_Inside(playerid)))
+					return SendErrorMessage(playerid, "Only owner can access this option.");
+
 				House_OpenStorage(playerid, House_Inside(playerid));
 			}
 			if(listitem == 2) {
+
+				if(!House_IsOwner(playerid, House_Inside(playerid)))
+					return SendErrorMessage(playerid, "Only owner can access this option.");
+
 				House_ShowKeyMenu(playerid, House_Inside(playerid));
 			}
 		}
@@ -4953,6 +5125,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}Rifle Material");		
 
 			}
+			if(listitem == 4) {
+
+				if(GetMoney(playerid) < 250000)
+					return SendErrorMessage(playerid, "You don't have enough money!");
+
+				if(Inventory_Add(playerid, "AK-47 Material", 3052, 1) == -1)
+					return 1;
+
+				GiveMoney(playerid, -250000, "Membeli AK Material");
+				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}AK-47 Material");		
+			}
 		}
 	}
 	if(dialogid == DIALOG_BM_CLIP)
@@ -5042,14 +5225,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(strval(inputtext) > 20)
 					return ShowPlayerDialog(playerid, DIALOG_BM_CLIP_AMOUNT, DIALOG_STYLE_INPUT, "7.62mm Caliber", "ERROR: Invalid amount!\nSilahkan masukan jumlah clip yang ingin dibeli:\nPrice: $120.00 / 1 Clip", "Buy", "Close");
 			
-				if(GetMoney(playerid) < strval(inputtext)*12000)
+				if(GetMoney(playerid) < strval(inputtext)*15000)
 					return ShowPlayerDialog(playerid, DIALOG_BM_CLIP_AMOUNT, DIALOG_STYLE_INPUT, "7.62mm Caliber", "ERROR: You don't have enough money!\nSilahkan masukan jumlah clip yang ingin dibeli:\nPrice: $120.00 / 1 Clip", "Buy", "Close");
 			
 				if(Inventory_Add(playerid, "7.62mm Caliber", 19995, strval(inputtext)) == -1)
 					return 1;
 					
-				GiveMoney(playerid, -strval(inputtext)*12000, "Membeli Rifle clip");
-				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}%d Clip {FFFFFF}dengan harga {FFFF00}$%s", strval(inputtext), FormatNumber(strval(inputtext)*12000));
+				GiveMoney(playerid, -strval(inputtext)*15000, "Membeli AK/Rifle clip");
+				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}%d Clip {FFFFFF}dengan harga {FFFF00}$%s", strval(inputtext), FormatNumber(strval(inputtext)*15000));
 			}
 		}
 	} 
@@ -5101,6 +5284,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}Rifle High Velocity Schematic");		
 				GiveMoney(playerid, -610000, "Membeli Rifle schematic");		
 			}
+			if(listitem == 4)
+			{
+				if(GetMoney(playerid) < 1430000)
+					return SendErrorMessage(playerid, "You don't have enough money!");
+
+				if(Inventory_Add(playerid, "AK-47 HV Schematic", 3111, 1) == -1)
+					return 1;
+
+				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}AK-47 High Velocity Schematic");		
+				GiveMoney(playerid, -1430000, "Membeli AK schematic");		
+			}
 		}
 	}
 	if(dialogid == DIALOG_BM_SCHEMATIC)
@@ -5150,6 +5344,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}Rifle Schematic");		
 				GiveMoney(playerid, -460000, "Membeli Rifle schematic");		
+			}
+			if(listitem == 4)
+			{
+				if(GetMoney(playerid) < 980000)
+					return SendErrorMessage(playerid, "You don't have enough money!");
+
+				if(Inventory_Add(playerid, "AK-47 Schematic", 3111, 1) == -1)
+					return 1;
+
+				SendServerMessage(playerid, "Kamu berhasil membeli {FF0000}AK-47 Schematic");		
+				GiveMoney(playerid, -980000, "Membeli AK schematic");		
 			}
 		}
 	}
@@ -5356,7 +5561,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				PlayerData[targetid][pBank] += strval(totalcash);
 				PlayerData[playerid][pBank] -= strval(totalcash);
-				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(targetid));
+				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
 				SendClientMessageEx(targetid, COLOR_SERVER, "ATM: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 			}
 			else
@@ -5372,7 +5577,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				PlayerData[targetid][pBank] += strval(totalcash);
 				PlayerData[playerid][pBank] -= strval(totalcash);
-				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(targetid));
+				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
 				SendClientMessageEx(targetid, COLOR_SERVER, "ATM: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 			}			
 		}
@@ -5540,7 +5745,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(contactid == -1)
 				return SendErrorMessage(playerid, "There is no room left for anymore contacts.");
 
-			SendServerMessage(playerid, "You have added \"%s\" to your contacts.", PlayerData[playerid][pTempContact]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "CONTACT INFO: "WHITE"Kamu telah menambahkan "YELLOW"\"%s\" "WHITE"ke kontakmu.", PlayerData[playerid][pTempContact]);
 		}
 		else
 		{
@@ -5664,20 +5869,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			ShowPlayerDialog(playerid, DIALOG_SMSNUM, DIALOG_STYLE_INPUT, "Text Message", "Please enter the message to send:", "Send", "Back");
 		}
 	}
-	if(dialogid == DIALOG_SMSNUM)
+	if(dialogid == DIALOG_REPLY)
 	{
 		if (response)
 		{
 			if (isnull(inputtext))
-				return ShowPlayerDialog(playerid, DIALOG_SMSNUM, DIALOG_STYLE_INPUT, "Text Message", "Error: Please enter a message to send.\n\nPlease enter the message to send:", "Send", "Back");
+				return cmd_reply(playerid, "\0");
 
-			new targetid = PlayerData[playerid][pContact];
+			new targetid = GetNumberOwner(PlayerData[playerid][pLastNumber]);
 
 			if (!IsPlayerConnected(targetid) || !PlayerHasItem(playerid, "Cellphone") || PlayerData[targetid][pPhoneOff])
 			    return SendErrorMessage(playerid, "The specified phone number went offline.");
 		    
-		    if(strlen(inputtext) > 32)
-		    	return SendErrorMessage(playerid, "Text tidak bisa lebih dari 32 karakter!");
+		    if(strlen(inputtext) > 90)
+		    	return SendErrorMessage(playerid, "Text tidak bisa lebih dari 90 karakter!");
 
 		    if(PlayerData[playerid][pCredit] < 1)
 		    	return SendErrorMessage(playerid, "Kamu tidak memiliki phone credits!");
@@ -5692,7 +5897,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			PlayerPlaySound(playerid, targetid, 0.0, 0.0, 0.0);
 					
-			SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s takes out their phone and sends a text.", ReturnName(playerid));
+			cmd_ame(playerid, "types something on his cellphone.");
+
+			PlayerData[targetid][pLastNumber] = PlayerData[playerid][pPhoneNumber];
+		}
+	}
+	if(dialogid == DIALOG_SMSNUM)
+	{
+		if (response)
+		{
+			if (isnull(inputtext))
+				return ShowPlayerDialog(playerid, DIALOG_SMSNUM, DIALOG_STYLE_INPUT, "Text Message", "Error: Please enter a message to send.\n\nPlease enter the message to send:", "Send", "Back");
+
+			new targetid = PlayerData[playerid][pContact];
+
+			if (!IsPlayerConnected(targetid) || !PlayerHasItem(playerid, "Cellphone") || PlayerData[targetid][pPhoneOff])
+			    return SendErrorMessage(playerid, "The specified phone number went offline.");
+		    
+		    if(strlen(inputtext) > 90)
+		    	return SendErrorMessage(playerid, "Text tidak bisa lebih dari 90 karakter!");
+
+		    if(PlayerData[playerid][pCredit] < 1)
+		    	return SendErrorMessage(playerid, "Kamu tidak memiliki phone credits!");
+
+			PlayerData[playerid][pCredit] -= 3;
+
+			if(PlayerData[playerid][pCredit] < 0)
+				PlayerData[playerid][pCredit] = 0;
+
+			SendClientMessageEx(targetid, X11_LIGHTBLUE, "** SMS from %s(%d): "WHITE"%s", IsNumberKnown(targetid, PlayerData[playerid][pPhoneNumber], true), PlayerData[playerid][pPhoneNumber], inputtext);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "** SMS to %s(%d): "WHITE"%s", IsNumberKnown(playerid, PlayerData[targetid][pPhoneNumber], true), PlayerData[targetid][pPhoneNumber], inputtext);
+
+			PlayerPlaySound(playerid, targetid, 0.0, 0.0, 0.0);
+					
+			cmd_ame(playerid, "types something on his cellphone.");
+
+			PlayerData[targetid][pLastNumber] = PlayerData[playerid][pPhoneNumber];
 		}
 		else
 		{
@@ -6248,7 +6488,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				else if(GetFactionType(playerid) == FACTION_NEWS)
 				{
-					strcat(string, "/live | /inviteguest | /removeguest | /bc | /broadcast | /(give/remove)mic");
+					strcat(string, "/live | /inviteguest | /removeguest | /bc | /broadcast | /(give/remove)mic | /postad");
 				}
 				else if(GetFactionType(playerid) == FACTION_GOV)
 				{
@@ -6318,6 +6558,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				strcat(string, "/race removefinish - untuk menghapus Checkpoint finish\n");
 				strcat(string, "/race leave - untuk keluar dari balapan");
 				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Race Commands", string, "Back", "");
+			}
+			if(listitem == 12) {
+				strcat(string, "/propose - untuk mengajukan pernikahan kepada pasangan (digunakan didalam church)\n");
+				strcat(string, "/divorce - untuk menghapus married status antar pasangan.\n");
+				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Marriage Commands", string, "Back", "");
 			}
 		}
 	}
@@ -6856,10 +7101,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(VehicleData[vehicleid][vRepair])
 		            return SendErrorMessage(playerid, "This vehicle is being repaired!");
 		            
-				new Float:hp;
-				GetVehicleHealth(vehicleid, hp);
-				
-				if(hp >= 900)
+
+				if(PlayerData[playerid][pMechPrice][0] < 1)
 				    return SendErrorMessage(playerid, "This Vehicle doesn't need to repaired!");
 				    
 				Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][0]);
@@ -6914,7 +7157,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					colors[i] = i;
 			   	}
-			   	ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR, colors);
+			   	ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR_1, colors);
+
+				SendClientMessage(playerid, X11_LIGHTBLUE, "MECH-HINT: "WHITE"Silahkan pilih warna pertama terlebih dahulu.");
 			}
 			if(listitem == 4) {
 			    if(GetComponent(playerid) < 50)
@@ -7068,7 +7313,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 10) {
 				
-			    if(GetComponent(playerid) < 70)
+			    if(GetComponent(playerid) < 200)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
 				if(!IsValidVehicle(vehicleid))
@@ -7122,16 +7367,30 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(neon != VEHICLE_NEON_NONE) {
 
 				VehicleData[vehicleid][vNeonColor] = neon;
-				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor]);
+				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 0);
+				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 1);
+				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 2);
 				SendServerMessage(playerid, "Neon berhasil dipasang pada kendaraan %s.", GetVehicleName(vehicleid));
 
-				Inventory_Remove(playerid, "Component", 70);
+				Inventory_Remove(playerid, "Component", 200);
+
+				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
+
+				VehicleData[vehicleid][vNeonStatus] = true;
 			}
 			else {
 				SendServerMessage(playerid, "Kamu berhasil menghapus Neon pada kendaraan %s.", GetVehicleName(vehicleid));
 				VehicleData[vehicleid][vNeonColor] = neon;
-				Vehicle_SetNeon(vehicleid, false);
+				Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 0);
+				Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 1);
+				Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 2);
+
+				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
+
+				VehicleData[vehicleid][vNeonStatus] = false;
 			}
+
+			Vehicle_Save(vehicleid);
 		}
 	}
 	if(dialogid == DIALOG_TUNE_RIMS) {
@@ -7441,7 +7700,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-			new vid = PlayerData[playerid][pVehicle], id = ListedCrate[playerid][listitem];
+			new id = ListedCrate[playerid][listitem];
 
 			SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil mengambil Cargo {FFFF00}%s {FFFFFF}dari Truck!", Crate_Name[CrateData[id][crateType]]);
 			ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
@@ -9124,7 +9383,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "You must specify a birth date."), ShowCharacterSetup(playerid);
 
 					new query[256];
-					mysql_format(sqlcon,query,sizeof(query),"INSERT INTO `characters` (`Name`, `UCP`, `Registered`, `PosX`, `PosY`, `PosZ`, `Skin`) VALUES('%e', '%e', '%d', '%f', '%f', '%f', '%d')", PlayerData[playerid][pTempName], GetName(playerid), gettime(), -1415.9169,-300.1727,14.1484, PlayerData[playerid][pSkin]);
+					mysql_format(sqlcon,query,sizeof(query),"INSERT INTO `characters` (`Name`, `UCP`, `Registered`, `PosX`, `PosY`, `PosZ`, `Skin`) VALUES('%e', '%e', '%d', '%.4f', '%.4f', '%.4f', '%d')", PlayerData[playerid][pTempName], GetName(playerid), gettime(), -1415.9169,-300.1727,14.1484, PlayerData[playerid][pSkin]);
 					mysql_tquery(sqlcon, query, "OnPlayerCharacterCreated", "d", playerid);
 
 				}
@@ -9148,6 +9407,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		else RemovePlayerFromVehicle(playerid);
 	}
+	return 1;
+}
+
+public OnQueryError(errorid, const error[], const callback[], const query[], MySQL:handle)
+{
+    SendAdminMessage(X11_TOMATO, "MySQL: An error encountered [ ERR_ID:%d / query printed on DB logs ]", errorid);
+	Log_Write("Logs/db_err.txt", "[%s] ERROR: %d / Query: %s - Callback: %s", ReturnDate(), errorid, query, callback);
 	return 1;
 }
 
@@ -9440,7 +9706,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		else {
 
 			if(IsEngineVehicle(GetPlayerVehicleID(playerid)))
-				ShowPlayerDialog(playerid, DIALOG_VEHMENU, DIALOG_STYLE_LIST, "Vehicle Control", "Toggle engine\nToggle Lock\nToggle Lights", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_VEHMENU, DIALOG_STYLE_LIST, "Vehicle Control", "Toggle engine\nToggle Lock\nToggle Lights\nToggle Neon", "Select", "Close");
 		}
 	}
 	if((newkeys & KEY_SECONDARY_ATTACK ))
@@ -9992,6 +10258,16 @@ public OnPlayerText(playerid, text[])
 		SetPlayerChatBubble(playerid, sprintf("Admin: %s", text), X11_RED_2, 15.0, 5000);
 		return 0;
 	}
+	if(PlayerData[playerid][pCallNews]) {
+
+		SendFactionMessageEx(FACTION_NEWS, X11_LIGHTBLUE, "193 CALL: "WHITE"%s (%s) "YELLOW"(ph: %d)", GetName(playerid, false), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
+		SendFactionMessageEx(FACTION_NEWS, X11_LIGHTBLUE, "DESCRIPTION: "WHITE"%s", text);
+
+		SendClientMessage(playerid, X11_LIGHTBLUE, "NEWS OPERATOR:"WHITE" Your phone call has been forwarded to 123 - San Fierro News");
+	    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+	    RemovePlayerAttachedObject(playerid, 3);
+		PlayerData[playerid][pCallNews] = false;
+	}
 	if(ServiceIndex[playerid] != 0)
 	{
 		ProcessServiceCall(playerid, text);
@@ -10192,24 +10468,20 @@ public OnVehicleSpawn(vehicleid)
 	return 1;
 }
 
-public OnQueryError(errorid, const error[], const callback[], const query[], MySQL:handle)
-{
-	new
-	    File:file = fopen("LogsError/MySQL.txt", io_append);
+/* Misc CMD */
 
-	if(file)
-	{
-	    new
-	        string[2048];
-
-		format(string, sizeof(string), "[%s]\r\nError ID: %i\r\nCallback: %s\r\nQuery: %s\r\n[!] %s\r\n\r\n", GetDate(), errorid, callback, query, error);
-		fwrite(file, string);
-		fclose(file);
-	}
-	return 1;
-}
 
 /* Main Functions */
+
+IsPlayerInsideProperty(playerid) {
+	if(House_Inside(playerid) != -1) {
+		return 1;
+	}
+	if(Flat_Inside(playerid) != -1) {
+		return 1;
+	}
+	return 0;
+}
 
 House_LimitFurniture(id) {
 	new limit = 0;
@@ -10298,7 +10570,7 @@ stock Flat_FurnitureCount(id)
 	return count;
 }
 
-stock FixText(text[])
+FixText(text[])
 {
     new len = strlen(text);
     if(len > 1)
@@ -10696,8 +10968,8 @@ ShowPlayerStats(playerid, targetid)
 	format(str, sizeof(str), "{FFFFFF}Name: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Gender: [{C6E2FF}%s{FFFFFF}] | Birthdate: [{C6E2FF}%s{FFFFFF}] | Money: [{009000}$%s{FFFFFF}] | Bank: [{009000}$%s{FFFFFF}]\n",
 	PlayerData[playerid][pName], PlayerData[playerid][pID], Gender_Name[PlayerData[playerid][pGender]], PlayerData[playerid][pBirthdate], FormatNumber(GetMoney(playerid)), FormatNumber(PlayerData[playerid][pBank]));
 	strcat(cat, str);
-	format(str, sizeof(str), "Origin: [{C6E2FF}%s{FFFFFF}] | Number: [{C6E2FF}%d{FFFFFF}] | Job: [{C6E2FF}%s, %s{FFFFFF}] | Faction: [{C6E2FF}%s{FFFFFF}] | Faction Rank: [{C6E2FF}%s{FFFFFF}]\n",
-	PlayerData[playerid][pOrigin], PlayerData[playerid][pPhoneNumber], GetJobName(PlayerData[playerid][pJob]), GetJobName(PlayerData[playerid][pJob2]), Faction_GetName(playerid), Faction_GetRank(playerid));
+	format(str, sizeof(str), "Origin: [{C6E2FF}%s{FFFFFF}] | Number: [{C6E2FF}%d{FFFFFF}] | Job: [{C6E2FF}%s, %s{FFFFFF}] | Faction: [{C6E2FF}%s{FFFFFF}] | Faction Rank: [{C6E2FF}%s{FFFFFF}] | Married With: [{C6E2FF}%s{FFFFFF}]\n",
+	PlayerData[playerid][pOrigin], PlayerData[playerid][pPhoneNumber], GetJobName(PlayerData[playerid][pJob]), GetJobName(PlayerData[playerid][pJob2]), Faction_GetName(playerid), Faction_GetRank(playerid), MarryWith[playerid]);
 	strcat(cat, str);
 	format(str, sizeof(str), "Vehicle Slot: [{C6E2FF}%d{FFFFFF}] | House Slot: [{C6E2FF}%d{FFFFFF}] | Business Slot: [{C6E2FF}%d{FFFFFF}]\n",
 	CountPlayerVehicleSlot(playerid), CountPlayerHouseSlot(playerid), CountPlayerBusinessSlot(playerid));
@@ -10720,7 +10992,7 @@ ShowPlayerStats(playerid, targetid)
 	return 1;
 }
 
-stock Furniture_Spawn(furnitureid) {
+Furniture_Spawn(furnitureid) {
 
 	if(Iter_Contains(Furniture, furnitureid))
 	{
@@ -10734,12 +11006,18 @@ stock Furniture_Spawn(furnitureid) {
 			FurnitureData[furnitureid][furnitureRot][2],
 			FurnitureData[furnitureid][furnitureWorld],
 			FurnitureData[furnitureid][furnitureInterior]
-		);	
+		);
+
+		if(FurnitureData[furnitureid][furnitureTextureModelid] != 0) {
+			SetDynamicObjectMaterial(FurnitureData[furnitureid][furnitureObject], 0, FurnitureData[furnitureid][furnitureTextureModelid], FurnitureData[furnitureid][furnitureTextureTXDName], FurnitureData[furnitureid][furnitureTextureName]);
+		}
+
+		Streamer_AppendArrayData(STREAMER_TYPE_OBJECT, FurnitureData[furnitureid][furnitureObject], E_STREAMER_WORLD_ID, FurnitureData[furnitureid][furnitureWorld]);
 	}
 	return 1;
 }
 
-stock Furniture_Sync(furnitureid) {
+Furniture_Sync(furnitureid) {
 
 	if(Iter_Contains(Furniture, furnitureid))
 	{
@@ -10750,6 +11028,12 @@ stock Furniture_Sync(furnitureid) {
 		Streamer_SetFloatData(STREAMER_TYPE_OBJECT, FurnitureData[furnitureid][furnitureObject], E_STREAMER_R_X, FurnitureData[furnitureid][furnitureRot][0]);
 		Streamer_SetFloatData(STREAMER_TYPE_OBJECT, FurnitureData[furnitureid][furnitureObject], E_STREAMER_R_Y, FurnitureData[furnitureid][furnitureRot][1]);
 		Streamer_SetFloatData(STREAMER_TYPE_OBJECT, FurnitureData[furnitureid][furnitureObject], E_STREAMER_R_Z, FurnitureData[furnitureid][furnitureRot][2]);
+	
+		if(FurnitureData[furnitureid][furnitureTextureModelid] != 0) {
+			SetDynamicObjectMaterial(FurnitureData[furnitureid][furnitureObject], 0, FurnitureData[furnitureid][furnitureTextureModelid], FurnitureData[furnitureid][furnitureTextureTXDName], FurnitureData[furnitureid][furnitureTextureName]);
+		}
+
+		Streamer_AppendArrayData(STREAMER_TYPE_OBJECT, FurnitureData[furnitureid][furnitureObject], E_STREAMER_WORLD_ID, FurnitureData[furnitureid][furnitureWorld]);
 	}
 	return 1;
 }
@@ -10771,7 +11055,7 @@ timer OnAutoAimCheck[2000](playerid) {
 }
 task OnServerDataUpdate[1800000]() {
 	fishPrice = RandomFloat(3.8,6.0);
-
+	woodPrice = RandomEx(2500, 5000);
 	return 1;
 }
 timer EnterWorkshop[5000](playerid, wsidx, vehicleid) {
@@ -10833,7 +11117,9 @@ timer UnstuckPlayerVehicle[1000](playerid, vehicleid) {
 	SetVehicleZAngle(vehicleid, VehicleData[vehicleid][vPos][3]);
 	SendServerMessage(playerid, "Your "YELLOW"%s "WHITE"has been unstucked.", GetVehicleName(vehicleid));
 
-	Vehicle_AttachObject(vehicleid);
+	for(new i = 0; i < MAX_VEHICLE_OBJECT; i++) if(VehicleObjects[vehicleid][i][vehObjectExists]) {
+		Vehicle_AttachObject(vehicleid, i);
+	}
 	Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 	return 1;
 }

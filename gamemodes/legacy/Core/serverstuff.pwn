@@ -184,6 +184,8 @@ stock LoadActor()
 
 stock LoadPoint()
 {
+	CreateDynamic3DTextLabel(""YELLOW"/propose "WHITE"here.", -1, 2214.3958,-1332.6309,252.4141, 3.0);
+
 	CreateDynamicPickup(1239, 23, 361.8309,173.6048,1008.3828, -1);
 	CreateDynamic3DTextLabel(""LIGHTBLUE"[Tax Office]\n{FFFF00}/paytax\n"WHITE"Untuk membayar pajak.", -1, 361.8309,173.6048,1008.3828, 10.0);
 

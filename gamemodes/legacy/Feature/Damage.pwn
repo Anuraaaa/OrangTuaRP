@@ -167,7 +167,20 @@ CMD:damages(playerid, params[]) {
     return 1;
 }
 
+CMD:adamages(playerid, params[]) {
+    new targetid;
+    if(PlayerData[playerid][pAdmin] < 1)
+        return SendErrorMessage(playerid, NO_PERMISSION);
 
+    if(sscanf(params, "u", targetid))
+        return Damage_Show(playerid, playerid);
+
+    if (targetid == INVALID_PLAYER_ID)
+        return SendErrorMessage(playerid, "That player is disconnected.");
+
+    Damage_Show(targetid, playerid);
+    return 1;
+}
 /* Callback */
 
 hook OnPlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart) {

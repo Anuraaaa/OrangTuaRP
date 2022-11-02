@@ -180,7 +180,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			if(GetFactionType(playerid) != FACTION_FAMILY)
 				ShowPlayerDialog(playerid, DIALOG_BM_HV_SCHEMATIC, DIALOG_STYLE_LIST, "High Velocity Schematic", "9mm Silenced | Price: $2,300.00\nShotgun | Price: $4,200.00", "Buy", "Close");
 			else	
-				ShowPlayerDialog(playerid, DIALOG_BM_HV_SCHEMATIC, DIALOG_STYLE_LIST, "High Velocity Schematic", "9mm Silenced | Price: $2,300.00\nShotgun | Price: $4,200.00\nDesert Eagle | Price: $2,900.00\nRifle | Price: $6,100.00", "Buy", "Close"); //memek
+				ShowPlayerDialog(playerid, DIALOG_BM_HV_SCHEMATIC, DIALOG_STYLE_LIST, "High Velocity Schematic", "9mm Silenced | Price: $2,300.00\nShotgun | Price: $4,200.00\nDesert Eagle | Price: $2,900.00\nRifle | Price: $6,100.00\nAK-47 | Price: $14,300.00", "Buy", "Close"); //memek
 
 		}
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, g_posSchematic[0], g_posSchematic[1], g_posSchematic[2]))//schematic
@@ -191,7 +191,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			if(GetFactionType(playerid) != FACTION_FAMILY)
 				ShowPlayerDialog(playerid, DIALOG_BM_SCHEMATIC, DIALOG_STYLE_LIST, "Schematic", "9mm Silenced schematic | Price: $1,700.00\nShotgun schematic | Price: $3,000.00", "Buy", "Close");
 			else
-				ShowPlayerDialog(playerid, DIALOG_BM_SCHEMATIC, DIALOG_STYLE_LIST, "Schematic", "9mm Silenced schematic | Price: $1,700.00\nShotgun schematic | Price: $3,000.00\nDesert Eagle schematic | Price: $2,000.00\nRifle schematic | Price: $4,600.00", "Buy", "Close");
+				ShowPlayerDialog(playerid, DIALOG_BM_SCHEMATIC, DIALOG_STYLE_LIST, "Schematic", "9mm Silenced schematic | Price: $1,700.00\nShotgun schematic | Price: $3,000.00\nDesert Eagle schematic | Price: $2,000.00\nRifle schematic | Price: $4,600.00\nAK-47 Schematic | Price: $9,800.00", "Buy", "Close");
 		}
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, g_posClip[0], g_posClip[1], g_posClip[2]))
 		{
@@ -201,7 +201,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			if(GetFactionType(playerid) != FACTION_FAMILY)
 				ShowPlayerDialog(playerid, DIALOG_BM_CLIP, DIALOG_STYLE_LIST, "Gun Clip", "9mm Luger | 17 rounds / 1 Clip | Price: $47.n00\n12 Gauge | 12 rounds / 1 Clip | Price: $69.00", "Buy", "Close");
 			else
-				ShowPlayerDialog(playerid, DIALOG_BM_CLIP, DIALOG_STYLE_LIST, "Gun Clip", "9mm Luger | 17 rounds / 1 Clip | Price: $47.n00\n12 Gauge | 12 rounds / 1 Clip | Price: $69.00\n.44 Magnum | 7 rounds / 1 Clip | Price: $55.00\n7.62mm Caliber | 5 rounds / 1 clip | Price: $120.00", "Buy", "Close");
+				ShowPlayerDialog(playerid, DIALOG_BM_CLIP, DIALOG_STYLE_LIST, "Gun Clip", "9mm Luger | Price: $47.00\n12 Gauge | Price: $69.00\n.44 Magnum | Price: $55.00\n7.62mm Caliber | Price: $150.00", "Buy", "Close");
 		}
 		if(IsPlayerInRangeOfPoint(playerid, 3.0,g_posMaterial[0], g_posMaterial[1], g_posMaterial[2]))
 		{
@@ -211,8 +211,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			if(GetFactionType(playerid) != FACTION_FAMILY)
 				ShowPlayerDialog(playerid, DIALOG_BM_MATERIAL, DIALOG_STYLE_LIST, "Material", "9mm Silenced | Price: $200.00\nShotgun | Price: $450.00", "Buy", "Close");
 			else	
-				ShowPlayerDialog(playerid, DIALOG_BM_MATERIAL, DIALOG_STYLE_LIST, "Material", "9mm Silenced | Price: $200.00\nShotgun | Price: $450.00\nDesert Eagle | Price: $350.00\nRifle | Price: $900.00", "Buy", "Close");
-
+				ShowPlayerDialog(playerid, DIALOG_BM_MATERIAL, DIALOG_STYLE_LIST, "Material", "9mm Silenced | Price: $200.00\nShotgun | Price: $450.00\nDesert Eagle | Price: $350.00\nRifle | Price: $900.00\nAK-47 | Price: $2,500.00", "Buy", "Close");
 		}
     }
     return Y_HOOKS_CONTINUE_RETURN_1;

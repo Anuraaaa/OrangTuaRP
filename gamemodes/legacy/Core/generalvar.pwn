@@ -1,7 +1,8 @@
 
 new bool:InHospital[MAX_PLAYERS];
 
-new Float:fishPrice = 3.0;
+new Float:fishPrice = 3.0,
+	woodPrice = 5000;
 
 new vehiclecallsign[MAX_VEHICLES];
 new Text3D:vehicle3Dtext[MAX_VEHICLES];
@@ -64,7 +65,8 @@ stock const ColorList[] = {
 enum
 {
 	MODEL_SELECTION_BUYSKIN,
-	MODEL_SELECTION_COLOR,
+	MODEL_SELECTION_COLOR_1,
+	MODEL_SELECTION_COLOR_2,
 	MODEL_SELECTION_ADD_SKIN,
 	MODEL_SELECTION_FACTION_SKIN,
 	MODEL_SELECTION_FACTION_SKINS,
@@ -406,7 +408,11 @@ enum
 	DIALOG_PAYTAX_FLAT,
 	DIALOG_HOUSE_TENANT_REMOVE,
 	DIALOG_FLAT_TENANT_REMOVE,
-	DIALOG_VEHSPAWN
+	DIALOG_VEHSPAWN,
+	DIALOG_ADS_TEXT,
+	DIALOG_ADS_POST,
+	DIALOG_REPLY,
+	DIALOG_FURNITURE_TEXTURE
 };
 
 enum {
@@ -811,4 +817,35 @@ new g_Modshop[110] =
 new const g_aWeatherRotations[] =
 {
 	14, 1, 7, 3, 5, 12, 8
+};
+
+stock const g_aPreloadLibs[][] =
+{
+    "AIRPORT",      "ATTRACTORS",   "BAR",          "BASEBALL",     "BD_FIRE",
+    "BEACH",        "BENCHPRESS",   "BF_INJECTION", "BIKE_DBZ",     "BIKED",
+    "BIKEH",        "BIKELEAP",     "BIKES",        "BIKEV",        "BLOWJOBZ",
+    "BMX",          "BOMBER",       "BOX",          "BSKTBALL",     "BUDDY",
+    "BUS",          "CAMERA",       "CAR",          "CAR_CHAT",     "CARRY",
+    "CASINO",       "CHAINSAW",     "CHOPPA",       "CLOTHES",      "COACH",
+    "COLT45",       "COP_AMBIENT",  "COP_DVBYZ",    "CRACK",        "CRIB",
+    "DAM_JUMP",     "DANCING",      "DEALER",       "DILDO",        "DODGE",
+    "DOZER",        "DRIVEBYS",     "FAT",          "FIGHT_B",      "FIGHT_C",
+    "FIGHT_D",      "FIGHT_E",      "FINALE",       "FINALE2",      "FLAME",
+    "FLOWERS",      "FOOD",         "FREEWEIGHTS",  "GANGS",        "GFUNK",
+    "GHANDS",       "GHETTO_DB",    "GOGGLES",      "GRAFFITI",     "GRAVEYARD",
+    "GRENADE",      "GYMNASIUM",    "HAIRCUTS",     "HEIST9",       "INT_HOUSE",
+    "INT_OFFICE",   "INT_SHOP",     "JST_BUISNESS", "KART",         "KISSING",
+    "KNIFE",        "LAPDAN1",      "LAPDAN2",      "LAPDAN3",      "LOWRIDER",
+    "MD_CHASE",     "MD_END",       "MEDIC",        "MISC",         "MTB",
+    "MUSCULAR",     "NEVADA",       "ON_LOOKERS",   "OTB",          "PARACHUTE",
+    "PARK",         "PAULNMAC",     "PED",          "PLAYER_DVBYS", "PLAYIDLES",
+    "POLICE",       "POOL",         "POOR",         "PYTHON",       "QUAD",
+    "QUAD_DBZ",     "RAPPING",      "RIFLE",        "RIOT",         "ROB_BANK",
+    "ROCKET",       "RUNNINGMAN",   "RUSTLER",      "RYDER",        "SCRATCHING",
+    "SEX",          "SHAMAL",       "SHOP",         "SHOTGUN",      "SILENCED",
+    "SKATE",        "SMOKING",      "SNIPER",       "SNM",          "SPRAYCAN",
+    "STRIP",        "SUNBATHE",     "SWAT",         "SWEET",        "SWIM",
+    "SWORD",        "TANK",         "TATTOOS",      "TEC",          "TRAIN",
+    "TRUCK",        "UZI",          "VAN",          "VENDING",      "VORTEX",
+    "WAYFARER",     "WEAPONS",      "WOP",          "WUZI"
 };

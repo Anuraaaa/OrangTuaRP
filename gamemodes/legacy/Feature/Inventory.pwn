@@ -45,14 +45,17 @@ new const g_aInventoryItems[][e_InventoryItems] =
 	{"Shotgun HV Schematic", 3111, 1},
 	{"Desert Eagle HV Schematic", 3111, 1},
 	{"Rifle HV Schematic", 3111, 1},
+	{"AK-47 HV Schematic", 3111, 1},
 	{"9mm Silenced Schematic", 3111, 1},
 	{"Shotgun Schematic", 3111, 1},
 	{"Desert Eagle Schematic", 3111, 1},
 	{"Rifle Schematic", 3111, 1},
+	{"AK-47 Schematic", 3111, 1},
 	{"Desert Eagle Material", 3052, 20},
 	{"9mm Silenced Material", 3052, 20},
 	{"Shotgun Material", 3052, 20},
 	{"Rifle Material", 3052, 20},
+	{"AK-47 Material", 3052, 20},
 	{"Axe", 19631, 1},
 	{"Fish Rod", 18632, 1},
 	{"Bait", 19566, 25},
@@ -614,6 +617,23 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 		GiveWeaponToPlayer(playerid, 25, 12, 500);
 		SendServerMessage(playerid, "Successfully crafting {FF0000}Shotgun");
 	}
+	else if(!strcmp(name, "AK-47 Schematic")) {
+		if(Inventory_Count(playerid, "AK-47 Material") < 1)
+			return SendErrorMessage(playerid, "Kamu tidak memiliki AK-47 Material!");
+
+		if(PlayerHasWeapon(playerid, 30))
+			return SendErrorMessage(playerid, "Kamu masih membawa AK-47!");
+
+		if(PlayerHasWeapon(playerid, 31))
+			return SendErrorMessage(playerid, "Kamu masih membawa senjata dengan jenis yang sama! (M4)");
+
+		if(PlayerData[playerid][pLevel] < 3)
+			return SendErrorMessage(playerid, "Tidak bisa membuat senjata ketika dibawah level 3!");
+
+		Inventory_Remove(playerid, "AK-47 Material", 1);
+		GiveWeaponToPlayer(playerid, 30, 30, 500);
+		SendServerMessage(playerid, "Successfully crafting {FF0000}AK-47");	
+	}
 	else if(!strcmp(name, "Rifle HV Schematic")) //HV
 	{
 		if(Inventory_Count(playerid, "Rifle Material") < 1)
@@ -659,6 +679,23 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 		GiveWeaponToPlayer(playerid, 24, 21, 500, 1);
 		SendServerMessage(playerid, "Successfully crafting {FF0000}Desert Eagle (High Velocity)");
 	}
+	else if(!strcmp(name, "AK-47 HV Schematic")) {
+		if(Inventory_Count(playerid, "AK-47 Material") < 1)
+			return SendErrorMessage(playerid, "Kamu tidak memiliki AK-47 Material!");
+
+		if(PlayerHasWeapon(playerid, 30))
+			return SendErrorMessage(playerid, "Kamu masih membawa AK-47!");
+
+		if(PlayerHasWeapon(playerid, 31))
+			return SendErrorMessage(playerid, "Kamu masih membawa senjata dengan jenis yang sama! (M4)");
+
+		if(PlayerData[playerid][pLevel] < 3)
+			return SendErrorMessage(playerid, "Tidak bisa membuat senjata ketika dibawah level 3!");
+
+		Inventory_Remove(playerid, "AK-47 Material", 1);
+		GiveWeaponToPlayer(playerid, 30, 30, 500, 1);
+		SendServerMessage(playerid, "Successfully crafting {FF0000}AK-47 (High Velocity)");	
+	}
 	else if(!strcmp(name, "9mm Silenced HV Schematic"))
 	{
 		if(Inventory_Count(playerid, "9mm Silenced Material") < 1)
@@ -698,20 +735,34 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 	else if(!strcmp(name, "7.62mm Caliber"))
 	{
 		new wep = GetWeapon(playerid);
-		if(wep != 33)
-			return SendErrorMessage(playerid, "You must holding Rifle!");
+		if(wep == 33) {
 
-		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] >= 50)
-			return SendErrorMessage(playerid, "Total peluru tidak bisa lebih dari 50!");
+			if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] >= 50)
+				return SendErrorMessage(playerid, "Total peluru tidak bisa lebih dari 50!");
 
-		PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] += 5;
-		PlayReloadAnimation(playerid, 33);
-		PlayerPlayNearbySound(playerid, 36401);
-		Inventory_Remove(playerid, "7.62mm Caliber", 1);
+			PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] += 5;
+			PlayReloadAnimation(playerid, 33);
+			PlayerPlayNearbySound(playerid, 36401);
+			Inventory_Remove(playerid, "7.62mm Caliber", 1);
 
-		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] > 50) {
-			PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] = 50;
+			if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] > 50) {
+				PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] = 50;
+			}
 		}
+		else if(wep == 30) {
+			if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] >= 300)
+				return SendErrorMessage(playerid, "Total peluru tidak bisa lebih dari 300!");
+
+			PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] += 30;
+			PlayReloadAnimation(playerid, 30);
+			PlayerPlayNearbySound(playerid, 36401);
+			Inventory_Remove(playerid, "7.62mm Caliber", 1);
+
+			if(PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] > 300) {
+				PlayerData[playerid][pAmmo][g_aWeaponSlots[wep]] = 300;
+			}	
+		}
+		else SendErrorMessage(playerid, "Kamu harus membawa AK-47/Rifle.");
 	}
 	else if(!strcmp(name, ".44 Magnum"))
 	{

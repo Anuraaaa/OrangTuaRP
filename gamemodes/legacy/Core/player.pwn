@@ -84,7 +84,7 @@ FUNC::CheckPlayerUCP(playerid)
 			{
 				ShowLoginMenu(playerid);
 				LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
-				SendServerMessage(playerid, "Kamu memiliki waktu 30 detik untuk login.");
+				SendClientMessage(playerid, X11_RED, "SECURITY: "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
 			}
 		}
 	}
@@ -665,6 +665,8 @@ stock IsHungerOrThirst(playerid) {
 stock ResetPlayerStatistics(playerid)
 {
 
+	PlayerData[playerid][pLastNumber] = 0;
+
 	format(MarryWith[playerid], 24, "Unknown");
 	format(MarryDate[playerid], 28, "None");
 	
@@ -672,7 +674,9 @@ stock ResetPlayerStatistics(playerid)
 	PlayerRubbed[playerid] = false;
 	PlayerData[playerid][pID] = -1;
 	ResetPlayerOutsideInfo(playerid);
+	Helmet[playerid] = 0;
 	
+	PlayerData[playerid][pCallNews] = false;
 	PlayerData[playerid][pCoin] = 0;
 	chat_floodProtect[playerid]  = 0;
 	cmd_floodProtect[playerid] = 0;
@@ -1172,7 +1176,59 @@ stock GiveWeaponToPlayer(playerid, weaponid, ammo = 100, dura = 500, highvelo = 
 	return GivePlayerWeapon(playerid, weaponid, 999999);
 }
 
-stock SendAdminMessage(color, const str[], {Float,_}:...)
+SendAdminDutyMessage(color, const str[], {Float,_}:...)
+{
+	static
+	    args,
+	    start,
+	    end,
+	    string[144]
+	;
+	#emit LOAD.S.pri 8
+	#emit STOR.pri args
+
+	if (args > 8)
+	{
+		#emit ADDR.pri str
+		#emit STOR.pri start
+
+	    for (end = start + (args - 8); end > start; end -= 4)
+		{
+	        #emit LREF.pri end
+	        #emit PUSH.pri
+		}
+		#emit PUSH.S str
+		#emit PUSH.C 144
+		#emit PUSH.C string
+
+		#emit LOAD.S.pri 8
+		#emit ADD.C 4
+		#emit PUSH.pri
+
+		#emit SYSREQ.C format
+		#emit LCTRL 5
+		#emit SCTRL 4
+
+        foreach (new i : Player) if(PlayerData[i][pSpawned])
+		{
+			if(PlayerData[i][pAdmin] >= 1 && PlayerData[i][pAduty])
+			{
+  				SendClientMessage(i, color, string);
+			}
+		}
+		return 1;
+	}
+	foreach (new i : Player) if(PlayerData[i][pSpawned])
+	{
+		if (PlayerData[i][pAdmin] >= 1 && PlayerData[i][pAduty])
+		{
+			SendClientMessage(i, color, str);
+		}
+	}
+	return 1;
+}
+
+SendAdminMessage(color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -1635,19 +1691,13 @@ stock GetNumberOwner(number)
 	return INVALID_PLAYER_ID;
 }
 
-FUNC::SetPlayerToUnfreeze(playerid, Float:x, Float:y, Float:z, Float:a)
+FUNC::SetPlayerToUnfreeze(playerid)
 {
-    if(!IsPlayerInRangeOfPoint(playerid, 3.0, x, y, z))
-        return 0;
-
-    SetPlayerPos(playerid, x, y, z);
-	SetPlayerFacingAngle(playerid, a);
     TogglePlayerControllable(playerid, 1);
     PlayerData[playerid][pFreeze] = 0;
-    return 1;
 }
 
-stock SetPlayerPositionEx(playerid, Float:x, Float:y, Float:z, Float:a, time = 2000)
+SetPlayerPositionEx(playerid, Float:x, Float:y, Float:z, time = 2000, interior = -1, world = -1)
 {
     if(PlayerData[playerid][pFreeze])
     {
@@ -1655,11 +1705,14 @@ stock SetPlayerPositionEx(playerid, Float:x, Float:y, Float:z, Float:a, time = 2
         PlayerData[playerid][pFreeze] = 0;
         TogglePlayerControllable(playerid, 1);
     }
-    SetCameraBehindPlayer(playerid);
+	GameTextForPlayer(playerid, "~w~Rendering objects...", time, 3);
     TogglePlayerControllable(playerid, 0);
-    SetPlayerPos(playerid, x, y, z + 0.5);
-	SetPlayerFacingAngle(playerid, a);
-	PlayerData[playerid][pFreeze] = 1;
-	PlayerData[playerid][pFreezeTimer] = SetTimerEx("SetPlayerToUnfreeze", time, false, "iffff", playerid, x, y, z, a);
-	return 1;
+	Streamer_UpdateEx(playerid, x, y, z, world, interior, STREAMER_TYPE_OBJECT, time, 0);
+    SetCameraBehindPlayer(playerid);
+    PlayerData[playerid][pFreeze] = 1;
+    PlayerData[playerid][pFreezeTimer] = SetTimerEx("SetPlayerToUnfreeze", time, false, "d", playerid);
+
+	if(interior != -1) SetPlayerInterior(playerid,interior);
+	if(world != -1) SetPlayerVirtualWorld(playerid,world);
+	return SetPlayerPos(playerid, x, y, z + 1);
 }

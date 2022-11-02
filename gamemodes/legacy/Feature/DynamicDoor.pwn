@@ -29,6 +29,7 @@ enum ddoor
 	dPickupint,
 	dMapIconID,
 	dMapIcon,
+	STREAMER_TAG_CP:dCP
 };
 
 new drData[MAX_DOOR][ddoor],
@@ -63,6 +64,9 @@ Doors_Updatelabel(id)
 		if(IsValidDynamicMapIcon(drData[id][dMapIconID]))
 			DestroyDynamicMapIcon(drData[id][dMapIconID]);
 		
+		if(IsValidDynamicCP(drData[id][dCP]))
+			DestroyDynamicCP(drData[id][dCP]);
+
 		new mstr[144];
 		if(drData[id][dGarage] == 1)
 		{
@@ -73,8 +77,9 @@ Doors_Updatelabel(id)
 		else
 		{
 			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to enter", id, drData[id][dName]);
-			drData[id][dPickupext] = CreateDynamicPickup(19132, 23, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dExtvw], drData[id][dExtint], -1, 50);
+			drData[id][dPickupext] = CreateDynamicPickup(19130, 23, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dExtvw], drData[id][dExtint], -1, 50);
 			drData[id][dLabelext] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]+0.35, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dExtvw], drData[id][dExtint]);
+			drData[id][dCP] = CreateDynamicCP(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], 2.5, drData[id][dExtvw], drData[id][dExtint], -1, 3.0);
 		}
 		
         if(drData[id][dIntposX] != 0.0 && drData[id][dIntposY] != 0.0 && drData[id][dIntposZ] != 0.0)
@@ -91,7 +96,7 @@ Doors_Updatelabel(id)
 				format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to exit", id, drData[id][dName]);
 
 				drData[id][dLabelint] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]+0.7, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dIntvw], drData[id][dIntint]);
-				drData[id][dPickupint] = CreateDynamicPickup(19132, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
+				drData[id][dPickupint] = CreateDynamicPickup(19130, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
 			}
 		}
 
@@ -194,7 +199,8 @@ CMD:createdoor(playerid, params[])
 	format(mstr,sizeof(mstr),"[ID: %d]\n{FFFFFF}%s\n{FFFFFF}Press {FF0000}[F] {FFFFFF}to enter", did, drData[did][dName]);
 	drData[did][dPickupext] = CreateDynamicPickup(19130, 23, drData[did][dExtposX], drData[did][dExtposY], drData[did][dExtposZ], drData[did][dExtvw], drData[did][dExtint], -1, 50);
 	drData[did][dLabelext] = CreateDynamic3DTextLabel( mstr, X11_LIGHTBLUE, drData[did][dExtposX], drData[did][dExtposY], drData[did][dExtposZ]+0.35, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[did][dExtvw], drData[did][dExtint]);
-    Doors_Updatelabel(did);
+    
+	Doors_Updatelabel(did);
 	Iter_Add(Doors, did);
 
 	mysql_format(sqlcon, query, sizeof(query), "INSERT INTO doors SET ID=%d, extvw=%d, extint=%d, extposx=%f, extposy=%f, extposz=%f, extposa=%f, name='%s'", did, drData[did][dExtvw], drData[did][dExtint], drData[did][dExtposX], drData[did][dExtposY], drData[did][dExtposZ], drData[did][dExtposA], name);
@@ -211,7 +217,8 @@ CMD:gotodoor(playerid, params[])
 	if(sscanf(params, "d", did))
 		return SendClientMessageEx(playerid, COLOR_WHITE, "[USAGE]: /gotodoor [id]");
 	if(!Iter_Contains(Doors, did)) return SendErrorMessage(playerid, "The doors you specified ID of doesn't exist.");
-	SetPlayerPositionEx(playerid, drData[did][dExtposX], drData[did][dExtposY], drData[did][dExtposZ], drData[did][dExtposA]);
+
+	SetPlayerPositionEx(playerid, drData[did][dExtposX], drData[did][dExtposY], drData[did][dExtposZ]);
     SetPlayerInterior(playerid, drData[did][dExtint]);
     SetPlayerVirtualWorld(playerid, drData[did][dExtvw]);
 	PlayerData[playerid][pInDoor] = -1;
@@ -473,7 +480,8 @@ CMD:editdoor(playerid, params[])
 		DestroyDynamic3DTextLabel(drData[did][dLabelint]);
 		DestroyDynamicPickup(drData[did][dPickupint]);
 		DestroyDynamicMapIcon(drData[did][dMapIconID]);
-			
+		DestroyDynamicCP(drData[did][dCP]);
+		
 		drData[did][dExtposX] = 0;
 		drData[did][dExtposY] = 0;
 		drData[did][dExtposZ] = 0;

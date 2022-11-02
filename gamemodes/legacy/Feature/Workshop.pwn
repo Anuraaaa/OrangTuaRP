@@ -280,6 +280,9 @@ CMD:createworkshop(playerid, params[]) {
 CMD:editworkshop(playerid, params[]) {
     new str[24], string[128], index;
 
+    if(PlayerData[playerid][pAdmin] < 6)
+        return PermissionError(playerid);
+        
     if(sscanf(params, "ds[24]S()[128]", index, str, string))
         return SendSyntaxMessage(playerid, "/editworkshop [wsid] [pos/price/asell/delete]");
 

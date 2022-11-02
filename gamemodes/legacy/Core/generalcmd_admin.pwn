@@ -23,7 +23,7 @@ CMD:ahelp(playerid, params[])
 	if(PlayerData[playerid][pAdmin] >= 4)
 	{
 		SendClientMessage(playerid, COLOR_YELLOW, "Admin Level 2: {FFFFFF}/sethp, /flipcar, /arevive, /gotoloc, /veh, /fixveh, /respawncar");
-		SendClientMessage(playerid, COLOR_YELLOW, "Admin Level 2: {FFFFFF}/gotointerior, /clearitems");
+		SendClientMessage(playerid, COLOR_YELLOW, "Admin Level 2: {FFFFFF}/gotointerior, /clearitems, /flymode");
 	}
 	if(PlayerData[playerid][pAdmin] >= 5)
 	{
@@ -637,6 +637,8 @@ CMD:spec(playerid, params[])
 	SendServerMessage(playerid, "You are now spectating %s (ID: %d).", GetName(userid), userid);
 	PlayerData[playerid][pSpectator] = userid;
 
+	if(PlayerData[playerid][pAdmin] <= PlayerData[userid][pAdmin] && PlayerData[userid][pAdmin] > 6)
+		SendClientMessageEx(userid, X11_GREY, "You are being spectated by "YELLOW"%s"GREY".", GetUsername(playerid));
 	return 1;
 }
 
@@ -901,7 +903,8 @@ CMD:createcar(playerid, params[])
 	
 	Vehicle_SetOwner(vehicleid, otherid, true);
 	Vehicle_SetType(vehicleid, VEHICLE_TYPE_PLAYER);
-    SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has created %s for %s", PlayerData[playerid][pUCP], ReturnVehicleModelName(model[0]), GetName(otherid));
+    SendAdminAction(playerid, "You have created %s for %s.", ReturnVehicleModelName(model[0]), GetName(otherid, false));
+	Log_Write("Logs/adminaction.txt", "[%s] %s created a %s for %s(%s)", GetUsername(playerid), ReturnVehicleModelName(model[0]), GetName(otherid, false), GetUsername(otherid));
 	return 1;
 }
 
@@ -1486,7 +1489,11 @@ CMD:acure(playerid, params[]) {
 	PlayerData[targetid][pHealthy] = 100.0;
 	PlayerData[targetid][pFever] = 0;
 	PlayerData[targetid][pCough] = 0;
-	forex(i, 7)
+	SetPlayerDrunkLevelEx(playerid, 0);
+	PlayerData[targetid][pHunger] = 30;
+	PlayerData[targetid][pThirst] = 30;
+	
+	for(new i = 0; i < 7; i++)
 	{
 		PlayerData[targetid][pDamages][i] = 100.0;
 		PlayerData[targetid][pBullets][i] = 0;
@@ -1817,7 +1824,7 @@ CMD:send(playerid, params[]) {
 		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"Insurance Center "WHITE"oleh "RED"%s", GetUsername(playerid));
 	}
 	else if(!strcmp(place, "news", true)) {
-		SetPlayerPos(targetid,-2668.6794,-7.5113,6.1328);
+		SetPlayerPos(targetid,-1908.7998,486.7876,35.1719);
 		SetPlayerInterior(targetid, 0);
 		SetPlayerVirtualWorld(targetid, 0);
 
@@ -2026,7 +2033,7 @@ CMD:a(playerid, params[])
 	    return SendSyntaxMessage(playerid, "/a [admin chat]");
 	    
 	foreach(new i : Player) if(PlayerData[i][pAdmin] > 0) {
-		SendClientMessageEx(i, COLOR_GREEN, "%s {FFFF00}%s: {FFFFFF}%s", GetAdminRank(playerid), PlayerData[playerid][pUCP], params);
+		SendClientMessageEx(i, COLOR_GREEN, "%s "GREY"%s: {FFFFFF}%s", GetAdminRank(playerid), PlayerData[playerid][pUCP], params);
 	}
 	return 1;
 }
@@ -2256,6 +2263,7 @@ CMD:gmx(playerid, params[])
 {	
 	if(PlayerData[playerid][pAdmin] < 7)
 		return SendServerMessage(playerid, "Ngapain Om!");
+
 	SendRconCommand("gmx");
 	return 1;
 }

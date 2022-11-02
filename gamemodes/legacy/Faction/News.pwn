@@ -28,7 +28,7 @@ CMD:bc(playerid, params[])
     }
     return 1;
 }
-
+/*
 CMD:camera(playerid, params[]) {
     GivePlayerCamera(playerid); 
     return 1;
@@ -42,7 +42,7 @@ CMD:watch(playerid, params[]) {
 CMD:unwatch(playerid, params[]) {
     StopPlayerWatchingCamera(playerid);
     return 1;
-}
+}*/
 CMD:broadcast(playerid, params[])
 {
     if(GetFactionType(playerid) != FACTION_NEWS)

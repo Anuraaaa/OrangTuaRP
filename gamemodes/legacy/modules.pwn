@@ -81,6 +81,11 @@
 #include "legacy\Feature\Tax.pwn"
 #include "legacy\Feature\Blackmarket.pwn"
 #include "legacy\Feature\Marriage.pwn"
+#include "legacy\Feature\WatchTV.pwn"
+#include "legacy\Feature\FactionVault.pwn"
+#include "legacy\Feature\Vote.pwn"
+#include "legacy\Feature\FlyMode.pwn"
+
 /* Job Modules */
 #include "legacy\Job\Smuggler.pwn"
 #include "legacy\Job\Trucker.pwn"

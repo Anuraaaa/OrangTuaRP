@@ -92,14 +92,14 @@ Contact_Add(playerid, number, name[]) {
 stock ShowContacts(playerid)
 {
 	new
-	    string[32 * MAX_CONTACTS],
+	    string[48 * MAX_CONTACTS],
 		count = 0;
 
-	string = "Add Contact\n";
+	string = ""GREY"New contacts\n";
 
 	for (new i = 0; i != MAX_CONTACTS; i ++) if (ContactData[playerid][i][contactExists] && ContactData[playerid][i][contactOwner] == PlayerData[playerid][pID])
 	{
-	    format(string, sizeof(string), "%s%s - #%d\n", string, ContactData[playerid][i][contactName], ContactData[playerid][i][contactNumber]);
+	    format(string, sizeof(string), "%s"WHITE"%s - #%d\n", string, ContactData[playerid][i][contactName], ContactData[playerid][i][contactNumber]);
 
 		ListedContacts[playerid][count++] = i;
 	}
@@ -187,6 +187,29 @@ CMD:sms(playerid, params[])
     SendClientMessageEx(playerid, X11_LIGHTBLUE, "** SMS to %s(%d): "WHITE"%s", IsNumberKnown(playerid, number, true), number, text);
     PlayerPlaySound(playerid, targetid, 0.0, 0.0, 0.0);
 	cmd_ame(playerid, "types something on his cellphone.");
+	PlayerData[targetid][pLastNumber] = PlayerData[playerid][pPhoneNumber];
+	return 1;
+}
+
+CMD:reply(playerid, params[]) {
+
+    if(!PlayerHasItem(playerid, "Cellphone"))
+        return SendErrorMessage(playerid, "You don't have cellphone on you.");
+
+    if(PlayerData[playerid][pPhoneOff])
+        return SendErrorMessage(playerid, "You must turn-on your cellphone first.");
+
+	if(!PlayerData[playerid][pLastNumber])
+		return SendErrorMessage(playerid, "Tidak ada yang mengirimkan pesan padamu baru-baru ini.");
+
+	if(GetNumberOwner(PlayerData[playerid][pLastNumber]) != INVALID_PLAYER_ID) {
+
+		new str[156];
+		format(str, sizeof(str), ""WHITE"Reply to: "YELLOW"%d\n"WHITE"Message: "GREEN"(input below)");
+		ShowPlayerDialog(playerid, DIALOG_REPLY, DIALOG_STYLE_MSGBOX, "Reply Message", str, "Send", "Close");
+	}
+	else SendErrorMessage(playerid, "Pengirim pesan terakhir tidak dapat dijangkau.");
+
 	return 1;
 }
 CMD:call(playerid, params[])
@@ -214,7 +237,7 @@ CMD:call(playerid, params[])
 		number;
 
 	if (sscanf(params, "d", number))
- 	   return SendSyntaxMessage(playerid, "/call [phone number] (1222 - Taxi | 911 - Emergency | 143 - Mechanic)");
+ 	   return SendSyntaxMessage(playerid, "/call [phone number] (1222 - Taxi | 911 - Emergency | 143 - Mechanic | 193 - News)");
 
 	if (!number)
 	    return SendErrorMessage(playerid, "The specified phone number is not in service.");
@@ -246,6 +269,20 @@ CMD:call(playerid, params[])
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
 		SendClientMessage(playerid, COLOR_LIGHTGREEN, "OPERATOR:{FFFFFF} The mechanic has been notified of your call.");
 		SendJobMessage(JOB_MECHANIC, COLOR_LIGHTGREEN, "MECH CALL: {FFFFFF}%s is requesting a mechanic at %s (%d)", GetName(playerid), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
+	}
+	else if(number == 193) {
+
+		if(!IsPlayerInAnyVehicle(playerid))
+		{
+			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
+		}
+		SetPlayerAttachedObject(playerid, 3, 18867, 6, 0.0909, -0.0030, 0.0000, 80.4001, 159.8000, 18.0000, 1.0000, 1.0000, 1.0000, 0xFFFFFFFF, 0xFFFFFFFF);
+
+
+	    PlayerPlayNearbySound(playerid, 3600);
+		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
+		SendClientMessage(playerid, X11_TURQUOISE_1, "NEWS OPERATOR:"WHITE" What can we help you? don't send junk message for this service.");	
+		PlayerData[playerid][pCallNews] = true;	
 	}
 	else if ((targetid = GetNumberOwner(number)) != INVALID_PLAYER_ID)
 	{

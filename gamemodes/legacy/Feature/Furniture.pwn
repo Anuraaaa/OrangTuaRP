@@ -9,11 +9,14 @@ enum furnitureData {
 	furnitureName[32],
 	Float:furniturePos[3],
 	Float:furnitureRot[3],
-	STREAMER_TAG_OBJECT:furnitureObject
+	STREAMER_TAG_OBJECT:furnitureObject,
+	furnitureTextureModelid,
+	furnitureTextureTXDName[24],
+	furnitureTextureName[24]
 };
 
 new FurnitureData[MAX_FURNITURE][furnitureData];
-new ListedFurniture[MAX_PLAYERS][MAX_HOUSE_FURNITURE];
+new ListedFurniture[MAX_PLAYERS][50];
 new Iterator:Furniture<MAX_FURNITURE>;
 
 enum {
@@ -327,6 +330,10 @@ FUNC::OnLoadFurniture()
 			cache_get_value_name_int(i, "ID", FurnitureData[id][furnitureProperty]);
 			cache_get_value_name_int(i, "furnitureType", FurnitureData[id][furniturePropertyType]);
 
+			cache_get_value_name_int(i, "TextureModelID", FurnitureData[id][furnitureTextureModelid]);
+			cache_get_value_name(i, "TextureTXD", FurnitureData[id][furnitureTextureTXDName], 24);
+			cache_get_value_name(i, "TextureName", FurnitureData[id][furnitureTextureName], 24);
+			
 			Iter_Add(Furniture, id);
 
 			Furniture_Spawn(id);
@@ -337,7 +344,7 @@ FUNC::OnLoadFurniture()
 	return 1;
 }
 
-stock GetFurnitureNameByModel(model)
+GetFurnitureNameByModel(model)
 {
 	new
 	    name[32];
@@ -389,7 +396,7 @@ stock Furniture_Save(furnitureid)
 	static
 	    string[712];
 
-	mysql_format(sqlcon, string, sizeof(string), "UPDATE `furniture` SET `furnitureModel` = '%d', `furnitureName` = '%s', `furnitureX` = '%.4f', `furnitureY` = '%.4f', `furnitureZ` = '%.4f', `furnitureRX` = '%.4f', `furnitureRY` = '%.4f', `furnitureRZ` = '%.4f', `ID` = '%d', `furnitureType` = '%d', `furnitureWorld` = '%d', `furnitureInterior` = '%d' WHERE `furnitureID` = '%d'",
+	mysql_format(sqlcon, string, sizeof(string), "UPDATE `furniture` SET `furnitureModel` = '%d', `furnitureName` = '%s', `furnitureX` = '%.4f', `furnitureY` = '%.4f', `furnitureZ` = '%.4f', `furnitureRX` = '%.4f', `furnitureRY` = '%.4f', `furnitureRZ` = '%.4f', `ID` = '%d', `furnitureType` = '%d', `furnitureWorld` = '%d', `furnitureInterior` = '%d', `TextureModelID` = '%d', `TextureTXD` = '%e', `TextureName` = '%e' WHERE `furnitureID` = '%d'",
 	    FurnitureData[furnitureid][furnitureModel],
 	    FurnitureData[furnitureid][furnitureName],
 	    FurnitureData[furnitureid][furniturePos][0],
@@ -402,6 +409,9 @@ stock Furniture_Save(furnitureid)
 		FurnitureData[furnitureid][furniturePropertyType],
 		FurnitureData[furnitureid][furnitureWorld],
 		FurnitureData[furnitureid][furnitureInterior],
+		FurnitureData[furnitureid][furnitureTextureModelid],
+		FurnitureData[furnitureid][furnitureTextureTXDName],
+		FurnitureData[furnitureid][furnitureTextureName],
 	    FurnitureData[furnitureid][furnitureID]
 	);
 	return mysql_tquery(sqlcon, string);
@@ -431,7 +441,10 @@ stock Furniture_Add(propid, name[], vw, int, modelid, type, Float:x, Float:y, Fl
         FurnitureData[id][furniturePropertyType] = type;
 		FurnitureData[id][furnitureInterior] = int;
 		FurnitureData[id][furnitureWorld] = vw;
-		
+		FurnitureData[id][furnitureTextureModelid] = 0;
+		format(FurnitureData[id][furnitureTextureTXDName], 24, "NoTexture");
+		format(FurnitureData[id][furnitureTextureName], 24, "NoTexture");
+
 		Iter_Add(Furniture, id);
 
 		mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `furniture` (`ID`) VALUES(%d)", FurnitureData[id][furnitureProperty]);

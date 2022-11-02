@@ -515,7 +515,7 @@ CMD:helm(playerid,params[])
             Helmet[playerid] = 1;
             SetPlayerAttachedObject(playerid,9 , 18645, 2, 0.07, 0.017, 0, 88, 75, 9);
             SendClientMessage(playerid, X11_GREEN, "You have put on a bike helmet. This will supress the impact of a crash.");
-            SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s reaches for their helmet, and takes it off.", ReturnName(playerid));
+            SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s reaches for their helmet, and takes it off.", ReturnName(playerid));
         }
     }
     else if(IsPlayerInAnyVehicle(playerid) && Helmet[playerid] == 1)
@@ -524,7 +524,7 @@ CMD:helm(playerid,params[])
         {
             Helmet[playerid] = 0;
             SendClientMessage(playerid, X11_GREEN, "You have taken off your helmet. You will no longer be protected from crashes.");
-            SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s reaches for their helmet, and unbuckles it.", ReturnName(playerid));
+            SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s reaches for their helmet, and unbuckles it.", ReturnName(playerid));
             if(IsPlayerAttachedObjectSlotUsed(playerid, 9)) 
 				RemovePlayerAttachedObject(playerid, 9);
         }
@@ -873,7 +873,7 @@ CMD:health(playerid, params[])
 CMD:accept(playerid, params[])
 {
 	if(isnull(params))
-		return SendSyntaxMessage(playerid, "/accept [Options]"), SendClientMessage(playerid, COLOR_SERVER, "Option: {FFFFFF}death, frisk, drag, vehicle, flat, house");
+		return SendSyntaxMessage(playerid, "/accept [Options]"), SendClientMessage(playerid, COLOR_SERVER, "Option: {FFFFFF}death, frisk, drag, vehicle, flat, house, marriage");
 
 	if(!strcmp(params, "death", true))
 	{
@@ -926,6 +926,26 @@ CMD:accept(playerid, params[])
 			DestroyDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]);
 
 	}
+	else if(!strcmp(params, "divorce", true)) {
+		if(DivorceOffer[playerid] == INVALID_PLAYER_ID)
+			return SendErrorMessage(playerid, "No one is asking you for a divorce.");
+
+		new targetid = DivorceOffer[playerid];
+
+
+		if(!IsPlayerNearPlayer(playerid, targetid, 5.0))
+			return SendErrorMessage(playerid, "You are not near player that divorcing you.");	
+
+		format(MarryWith[playerid], 24, "Unknown");
+		format(MarryWith[targetid], 24, "Unknown");
+		format(MarryDate[playerid], 28, "_");
+		format(MarryDate[targetid], 28, "_");
+
+		SendClientMessageEx(targetid, X11_LIGHTBLUE, "DIVORCE: "YELLOW"%s "WHITE"is accepting your divorce offer, you are no longer married with "YELLOW"%s", ReturnName(playerid), ReturnName(playerid));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "DIVORCE: "WHITE"You have accepted the divorce offer, you are no longer married with "YELLOW"%s", ReturnName(targetid));
+
+		DivorceOffer[playerid] = INVALID_PLAYER_ID;
+	}
 	else if(!strcmp(params, "marriage", true)) {
 		if(MarryOffer[playerid] == INVALID_PLAYER_ID)
 			return SendErrorMessage(playerid, "No one is proposing you.");
@@ -941,9 +961,10 @@ CMD:accept(playerid, params[])
 		format(MarryDate[targetid], 28, "%s", ReturnDate());
 
 		GiveMoney(targetid, -200000, "Marriage");
+		serverVault += 200000;
 
-		SendClientMessageToAllEx(-1, ""GREY_SAMP"MARRIAGE: "WHITE"Please congratulate to our new "YELLOW"couple");
-		SendClientMessageToAllEx(-1, ""GREY_SAMP"MARRIAGE: "CYAN"%s "WHITE"and "CYAN"%s", GetName(targetid, false), GetName(playerid, false));
+		SendClientMessageToAllEx(-1, ""GREY_SAMP"MARRIAGE: "WHITE"Please congratulate to our new "CYAN"couple");
+		SendClientMessageToAllEx(-1, ""GREY_SAMP"MARRIAGE: "YELLOW"%s "WHITE"and "YELLOW"%s", GetName(targetid, false), GetName(playerid, false));
 
 		MarryOffer[playerid] = INVALID_PLAYER_ID;
 	}
@@ -1404,18 +1425,8 @@ CMD:ado(playerid, params[])
 
 	SendClientMessage(playerid,COLOR_GREY,"INFO: {FFFFFF}ADO Has been placed, use {FFFF00}/deleteado {FFFFFF}to remove your ADO.");
 
-	if (IsPlayerInAnyVehicle(playerid))
-	{
-	    RemovePlayerADO(playerid);
-	    
-		new carid = GetPlayerVehicleID(playerid);
-		PlayerData[playerid][pAdoLabel] = CreateDynamic3DTextLabel(sprintf("%s\n(( %s ))", msg, ReturnName(playerid)), X11_PLUM, x, y, 200, 20, INVALID_PLAYER_ID, carid);
-	}
-	else
-	{
-	    RemovePlayerADO(playerid);
-		PlayerData[playerid][pAdoLabel] = CreateDynamic3DTextLabel(sprintf("%s\n(( %s ))", msg, ReturnName(playerid)), X11_PLUM, x, y, z, 20);
-	}
+	RemovePlayerADO(playerid);
+	PlayerData[playerid][pAdoLabel] = CreateDynamic3DTextLabel(sprintf("%s\n(( %s ))", msg, ReturnName(playerid)), X11_PLUM, x, y, z, 20);
 	return 1;
 }
 
@@ -1491,7 +1502,7 @@ CMD:buycomponent(playerid, params[])
 		return 1;
 
 	GiveMoney(playerid, -amount*50, "Beli Component");
-	SendServerMessage(playerid, "Kamu berhasil membeli {FFFF00}%d {FFFFFF}component dengan harga {00FF00}$%s", amount, FormatNumber(amount*50));
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "COMPONENT: "WHITE"Berhasil membeli {FFFF00}%d component(s) "WHITE"dengan harga {00FF00}$%s", amount, FormatNumber(amount*50));
 	StockData[stockComponent] -= amount;
 
 	UpdateServerStock(SERVER_STOCK_COMPONENT);
@@ -1535,7 +1546,7 @@ CMD:help(playerid, params[])
 	if(!PlayerData[playerid][pSpawned])
 		return SendErrorMessage(playerid, "You're not spawned!");
 
-	ShowPlayerDialog(playerid, DIALOG_HELP, DIALOG_STYLE_LIST, "Help Menu", "General Commands\nChat Commands\nJob Commands\nFaction Commands\nBusiness Commands\nHouse Commands\nFlat Commands\nBank Commands\nDealership Commands\nVehicle ShareKey Commands\nWorkshop Commands\nRace Commands", "Select", "Close");
+	ShowPlayerDialog(playerid, DIALOG_HELP, DIALOG_STYLE_LIST, "Help Menu", "General Commands\nChat Commands\nJob Commands\nFaction Commands\nBusiness Commands\nHouse Commands\nFlat Commands\nBank Commands\nDealership Commands\nVehicle ShareKey Commands\nWorkshop Commands\nRace Commands\nMarriage Commands", "Select", "Close");
 	return 1;
 }
 
@@ -1704,6 +1715,10 @@ CMD:transfer(playerid, params[])
 		SendClientMessageEx(playerid, COLOR_SERVER, "TRANSFER: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
 		SendClientMessageEx(id, COLOR_SERVER, "TRANSFER: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 		Log_Write("Logs/transfer_log.txt", "[%s] %s(%s) has transfer to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+	
+		if(strval(totalcash) > 100000) {
+			SendAdminDutyMessage(X11_YELLOW, "TRANSFERWARN: "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+		}
 	}
 	else
 	{
@@ -1721,6 +1736,10 @@ CMD:transfer(playerid, params[])
 		SendClientMessageEx(playerid, COLOR_SERVER, "TRANSFER: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
 		SendClientMessageEx(id, COLOR_SERVER, "TRANSFER: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 		Log_Write("Logs/transfer_log.txt", "[%s] %s(%s) has transfer to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+	
+		if(strval(totalcash) > 100000) {
+			SendAdminDutyMessage(X11_YELLOW, "TRANSFERWARN: "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+		}
 	}
     return 1;
  }
@@ -1747,9 +1766,6 @@ CMD:deposit(playerid, params[])
 		return SendSyntaxMessage(playerid, "/deposit [amount (dollar.cents)]");
 
 	amount = strcash(cash);
-
-	if(amount < 0 || amount > 500000)
-		return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00 dan maksimal per-deposit adalah $5,000.00!");
 
 	if(GetMoney(playerid) < amount)
 		return SendErrorMessage(playerid, "Kamu tidak membawa uang sebanyak itu! ($%s)", FormatNumber(amount));
@@ -1833,9 +1849,6 @@ CMD:pay(playerid, params[])
 		if(strval(totalcash) < 0) 
 			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
 
-		if(strval(totalcash) > 200000)
-			return SendErrorMessage(playerid, "Amount cannot more than $2000.00!");
-
 		if(GetMoney(playerid) < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu.");
 
@@ -1855,6 +1868,10 @@ CMD:pay(playerid, params[])
 
         if(!IsPlayerInAnyVehicle(id))
         	SetPlayerToFacePlayer(id, playerid);
+
+		if(strval(totalcash) > 100000) {
+			SendAdminDutyMessage(X11_YELLOW, "PAYWARN: "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+		}
 	}
 	else
 	{
@@ -1863,9 +1880,6 @@ CMD:pay(playerid, params[])
 
 		if(strval(totalcash) < 0) 
 			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
-
-		if(strval(totalcash) > 200000)
-			return SendErrorMessage(playerid, "Amount cannot more than $2000.00!");
 		
 		if(GetMoney(playerid) < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu.");
@@ -1886,6 +1900,11 @@ CMD:pay(playerid, params[])
 
         if(!IsPlayerInAnyVehicle(id))
         	SetPlayerToFacePlayer(id, playerid);
+
+
+		if(strval(totalcash) > 100000) {
+			SendAdminDutyMessage(X11_YELLOW, "PAYWARN: "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+		}
 	}
     return 1;
 }
@@ -1926,10 +1945,9 @@ CMD:enter(playerid, params[])
 					return SendErrorMessage(playerid, "This business is closed.");
 
 				GetPlayerOutsideInfo(playerid);
-				
 				PlayerData[playerid][pInBiz] = bid;
-				SetCameraBehindPlayer(playerid);
-				SetPlayerCompensatedPos(playerid, BizData[bid][bizInt][0], BizData[bid][bizInt][1], BizData[bid][bizInt][2], _, BizData[bid][bizWorld], BizData[bid][bizInterior]);
+				//SetPlayerCompensatedPos(playerid, BizData[bid][bizInt][0], BizData[bid][bizInt][1], BizData[bid][bizInt][2], _, BizData[bid][bizWorld], BizData[bid][bizInterior]);
+				SetPlayerPositionEx(playerid, BizData[bid][bizInt][0], BizData[bid][bizInt][1], BizData[bid][bizInt][2], 4000, BizData[bid][bizInterior], BizData[bid][bizWorld]);
 			}
 	    }
 		new inbiz = PlayerData[playerid][pInBiz];
@@ -1947,10 +1965,11 @@ CMD:enter(playerid, params[])
 	            return ShowText(playerid, "~r~Locked", 2);
 
 			GetPlayerOutsideInfo(playerid);
-
-			SetPlayerCompensatedPos(playerid, HouseData[id][houseInt][0], HouseData[id][houseInt][1], HouseData[id][houseInt][2], _, HouseData[id][houseID] + 5000, HouseData[id][houseInterior]);
+			//SetPlayerCompensatedPos(playerid, HouseData[id][houseInt][0], HouseData[id][houseInt][1], HouseData[id][houseInt][2], _, HouseData[id][houseID] + 5000, HouseData[id][houseInterior]);
 			SetPlayerFacingAngle(playerid, HouseData[id][houseInt][3]);
-			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, HouseData[id][houseInt][0], HouseData[id][houseInt][1], HouseData[id][houseInt][2], 4000, HouseData[id][houseInterior],HouseData[id][houseID] + 5000);
+
+			//SetCameraBehindPlayer(playerid);
 
 			PlayerData[playerid][pInHouse] = HouseData[id][houseID];
 
@@ -1975,8 +1994,10 @@ CMD:enter(playerid, params[])
 
 			GetPlayerOutsideInfo(playerid);
 
-			SetPlayerCompensatedPos(playerid, FlatData[id][flatInt][0], FlatData[id][flatInt][1], FlatData[id][flatInt][2], _, FlatData[id][flatIntWorld], FlatData[id][flatIntInterior]);
-			SetCameraBehindPlayer(playerid);
+			//SetPlayerCompensatedPos(playerid, FlatData[id][flatInt][0], FlatData[id][flatInt][1], FlatData[id][flatInt][2], _, FlatData[id][flatIntWorld], FlatData[id][flatIntInterior]);
+			//SetCameraBehindPlayer(playerid);
+
+			SetPlayerPositionEx(playerid, FlatData[id][flatInt][0], FlatData[id][flatInt][1], FlatData[id][flatInt][2], 4000, FlatData[id][flatIntInterior], FlatData[id][flatIntWorld]);
 
 			PlayerData[playerid][pInFlat] = id;
 		} 
@@ -2019,17 +2040,15 @@ CMD:enter(playerid, params[])
 					if(sscanf(paramss, "s[256]", paramss)) return SendClientMessageEx(playerid, COLOR_WHITE, "[USAGE]: /enter [password]");
 					if(strcmp(paramss, drData[did][dPass])) return SendErrorMessage(playerid, "Invalid door password.");
 					
-					SetPlayerCompensatedPos(playerid, drData[did][dIntposX], drData[did][dIntposY], drData[did][dIntposZ], _, drData[did][dIntvw], drData[did][dIntint]);
+					//SetPlayerCompensatedPos(playerid, drData[did][dIntposX], drData[did][dIntposY], drData[did][dIntposZ], _, drData[did][dIntvw], drData[did][dIntint]);
 					PlayerData[playerid][pInDoor] = did;
-					SetPlayerFacingAngle(playerid, drData[did][dIntposA]);
-					SetCameraBehindPlayer(playerid);
+					//SetPlayerFacingAngle(playerid, drData[did][dIntposA]);
+					//SetCameraBehindPlayer(playerid);
+					SetPlayerPositionEx(playerid, drData[did][dIntposX], drData[did][dIntposY], drData[did][dIntposZ], 4000, drData[did][dIntint], drData[did][dIntvw]);
 				}
 				else
 				{
-					SetPlayerCompensatedPos(playerid, drData[did][dIntposX], drData[did][dIntposY], drData[did][dIntposZ], _, drData[did][dIntvw], drData[did][dIntint]);
-					PlayerData[playerid][pInDoor] = did;
-					SetPlayerFacingAngle(playerid, drData[did][dIntposA]);
-					SetCameraBehindPlayer(playerid);
+					SetPlayerPositionEx(playerid, drData[did][dIntposX], drData[did][dIntposY], drData[did][dIntposZ], 4000, drData[did][dIntint], drData[did][dIntvw]);
 				}
 				SQL_SaveCharacter(playerid);
 			}
@@ -2132,9 +2151,9 @@ CMD:v(playerid, params[])
 
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
-	    SendSyntaxMessage(playerid, "/v(ehicle) [name]");
-	    SendClientMessage(playerid, COLOR_SERVER, "Names:{FFFFFF} list, lock, engine, hood, trunk, light");
-		SendClientMessage(playerid, COLOR_SERVER, "Names:{FFFFFF} attachment, give, storage, detail");
+	    SendSyntaxMessage(playerid, "/v(ehicle) [entity]");
+	    SendClientMessage(playerid, COLOR_SERVER, "Entity:{FFFFFF} list, lock, engine, hood, trunk, light");
+		SendClientMessage(playerid, COLOR_SERVER, "Entity:{FFFFFF} attachment, give, storage, detail, neon");
 	    return 1;
 	}
 	if(!strcmp(type, "engine", true))
@@ -2168,9 +2187,38 @@ CMD:v(playerid, params[])
 					return SendErrorMessage(playerid, "Please disable vehicle handbrake first!");
 
 				SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s inserts the key into the ignition and starts the engine.", ReturnName(playerid));
-				StartPlayerLoadingBar(playerid, 20, "Turning_on_engine...", 50, "Vehicle_TurnOnEngine");
+				StartPlayerLoadingBar(playerid, 50, "Turning_on_engine...", 40, "Vehicle_TurnOnEngine");
 			}
 		}
+	}
+	else if(!strcmp(type, "neon", true)) {
+
+		vehicleid = GetPlayerVehicleID(playerid);
+
+		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
+			return SendErrorMessage(playerid, "Kamu harus mengemudikan kendaraan terlebih dahulu.");
+			
+		if(VehicleData[vehicleid][vNeonColor] == VEHICLE_NEON_NONE)
+			return SendErrorMessage(playerid, "Kendaraan ini tidak memiliki neon.");
+
+		if(!VehicleData[vehicleid][vNeonStatus]) {
+			Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 0);
+			Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 1);
+			Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 2);
+			VehicleData[vehicleid][vNeonStatus] = true;
+
+			SendClientMessage(playerid, X11_LIGHTBLUE, "VEHICLE: "WHITE"Vehicle neon has been "GREEN"turned on");
+		}
+		else {
+			Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 0);
+			Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 1);
+			Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 2);
+			VehicleData[vehicleid][vNeonStatus] = false;		
+
+			SendClientMessage(playerid, X11_LIGHTBLUE, "VEHICLE: "WHITE"Vehicle neon has been "RED"turned off");	
+		}
+
+		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 	}
 	else if(!strcmp(type, "storage", true)) {
 
@@ -2213,6 +2261,7 @@ CMD:v(playerid, params[])
 
 		if(sscanf(string, "u", targetid)) {
 			Vehicle_ShowRegistration(playerid, vehicleid);
+			return 1;
 		}
 		if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
 			return SendErrorMessage(playerid, "You have specified invalid player.");
@@ -2267,23 +2316,7 @@ CMD:v(playerid, params[])
 		    
 	    if(IsPlayerInDynamicArea(playerid, AreaData[areaMechanic]))
 		{
-			new str[612];
-			format(str, sizeof(str), "idx\tModification\tCategory\n");
-			for(new i = 0; i < 5; i++)
-			{
-				if(VehicleData[vehicleid][vToyID][i] != 0)
-				{
-					if(VehicleData[vehicleid][vToyType][i] == VEHICLE_TOY_TEXT)
-						format(str, sizeof(str), "%s%d)\tText: %s\tMaterial Text\n", str, i + 1, vehicleToyText[vehicleid][i]);
-					else
-						format(str, sizeof(str), "%s%d)\tModel: %d\tObject\n", str, i + 1, VehicleData[vehicleid][vToyID][i]);
-				}	
-				else
-				{
-					format(str, sizeof(str), "%s%d)\tINVALID_OBJECT_ID\t(null)\n", str, i + 1);
-				}
-			}
-			ShowPlayerDialog(playerid, DIALOG_MODSHOP, DIALOG_STYLE_TABLIST_HEADERS, "Vehicle Attachment(s)", str, "Select", "Cancel");
+			ShowVehicleAttachmentMenu(playerid, vehicleid);
 			PlayerData[playerid][pVehicle] = vehicleid;
 		}
 		else
@@ -2298,6 +2331,9 @@ CMD:v(playerid, params[])
 
 	    if(vehicleid == INVALID_VEHICLE_ID)
 	    	return SendErrorMessage(playerid, "You're not in range of any vehicles.");
+
+		if(!IsDoorVehicle(vehicleid))
+			return SendErrorMessage(playerid, "Kendaraan ini tidak memiliki hood.");
 
 	    switch (GetHoodStatus(vehicleid))
 	    {
@@ -2330,7 +2366,10 @@ CMD:v(playerid, params[])
 
 		if(VehicleData[vehicleid][vLocked])
 			return SendErrorMessage(playerid, "Kendaraan ini masih terkunci!");
-			
+	
+		if(!IsDoorVehicle(vehicleid))
+			return SendErrorMessage(playerid, "Kendaraan ini tidak memiliki trunk.");
+
     	switch (GetTrunkStatus(vehicleid))
     	{
     		case false:

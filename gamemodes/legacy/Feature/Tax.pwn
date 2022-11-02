@@ -71,7 +71,6 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             if(HouseData[id][houseTaxState] == TAX_STATE_COOLDOWN)
                 return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk rumah ini.");
 
-
             price = HouseData[id][housePrice] * 5/100;
 
             if(GetMoney(playerid) < price)
@@ -96,7 +95,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             id = g_ListedProp[playerid][listitem], price = 0;
 
             if(FlatData[id][flatTaxState] == TAX_STATE_COOLDOWN)
-                return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk flat ini.");
+                return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk flat ini."), SendErrorMessage(playerid, "Flat %d | State %d | Date %d", id, FlatData[id][flatTaxState], FlatData[id][flatTaxDate]);
 
 
             price = FlatData[id][flatPrice] * 5/100;
@@ -127,7 +126,7 @@ task house_OnTaxUpdate[60000]() {
                 HouseData[i][houseTaxPaid] = false;
             }
             else {
-                SendAdminMessage(X11_TOMATO, "HouseWarn: House ID %d telah di asell karena tidak membayar pajak.", i);
+                // SendAdminMessage(X11_TOMATO, "HouseWarn: House ID %d telah di asell karena tidak membayar pajak.", i);
 
                 new string[256], msge[128];
                 format(msge, 128, "Rumahmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
@@ -150,8 +149,8 @@ task house_OnTaxUpdate[60000]() {
         }
     }
     return 1;
-}
-task flat_OnTaxUpdate[60000]() {
+}//
+task flat_OnTaxUpdate[10000]() {
 
     foreach(new i : Flat) if(FlatData[i][flatTaxDate] != 0 && FlatData[i][flatOwner] != -1) {
         if(FlatData[i][flatTaxDate] <= gettime()) {
@@ -159,9 +158,11 @@ task flat_OnTaxUpdate[60000]() {
                 FlatData[i][flatTaxState] = TAX_STATE_DEADLINE;
                 FlatData[i][flatTaxDate] = gettime() + (3 * 86400);
                 FlatData[i][flatTaxPaid] = false;
+                
+                printf("Called DUE DATE Flat ID: %d", i);
             }
             else {
-                SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d telah di asell karena tidak membayar pajak.", i);
+                // SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d telah di asell karena tidak membayar pajak.", i);
 
                 new string[256], msge[128];
                 format(msge, 128, "Flat mu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);

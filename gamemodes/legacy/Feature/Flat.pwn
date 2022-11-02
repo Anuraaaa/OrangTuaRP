@@ -807,9 +807,9 @@ CMD:flat(playerid, params[]) {
 	}
 	else if(!strcmp(type, "menu", true)) {
 
-		if((index = Flat_Inside(playerid)) != -1 && Flat_IsOwner(playerid, index)) {
+		if((index = Flat_Inside(playerid)) != -1 && Flat_IsHaveAccess(playerid, index)) {
 
-			ShowPlayerDialog(playerid, DIALOG_FLAT_MENU, DIALOG_STYLE_LIST, "Flat Menu", "Key Management\nStorage\nFurniture", "Select", "Close");
+			ShowPlayerDialog(playerid, DIALOG_FLAT_MENU, DIALOG_STYLE_LIST, "Flat Menu", "Key Management\nAccess Storage\nManage Furniture", "Select", "Close");
 		}
 		else SendErrorMessage(playerid, "Kamu tidak berada didalam flat milikmu.");
 	}

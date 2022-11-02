@@ -410,22 +410,17 @@ FUNC::OnAksesorisCreated(playerid, id)
 CMD:acc(playerid, params[])
 {
 	new 
-		string[255],
-		count = 0
+		string[352]
 	;
 	
 	format(string,sizeof(string),"Index\tName\tBone\n");
 	for (new id = 0; id != MAX_ACC; id++)
-	if(AccData[playerid][id][accExists])
 	{
-		format(string,sizeof(string),"%s#%d\t%s\t%s\n", string, id, AccData[playerid][id][accName], accBones[AccData[playerid][id][accBone]-1]);
-		if (count < MAX_ACC)
-		{
-			ListedAcc[playerid][count] = id;
-			count = count + 1;
-		}
+        if(AccData[playerid][id][accExists])
+		    format(string,sizeof(string),"%s"WHITE"#%d\t%s\t%s\n", string, id, AccData[playerid][id][accName], accBones[AccData[playerid][id][accBone]-1]);
+        else 
+            format(string, sizeof(string), "%s"GREY"Empty slot\n", string);
 	}
-	if(!count) SendErrorMessage(playerid, "Kamu tidak memiliki aksesoris.");
-	else ShowPlayerDialog(playerid, DIALOG_ACC_MENU, DIALOG_STYLE_TABLIST_HEADERS, "Editing Accessory", string, "Select","Exit");
+	ShowPlayerDialog(playerid, DIALOG_ACC_MENU, DIALOG_STYLE_TABLIST_HEADERS, "Editing Accessory", string, "Select","Exit");
     return 1;
 }

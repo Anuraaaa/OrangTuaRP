@@ -93,11 +93,16 @@ CMD:selltimber(playerid, params[])
 		return SendErrorMessage(playerid, "Kamu harus menunggu %d menit untuk bekerja kembali.", PlayerData[playerid][pLumberDelay]/60);
 	
 	
-	new str[156];
-	format(str, sizeof(str), "JOB: {FFFFFF}You've sold {FFFF00}%d {FFFFFF}timber and earn {00FF00}$%s {FFFFFF}on Salary.", VehicleData[vid][vWood], FormatNumber(VehicleData[vid][vWood]*5000));
-	AddSalary(playerid, "Selling Timber", VehicleData[vid][vWood]*5000);
-	SendClientMessage(playerid, COLOR_SERVER, str);
-	VehicleData[vid][vWood] = 0;
-	PlayerData[playerid][pLumberDelay] = 1800;
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "LUMBER-INFO: "WHITE"Harga kayu saat ini adalah "GREEN"$%s"WHITE" dan kamu akan mendapatkan "GREEN"$%s", FormatNumber(woodPrice), FormatNumber(VehicleData[vid][vWood]*woodPrice));
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "LUMBER-INFO: "WHITE"Gunakan "YELLOW"/selltimber confirm "WHITE"untuk lanjut menjual.");
+	
+	if(!strcmp(params, "confirm", true)) {
+		new str[156];
+		format(str, sizeof(str), "JOB: {FFFFFF}Kamu berhasil menjual "YELLOW"%d kayu "WHITE"dan mendapatkan "GREEN"$%s "WHITE"pada salary.", VehicleData[vid][vWood], FormatNumber(VehicleData[vid][vWood]*woodPrice));
+		AddSalary(playerid, "Selling Timber", VehicleData[vid][vWood]*woodPrice);
+		SendClientMessage(playerid, COLOR_SERVER, str);
+		VehicleData[vid][vWood] = 0;
+		PlayerData[playerid][pLumberDelay] = 1800;
+	}
 	return 1;
 }

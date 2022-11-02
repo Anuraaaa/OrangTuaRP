@@ -27,7 +27,7 @@
 #define DATABASE_PASSWORD 			"BG6tW@VPc7xYy2Z"
 
 #define SERVER_NAME 			"Orang Tua Roleplay"
-#define SERVER_VERSION 			"v8.12.8"
+#define SERVER_VERSION 			"v10.12.9"
 
 #if !defined BCRYPT_HASH_LENGTH
 	#define BCRYPT_HASH_LENGTH 250
@@ -88,7 +88,7 @@
 #define MAX_HOUSE_STORAGE			10
 #define MAX_WHEAT					1000
 #define MAX_TAGS					100
-#define MAX_ACTOR 					100
+#define MAX_ACTOR 					200
 #define MAX_WEAPONS 				55
 #define MAX_BODY_PARTS 				7
 #define MAX_HOUSE_FURNITURE			30
@@ -128,3 +128,6 @@
 #define MAX_TRASH					100
 #define MAX_PUBLIC_GARAGE			50
 #define MAX_CAR_STORAGE				5
+
+#define SOUND_FIREALARM_START   (3401)
+#define SOUND_FIREALARM_END     (3402)
