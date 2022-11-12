@@ -188,6 +188,8 @@ new const g_aFurnitureData[][e_FurnitureData] = {
 	{6, "Television 15", 2320},
 	{6, "Television 16", 2595},
 	{6, "Television 17", 16377},
+	{6, "LCD Television 1", 19786},
+	{6, "LCD Television 2", 19787},
 	{7, "Kitchen 1", 2013},
 	{7, "Kitchen 2", 2017},
 	{7, "Kitchen 3", 2127},
@@ -295,7 +297,31 @@ new const g_aFurnitureData[][e_FurnitureData] = {
 	{9, "Brick Plank", 19437},
 	{9, "Big Wooden Wall", 19376},
 	{9, "Big Cement Wall", 19371},
-	{9, "Big White Wall", 19377}
+	{9, "Big White Wall", 19377},
+	{9, "Wardrobe Door", 1567},
+	{9, "Wood Door", 1491},
+	{9, "Wooden Fabric Door", 1493},
+	{9, "Dirty Green Door", 1492},
+	{9, "Holed Wall", 19383},
+	{9, "Short Wall", 19426},
+	{9, "Pump Drinks", 1541},
+	{9, "Music Column", 2231},
+	{9, "Empty Fridge", 2531},
+	{9, "Ufo Light",  16780},
+	{9, "CJ Mlight", 1734},
+	{9, "Music Cabinet", 2100},
+	{9, "Boombox", 2103},
+	{9, "Pool Table", 14651},
+	{9, "Bottle and Cigarettes", 1670},
+	{9, "Bookshelf", 1742},
+	{9, "Complex Wooden Door", 1502},
+	{9, "Pot of Red Flowers", 2245},
+	{9, "Plant Pot 1", 2240},
+	{9, "Plant Pot 2", 2244},
+	{9, "Plant Pot 3", 2248},
+	{9, "Plant Pot 4", 948},
+	{9, "Pot of Small Bush", 15038},
+	{9, "Light", 18075}
 
 };
 
@@ -357,7 +383,7 @@ GetFurnitureNameByModel(model)
 	return name;
 }
 
-stock Furniture_ReturnPrice(index)
+Furniture_ReturnPrice(index)
 {
 	new price;
 	switch(index)
@@ -376,7 +402,7 @@ stock Furniture_ReturnPrice(index)
 	return price;
 }
 
-stock Furniture_Refresh(furnitureid)
+Furniture_Refresh(furnitureid)
 {
 	if(Iter_Contains(Furniture, furnitureid))
 	{
@@ -391,7 +417,7 @@ stock Furniture_Refresh(furnitureid)
 	return 1;
 }
 
-stock Furniture_Save(furnitureid)
+Furniture_Save(furnitureid)
 {
 	static
 	    string[712];
@@ -417,7 +443,7 @@ stock Furniture_Save(furnitureid)
 	return mysql_tquery(sqlcon, string);
 }
 
-stock Furniture_Add(propid, name[], vw, int, modelid, type, Float:x, Float:y, Float:z, Float:rx = 0.0, Float:ry = 0.0, Float:rz = 0.0)
+Furniture_Add(propid, name[], vw, int, modelid, type, Float:x, Float:y, Float:z, Float:rx = 0.0, Float:ry = 0.0, Float:rz = 0.0)
 {
 	static
 	    string[64],
@@ -461,7 +487,7 @@ FUNC::OnFurnitureCreated(furnitureid)
 	return 1;
 }
 
-stock Furniture_Delete(furnitureid, bool:safe_remove = false)
+Furniture_Delete(furnitureid, bool:safe_remove = false)
 {
 	static
 	    string[72];

@@ -210,8 +210,8 @@ stock LoadPoint()
 	CreateDynamicPickup(1239, 23, -1993.0046,-2388.0107,30.6250, -1);
 	CreateDynamic3DTextLabel("{FFFF00}[Timber Storage]\n{FFFFFF}Type {FFFF00}/selltimber {FFFFFF}to sell all Timber\nPrice: {00FF00}$50.00{FFFFFF} per Timber", -1, -1993.0046,-2388.0107,30.6250, 10.0);
 
-	CreateDynamicPickup(1239, 23, -1772.3304, -2013.1531, 1500.7853, -1);
-	CreateDynamic3DTextLabel("{86C6F4}[Medical]\n{FFFFFF}/autotreatment\nPrice: {00FF00}$150.0", -1, -1772.3304, -2013.1531, 1500.7853, 10.0);
+	CreateDynamicPickup(1239, 23, -1436.1725,-1528.6896,3001.5059, -1);
+	CreateDynamic3DTextLabel("{86C6F4}[Medical]\n{FFFFFF}/autotreatment\nPrice: {00FF00}$150.0", -1, -1436.1725,-1528.6896,3001.5059, 10.0);
 
 	CreateDynamicPickup(1239, 23, -1862.1053,-145.7666,11.8984, -1);
 	LabelData[labelComponent] = CreateDynamic3DTextLabel(sprintf(""LIGHTBLUE"[Component]\n"WHITE"Stock: "YELLOW"%d/10000\n"WHITE"Price: "GREEN"$0.50", StockData[stockComponent]), -1, -1862.1053,-145.7666,11.8984, 10.0);
@@ -228,6 +228,9 @@ stock LoadPoint()
 
 	CreateDynamicPickup(1239, 23, -2750.7354,203.6906,7.0267, -1);
 	CreateDynamic3DTextLabel("{86C6F4}[Crate Unloading]\n{FFFF00}/unloadcrate\n"WHITE"To unloading crate.", -1, -2750.7354,203.6906,7.0267, 10.0);
+
+	CreateDynamicPickup(1241, 23, -1437.7163,-1517.8572,3001.5059, -1);
+	CreateDynamic3DTextLabel("[PHARMACY]\n/getpills here", -1, -1437.7163,-1517.8572,3001.5059, 10.0);
 
 	CreateDynamicPickup(1239, 23, -192.3483, 1338.7361, 1500.9823, -1);
 	CreateDynamic3DTextLabel("{86C6F4}[Advertisement]\n{FFFFFF}/ad", -1, -192.3483, 1338.7361, 1500.9823, 10.0);
@@ -265,11 +268,11 @@ stock LoadPoint()
 	CreateDynamicPickup(1239, 23, -1634.1038,653.5013,7.1875, -1, -1);
 	CreateDynamic3DTextLabel("{0000FF}[Impound Point]\n{FFFFFF}/impound for impound vehicle.", -1, -1634.1038,653.5013,7.1875, 10.0);
 
-	CreateDynamicPickup(1239, 23, 1384.4253,1532.2789,1510.9011, -1, -1);
-	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/buyplate - for buy plate\n/payticket - for pay ticket", -1, 1384.4253,1532.2789,1510.9011, 5.0);
+	CreateDynamicPickup(1239, 23, 1380.9594,1557.6090,3001.0859, -1, -1);
+	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/buyplate - for buy plate\n/payticket - for pay ticket", -1, 1380.9594,1557.6090,3001.0859, 5.0);
 
-	CreateDynamicPickup(1239, 23, 1382.0933,1532.1388,1510.9011, -1, -1);
-	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/unimpound - for release vehicle", -1, 1382.0933,1532.1388,1510.9011, 5.0);
+	CreateDynamicPickup(1239, 23, 1378.8019,1557.6079,3001.0859, -1, -1);
+	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/unimpound - for release vehicle", -1, 1378.8019,1557.6079,3001.0859, 5.0);
 
 	CreateDynamicPickup(1239, 23, -1939.4851,555.0747,35.1719, -1, -1);
 	CreateDynamic3DTextLabel("{FFFF00}[Insurance Center]\n{FFFF00}/insu buy {FFFFFF}- to purchase insurance\n{FFFF00}/insu claim {FFFFFF}- to claim vehicle", -1, -1939.4851,555.0747,35.1719, 20.0);

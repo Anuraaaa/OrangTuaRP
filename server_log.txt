@@ -54351,3 +54351,4701 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [18:11:40] 
 [18:11:40] plugin.mysql: Unloading plugin...
 [18:11:40] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[22:18:43] password = ""  (string)
+[22:18:43] weburl = "www.sa-mp.com"  (string)
+[22:18:43] 
+[22:18:43] Server Plugins
+[22:18:43] --------------
+[22:18:43]  Loading plugin: crashdetect
+[22:18:43]   CrashDetect plugin 4.20
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: pawnraknet
+[22:18:43] [Pawn.RakNet] plugin v1.5.1 loading...
+[22:18:43] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: streamer
+[22:18:43] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: sscanf
+[22:18:43] 
+[22:18:43]  ===============================
+[22:18:43] 
+[22:18:43]       sscanf plugin loaded.     
+[22:18:43] 
+[22:18:43]          Version: 2.13.1
+[22:18:43] 
+[22:18:43]    (c) 2022 Alex "Y_Less" Cole  
+[22:18:43] 
+[22:18:43]  ===============================
+[22:18:43] 
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: mysql
+[22:18:43]  >> plugin.mysql: R41-4 successfully loaded.
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: samp_bcrypt
+[22:18:43] [SampBcrypt] [info]: Version: 0.3.4
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: samp-compat
+[22:18:43]   -- samp-compat for 0.3.7-R2 initialized
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: chrono
+[22:18:43]   Loaded.
+[22:18:43]  Loading plugin: mapandreas
+[22:18:43]   Loaded.
+[22:18:43]  Loaded 9 plugins.
+
+[22:18:43] 
+[22:18:43] Filterscripts
+[22:18:43] ---------------
+[22:18:43]   Loading filterscript 'PLE.amx'...
+[22:18:43]  
+[22:18:43]  ========================================== 
+[22:18:43]  |                                        | 
+[22:18:43]  |    Generating code, this may take a    | 
+[22:18:43]  |           little bit of time.          | 
+[22:18:43]  |                                        | 
+[22:18:43]  |             Please wait...             | 
+[22:18:43]  |                                        | 
+[22:18:43]  ========================================== 
+[22:18:43]  |                                        | 
+[22:18:43]  | Note that this code generation works   | 
+[22:18:43]  | best with the JIT plugin, which you    | 
+[22:18:43]  | are not currently using.  Get it here: | 
+[22:18:43]  |                                        | 
+[22:18:43]  |        https://git.io/jit-plugin       | 
+[22:18:43]  |                                        | 
+[22:18:43]  ========================================== 
+[22:18:43]  
+[22:18:43]  
+[22:18:43]  
+[22:18:43]  
+[22:18:43]  ========================================== 
+[22:18:43]  |                                        | 
+[22:18:43]  |         YSI version 5.05.0301          | 
+[22:18:43]  |         By Alex "Y_Less" Cole          | 
+[22:18:43]  |                                        | 
+[22:18:43]  | Unable to check the latest YSI version | 
+[22:18:43]  | - please watch the forums and github:  | 
+[22:18:43]  |                                        | 
+[22:18:43]  |   https://git.io/5.x                   | 
+[22:18:43]  |                                        | 
+[22:18:43]  ========================================== 
+[22:18:43]  
+[22:18:43] 
+
+[22:18:43] ======================================================================================
+[22:18:43] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[22:18:43] ||  			   	       Version 1.0				    ||
+[22:18:43] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[22:18:43] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[22:18:43] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[22:18:43] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[22:18:43] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[22:18:43] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[22:18:43] ||										    ||
+[22:18:43] =======================================================================================
+[22:18:43]   Loaded 1 filterscripts.
+
+[22:18:44]  
+[22:18:44]  
+[22:18:44]  
+[22:18:44]  ========================================== 
+[22:18:44]  |                                        | 
+[22:18:44]  |         YSI version 5.05.0005          | 
+[22:18:44]  |         By Alex "Y_Less" Cole          | 
+[22:18:44]  |                                        | 
+[22:18:44]  | Unable to check the latest YSI version | 
+[22:18:44]  | - please watch the forums and github:  | 
+[22:18:44]  |                                        | 
+[22:18:44]  |   https://git.io/5.x                   | 
+[22:18:44]  |                                        | 
+[22:18:44]  ========================================== 
+[22:18:44]  
+[22:18:44]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[22:18:44]  
+[22:18:44] --------------------------------------
+[22:18:44]  Anticheat Nex-AC loaded!
+[22:18:44]  Anticheat version: 1.9.59
+[22:18:44]  Author: Nexius
+[22:18:44] --------------------------------------
+
+[22:19:33] Setting server password to: "otrpgaming"
+[22:19:33] [Database] Failed! Error: [2002] Can't connect to MySQL server on 'localhost' (10061)
+[22:19:33] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[22:43:47] password = ""  (string)
+[22:43:47] weburl = "www.sa-mp.com"  (string)
+[22:43:47] 
+[22:43:47] Server Plugins
+[22:43:47] --------------
+[22:43:47]  Loading plugin: crashdetect
+[22:43:47]   CrashDetect plugin 4.20
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: pawnraknet
+[22:43:47] [Pawn.RakNet] plugin v1.5.1 loading...
+[22:43:47] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: streamer
+[22:43:47] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: sscanf
+[22:43:47] 
+[22:43:47]  ===============================
+[22:43:47] 
+[22:43:47]       sscanf plugin loaded.     
+[22:43:47] 
+[22:43:47]          Version: 2.13.1
+[22:43:47] 
+[22:43:47]    (c) 2022 Alex "Y_Less" Cole  
+[22:43:47] 
+[22:43:47]  ===============================
+[22:43:47] 
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: mysql
+[22:43:47]  >> plugin.mysql: R41-4 successfully loaded.
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: samp_bcrypt
+[22:43:47] [SampBcrypt] [info]: Version: 0.3.4
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: samp-compat
+[22:43:47]   -- samp-compat for 0.3.7-R2 initialized
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: chrono
+[22:43:47]   Loaded.
+[22:43:47]  Loading plugin: mapandreas
+[22:43:47]   Loaded.
+[22:43:47]  Loaded 9 plugins.
+
+[22:43:47] 
+[22:43:47] Filterscripts
+[22:43:47] ---------------
+[22:43:47]   Loading filterscript 'PLE.amx'...
+[22:43:47]  
+[22:43:47]  ========================================== 
+[22:43:47]  |                                        | 
+[22:43:47]  |    Generating code, this may take a    | 
+[22:43:47]  |           little bit of time.          | 
+[22:43:47]  |                                        | 
+[22:43:47]  |             Please wait...             | 
+[22:43:47]  |                                        | 
+[22:43:47]  ========================================== 
+[22:43:47]  |                                        | 
+[22:43:47]  | Note that this code generation works   | 
+[22:43:47]  | best with the JIT plugin, which you    | 
+[22:43:47]  | are not currently using.  Get it here: | 
+[22:43:47]  |                                        | 
+[22:43:47]  |        https://git.io/jit-plugin       | 
+[22:43:47]  |                                        | 
+[22:43:47]  ========================================== 
+[22:43:47]  
+[22:43:47]  
+[22:43:47]  
+[22:43:47]  
+[22:43:47]  ========================================== 
+[22:43:47]  |                                        | 
+[22:43:47]  |         YSI version 5.05.0301          | 
+[22:43:47]  |         By Alex "Y_Less" Cole          | 
+[22:43:47]  |                                        | 
+[22:43:47]  | Unable to check the latest YSI version | 
+[22:43:47]  | - please watch the forums and github:  | 
+[22:43:47]  |                                        | 
+[22:43:47]  |   https://git.io/5.x                   | 
+[22:43:47]  |                                        | 
+[22:43:47]  ========================================== 
+[22:43:47]  
+[22:43:47] 
+
+[22:43:47] ======================================================================================
+[22:43:47] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[22:43:47] ||  			   	       Version 1.0				    ||
+[22:43:47] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[22:43:47] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[22:43:47] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[22:43:47] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[22:43:47] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[22:43:47] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[22:43:47] ||										    ||
+[22:43:47] =======================================================================================
+[22:43:47]   Loaded 1 filterscripts.
+
+[22:43:49]  
+[22:43:49]  
+[22:43:49]  
+[22:43:49]  ========================================== 
+[22:43:49]  |                                        | 
+[22:43:49]  |         YSI version 5.05.0005          | 
+[22:43:49]  |         By Alex "Y_Less" Cole          | 
+[22:43:49]  |                                        | 
+[22:43:49]  | Unable to check the latest YSI version | 
+[22:43:49]  | - please watch the forums and github:  | 
+[22:43:49]  |                                        | 
+[22:43:49]  |   https://git.io/5.x                   | 
+[22:43:49]  |                                        | 
+[22:43:49]  ========================================== 
+[22:43:49]  
+[22:43:49]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[22:43:49]  
+[22:43:49] --------------------------------------
+[22:43:49]  Anticheat Nex-AC loaded!
+[22:43:49]  Anticheat version: 1.9.59
+[22:43:49]  Author: Nexius
+[22:43:49] --------------------------------------
+
+[22:43:49] [Database] Connected!
+[22:43:49] [MAPPING] Loaded mappings in 35ms
+[22:43:49] Economy Data Loaded.
+[22:43:49] Number of vehicle models: 7
+[22:43:50] [EMERGENCY] Loaded 10 emergency calls from database
+[22:43:50] [ACTOR] Loaded 99 Dynamic Actor from database
+[22:43:50] [ATM] Loaded 34 ATM from the database
+[22:43:50] [PUMP] Loaded 14 Fuel Pump from database
+[22:43:50] [BUSINESS] Loaded 29 Business from database
+[22:43:50] [DEALER] Loaded 7 dealership from database
+[22:43:50] [DROPITEM] Loaded 445 Dropped items from database.
+[22:43:50] [DOOR] Loaded 35 door from database
+[22:43:50] [FACTION] Loaded 8 faction from database
+[22:43:50] [FLAT] Loaded 129 Flat from database.
+[22:43:50] [GARAGE] Loaded 32 public garage from database.
+[22:43:50] [HOUSE] Loaded 186 House from the Database
+[22:43:50] [OBJECT] Loaded 4 Object from database
+[22:43:50] [RENTAL] Loaded 1 Rental from database
+[22:43:50] [SPEEDCAM] Loaded 6 Speed Camera from database
+[22:43:50] [SPRAYTAG] Loaded 100 spraytags from database
+[22:43:50] [TRASH] Loaded 46 Trash from database
+[22:43:50] [TREE] Loaded 71 tree from database
+[22:43:50] [WEED] Loaded 2 Weed from database
+[22:43:50] [WORKSHOP] Loaded 5 workshop from database.
+[22:43:50] [ROCK] Loaded 32 rock from database.
+[22:43:50] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[22:43:51] [FURNITURE] Loaded 3321 furniture from database.
+[22:44:20] [connection] incoming connection: 127.0.0.1:56613 id: 0
+[22:44:20] [join] vyn has joined the server (0:127.0.0.1)
+[22:44:31] [nick] vyn nick changed to Victor_Mendez
+[22:44:32] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[22:44:43] [CMD] Victor Mendez: /v attachment
+[22:45:15] [CMD] Victor Mendez: /v attachment
+[22:45:29] [CMD] Victor Mendez: /v attachment
+[22:45:35] [CMD] Victor Mendez: /v attachment
+[22:45:47] [CMD] Victor Mendez: /v attachment
+[22:45:54] [CMD] Victor Mendez: /v attachment
+[22:46:01] [CMD] Victor Mendez: /v attachment
+[22:46:05] [CMD] Victor Mendez: /v attachment
+[22:46:19] [CMD] Victor Mendez: /v attachment
+[22:46:21] [CMD] Victor Mendez: /v attachment
+[22:46:30] [CMD] Victor Mendez: /v attachment
+[22:46:42] [CMD] Victor Mendez: /v attachment
+[22:46:47] [CMD] Victor Mendez: /v attachment
+[22:46:54] [CMD] Victor Mendez: /v attachment
+[22:47:00] [CMD] Victor Mendez: /v attachment
+[22:48:36] [CMD] Victor Mendez: /f quot
+[22:48:37] [CMD] Victor Mendez: /f quit
+[22:48:41] [CMD] Victor Mendez: /setskin 0 29
+[22:48:43] [CMD] Victor Mendez: /acc
+[22:48:45] [CMD] Victor Mendez: /acc
+[22:48:47] [CMD] Victor Mendez: /acc
+[22:48:49] [CMD] Victor Mendez: /acc
+[22:48:52] [CMD] Victor Mendez: /acc
+[22:48:57] [death] Victor_Mendez died 255
+[22:49:07] [CMD] Victor Mendez: /setleader 0 0
+[22:49:16] [CMD] Victor Mendez: /arevive 0
+[22:49:23] [CMD] Victor Mendez: /gotodoor 2
+[22:49:26] [CMD] Victor Mendez: /gotodoor 3
+[22:49:28] [CMD] Victor Mendez: /gotodoor 4
+[22:49:29] [CMD] Victor Mendez: /gotodoor 5
+[22:49:30] [CMD] Victor Mendez: /gotodoor 6
+[22:49:32] [CMD] Victor Mendez: /gotodoor 8
+[22:49:34] [CMD] Victor Mendez: /gotodoor 7
+[22:49:35] [CMD] Victor Mendez: /gotodoor 9
+[22:49:37] [CMD] Victor Mendez: /gotodoor 10
+[22:49:38] [CMD] Victor Mendez: /gotodoor 11
+[22:49:40] [CMD] Victor Mendez: /gotodoor 12
+[22:49:42] [CMD] Victor Mendez: /gotodoor 13
+[22:49:43] [CMD] Victor Mendez: /gotodoor 14
+[22:49:45] [CMD] Victor Mendez: /gotodoor 15
+[22:50:40] [CMD] Victor Mendez: /f  locker
+[22:50:41] [CMD] Victor Mendez: /f  locker
+[22:50:43] [CMD] Victor Mendez: /f  locker
+[22:50:44] [CMD] Victor Mendez: /f quit
+[22:50:48] [CMD] Victor Mendez: /stats
+[22:51:02] [CMD] Victor Mendez: /flymode
+[22:51:07] [CMD] Victor Mendez: /flymode
+[22:56:40] [part] Victor_Mendez has left the server (0:1)
+[22:56:43] [PLAYER_VEH] Unloading player vehicleid 29.
+[22:56:43] [PLAYER_VEH] Unloading player vehicleid 30.
+[22:56:43] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:41:51] password = ""  (string)
+[18:41:51] weburl = "www.sa-mp.com"  (string)
+[18:41:51] 
+[18:41:51] Server Plugins
+[18:41:51] --------------
+[18:41:51]  Loading plugin: crashdetect
+[18:41:51]   CrashDetect plugin 4.20
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: pawnraknet
+[18:41:51] [Pawn.RakNet] plugin v1.5.1 loading...
+[18:41:51] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: streamer
+[18:41:51] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: sscanf
+[18:41:51] 
+[18:41:51]  ===============================
+[18:41:51] 
+[18:41:51]       sscanf plugin loaded.     
+[18:41:51] 
+[18:41:51]          Version: 2.13.1
+[18:41:51] 
+[18:41:51]    (c) 2022 Alex "Y_Less" Cole  
+[18:41:51] 
+[18:41:51]  ===============================
+[18:41:51] 
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: mysql
+[18:41:51]  >> plugin.mysql: R41-4 successfully loaded.
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: samp_bcrypt
+[18:41:51] [SampBcrypt] [info]: Version: 0.3.4
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: samp-compat
+[18:41:51]   -- samp-compat for 0.3.7-R2 initialized
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: chrono
+[18:41:51]   Loaded.
+[18:41:51]  Loading plugin: mapandreas
+[18:41:51]   Loaded.
+[18:41:51]  Loaded 9 plugins.
+
+[18:41:51] 
+[18:41:51] Filterscripts
+[18:41:51] ---------------
+[18:41:51]   Loading filterscript 'PLE.amx'...
+[18:41:51]  
+[18:41:51]  ========================================== 
+[18:41:51]  |                                        | 
+[18:41:51]  |    Generating code, this may take a    | 
+[18:41:51]  |           little bit of time.          | 
+[18:41:51]  |                                        | 
+[18:41:51]  |             Please wait...             | 
+[18:41:51]  |                                        | 
+[18:41:51]  ========================================== 
+[18:41:51]  |                                        | 
+[18:41:51]  | Note that this code generation works   | 
+[18:41:51]  | best with the JIT plugin, which you    | 
+[18:41:51]  | are not currently using.  Get it here: | 
+[18:41:51]  |                                        | 
+[18:41:51]  |        https://git.io/jit-plugin       | 
+[18:41:51]  |                                        | 
+[18:41:51]  ========================================== 
+[18:41:51]  
+[18:41:51]  
+[18:41:51]  
+[18:41:51]  
+[18:41:51]  ========================================== 
+[18:41:51]  |                                        | 
+[18:41:51]  |         YSI version 5.05.0301          | 
+[18:41:51]  |         By Alex "Y_Less" Cole          | 
+[18:41:51]  |                                        | 
+[18:41:51]  | Unable to check the latest YSI version | 
+[18:41:51]  | - please watch the forums and github:  | 
+[18:41:51]  |                                        | 
+[18:41:51]  |   https://git.io/5.x                   | 
+[18:41:51]  |                                        | 
+[18:41:51]  ========================================== 
+[18:41:51]  
+[18:41:51] 
+
+[18:41:51] ======================================================================================
+[18:41:51] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[18:41:51] ||  			   	       Version 1.0				    ||
+[18:41:51] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[18:41:51] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[18:41:51] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[18:41:51] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[18:41:51] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[18:41:51] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[18:41:51] ||										    ||
+[18:41:51] =======================================================================================
+[18:41:51]   Loaded 1 filterscripts.
+
+[18:41:52]  
+[18:41:52]  
+[18:41:52]  
+[18:41:52]  ========================================== 
+[18:41:52]  |                                        | 
+[18:41:52]  |         YSI version 5.05.0005          | 
+[18:41:52]  |         By Alex "Y_Less" Cole          | 
+[18:41:52]  |                                        | 
+[18:41:52]  | Unable to check the latest YSI version | 
+[18:41:52]  | - please watch the forums and github:  | 
+[18:41:52]  |                                        | 
+[18:41:52]  |   https://git.io/5.x                   | 
+[18:41:52]  |                                        | 
+[18:41:52]  ========================================== 
+[18:41:52]  
+[18:41:52]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[18:41:52]  
+[18:41:52] --------------------------------------
+[18:41:52]  Anticheat Nex-AC loaded!
+[18:41:52]  Anticheat version: 1.9.59
+[18:41:52]  Author: Nexius
+[18:41:52] --------------------------------------
+
+[18:41:52] [Database] Connected!
+[18:41:53] [MAPPING] Loaded mappings in 27ms
+[18:41:53] Economy Data Loaded.
+[18:41:53] Number of vehicle models: 7
+[18:41:53] [EMERGENCY] Loaded 10 emergency calls from database
+[18:41:53] [ACTOR] Loaded 99 Dynamic Actor from database
+[18:41:53] [ATM] Loaded 34 ATM from the database
+[18:41:53] [PUMP] Loaded 14 Fuel Pump from database
+[18:41:53] [BUSINESS] Loaded 29 Business from database
+[18:41:53] [DEALER] Loaded 7 dealership from database
+[18:41:53] [DROPITEM] Loaded 445 Dropped items from database.
+[18:41:53] [DOOR] Loaded 35 door from database
+[18:41:53] [FACTION] Loaded 8 faction from database
+[18:41:54] [FLAT] Loaded 129 Flat from database.
+[18:41:54] [GARAGE] Loaded 32 public garage from database.
+[18:41:54] [HOUSE] Loaded 186 House from the Database
+[18:41:54] [OBJECT] Loaded 4 Object from database
+[18:41:54] [RENTAL] Loaded 1 Rental from database
+[18:41:54] [SPEEDCAM] Loaded 6 Speed Camera from database
+[18:41:54] [SPRAYTAG] Loaded 100 spraytags from database
+[18:41:54] [TRASH] Loaded 46 Trash from database
+[18:41:54] [TREE] Loaded 71 tree from database
+[18:41:54] [WEED] Loaded 2 Weed from database
+[18:41:54] [WORKSHOP] Loaded 5 workshop from database.
+[18:41:54] [ROCK] Loaded 32 rock from database.
+[18:41:54] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[18:41:55] [FURNITURE] Loaded 3321 furniture from database.
+[18:43:28] [connection] incoming connection: 127.0.0.1:51572 id: 0
+[18:43:28] [join] vyn has joined the server (0:127.0.0.1)
+[18:43:40] [nick] vyn nick changed to Victor_Mendez
+[18:43:40] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[18:43:43] [CMD] Victor Mendez: /acc
+[18:43:45] [CMD] Victor Mendez: /acc
+[18:43:51] [CMD] Victor Mendez: /gotoloc sfn
+[18:43:54] [CMD] Victor Mendez: /send 0 sfn
+[18:43:56] [CMD] Victor Mendez: /send 0 news
+[18:44:12] [CMD] Victor Mendez: /setleader 0 2
+[18:44:14] [CMD] Victor Mendez: /postad
+[18:44:14] [CMD] Victor Mendez: /postad  0
+[18:44:42] [CMD] Victor Mendez: /ad
+[18:44:44] [CMD] Victor Mendez: /postad
+[18:45:47] [CMD] Victor Mendez: /v list
+[18:45:49] [CMD] Victor Mendez: /myproperty
+[18:45:52] [CMD] Victor Mendez: /gotoloc flat 122
+[18:45:58] [CMD] Victor Mendez: /flat menu
+[18:46:02] [CMD] Victor Mendez: /flat menu
+[18:46:42] [CMD] Victor Mendez: /flat menu
+[18:48:47] [CMD] Victor Mendez: /flat menu
+[18:48:54] [nick] Victor_Mendez nick changed to vyn
+[18:48:54] [CMD] vyn: /ADUTY
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:49:02] password = ""  (string)
+[18:49:02] weburl = "www.sa-mp.com"  (string)
+[18:49:02] 
+[18:49:02] Server Plugins
+[18:49:02] --------------
+[18:49:02]  Loading plugin: crashdetect
+[18:49:02]   CrashDetect plugin 4.20
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: pawnraknet
+[18:49:02] [Pawn.RakNet] plugin v1.5.1 loading...
+[18:49:02] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: streamer
+[18:49:02] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: sscanf
+[18:49:02] 
+[18:49:02]  ===============================
+[18:49:02] 
+[18:49:02]       sscanf plugin loaded.     
+[18:49:02] 
+[18:49:02]          Version: 2.13.1
+[18:49:02] 
+[18:49:02]    (c) 2022 Alex "Y_Less" Cole  
+[18:49:02] 
+[18:49:02]  ===============================
+[18:49:02] 
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: mysql
+[18:49:02]  >> plugin.mysql: R41-4 successfully loaded.
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: samp_bcrypt
+[18:49:02] [SampBcrypt] [info]: Version: 0.3.4
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: samp-compat
+[18:49:02]   -- samp-compat for 0.3.7-R2 initialized
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: chrono
+[18:49:02]   Loaded.
+[18:49:02]  Loading plugin: mapandreas
+[18:49:02]   Loaded.
+[18:49:02]  Loaded 9 plugins.
+
+[18:49:02] 
+[18:49:02] Filterscripts
+[18:49:02] ---------------
+[18:49:02]   Loading filterscript 'PLE.amx'...
+[18:49:02]  
+[18:49:02]  ========================================== 
+[18:49:02]  |                                        | 
+[18:49:02]  |    Generating code, this may take a    | 
+[18:49:02]  |           little bit of time.          | 
+[18:49:02]  |                                        | 
+[18:49:02]  |             Please wait...             | 
+[18:49:02]  |                                        | 
+[18:49:02]  ========================================== 
+[18:49:02]  |                                        | 
+[18:49:02]  | Note that this code generation works   | 
+[18:49:02]  | best with the JIT plugin, which you    | 
+[18:49:02]  | are not currently using.  Get it here: | 
+[18:49:02]  |                                        | 
+[18:49:02]  |        https://git.io/jit-plugin       | 
+[18:49:02]  |                                        | 
+[18:49:02]  ========================================== 
+[18:49:02]  
+[18:49:02]  
+[18:49:02]  
+[18:49:02]  
+[18:49:02]  ========================================== 
+[18:49:02]  |                                        | 
+[18:49:02]  |         YSI version 5.05.0301          | 
+[18:49:02]  |         By Alex "Y_Less" Cole          | 
+[18:49:02]  |                                        | 
+[18:49:02]  | Unable to check the latest YSI version | 
+[18:49:02]  | - please watch the forums and github:  | 
+[18:49:02]  |                                        | 
+[18:49:02]  |   https://git.io/5.x                   | 
+[18:49:02]  |                                        | 
+[18:49:02]  ========================================== 
+[18:49:02]  
+[18:49:02] 
+
+[18:49:02] ======================================================================================
+[18:49:02] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[18:49:02] ||  			   	       Version 1.0				    ||
+[18:49:02] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[18:49:02] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[18:49:02] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[18:49:02] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[18:49:02] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[18:49:02] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[18:49:02] ||										    ||
+[18:49:02] =======================================================================================
+[18:49:02]   Loaded 1 filterscripts.
+
+[18:49:03]  
+[18:49:03]  
+[18:49:03]  
+[18:49:03]  ========================================== 
+[18:49:03]  |                                        | 
+[18:49:03]  |         YSI version 5.05.0005          | 
+[18:49:03]  |         By Alex "Y_Less" Cole          | 
+[18:49:03]  |                                        | 
+[18:49:03]  | Unable to check the latest YSI version | 
+[18:49:03]  | - please watch the forums and github:  | 
+[18:49:03]  |                                        | 
+[18:49:03]  |   https://git.io/5.x                   | 
+[18:49:03]  |                                        | 
+[18:49:03]  ========================================== 
+[18:49:03]  
+[18:49:03]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[18:49:03]  
+[18:49:03] --------------------------------------
+[18:49:03]  Anticheat Nex-AC loaded!
+[18:49:03]  Anticheat version: 1.9.59
+[18:49:03]  Author: Nexius
+[18:49:03] --------------------------------------
+
+[18:49:03] [Database] Connected!
+[18:49:03] [MAPPING] Loaded mappings in 21ms
+[18:49:03] Economy Data Loaded.
+[18:49:03] Number of vehicle models: 7
+[18:49:03] [EMERGENCY] Loaded 10 emergency calls from database
+[18:49:03] [ACTOR] Loaded 99 Dynamic Actor from database
+[18:49:03] [ATM] Loaded 34 ATM from the database
+[18:49:03] [PUMP] Loaded 14 Fuel Pump from database
+[18:49:03] [BUSINESS] Loaded 29 Business from database
+[18:49:03] [DEALER] Loaded 7 dealership from database
+[18:49:03] [DROPITEM] Loaded 445 Dropped items from database.
+[18:49:03] [DOOR] Loaded 35 door from database
+[18:49:03] [FACTION] Loaded 8 faction from database
+[18:49:03] [FLAT] Loaded 129 Flat from database.
+[18:49:03] [GARAGE] Loaded 32 public garage from database.
+[18:49:03] [HOUSE] Loaded 186 House from the Database
+[18:49:03] [OBJECT] Loaded 4 Object from database
+[18:49:03] [RENTAL] Loaded 1 Rental from database
+[18:49:03] [SPEEDCAM] Loaded 6 Speed Camera from database
+[18:49:03] [SPRAYTAG] Loaded 100 spraytags from database
+[18:49:03] [TRASH] Loaded 46 Trash from database
+[18:49:03] [TREE] Loaded 71 tree from database
+[18:49:03] [WEED] Loaded 2 Weed from database
+[18:49:03] [WORKSHOP] Loaded 5 workshop from database.
+[18:49:03] [ROCK] Loaded 32 rock from database.
+[18:49:03] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[18:49:04] [FURNITURE] Loaded 3321 furniture from database.
+[18:49:18] [connection] incoming connection: 127.0.0.1:62096 id: 0
+[18:49:18] [join] vyn has joined the server (0:127.0.0.1)
+[18:49:27] [nick] vyn nick changed to Victor_Mendez
+[18:49:27] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[18:49:38] [CMD] Victor Mendez: /flat menu
+[18:49:43] [CMD] Victor Mendez: /flat menu
+[18:49:49] [CMD] Victor Mendez: /flat menu
+[18:49:54] [CASH UPDATE] Victor_Mendez(vyn) | Before: $26,561.76 | After: $26,493.76 | Reason: Membeli furniture
+[18:49:57] [CMD] Victor Mendez: /flat menu
+[18:50:01] [CMD] Victor Mendez: /flat menu
+[18:50:07] [CMD] Victor Mendez: /flat menu
+[18:50:24] [CMD] Victor Mendez: /gotoloc house 1
+[18:50:29] [CMD] Victor Mendez: /createhouse
+[18:50:32] [CMD] Victor Mendez: /createhouse 3 1
+[18:50:34] [CMD] Victor Mendez: /flat buy
+[18:50:37] [CMD] Victor Mendez: /housebuy
+[18:50:39] [CMD] Victor Mendez: /house buy
+[18:50:41] [CMD] Victor Mendez: /enter
+[18:50:44] [CMD] Victor Mendez: /house lock
+[18:50:52] [CMD] Victor Mendez: /house menu
+[18:51:25] [CASH UPDATE] Victor_Mendez(vyn) | Before: $26,492.76 | After: $26,424.76 | Reason: Membeli furniture
+[18:51:26] [CMD] Victor Mendez: /house menu
+[18:51:29] [CMD] Victor Mendez: /house menu
+[18:51:33] [CMD] Victor Mendez: /house menu
+[18:51:36] [CMD] Victor Mendez: /house menu
+[18:51:53] [part] Victor_Mendez has left the server (0:1)
+[18:51:56] [PLAYER_VEH] Unloading player vehicleid 29.
+[18:51:56] [PLAYER_VEH] Unloading player vehicleid 30.
+[18:51:56] [PLAYER_VEH] Unloading player vehicleid 28.
+[18:52:01] [debug] Server received interrupt signal
+[18:52:01] [debug] Native backtrace:
+[18:52:01] [debug] #0 778a2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[18:52:01] [debug] #1 76e3764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[18:52:01] [debug] #2 0048d53c in ?? () in samp-server.exe
+[18:52:01] [debug] #3 0049b531 in ?? () in samp-server.exe
+[18:52:01] [debug] #4 0049b541 in ?? () in samp-server.exe
+[18:52:01] --- Server Shutting Down.
+[18:52:01] ** Saved server data in 1ms
+[18:52:01] ** Saved server economy in 1ms
+[18:52:01] ** Saved vehicle data in 1ms
+[18:52:01] ** Saved player data in 1ms
+[18:52:01] ** Saved tree data in 18ms.
+[18:52:01] ** Saved  weed data  in 19ms.
+[18:52:01] ** Saved speedcam data in 19ms
+[18:52:01] ** Saved dealer data in 23ms
+[18:52:01] ** Saved house data  in 100ms
+[18:52:01] ** Saved business data in 117ms
+[18:52:01] ** Saved tree data in 133ms
+[18:52:01] ** Saved flat data in 169ms
+[18:52:01] ** Saved pump data in 170ms
+[18:52:01] There is 0 player when the server shutdown.
+[18:52:01]  
+[18:52:01] --------------------------------------
+[18:52:01]  Statistics anticheat Nex-AC
+[18:52:01]  Detected and prevented:
+[18:52:01]   0 cheating attempts
+[18:52:01]   0 hacking attempts
+[18:52:01]   0 crashing attempts
+[18:52:01]   0 flooding attempts
+[18:52:01]   0 attacks
+[18:52:01]  Total detected and punished 0 cheaters
+[18:52:01] --------------------------------------
+
+[18:52:01] [Pawn.RakNet] plugin unloaded
+[18:52:01] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[18:52:01] 
+[18:52:01]  ===============================
+[18:52:01] 
+[18:52:01]      sscanf plugin unloaded.    
+[18:52:01] 
+[18:52:01]  ===============================
+[18:52:01] 
+[18:52:01] plugin.mysql: Unloading plugin...
+[18:52:01] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[15:39:57] password = ""  (string)
+[15:39:57] weburl = "www.sa-mp.com"  (string)
+[15:39:57] 
+[15:39:57] Server Plugins
+[15:39:57] --------------
+[15:39:57]  Loading plugin: crashdetect
+[15:39:57]   CrashDetect plugin 4.20
+[15:39:57]   Loaded.
+[15:39:57]  Loading plugin: pawnraknet
+[15:39:57] [Pawn.RakNet] plugin v1.5.1 loading...
+[15:39:57] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[15:39:57]   Loaded.
+[15:39:57]  Loading plugin: streamer
+[15:39:58] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: sscanf
+[15:39:58] 
+[15:39:58]  ===============================
+[15:39:58] 
+[15:39:58]       sscanf plugin loaded.     
+[15:39:58] 
+[15:39:58]          Version: 2.13.1
+[15:39:58] 
+[15:39:58]    (c) 2022 Alex "Y_Less" Cole  
+[15:39:58] 
+[15:39:58]  ===============================
+[15:39:58] 
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: mysql
+[15:39:58]  >> plugin.mysql: R41-4 successfully loaded.
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: samp_bcrypt
+[15:39:58] [SampBcrypt] [info]: Version: 0.3.4
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: samp-compat
+[15:39:58]   -- samp-compat for 0.3.7-R2 initialized
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: chrono
+[15:39:58]   Loaded.
+[15:39:58]  Loading plugin: mapandreas
+[15:39:58]   Loaded.
+[15:39:58]  Loaded 9 plugins.
+
+[15:39:58] 
+[15:39:58] Filterscripts
+[15:39:58] ---------------
+[15:39:58]   Loading filterscript 'PLE.amx'...
+[15:39:58]  
+[15:39:58]  ========================================== 
+[15:39:58]  |                                        | 
+[15:39:58]  |    Generating code, this may take a    | 
+[15:39:58]  |           little bit of time.          | 
+[15:39:58]  |                                        | 
+[15:39:58]  |             Please wait...             | 
+[15:39:58]  |                                        | 
+[15:39:58]  ========================================== 
+[15:39:58]  |                                        | 
+[15:39:58]  | Note that this code generation works   | 
+[15:39:58]  | best with the JIT plugin, which you    | 
+[15:39:58]  | are not currently using.  Get it here: | 
+[15:39:58]  |                                        | 
+[15:39:58]  |        https://git.io/jit-plugin       | 
+[15:39:58]  |                                        | 
+[15:39:58]  ========================================== 
+[15:39:58]  
+[15:39:58]  
+[15:39:58]  
+[15:39:58]  
+[15:39:58]  ========================================== 
+[15:39:58]  |                                        | 
+[15:39:58]  |         YSI version 5.05.0301          | 
+[15:39:58]  |         By Alex "Y_Less" Cole          | 
+[15:39:58]  |                                        | 
+[15:39:58]  | Unable to check the latest YSI version | 
+[15:39:58]  | - please watch the forums and github:  | 
+[15:39:58]  |                                        | 
+[15:39:58]  |   https://git.io/5.x                   | 
+[15:39:58]  |                                        | 
+[15:39:58]  ========================================== 
+[15:39:58]  
+[15:39:58] 
+
+[15:39:58] ======================================================================================
+[15:39:58] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[15:39:58] ||  			   	       Version 1.0				    ||
+[15:39:58] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[15:39:58] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[15:39:58] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[15:39:58] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[15:39:58] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[15:39:58] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[15:39:58] ||										    ||
+[15:39:58] =======================================================================================
+[15:39:58]   Loaded 1 filterscripts.
+
+[15:39:59]  
+[15:39:59]  
+[15:39:59]  
+[15:39:59]  ========================================== 
+[15:39:59]  |                                        | 
+[15:39:59]  |         YSI version 5.05.0005          | 
+[15:39:59]  |         By Alex "Y_Less" Cole          | 
+[15:39:59]  |                                        | 
+[15:39:59]  | Unable to check the latest YSI version | 
+[15:39:59]  | - please watch the forums and github:  | 
+[15:39:59]  |                                        | 
+[15:39:59]  |   https://git.io/5.x                   | 
+[15:39:59]  |                                        | 
+[15:39:59]  ========================================== 
+[15:39:59]  
+[15:39:59]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[15:39:59]  
+[15:39:59] --------------------------------------
+[15:39:59]  Anticheat Nex-AC loaded!
+[15:39:59]  Anticheat version: 1.9.59
+[15:39:59]  Author: Nexius
+[15:39:59] --------------------------------------
+
+[15:39:59] [Database] Connected!
+[15:40:00] [MAPPING] Loaded mappings in 23ms
+[15:40:00] Economy Data Loaded.
+[15:40:00] Number of vehicle models: 7
+[15:40:00] [EMERGENCY] Loaded 10 emergency calls from database
+[15:40:00] [ACTOR] Loaded 99 Dynamic Actor from database
+[15:40:00] [ATM] Loaded 34 ATM from the database
+[15:40:00] [PUMP] Loaded 14 Fuel Pump from database
+[15:40:00] [BUSINESS] Loaded 29 Business from database
+[15:40:00] [DEALER] Loaded 7 dealership from database
+[15:40:00] [DROPITEM] Loaded 445 Dropped items from database.
+[15:40:00] [DOOR] Loaded 35 door from database
+[15:40:00] [FACTION] Loaded 8 faction from database
+[15:40:00] [FLAT] Loaded 129 Flat from database.
+[15:40:00] [GARAGE] Loaded 32 public garage from database.
+[15:40:00] [HOUSE] Loaded 187 House from the Database
+[15:40:00] [OBJECT] Loaded 4 Object from database
+[15:40:00] [RENTAL] Loaded 1 Rental from database
+[15:40:00] [SPEEDCAM] Loaded 6 Speed Camera from database
+[15:40:00] [SPRAYTAG] Loaded 100 spraytags from database
+[15:40:00] [TRASH] Loaded 46 Trash from database
+[15:40:00] [TREE] Loaded 71 tree from database
+[15:40:00] [WEED] Loaded 2 Weed from database
+[15:40:00] [WORKSHOP] Loaded 5 workshop from database.
+[15:40:00] [ROCK] Loaded 32 rock from database.
+[15:40:00] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[15:40:01] [FURNITURE] Loaded 3321 furniture from database.
+[15:40:29] [connection] incoming connection: 127.0.0.1:58373 id: 0
+[15:40:29] [join] vyn has joined the server (0:127.0.0.1)
+[15:40:38] [nick] vyn nick changed to Havoc_Redmond
+[15:40:38] [PLAYER_DMG] Loaded 10 damagelog from player Havoc Redmond.
+[15:40:55] [part] Havoc_Redmond has left the server (0:0)
+[15:40:58] [PLAYER_VEH] Unloading player vehicleid 29.
+[15:40:58] [PLAYER_VEH] Unloading player vehicleid 30.
+[15:40:58] [PLAYER_VEH] Unloading player vehicleid 28.
+[15:41:03] [connection] incoming connection: 127.0.0.1:61974 id: 0
+[15:41:03] [join] vyn has joined the server (0:127.0.0.1)
+[15:41:12] [nick] vyn nick changed to Victor_Mendez
+[15:41:12] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[15:41:28] [CMD] Victor Mendez: /send 0 mc
+[15:41:31] [CMD] Victor Mendez: /v list
+[15:41:38] [CMD] Victor Mendez: /gentercar 28
+[15:41:46] [CMD] Victor Mendez: /gotoloc biz 1
+[15:41:48] [CMD] Victor Mendez: /gotoloc biz 2
+[15:41:51] [CMD] Victor Mendez: /gotoloc biz 23
+[15:41:54] [CMD] Victor Mendez: /gotoloc biz 4
+[15:41:56] [CMD] Victor Mendez: /gotoloc biz 3
+[15:41:59] [CMD] Victor Mendez: /gotoloc biz 6
+[15:42:01] [CMD] Victor Mendez: /gotoloc biz 5
+[15:42:05] [CMD] Victor Mendez: /buy
+[15:42:14] [CMD] Victor Mendez: /editbiz 5 stock 100
+[15:42:16] [CMD] Victor Mendez: /buy
+[15:42:21] [CMD] Victor Mendez: /buy
+[15:42:23] [CMD] Victor Mendez: /buy
+[15:43:32] [CMD] Victor Mendez: /mask
+[15:43:35] [CMD] Victor Mendez: /mask
+[15:43:38] [CMD] Victor Mendez: /mask
+[15:43:40] [CMD] Victor Mendez: /mask
+[15:43:53] [part] Victor_Mendez has left the server (0:1)
+[15:43:56] [PLAYER_VEH] Unloading player vehicleid 29.
+[15:43:56] [PLAYER_VEH] Unloading player vehicleid 30.
+[15:43:56] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[05:29:08] password = ""  (string)
+[05:29:08] weburl = "www.sa-mp.com"  (string)
+[05:29:08] 
+[05:29:08] Server Plugins
+[05:29:08] --------------
+[05:29:08]  Loading plugin: crashdetect
+[05:29:08]   CrashDetect plugin 4.20
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: pawnraknet
+[05:29:08] [Pawn.RakNet] plugin v1.5.1 loading...
+[05:29:08] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: streamer
+[05:29:08] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: sscanf
+[05:29:08] 
+[05:29:08]  ===============================
+[05:29:08] 
+[05:29:08]       sscanf plugin loaded.     
+[05:29:08] 
+[05:29:08]          Version: 2.13.1
+[05:29:08] 
+[05:29:08]    (c) 2022 Alex "Y_Less" Cole  
+[05:29:08] 
+[05:29:08]  ===============================
+[05:29:08] 
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: mysql
+[05:29:08]  >> plugin.mysql: R41-4 successfully loaded.
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: samp_bcrypt
+[05:29:08] [SampBcrypt] [info]: Version: 0.3.4
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: samp-compat
+[05:29:08]   -- samp-compat for 0.3.7-R2 initialized
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: chrono
+[05:29:08]   Loaded.
+[05:29:08]  Loading plugin: mapandreas
+[05:29:08]   Loaded.
+[05:29:08]  Loaded 9 plugins.
+
+[05:29:08] 
+[05:29:08] Filterscripts
+[05:29:08] ---------------
+[05:29:08]   Loading filterscript 'PLE.amx'...
+[05:29:08]  
+[05:29:08]  ========================================== 
+[05:29:08]  |                                        | 
+[05:29:08]  |    Generating code, this may take a    | 
+[05:29:08]  |           little bit of time.          | 
+[05:29:08]  |                                        | 
+[05:29:08]  |             Please wait...             | 
+[05:29:08]  |                                        | 
+[05:29:08]  ========================================== 
+[05:29:08]  |                                        | 
+[05:29:08]  | Note that this code generation works   | 
+[05:29:08]  | best with the JIT plugin, which you    | 
+[05:29:08]  | are not currently using.  Get it here: | 
+[05:29:08]  |                                        | 
+[05:29:08]  |        https://git.io/jit-plugin       | 
+[05:29:08]  |                                        | 
+[05:29:08]  ========================================== 
+[05:29:08]  
+[05:29:08]  
+[05:29:08]  
+[05:29:08]  
+[05:29:08]  ========================================== 
+[05:29:08]  |                                        | 
+[05:29:08]  |         YSI version 5.05.0301          | 
+[05:29:08]  |         By Alex "Y_Less" Cole          | 
+[05:29:08]  |                                        | 
+[05:29:08]  | Unable to check the latest YSI version | 
+[05:29:08]  | - please watch the forums and github:  | 
+[05:29:08]  |                                        | 
+[05:29:08]  |   https://git.io/5.x                   | 
+[05:29:08]  |                                        | 
+[05:29:08]  ========================================== 
+[05:29:08]  
+[05:29:08] 
+
+[05:29:08] ======================================================================================
+[05:29:08] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[05:29:08] ||  			   	       Version 1.0				    ||
+[05:29:08] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[05:29:08] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[05:29:08] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[05:29:08] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[05:29:08] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[05:29:08] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[05:29:08] ||										    ||
+[05:29:08] =======================================================================================
+[05:29:08]   Loaded 1 filterscripts.
+
+[05:29:10]  
+[05:29:10]  
+[05:29:10]  
+[05:29:10]  ========================================== 
+[05:29:10]  |                                        | 
+[05:29:10]  |         YSI version 5.05.0005          | 
+[05:29:10]  |         By Alex "Y_Less" Cole          | 
+[05:29:10]  |                                        | 
+[05:29:10]  | Unable to check the latest YSI version | 
+[05:29:10]  | - please watch the forums and github:  | 
+[05:29:10]  |                                        | 
+[05:29:10]  |   https://git.io/5.x                   | 
+[05:29:10]  |                                        | 
+[05:29:10]  ========================================== 
+[05:29:10]  
+[05:29:10]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[05:29:10]  
+[05:29:10] --------------------------------------
+[05:29:10]  Anticheat Nex-AC loaded!
+[05:29:10]  Anticheat version: 1.9.59
+[05:29:10]  Author: Nexius
+[05:29:10] --------------------------------------
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[05:33:34] password = ""  (string)
+[05:33:34] weburl = "www.sa-mp.com"  (string)
+[05:33:34] 
+[05:33:34] Server Plugins
+[05:33:34] --------------
+[05:33:34]  Loading plugin: crashdetect
+[05:33:34]   CrashDetect plugin 4.20
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: pawnraknet
+[05:33:34] [Pawn.RakNet] plugin v1.5.1 loading...
+[05:33:34] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: streamer
+[05:33:34] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: sscanf
+[05:33:34] 
+[05:33:34]  ===============================
+[05:33:34] 
+[05:33:34]       sscanf plugin loaded.     
+[05:33:34] 
+[05:33:34]          Version: 2.13.1
+[05:33:34] 
+[05:33:34]    (c) 2022 Alex "Y_Less" Cole  
+[05:33:34] 
+[05:33:34]  ===============================
+[05:33:34] 
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: mysql
+[05:33:34]  >> plugin.mysql: R41-4 successfully loaded.
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: samp_bcrypt
+[05:33:34] [SampBcrypt] [info]: Version: 0.3.4
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: samp-compat
+[05:33:34]   -- samp-compat for 0.3.7-R2 initialized
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: chrono
+[05:33:34]   Loaded.
+[05:33:34]  Loading plugin: mapandreas
+[05:33:34]   Loaded.
+[05:33:34]  Loaded 9 plugins.
+
+[05:33:34] 
+[05:33:34] Filterscripts
+[05:33:34] ---------------
+[05:33:34]   Loading filterscript 'PLE.amx'...
+[05:33:34]  
+[05:33:34]  ========================================== 
+[05:33:34]  |                                        | 
+[05:33:34]  |    Generating code, this may take a    | 
+[05:33:34]  |           little bit of time.          | 
+[05:33:34]  |                                        | 
+[05:33:34]  |             Please wait...             | 
+[05:33:34]  |                                        | 
+[05:33:34]  ========================================== 
+[05:33:34]  |                                        | 
+[05:33:34]  | Note that this code generation works   | 
+[05:33:34]  | best with the JIT plugin, which you    | 
+[05:33:34]  | are not currently using.  Get it here: | 
+[05:33:34]  |                                        | 
+[05:33:34]  |        https://git.io/jit-plugin       | 
+[05:33:34]  |                                        | 
+[05:33:34]  ========================================== 
+[05:33:34]  
+[05:33:34]  
+[05:33:34]  
+[05:33:34]  
+[05:33:34]  ========================================== 
+[05:33:34]  |                                        | 
+[05:33:34]  |         YSI version 5.05.0301          | 
+[05:33:34]  |         By Alex "Y_Less" Cole          | 
+[05:33:34]  |                                        | 
+[05:33:34]  | Unable to check the latest YSI version | 
+[05:33:34]  | - please watch the forums and github:  | 
+[05:33:34]  |                                        | 
+[05:33:34]  |   https://git.io/5.x                   | 
+[05:33:34]  |                                        | 
+[05:33:34]  ========================================== 
+[05:33:34]  
+[05:33:34] 
+
+[05:33:34] ======================================================================================
+[05:33:34] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[05:33:34] ||  			   	       Version 1.0				    ||
+[05:33:34] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[05:33:34] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[05:33:34] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[05:33:34] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[05:33:34] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[05:33:34] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[05:33:34] ||										    ||
+[05:33:34] =======================================================================================
+[05:33:34]   Loaded 1 filterscripts.
+
+[05:33:35]  
+[05:33:35]  
+[05:33:35]  
+[05:33:35]  ========================================== 
+[05:33:35]  |                                        | 
+[05:33:35]  |         YSI version 5.05.0005          | 
+[05:33:35]  |         By Alex "Y_Less" Cole          | 
+[05:33:35]  |                                        | 
+[05:33:35]  | Unable to check the latest YSI version | 
+[05:33:35]  | - please watch the forums and github:  | 
+[05:33:35]  |                                        | 
+[05:33:35]  |   https://git.io/5.x                   | 
+[05:33:35]  |                                        | 
+[05:33:35]  ========================================== 
+[05:33:35]  
+[05:33:35]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[05:33:35]  
+[05:33:35] --------------------------------------
+[05:33:35]  Anticheat Nex-AC loaded!
+[05:33:35]  Anticheat version: 1.9.59
+[05:33:35]  Author: Nexius
+[05:33:35] --------------------------------------
+
+[05:36:00] [Database] Connected!
+[05:36:01] [MAPPING] Loaded mappings in 30ms
+[05:36:01] Economy Data Loaded.
+[05:36:01] Number of vehicle models: 7
+[05:36:01] [EMERGENCY] Loaded 16 emergency calls from database
+[05:36:01] [ACTOR] Loaded 94 Dynamic Actor from database
+[05:36:01] [ATM] Loaded 35 ATM from the database
+[05:36:01] [PUMP] Loaded 14 Fuel Pump from database
+[05:36:01] [BUSINESS] Loaded 30 Business from database
+[05:36:01] [DEALER] Loaded 7 dealership from database
+[05:36:01] [DROPITEM] Loaded 414 Dropped items from database.
+[05:36:01] [DOOR] Loaded 34 door from database
+[05:36:01] [FACTION] Loaded 8 faction from database
+[05:36:01] [FLAT] Loaded 129 Flat from database.
+[05:36:01] [GARAGE] Loaded 32 public garage from database.
+[05:36:02] [HOUSE] Loaded 187 House from the Database
+[05:36:02] [OBJECT] Loaded 4 Object from database
+[05:36:02] [RENTAL] Loaded 1 Rental from database
+[05:36:02] [SPEEDCAM] Loaded 6 Speed Camera from database
+[05:36:02] [SPRAYTAG] Loaded 92 spraytags from database
+[05:36:02] [TRASH] Loaded 46 Trash from database
+[05:36:02] [TREE] Loaded 71 tree from database
+[05:36:02] [WORKSHOP] Loaded 4 workshop from database.
+[05:36:02] [ROCK] Loaded 32 rock from database.
+[05:36:02] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[05:36:02] [FURNITURE] Loaded 3376 furniture from database.
+[05:36:59] *** Streamer Plugin: Streamer_SetFloatData: Invalid ID specified.
+[15:02:10] [connection] incoming connection: 127.0.0.1:61069 id: 0
+[15:02:10] [join] vyn has joined the server (0:127.0.0.1)
+[15:02:23] [chat] [vyn]: a
+[15:02:24] [part] vyn has left the server (0:1)
+[15:02:26] [debug] Server received interrupt signal
+[15:02:26] [debug] Native backtrace:
+[15:02:26] [debug] #0 775a2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[15:02:26] [debug] #1 7649764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[15:02:26] [debug] #2 0048d53c in ?? () in samp-server.exe
+[15:02:26] [debug] #3 0049b531 in ?? () in samp-server.exe
+[15:02:26] [debug] #4 0049b541 in ?? () in samp-server.exe
+[15:02:26] --- Server Shutting Down.
+[15:02:26] ** Saved server data in 0ms
+[15:02:26] ** Saved server economy in 1ms
+[15:02:26] ** Saved vehicle data in 1ms
+[15:02:26] ** Saved player data in 1ms
+[15:02:26] ** Saved tree data in 18ms.
+[15:02:26] ** Saved  weed data  in 18ms.
+[15:02:26] ** Saved speedcam data in 19ms
+[15:02:26] ** Saved dealer data in 24ms
+[15:02:26] ** Saved house data  in 99ms
+[15:02:26] ** Saved business data in 116ms
+[15:02:26] ** Saved tree data in 131ms
+[15:02:26] ** Saved flat data in 167ms
+[15:02:26] ** Saved pump data in 168ms
+[15:02:26] There is 0 player when the server shutdown.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[19:39:18] password = ""  (string)
+[19:39:18] weburl = "www.sa-mp.com"  (string)
+[19:39:18] 
+[19:39:18] Server Plugins
+[19:39:18] --------------
+[19:39:18]  Loading plugin: crashdetect
+[19:39:18]   CrashDetect plugin 4.20
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: pawnraknet
+[19:39:18] [Pawn.RakNet] plugin v1.5.1 loading...
+[19:39:18] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: streamer
+[19:39:18] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: sscanf
+[19:39:18] 
+[19:39:18]  ===============================
+[19:39:18] 
+[19:39:18]       sscanf plugin loaded.     
+[19:39:18] 
+[19:39:18]          Version: 2.13.1
+[19:39:18] 
+[19:39:18]    (c) 2022 Alex "Y_Less" Cole  
+[19:39:18] 
+[19:39:18]  ===============================
+[19:39:18] 
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: mysql
+[19:39:18]  >> plugin.mysql: R41-4 successfully loaded.
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: samp_bcrypt
+[19:39:18] [SampBcrypt] [info]: Version: 0.3.4
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: samp-compat
+[19:39:18]   -- samp-compat for 0.3.7-R2 initialized
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: chrono
+[19:39:18]   Loaded.
+[19:39:18]  Loading plugin: mapandreas
+[19:39:18]   Loaded.
+[19:39:18]  Loaded 9 plugins.
+
+[19:39:18] 
+[19:39:18] Filterscripts
+[19:39:18] ---------------
+[19:39:18]   Loading filterscript 'PLE.amx'...
+[19:39:18]  
+[19:39:18]  ========================================== 
+[19:39:18]  |                                        | 
+[19:39:18]  |    Generating code, this may take a    | 
+[19:39:18]  |           little bit of time.          | 
+[19:39:18]  |                                        | 
+[19:39:18]  |             Please wait...             | 
+[19:39:18]  |                                        | 
+[19:39:18]  ========================================== 
+[19:39:18]  |                                        | 
+[19:39:18]  | Note that this code generation works   | 
+[19:39:18]  | best with the JIT plugin, which you    | 
+[19:39:18]  | are not currently using.  Get it here: | 
+[19:39:18]  |                                        | 
+[19:39:18]  |        https://git.io/jit-plugin       | 
+[19:39:18]  |                                        | 
+[19:39:18]  ========================================== 
+[19:39:18]  
+[19:39:18]  
+[19:39:18]  
+[19:39:18]  
+[19:39:18]  ========================================== 
+[19:39:18]  |                                        | 
+[19:39:18]  |         YSI version 5.05.0301          | 
+[19:39:18]  |         By Alex "Y_Less" Cole          | 
+[19:39:18]  |                                        | 
+[19:39:18]  | Unable to check the latest YSI version | 
+[19:39:18]  | - please watch the forums and github:  | 
+[19:39:18]  |                                        | 
+[19:39:18]  |   https://git.io/5.x                   | 
+[19:39:18]  |                                        | 
+[19:39:18]  ========================================== 
+[19:39:18]  
+[19:39:18] 
+
+[19:39:18] ======================================================================================
+[19:39:18] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[19:39:18] ||  			   	       Version 1.0				    ||
+[19:39:18] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[19:39:18] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[19:39:18] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[19:39:18] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[19:39:18] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[19:39:18] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[19:39:18] ||										    ||
+[19:39:18] =======================================================================================
+[19:39:18]   Loaded 1 filterscripts.
+
+[19:39:20]  
+[19:39:20]  
+[19:39:20]  
+[19:39:20]  ========================================== 
+[19:39:20]  |                                        | 
+[19:39:20]  |         YSI version 5.05.0005          | 
+[19:39:20]  |         By Alex "Y_Less" Cole          | 
+[19:39:20]  |                                        | 
+[19:39:20]  | Unable to check the latest YSI version | 
+[19:39:20]  | - please watch the forums and github:  | 
+[19:39:20]  |                                        | 
+[19:39:20]  |   https://git.io/5.x                   | 
+[19:39:20]  |                                        | 
+[19:39:20]  ========================================== 
+[19:39:20]  
+[19:39:20]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[19:39:20]  
+[19:39:20] --------------------------------------
+[19:39:20]  Anticheat Nex-AC loaded!
+[19:39:20]  Anticheat version: 1.9.59
+[19:39:20]  Author: Nexius
+[19:39:20] --------------------------------------
+
+[19:41:10] [Database] Connected!
+[19:41:10] [MAPPING] Loaded mappings in 24ms
+[19:41:10] Economy Data Loaded.
+[19:41:10] Number of vehicle models: 7
+[19:41:10] [EMERGENCY] Loaded 12 emergency calls from database
+[19:41:10] [ACTOR] Loaded 96 Dynamic Actor from database
+[19:41:10] [ATM] Loaded 40 ATM from the database
+[19:41:10] [PUMP] Loaded 14 Fuel Pump from database
+[19:41:10] [BUSINESS] Loaded 30 Business from database
+[19:41:10] [DEALER] Loaded 7 dealership from database
+[19:41:11] [DROPITEM] Loaded 412 Dropped items from database.
+[19:41:11] [DOOR] Loaded 35 door from database
+[19:41:11] [FACTION] Loaded 8 faction from database
+[19:41:11] [FLAT] Loaded 129 Flat from database.
+[19:41:12] [GARAGE] Loaded 32 public garage from database.
+[19:41:12] [HOUSE] Loaded 187 House from the Database
+[19:41:12] [OBJECT] Loaded 4 Object from database
+[19:41:12] [RENTAL] Loaded 1 Rental from database
+[19:41:12] [SPEEDCAM] Loaded 6 Speed Camera from database
+[19:41:12] [SPRAYTAG] Loaded 92 spraytags from database
+[19:41:13] [TRASH] Loaded 46 Trash from database
+[19:41:13] [TREE] Loaded 71 tree from database
+[19:41:13] [WORKSHOP] Loaded 4 workshop from database.
+[19:41:13] [ROCK] Loaded 32 rock from database.
+[19:41:14] [FACTIONGARAGE] Loaded 7 faction garage from database.
+[19:41:18] [FURNITURE] Loaded 3395 furniture from database.
+[19:43:07] [connection] incoming connection: 127.0.0.1:54718 id: 0
+[19:43:07] [join] vyn has joined the server (0:127.0.0.1)
+[19:43:17] [nick] vyn nick changed to Victor_Mendez
+[19:43:18] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[19:43:20] [CMD] Victor Mendez: /setleader 0 0
+[19:43:21] [CMD] Victor Mendez: /send 0 sapd
+[19:43:52] [CMD] Victor Mendez: /su
+[19:43:59] [CMD] Victor Mendez: /fgarage
+[19:44:02] [CMD] Victor Mendez: /mdc
+[19:44:52] [CMD] Victor Mendez: /su
+[19:44:53] [CMD] Victor Mendez: /su 0
+[19:45:03] [CMD] Victor Mendez: /su 0 Only test the feature tho.
+[19:45:28] [CMD] Victor Mendez: /su 0 Only test the feature tho.
+[19:45:30] [CMD] Victor Mendez: /mdc
+[19:47:18] [part] Victor_Mendez has left the server (0:1)
+[19:47:21] [PLAYER_VEH] Unloading player vehicleid 29.
+[19:47:21] [PLAYER_VEH] Unloading player vehicleid 31.
+[19:47:21] [PLAYER_VEH] Unloading player vehicleid 30.
+[19:47:21] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[17:05:30] password = ""  (string)
+[17:05:30] weburl = "www.sa-mp.com"  (string)
+[17:05:30] 
+[17:05:30] Server Plugins
+[17:05:30] --------------
+[17:05:30]  Loading plugin: crashdetect
+[17:05:30]   CrashDetect plugin 4.20
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: pawnraknet
+[17:05:30] [Pawn.RakNet] plugin v1.5.1 loading...
+[17:05:30] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: streamer
+[17:05:30] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: sscanf
+[17:05:30] 
+[17:05:30]  ===============================
+[17:05:30] 
+[17:05:30]       sscanf plugin loaded.     
+[17:05:30] 
+[17:05:30]          Version: 2.13.1
+[17:05:30] 
+[17:05:30]    (c) 2022 Alex "Y_Less" Cole  
+[17:05:30] 
+[17:05:30]  ===============================
+[17:05:30] 
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: mysql
+[17:05:30]  >> plugin.mysql: R41-4 successfully loaded.
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: samp_bcrypt
+[17:05:30] [SampBcrypt] [info]: Version: 0.3.4
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: samp-compat
+[17:05:30]   -- samp-compat for 0.3.7-R2 initialized
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: chrono
+[17:05:30]   Loaded.
+[17:05:30]  Loading plugin: mapandreas
+[17:05:30]   Loaded.
+[17:05:30]  Loaded 9 plugins.
+
+[17:05:30] 
+[17:05:30] Filterscripts
+[17:05:30] ---------------
+[17:05:30]   Loading filterscript 'PLE.amx'...
+[17:05:30]  
+[17:05:30]  ========================================== 
+[17:05:30]  |                                        | 
+[17:05:30]  |    Generating code, this may take a    | 
+[17:05:30]  |           little bit of time.          | 
+[17:05:30]  |                                        | 
+[17:05:30]  |             Please wait...             | 
+[17:05:30]  |                                        | 
+[17:05:30]  ========================================== 
+[17:05:30]  |                                        | 
+[17:05:30]  | Note that this code generation works   | 
+[17:05:30]  | best with the JIT plugin, which you    | 
+[17:05:30]  | are not currently using.  Get it here: | 
+[17:05:30]  |                                        | 
+[17:05:30]  |        https://git.io/jit-plugin       | 
+[17:05:30]  |                                        | 
+[17:05:30]  ========================================== 
+[17:05:30]  
+[17:05:30]  
+[17:05:30]  
+[17:05:30]  
+[17:05:30]  ========================================== 
+[17:05:30]  |                                        | 
+[17:05:30]  |         YSI version 5.05.0301          | 
+[17:05:30]  |         By Alex "Y_Less" Cole          | 
+[17:05:30]  |                                        | 
+[17:05:30]  | Unable to check the latest YSI version | 
+[17:05:30]  | - please watch the forums and github:  | 
+[17:05:30]  |                                        | 
+[17:05:30]  |   https://git.io/5.x                   | 
+[17:05:30]  |                                        | 
+[17:05:30]  ========================================== 
+[17:05:30]  
+[17:05:30] 
+
+[17:05:30] ======================================================================================
+[17:05:30] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[17:05:30] ||  			   	       Version 1.0				    ||
+[17:05:30] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[17:05:30] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[17:05:30] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[17:05:30] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[17:05:30] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[17:05:30] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[17:05:30] ||										    ||
+[17:05:30] =======================================================================================
+[17:05:30]   Loaded 1 filterscripts.
+
+[17:05:31]  
+[17:05:31]  
+[17:05:31]  
+[17:05:31]  ========================================== 
+[17:05:31]  |                                        | 
+[17:05:31]  |         YSI version 5.05.0005          | 
+[17:05:31]  |         By Alex "Y_Less" Cole          | 
+[17:05:31]  |                                        | 
+[17:05:31]  | Unable to check the latest YSI version | 
+[17:05:31]  | - please watch the forums and github:  | 
+[17:05:31]  |                                        | 
+[17:05:31]  |   https://git.io/5.x                   | 
+[17:05:31]  |                                        | 
+[17:05:31]  ========================================== 
+[17:05:31]  
+[17:05:31]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[17:05:31]  
+[17:05:31] --------------------------------------
+[17:05:31]  Anticheat Nex-AC loaded!
+[17:05:31]  Anticheat version: 1.9.59
+[17:05:31]  Author: Nexius
+[17:05:31] --------------------------------------
+
+[17:05:53] [Database] Connected!
+[17:05:54] [MAPPING] Loaded mappings in 21ms
+[17:05:54] Economy Data Loaded.
+[17:05:54] Number of vehicle models: 7
+[17:05:55] [EMERGENCY] Loaded 20 emergency calls from database
+[17:05:55] [ACTOR] Loaded 96 Dynamic Actor from database
+[17:05:55] [ATM] Loaded 40 ATM from the database
+[17:05:55] [PUMP] Loaded 14 Fuel Pump from database
+[17:05:55] [BUSINESS] Loaded 28 Business from database
+[17:05:55] [DEALER] Loaded 7 dealership from database
+[17:05:55] [DROPITEM] Loaded 422 Dropped items from database.
+[17:05:55] [DOOR] Loaded 35 door from database
+[17:05:55] [FACTION] Loaded 8 faction from database
+[17:05:55] [FLAT] Loaded 129 Flat from database.
+[17:05:55] [GARAGE] Loaded 32 public garage from database.
+[17:05:55] [HOUSE] Loaded 187 House from the Database
+[17:05:55] [OBJECT] Loaded 4 Object from database
+[17:05:55] [RENTAL] Loaded 1 Rental from database
+[17:05:55] [SPEEDCAM] Loaded 6 Speed Camera from database
+[17:05:55] [SPRAYTAG] Loaded 100 spraytags from database
+[17:05:55] [TRASH] Loaded 46 Trash from database
+[17:05:55] [TREE] Loaded 71 tree from database
+[17:05:55] [WEED] Loaded 6 Weed from database
+[17:05:55] [WORKSHOP] Loaded 4 workshop from database.
+[17:05:55] [ROCK] Loaded 32 rock from database.
+[17:05:55] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[17:05:56] [FURNITURE] Loaded 3527 furniture from database.
+[17:13:11] [connection] incoming connection: 127.0.0.1:49629 id: 0
+[17:13:11] [join] vyn has joined the server (0:127.0.0.1)
+[17:13:27] [nick] vyn nick changed to Victor_Mendez
+[17:13:28] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[17:13:30] [CMD] Victor Mendez: /f quit
+[17:13:35] [CMD] Victor Mendez: /send 0 ff
+[17:13:38] [CMD] Victor Mendez: /v list
+[17:13:42] [CMD] Victor Mendez: /v list
+[17:13:45] [CMD] Victor Mendez: /gentercar 28
+[17:13:50] [CMD] Victor Mendez: /v list
+[17:13:59] [CMD] Victor Mendez: /send 0 ff
+[17:14:04] [CMD] Victor Mendez: /createcar 0 super
+[17:14:54] [part] Victor_Mendez has left the server (0:1)
+[17:14:57] [PLAYER_VEH] Unloading player vehicleid 29.
+[17:14:57] [PLAYER_VEH] Unloading player vehicleid 31.
+[17:14:57] [PLAYER_VEH] Unloading player vehicleid 30.
+[17:14:57] [PLAYER_VEH] Unloading player vehicleid 32.
+[17:14:57] [PLAYER_VEH] Unloading player vehicleid 28.
+[17:20:20] [connection] incoming connection: 127.0.0.1:61865 id: 0
+[17:20:21] [join] vyn has joined the server (0:127.0.0.1)
+[17:20:27] [chat] [vyn]: a
+[17:20:37] [nick] vyn nick changed to Victor_Mendez
+[17:20:39] [PLAYER_DMG] Loaded 9 damagelog from player Victor Mendez.
+[17:20:41] [CMD] Victor Mendez: /flipcoin
+[17:20:42] [CMD] Victor Mendez: /flipcoin
+[17:20:42] [CMD] Victor Mendez: /flipcoin
+[17:20:42] [CMD] Victor Mendez: /flipcoin
+[17:20:43] [CMD] Victor Mendez: /flipcoin
+[17:20:43] [CMD] Victor Mendez: /flipcoin
+[17:20:43] [CMD] Victor Mendez: /flipcoin
+[17:20:44] [CMD] Victor Mendez: /flipcoin
+[17:20:44] [CMD] Victor Mendez: /flipcoin
+[17:20:44] [CMD] Victor Mendez: /flipcoin
+[17:20:45] [CMD] Victor Mendez: /flipcoin
+[17:20:45] [CMD] Victor Mendez: /flipcoin
+[17:20:45] [CMD] Victor Mendez: /flipcoin
+[17:20:46] [CMD] Victor Mendez: /flipcoin
+[17:20:47] [CMD] Victor Mendez: /flipcoin
+[17:20:47] [CMD] Victor Mendez: /flipcoin
+[17:20:49] [CMD] Victor Mendez: /flipcoin
+[17:20:49] [CMD] Victor Mendez: /flipcoin
+[17:20:49] [CMD] Victor Mendez: /flipcoin
+[17:20:50] [CMD] Victor Mendez: /flipcoin
+[17:20:50] [CMD] Victor Mendez: /flipcoin
+[17:20:51] [CMD] Victor Mendez: /flipcoin
+[17:20:51] [CMD] Victor Mendez: /flipcoin
+[17:20:52] [CMD] Victor Mendez: /flipcoin
+[17:20:52] [CMD] Victor Mendez: /flipcoin
+[17:20:53] [CMD] Victor Mendez: /flipcoin
+[17:20:53] [CMD] Victor Mendez: /flipcoin
+[17:20:53] [CMD] Victor Mendez: /flipcoint
+[17:20:55] [CMD] Victor Mendez: /flipcoint
+[17:20:56] [CMD] Victor Mendez: /flipcoin
+[17:20:58] [part] Victor_Mendez has left the server (0:1)
+[17:21:01] [PLAYER_VEH] Unloading player vehicleid 29.
+[17:21:01] [PLAYER_VEH] Unloading player vehicleid 31.
+[17:21:01] [PLAYER_VEH] Unloading player vehicleid 30.
+[17:21:01] [PLAYER_VEH] Unloading player vehicleid 32.
+[17:21:01] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[09:41:50] password = ""  (string)
+[09:41:50] weburl = "www.sa-mp.com"  (string)
+[09:41:50] 
+[09:41:50] Server Plugins
+[09:41:50] --------------
+[09:41:50]  Loading plugin: crashdetect
+[09:41:50]   CrashDetect plugin 4.20
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: pawnraknet
+[09:41:50] [Pawn.RakNet] plugin v1.5.1 loading...
+[09:41:50] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: streamer
+[09:41:50] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: sscanf
+[09:41:50] 
+[09:41:50]  ===============================
+[09:41:50] 
+[09:41:50]       sscanf plugin loaded.     
+[09:41:50] 
+[09:41:50]          Version: 2.13.1
+[09:41:50] 
+[09:41:50]    (c) 2022 Alex "Y_Less" Cole  
+[09:41:50] 
+[09:41:50]  ===============================
+[09:41:50] 
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: mysql
+[09:41:50]  >> plugin.mysql: R41-4 successfully loaded.
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: samp_bcrypt
+[09:41:50] [SampBcrypt] [info]: Version: 0.3.4
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: samp-compat
+[09:41:50]   -- samp-compat for 0.3.7-R2 initialized
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: chrono
+[09:41:50]   Loaded.
+[09:41:50]  Loading plugin: mapandreas
+[09:41:50]   Loaded.
+[09:41:50]  Loaded 9 plugins.
+
+[09:41:50] 
+[09:41:50] Filterscripts
+[09:41:50] ---------------
+[09:41:50]   Loading filterscript 'PLE.amx'...
+[09:41:50]  
+[09:41:50]  ========================================== 
+[09:41:50]  |                                        | 
+[09:41:50]  |    Generating code, this may take a    | 
+[09:41:50]  |           little bit of time.          | 
+[09:41:50]  |                                        | 
+[09:41:50]  |             Please wait...             | 
+[09:41:50]  |                                        | 
+[09:41:50]  ========================================== 
+[09:41:50]  |                                        | 
+[09:41:50]  | Note that this code generation works   | 
+[09:41:50]  | best with the JIT plugin, which you    | 
+[09:41:50]  | are not currently using.  Get it here: | 
+[09:41:50]  |                                        | 
+[09:41:50]  |        https://git.io/jit-plugin       | 
+[09:41:50]  |                                        | 
+[09:41:50]  ========================================== 
+[09:41:50]  
+[09:41:50]  
+[09:41:50]  
+[09:41:50]  
+[09:41:50]  ========================================== 
+[09:41:50]  |                                        | 
+[09:41:50]  |         YSI version 5.05.0301          | 
+[09:41:50]  |         By Alex "Y_Less" Cole          | 
+[09:41:50]  |                                        | 
+[09:41:50]  | Unable to check the latest YSI version | 
+[09:41:50]  | - please watch the forums and github:  | 
+[09:41:50]  |                                        | 
+[09:41:50]  |   https://git.io/5.x                   | 
+[09:41:50]  |                                        | 
+[09:41:50]  ========================================== 
+[09:41:50]  
+[09:41:50] 
+
+[09:41:50] ======================================================================================
+[09:41:50] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[09:41:50] ||  			   	       Version 1.0				    ||
+[09:41:50] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[09:41:50] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[09:41:50] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[09:41:50] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[09:41:50] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[09:41:50] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[09:41:50] ||										    ||
+[09:41:50] =======================================================================================
+[09:41:50]   Loaded 1 filterscripts.
+
+[09:41:51]  
+[09:41:51]  
+[09:41:51]  
+[09:41:51]  ========================================== 
+[09:41:51]  |                                        | 
+[09:41:51]  |         YSI version 5.05.0005          | 
+[09:41:51]  |         By Alex "Y_Less" Cole          | 
+[09:41:51]  |                                        | 
+[09:41:51]  | Unable to check the latest YSI version | 
+[09:41:51]  | - please watch the forums and github:  | 
+[09:41:51]  |                                        | 
+[09:41:51]  |   https://git.io/5.x                   | 
+[09:41:51]  |                                        | 
+[09:41:51]  ========================================== 
+[09:41:51]  
+[09:41:51]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[09:41:51]  
+[09:41:51] --------------------------------------
+[09:41:51]  Anticheat Nex-AC loaded!
+[09:41:51]  Anticheat version: 1.9.59
+[09:41:51]  Author: Nexius
+[09:41:51] --------------------------------------
+
+[09:42:36] [Database] Connected!
+[09:42:36] [MAPPING] Loaded mappings in 30ms
+[09:42:36] Economy Data Loaded.
+[09:42:36] Number of vehicle models: 7
+[09:42:36] [EMERGENCY] Loaded 42 emergency calls from database
+[09:42:36] [ACTOR] Loaded 96 Dynamic Actor from database
+[09:42:37] [ATM] Loaded 40 ATM from the database
+[09:42:37] [PUMP] Loaded 14 Fuel Pump from database
+[09:42:37] [BUSINESS] Loaded 28 Business from database
+[09:42:37] [DEALER] Loaded 7 dealership from database
+[09:42:37] [DROPITEM] Loaded 400 Dropped items from database.
+[09:42:37] [DOOR] Loaded 35 door from database
+[09:42:37] [FACTION] Loaded 8 faction from database
+[09:42:37] [FLAT] Loaded 129 Flat from database.
+[09:42:37] [GARAGE] Loaded 32 public garage from database.
+[09:42:37] [HOUSE] Loaded 187 House from the Database
+[09:42:37] [OBJECT] Loaded 4 Object from database
+[09:42:37] [RENTAL] Loaded 1 Rental from database
+[09:42:37] [SPEEDCAM] Loaded 6 Speed Camera from database
+[09:42:38] [SPRAYTAG] Loaded 100 spraytags from database
+[09:42:38] [TRASH] Loaded 46 Trash from database
+[09:42:38] [TREE] Loaded 71 tree from database
+[09:42:38] [WEED] Loaded 5 Weed from database
+[09:42:38] [WORKSHOP] Loaded 4 workshop from database.
+[09:42:38] [ROCK] Loaded 32 rock from database.
+[09:42:38] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[09:42:39] [FURNITURE] Loaded 3576 furniture from database.
+[09:43:15] [connection] incoming connection: 127.0.0.1:57116 id: 0
+[09:43:15] [join] vyn has joined the server (0:127.0.0.1)
+[09:43:30] [nick] vyn nick changed to Rigoberto_Pagelaran
+[09:43:34] [CMD] Rigoberto Pagelaran: /gotoloc dealer
+[09:43:34] [CMD] Rigoberto Pagelaran: /gotoloc dealer 2
+[09:43:36] [CMD] Rigoberto Pagelaran: /gotoloc dealer 1
+[09:43:37] [CMD] Rigoberto Pagelaran: /gotoloc dealer 3
+[09:43:39] [CMD] Rigoberto Pagelaran: /gotoloc dealer 4
+[09:43:41] [CMD] Rigoberto Pagelaran: /gotoloc dealer 3
+[09:43:49] [CASH UPDATE] Rigoberto_Pagelaran(vyn) | Before: $100.00 | After: $10,100.00 | Reason: Given from admin
+[09:43:49] [CMD] Rigoberto Pagelaran: /givecash 0 10000
+[09:43:52] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:43:56] [CMD] Rigoberto Pagelaran: /editdealer
+[09:44:00] [CMD] Rigoberto Pagelaran: /editdealer 3 stock
+[09:44:13] [CMD] Rigoberto Pagelaran: /editdealer 3 stock
+[09:44:17] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:44:19] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:44:21] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:45:15] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:45:16] [CASH UPDATE] Rigoberto_Pagelaran(vyn) | Before: $10,100.00 | After: $7,600.00 | Reason: Membeli kendaraan
+[09:45:17] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:45:19] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:45:23] [CMD] Rigoberto Pagelaran: /v list
+[09:45:26] [CMD] Rigoberto Pagelaran: /destroycar 28
+[09:45:40] [CMD] Rigoberto Pagelaran: /editdealer 3 vehicle
+[09:45:51] [CMD] Rigoberto Pagelaran: /editdealer 3 vehicle
+[09:49:11] [part] Rigoberto_Pagelaran has left the server (0:1)
+[09:49:14] [debug] Server received interrupt signal
+[09:49:14] [debug] Native backtrace:
+[09:49:14] [debug] #0 777b2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[09:49:14] [debug] #1 75d2764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[09:49:14] [debug] #2 0048d53c in ?? () in samp-server.exe
+[09:49:14] [debug] #3 0049b531 in ?? () in samp-server.exe
+[09:49:14] [debug] #4 0049b541 in ?? () in samp-server.exe
+[09:49:14] --- Server Shutting Down.
+[09:49:14] ** Saved server data in 0ms
+[09:49:14] ** Saved server economy in 0ms
+[09:49:14] ** Saved vehicle data in 0ms
+[09:49:14] ** Saved player data in 1ms
+[09:49:14] ** Saved tree data in 17ms.
+[09:49:14] ** Saved  weed data  in 18ms.
+[09:49:14] ** Saved speedcam data in 18ms
+[09:49:14] ** Saved dealer data in 23ms
+[09:49:14] ** Saved house data  in 91ms
+[09:49:14] ** Saved business data in 106ms
+[09:49:14] ** Saved tree data in 123ms
+[09:49:14] ** Saved flat data in 159ms
+[09:49:14] ** Saved pump data in 160ms
+[09:49:14] There is 0 player when the server shutdown.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[09:49:22] password = ""  (string)
+[09:49:22] weburl = "www.sa-mp.com"  (string)
+[09:49:22] 
+[09:49:22] Server Plugins
+[09:49:22] --------------
+[09:49:22]  Loading plugin: crashdetect
+[09:49:22]   CrashDetect plugin 4.20
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: pawnraknet
+[09:49:22] [Pawn.RakNet] plugin v1.5.1 loading...
+[09:49:22] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: streamer
+[09:49:22] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: sscanf
+[09:49:22] 
+[09:49:22]  ===============================
+[09:49:22] 
+[09:49:22]       sscanf plugin loaded.     
+[09:49:22] 
+[09:49:22]          Version: 2.13.1
+[09:49:22] 
+[09:49:22]    (c) 2022 Alex "Y_Less" Cole  
+[09:49:22] 
+[09:49:22]  ===============================
+[09:49:22] 
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: mysql
+[09:49:22]  >> plugin.mysql: R41-4 successfully loaded.
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: samp_bcrypt
+[09:49:22] [SampBcrypt] [info]: Version: 0.3.4
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: samp-compat
+[09:49:22]   -- samp-compat for 0.3.7-R2 initialized
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: chrono
+[09:49:22]   Loaded.
+[09:49:22]  Loading plugin: mapandreas
+[09:49:22]   Loaded.
+[09:49:22]  Loaded 9 plugins.
+
+[09:49:22] 
+[09:49:22] Filterscripts
+[09:49:22] ---------------
+[09:49:22]   Loading filterscript 'PLE.amx'...
+[09:49:22]  
+[09:49:22]  ========================================== 
+[09:49:22]  |                                        | 
+[09:49:22]  |    Generating code, this may take a    | 
+[09:49:22]  |           little bit of time.          | 
+[09:49:22]  |                                        | 
+[09:49:22]  |             Please wait...             | 
+[09:49:22]  |                                        | 
+[09:49:22]  ========================================== 
+[09:49:22]  |                                        | 
+[09:49:22]  | Note that this code generation works   | 
+[09:49:22]  | best with the JIT plugin, which you    | 
+[09:49:22]  | are not currently using.  Get it here: | 
+[09:49:22]  |                                        | 
+[09:49:22]  |        https://git.io/jit-plugin       | 
+[09:49:22]  |                                        | 
+[09:49:22]  ========================================== 
+[09:49:22]  
+[09:49:22]  
+[09:49:22]  
+[09:49:22]  
+[09:49:22]  ========================================== 
+[09:49:22]  |                                        | 
+[09:49:22]  |         YSI version 5.05.0301          | 
+[09:49:22]  |         By Alex "Y_Less" Cole          | 
+[09:49:22]  |                                        | 
+[09:49:22]  | Unable to check the latest YSI version | 
+[09:49:22]  | - please watch the forums and github:  | 
+[09:49:22]  |                                        | 
+[09:49:22]  |   https://git.io/5.x                   | 
+[09:49:22]  |                                        | 
+[09:49:22]  ========================================== 
+[09:49:22]  
+[09:49:22] 
+
+[09:49:22] ======================================================================================
+[09:49:22] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[09:49:22] ||  			   	       Version 1.0				    ||
+[09:49:22] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[09:49:22] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[09:49:22] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[09:49:22] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[09:49:22] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[09:49:22] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[09:49:22] ||										    ||
+[09:49:22] =======================================================================================
+[09:49:22]   Loaded 1 filterscripts.
+
+[09:49:23]  
+[09:49:23]  
+[09:49:23]  
+[09:49:23]  ========================================== 
+[09:49:23]  |                                        | 
+[09:49:23]  |         YSI version 5.05.0005          | 
+[09:49:23]  |         By Alex "Y_Less" Cole          | 
+[09:49:23]  |                                        | 
+[09:49:23]  | Unable to check the latest YSI version | 
+[09:49:23]  | - please watch the forums and github:  | 
+[09:49:23]  |                                        | 
+[09:49:23]  |   https://git.io/5.x                   | 
+[09:49:23]  |                                        | 
+[09:49:23]  ========================================== 
+[09:49:23]  
+[09:49:23]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[09:49:23]  
+[09:49:23] --------------------------------------
+[09:49:23]  Anticheat Nex-AC loaded!
+[09:49:23]  Anticheat version: 1.9.59
+[09:49:23]  Author: Nexius
+[09:49:23] --------------------------------------
+
+[09:50:16] [Database] Connected!
+[09:50:16] [MAPPING] Loaded mappings in 24ms
+[09:50:16] Economy Data Loaded.
+[09:50:16] Number of vehicle models: 7
+[09:50:16] [EMERGENCY] Loaded 42 emergency calls from database
+[09:50:16] [ACTOR] Loaded 96 Dynamic Actor from database
+[09:50:16] [ATM] Loaded 40 ATM from the database
+[09:50:16] [PUMP] Loaded 14 Fuel Pump from database
+[09:50:17] [BUSINESS] Loaded 28 Business from database
+[09:50:17] [DEALER] Loaded 7 dealership from database
+[09:50:17] [DROPITEM] Loaded 400 Dropped items from database.
+[09:50:17] [DOOR] Loaded 35 door from database
+[09:50:17] [FACTION] Loaded 8 faction from database
+[09:50:17] [FLAT] Loaded 129 Flat from database.
+[09:50:17] [GARAGE] Loaded 32 public garage from database.
+[09:50:17] [HOUSE] Loaded 187 House from the Database
+[09:50:17] [OBJECT] Loaded 4 Object from database
+[09:50:17] [RENTAL] Loaded 1 Rental from database
+[09:50:17] [SPEEDCAM] Loaded 6 Speed Camera from database
+[09:50:17] [SPRAYTAG] Loaded 100 spraytags from database
+[09:50:17] [TRASH] Loaded 46 Trash from database
+[09:50:17] [TREE] Loaded 71 tree from database
+[09:50:17] [WEED] Loaded 5 Weed from database
+[09:50:17] [WORKSHOP] Loaded 4 workshop from database.
+[09:50:17] [ROCK] Loaded 32 rock from database.
+[09:50:17] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[09:50:19] [FURNITURE] Loaded 3576 furniture from database.
+[09:51:43] [connection] incoming connection: 127.0.0.1:57759 id: 0
+[09:51:43] [join] vyn has joined the server (0:127.0.0.1)
+[09:51:53] [nick] vyn nick changed to Rigoberto_Pagelaran
+[09:51:57] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:51:58] [CASH UPDATE] Rigoberto_Pagelaran(vyn) | Before: $7,600.00 | After: $5,100.00 | Reason: Membeli kendaraan
+[09:52:06] [CMD] Rigoberto Pagelaran: /buyvehicle
+[09:53:02] [CMD] Rigoberto Pagelaran: /send
+[09:53:04] [CMD] Rigoberto Pagelaran: /send 0 deliver
+[09:53:07] [CMD] Rigoberto Pagelaran: /send 0 mc
+[09:53:09] [CMD] Rigoberto Pagelaran: /flymode
+[09:53:15] [CMD] Rigoberto Pagelaran: /flymode
+[09:53:25] [CMD] Rigoberto Pagelaran: /startdeliver
+[09:54:02] [CMD] Rigoberto Pagelaran: /pickupcrate
+[09:54:16] [CMD] Rigoberto Pagelaran: /loadcrate
+[09:54:26] [CMD] Rigoberto Pagelaran: /stopdeliver
+[09:54:31] [part] Rigoberto_Pagelaran has left the server (0:1)
+[09:54:34] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[01:39:45] password = ""  (string)
+[01:39:45] weburl = "www.sa-mp.com"  (string)
+[01:39:45] 
+[01:39:45] Server Plugins
+[01:39:45] --------------
+[01:39:45]  Loading plugin: crashdetect
+[01:39:45]   CrashDetect plugin 4.20
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: pawnraknet
+[01:39:45] [Pawn.RakNet] plugin v1.5.1 loading...
+[01:39:45] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: streamer
+[01:39:45] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: sscanf
+[01:39:45] 
+[01:39:45]  ===============================
+[01:39:45] 
+[01:39:45]       sscanf plugin loaded.     
+[01:39:45] 
+[01:39:45]          Version: 2.13.1
+[01:39:45] 
+[01:39:45]    (c) 2022 Alex "Y_Less" Cole  
+[01:39:45] 
+[01:39:45]  ===============================
+[01:39:45] 
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: mysql
+[01:39:45]  >> plugin.mysql: R41-4 successfully loaded.
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: samp_bcrypt
+[01:39:45] [SampBcrypt] [info]: Version: 0.3.4
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: samp-compat
+[01:39:45]   -- samp-compat for 0.3.7-R2 initialized
+[01:39:45]   Loaded.
+[01:39:45]  Loading plugin: chrono
+[01:39:46]   Loaded.
+[01:39:46]  Loading plugin: mapandreas
+[01:39:46]   Loaded.
+[01:39:46]  Loaded 9 plugins.
+
+[01:39:46] 
+[01:39:46] Filterscripts
+[01:39:46] ---------------
+[01:39:46]   Loading filterscript 'PLE.amx'...
+[01:39:46]  
+[01:39:46]  ========================================== 
+[01:39:46]  |                                        | 
+[01:39:46]  |    Generating code, this may take a    | 
+[01:39:46]  |           little bit of time.          | 
+[01:39:46]  |                                        | 
+[01:39:46]  |             Please wait...             | 
+[01:39:46]  |                                        | 
+[01:39:46]  ========================================== 
+[01:39:46]  |                                        | 
+[01:39:46]  | Note that this code generation works   | 
+[01:39:46]  | best with the JIT plugin, which you    | 
+[01:39:46]  | are not currently using.  Get it here: | 
+[01:39:46]  |                                        | 
+[01:39:46]  |        https://git.io/jit-plugin       | 
+[01:39:46]  |                                        | 
+[01:39:46]  ========================================== 
+[01:39:46]  
+[01:39:46]  
+[01:39:46]  
+[01:39:46]  
+[01:39:46]  ========================================== 
+[01:39:46]  |                                        | 
+[01:39:46]  |         YSI version 5.05.0301          | 
+[01:39:46]  |         By Alex "Y_Less" Cole          | 
+[01:39:46]  |                                        | 
+[01:39:46]  | Unable to check the latest YSI version | 
+[01:39:46]  | - please watch the forums and github:  | 
+[01:39:46]  |                                        | 
+[01:39:46]  |   https://git.io/5.x                   | 
+[01:39:46]  |                                        | 
+[01:39:46]  ========================================== 
+[01:39:46]  
+[01:39:46] 
+
+[01:39:46] ======================================================================================
+[01:39:46] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[01:39:46] ||  			   	       Version 1.0				    ||
+[01:39:46] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[01:39:46] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[01:39:46] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[01:39:46] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[01:39:46] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[01:39:46] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[01:39:46] ||										    ||
+[01:39:46] =======================================================================================
+[01:39:46]   Loaded 1 filterscripts.
+
+[01:39:47]  
+[01:39:47]  
+[01:39:47]  
+[01:39:47]  ========================================== 
+[01:39:47]  |                                        | 
+[01:39:47]  |         YSI version 5.05.0005          | 
+[01:39:47]  |         By Alex "Y_Less" Cole          | 
+[01:39:47]  |                                        | 
+[01:39:47]  | Unable to check the latest YSI version | 
+[01:39:47]  | - please watch the forums and github:  | 
+[01:39:47]  |                                        | 
+[01:39:47]  |   https://git.io/5.x                   | 
+[01:39:47]  |                                        | 
+[01:39:47]  ========================================== 
+[01:39:47]  
+[01:39:47]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[01:39:47]  
+[01:39:47] --------------------------------------
+[01:39:47]  Anticheat Nex-AC loaded!
+[01:39:47]  Anticheat version: 1.9.59
+[01:39:47]  Author: Nexius
+[01:39:47] --------------------------------------
+
+[01:39:59] [Database] Connected!
+[01:40:00] [MAPPING] Loaded mappings in 25ms
+[01:40:00] Economy Data Loaded.
+[01:40:00] Number of vehicle models: 7
+[01:40:00] [EMERGENCY] Loaded 11 emergency calls from database
+[01:40:00] [ACTOR] Loaded 96 Dynamic Actor from database
+[01:40:00] [ATM] Loaded 41 ATM from the database
+[01:40:00] [PUMP] Loaded 14 Fuel Pump from database
+[01:40:00] [BUSINESS] Loaded 28 Business from database
+[01:40:00] [DEALER] Loaded 7 dealership from database
+[01:40:00] [DROPITEM] Loaded 416 Dropped items from database.
+[01:40:00] [DOOR] Loaded 35 door from database
+[01:40:00] [FACTION] Loaded 8 faction from database
+[01:40:01] [FLAT] Loaded 129 Flat from database.
+[01:40:01] [GARAGE] Loaded 32 public garage from database.
+[01:40:01] [HOUSE] Loaded 187 House from the Database
+[01:40:01] [OBJECT] Loaded 4 Object from database
+[01:40:01] [RENTAL] Loaded 1 Rental from database
+[01:40:01] [SPEEDCAM] Loaded 6 Speed Camera from database
+[01:40:01] [SPRAYTAG] Loaded 93 spraytags from database
+[01:40:01] [TRASH] Loaded 46 Trash from database
+[01:40:01] [TREE] Loaded 71 tree from database
+[01:40:01] [WEED] Loaded 180 Weed from database
+[01:40:01] [WORKSHOP] Loaded 4 workshop from database.
+[01:40:01] [ROCK] Loaded 32 rock from database.
+[01:40:01] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[01:40:02] [FURNITURE] Loaded 3760 furniture from database.
+[01:41:02] [connection] incoming connection: 127.0.0.1:51552 id: 0
+[01:41:03] [join] vyn has joined the server (0:127.0.0.1)
+[01:41:06] [part] vyn has left the server (0:1)
+[01:42:58] [connection] incoming connection: 127.0.0.1:51663 id: 0
+[01:42:58] [join] vyn has joined the server (0:127.0.0.1)
+[01:43:07] [nick] vyn nick changed to Victor_Mendez
+[01:43:12] [CMD] Victor Mendez: /gotoloc biz 0
+[01:43:16] [CMD] Victor Mendez: /gotoloc biz 1
+[01:43:17] [CMD] Victor Mendez: /gotoloc biz 2
+[01:43:30] [CMD] Victor Mendez: /buy
+[01:43:38] [CMD] Victor Mendez: /acc
+[01:43:43] [nick] Victor_Mendez nick changed to vyn
+[01:43:43] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[01:44:20] password = ""  (string)
+[01:44:20] weburl = "www.sa-mp.com"  (string)
+[01:44:20] 
+[01:44:20] Server Plugins
+[01:44:20] --------------
+[01:44:20]  Loading plugin: crashdetect
+[01:44:20]   CrashDetect plugin 4.20
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: pawnraknet
+[01:44:20] [Pawn.RakNet] plugin v1.5.1 loading...
+[01:44:20] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: streamer
+[01:44:20] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: sscanf
+[01:44:20] 
+[01:44:20]  ===============================
+[01:44:20] 
+[01:44:20]       sscanf plugin loaded.     
+[01:44:20] 
+[01:44:20]          Version: 2.13.1
+[01:44:20] 
+[01:44:20]    (c) 2022 Alex "Y_Less" Cole  
+[01:44:20] 
+[01:44:20]  ===============================
+[01:44:20] 
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: mysql
+[01:44:20]  >> plugin.mysql: R41-4 successfully loaded.
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: samp_bcrypt
+[01:44:20] [SampBcrypt] [info]: Version: 0.3.4
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: samp-compat
+[01:44:20]   -- samp-compat for 0.3.7-R2 initialized
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: chrono
+[01:44:20]   Loaded.
+[01:44:20]  Loading plugin: mapandreas
+[01:44:20]   Loaded.
+[01:44:20]  Loaded 9 plugins.
+
+[01:44:20] 
+[01:44:20] Filterscripts
+[01:44:20] ---------------
+[01:44:20]   Loading filterscript 'PLE.amx'...
+[01:44:20]  
+[01:44:20]  ========================================== 
+[01:44:20]  |                                        | 
+[01:44:20]  |    Generating code, this may take a    | 
+[01:44:20]  |           little bit of time.          | 
+[01:44:20]  |                                        | 
+[01:44:20]  |             Please wait...             | 
+[01:44:20]  |                                        | 
+[01:44:20]  ========================================== 
+[01:44:20]  |                                        | 
+[01:44:20]  | Note that this code generation works   | 
+[01:44:20]  | best with the JIT plugin, which you    | 
+[01:44:20]  | are not currently using.  Get it here: | 
+[01:44:20]  |                                        | 
+[01:44:20]  |        https://git.io/jit-plugin       | 
+[01:44:20]  |                                        | 
+[01:44:20]  ========================================== 
+[01:44:20]  
+[01:44:20]  
+[01:44:20]  
+[01:44:20]  
+[01:44:20]  ========================================== 
+[01:44:20]  |                                        | 
+[01:44:20]  |         YSI version 5.05.0301          | 
+[01:44:20]  |         By Alex "Y_Less" Cole          | 
+[01:44:20]  |                                        | 
+[01:44:20]  | Unable to check the latest YSI version | 
+[01:44:20]  | - please watch the forums and github:  | 
+[01:44:20]  |                                        | 
+[01:44:20]  |   https://git.io/5.x                   | 
+[01:44:20]  |                                        | 
+[01:44:20]  ========================================== 
+[01:44:20]  
+[01:44:20] 
+
+[01:44:20] ======================================================================================
+[01:44:20] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[01:44:20] ||  			   	       Version 1.0				    ||
+[01:44:20] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[01:44:20] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[01:44:20] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[01:44:20] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[01:44:20] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[01:44:20] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[01:44:20] ||										    ||
+[01:44:20] =======================================================================================
+[01:44:20]   Loaded 1 filterscripts.
+
+[01:44:21]  
+[01:44:21]  
+[01:44:21]  
+[01:44:21]  ========================================== 
+[01:44:21]  |                                        | 
+[01:44:21]  |         YSI version 5.05.0005          | 
+[01:44:21]  |         By Alex "Y_Less" Cole          | 
+[01:44:21]  |                                        | 
+[01:44:21]  | Unable to check the latest YSI version | 
+[01:44:21]  | - please watch the forums and github:  | 
+[01:44:21]  |                                        | 
+[01:44:21]  |   https://git.io/5.x                   | 
+[01:44:21]  |                                        | 
+[01:44:21]  ========================================== 
+[01:44:21]  
+[01:44:21]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[01:44:21]  
+[01:44:21] --------------------------------------
+[01:44:21]  Anticheat Nex-AC loaded!
+[01:44:21]  Anticheat version: 1.9.59
+[01:44:21]  Author: Nexius
+[01:44:21] --------------------------------------
+
+[01:44:28] [Database] Connected!
+[01:44:28] [MAPPING] Loaded mappings in 21ms
+[01:44:28] Economy Data Loaded.
+[01:44:28] Number of vehicle models: 7
+[01:44:28] [EMERGENCY] Loaded 11 emergency calls from database
+[01:44:28] [ACTOR] Loaded 96 Dynamic Actor from database
+[01:44:28] [ATM] Loaded 41 ATM from the database
+[01:44:28] [PUMP] Loaded 14 Fuel Pump from database
+[01:44:28] [BUSINESS] Loaded 28 Business from database
+[01:44:28] [DEALER] Loaded 7 dealership from database
+[01:44:29] [DROPITEM] Loaded 416 Dropped items from database.
+[01:44:29] [DOOR] Loaded 35 door from database
+[01:44:29] [FACTION] Loaded 8 faction from database
+[01:44:29] [FLAT] Loaded 129 Flat from database.
+[01:44:29] [GARAGE] Loaded 32 public garage from database.
+[01:44:29] [HOUSE] Loaded 187 House from the Database
+[01:44:29] [OBJECT] Loaded 4 Object from database
+[01:44:29] [RENTAL] Loaded 1 Rental from database
+[01:44:29] [SPEEDCAM] Loaded 6 Speed Camera from database
+[01:44:29] [SPRAYTAG] Loaded 93 spraytags from database
+[01:44:29] [TRASH] Loaded 46 Trash from database
+[01:44:29] [TREE] Loaded 71 tree from database
+[01:44:29] [WEED] Loaded 137 Weed from database
+[01:44:29] [WORKSHOP] Loaded 4 workshop from database.
+[01:44:29] [ROCK] Loaded 32 rock from database.
+[01:44:29] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[01:44:30] [FURNITURE] Loaded 3760 furniture from database.
+[01:45:19] [connection] incoming connection: 127.0.0.1:56495 id: 0
+[01:45:19] [join] vyn has joined the server (0:127.0.0.1)
+[01:45:28] [nick] vyn nick changed to Victor_Mendez
+[01:45:34] [CMD] Victor Mendez: /acc
+[01:46:39] [nick] Victor_Mendez nick changed to vyn
+[01:46:39] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[01:47:04] password = ""  (string)
+[01:47:04] weburl = "www.sa-mp.com"  (string)
+[01:47:04] 
+[01:47:04] Server Plugins
+[01:47:04] --------------
+[01:47:04]  Loading plugin: crashdetect
+[01:47:04]   CrashDetect plugin 4.20
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: pawnraknet
+[01:47:04] [Pawn.RakNet] plugin v1.5.1 loading...
+[01:47:04] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: streamer
+[01:47:04] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: sscanf
+[01:47:04] 
+[01:47:04]  ===============================
+[01:47:04] 
+[01:47:04]       sscanf plugin loaded.     
+[01:47:04] 
+[01:47:04]          Version: 2.13.1
+[01:47:04] 
+[01:47:04]    (c) 2022 Alex "Y_Less" Cole  
+[01:47:04] 
+[01:47:04]  ===============================
+[01:47:04] 
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: mysql
+[01:47:04]  >> plugin.mysql: R41-4 successfully loaded.
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: samp_bcrypt
+[01:47:04] [SampBcrypt] [info]: Version: 0.3.4
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: samp-compat
+[01:47:04]   -- samp-compat for 0.3.7-R2 initialized
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: chrono
+[01:47:04]   Loaded.
+[01:47:04]  Loading plugin: mapandreas
+[01:47:04]   Loaded.
+[01:47:04]  Loaded 9 plugins.
+
+[01:47:04] 
+[01:47:04] Filterscripts
+[01:47:04] ---------------
+[01:47:04]   Loading filterscript 'PLE.amx'...
+[01:47:04]  
+[01:47:04]  ========================================== 
+[01:47:04]  |                                        | 
+[01:47:04]  |    Generating code, this may take a    | 
+[01:47:04]  |           little bit of time.          | 
+[01:47:04]  |                                        | 
+[01:47:04]  |             Please wait...             | 
+[01:47:04]  |                                        | 
+[01:47:04]  ========================================== 
+[01:47:04]  |                                        | 
+[01:47:04]  | Note that this code generation works   | 
+[01:47:04]  | best with the JIT plugin, which you    | 
+[01:47:04]  | are not currently using.  Get it here: | 
+[01:47:04]  |                                        | 
+[01:47:04]  |        https://git.io/jit-plugin       | 
+[01:47:04]  |                                        | 
+[01:47:04]  ========================================== 
+[01:47:04]  
+[01:47:04]  
+[01:47:04]  
+[01:47:04]  
+[01:47:04]  ========================================== 
+[01:47:04]  |                                        | 
+[01:47:04]  |         YSI version 5.05.0301          | 
+[01:47:04]  |         By Alex "Y_Less" Cole          | 
+[01:47:04]  |                                        | 
+[01:47:04]  | Unable to check the latest YSI version | 
+[01:47:04]  | - please watch the forums and github:  | 
+[01:47:04]  |                                        | 
+[01:47:04]  |   https://git.io/5.x                   | 
+[01:47:04]  |                                        | 
+[01:47:04]  ========================================== 
+[01:47:04]  
+[01:47:04] 
+
+[01:47:04] ======================================================================================
+[01:47:04] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[01:47:04] ||  			   	       Version 1.0				    ||
+[01:47:04] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[01:47:04] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[01:47:04] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[01:47:04] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[01:47:04] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[01:47:04] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[01:47:04] ||										    ||
+[01:47:04] =======================================================================================
+[01:47:04]   Loaded 1 filterscripts.
+
+[01:47:05]  
+[01:47:05]  
+[01:47:05]  
+[01:47:05]  ========================================== 
+[01:47:05]  |                                        | 
+[01:47:05]  |         YSI version 5.05.0005          | 
+[01:47:05]  |         By Alex "Y_Less" Cole          | 
+[01:47:05]  |                                        | 
+[01:47:05]  | Unable to check the latest YSI version | 
+[01:47:05]  | - please watch the forums and github:  | 
+[01:47:05]  |                                        | 
+[01:47:05]  |   https://git.io/5.x                   | 
+[01:47:05]  |                                        | 
+[01:47:05]  ========================================== 
+[01:47:05]  
+[01:47:05]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[01:47:05]  
+[01:47:05] --------------------------------------
+[01:47:05]  Anticheat Nex-AC loaded!
+[01:47:05]  Anticheat version: 1.9.59
+[01:47:05]  Author: Nexius
+[01:47:05] --------------------------------------
+
+[01:47:14] [Database] Connected!
+[01:47:14] [MAPPING] Loaded mappings in 21ms
+[01:47:14] Economy Data Loaded.
+[01:47:14] Number of vehicle models: 7
+[01:47:14] [EMERGENCY] Loaded 11 emergency calls from database
+[01:47:14] [ACTOR] Loaded 96 Dynamic Actor from database
+[01:47:14] [ATM] Loaded 41 ATM from the database
+[01:47:14] [PUMP] Loaded 14 Fuel Pump from database
+[01:47:14] [BUSINESS] Loaded 28 Business from database
+[01:47:14] [DEALER] Loaded 7 dealership from database
+[01:47:14] [DROPITEM] Loaded 416 Dropped items from database.
+[01:47:15] [DOOR] Loaded 35 door from database
+[01:47:15] [FACTION] Loaded 8 faction from database
+[01:47:15] [FLAT] Loaded 129 Flat from database.
+[01:47:15] [GARAGE] Loaded 32 public garage from database.
+[01:47:15] [HOUSE] Loaded 187 House from the Database
+[01:47:15] [OBJECT] Loaded 4 Object from database
+[01:47:15] [RENTAL] Loaded 1 Rental from database
+[01:47:15] [SPEEDCAM] Loaded 6 Speed Camera from database
+[01:47:15] [SPRAYTAG] Loaded 93 spraytags from database
+[01:47:15] [TRASH] Loaded 46 Trash from database
+[01:47:15] [TREE] Loaded 71 tree from database
+[01:47:15] [WEED] Loaded 120 Weed from database
+[01:47:15] [WORKSHOP] Loaded 4 workshop from database.
+[01:47:15] [ROCK] Loaded 32 rock from database.
+[01:47:15] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[01:47:16] [FURNITURE] Loaded 3760 furniture from database.
+[01:47:38] [connection] incoming connection: 127.0.0.1:60659 id: 0
+[01:47:38] [join] vyn has joined the server (0:127.0.0.1)
+[01:47:59] [part] vyn has left the server (0:0)
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[01:48:05] password = ""  (string)
+[01:48:05] weburl = "www.sa-mp.com"  (string)
+[01:48:05] 
+[01:48:05] Server Plugins
+[01:48:05] --------------
+[01:48:05]  Loading plugin: crashdetect
+[01:48:05]   CrashDetect plugin 4.20
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: pawnraknet
+[01:48:05] [Pawn.RakNet] plugin v1.5.1 loading...
+[01:48:05] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: streamer
+[01:48:05] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: sscanf
+[01:48:05] 
+[01:48:05]  ===============================
+[01:48:05] 
+[01:48:05]       sscanf plugin loaded.     
+[01:48:05] 
+[01:48:05]          Version: 2.13.1
+[01:48:05] 
+[01:48:05]    (c) 2022 Alex "Y_Less" Cole  
+[01:48:05] 
+[01:48:05]  ===============================
+[01:48:05] 
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: mysql
+[01:48:05]  >> plugin.mysql: R41-4 successfully loaded.
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: samp_bcrypt
+[01:48:05] [SampBcrypt] [info]: Version: 0.3.4
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: samp-compat
+[01:48:05]   -- samp-compat for 0.3.7-R2 initialized
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: chrono
+[01:48:05]   Loaded.
+[01:48:05]  Loading plugin: mapandreas
+[01:48:05]   Loaded.
+[01:48:05]  Loaded 9 plugins.
+
+[01:48:05] 
+[01:48:05] Filterscripts
+[01:48:05] ---------------
+[01:48:05]   Loading filterscript 'PLE.amx'...
+[01:48:05]  
+[01:48:05]  ========================================== 
+[01:48:05]  |                                        | 
+[01:48:05]  |    Generating code, this may take a    | 
+[01:48:05]  |           little bit of time.          | 
+[01:48:05]  |                                        | 
+[01:48:05]  |             Please wait...             | 
+[01:48:05]  |                                        | 
+[01:48:05]  ========================================== 
+[01:48:05]  |                                        | 
+[01:48:05]  | Note that this code generation works   | 
+[01:48:05]  | best with the JIT plugin, which you    | 
+[01:48:05]  | are not currently using.  Get it here: | 
+[01:48:05]  |                                        | 
+[01:48:05]  |        https://git.io/jit-plugin       | 
+[01:48:05]  |                                        | 
+[01:48:05]  ========================================== 
+[01:48:05]  
+[01:48:05]  
+[01:48:05]  
+[01:48:05]  
+[01:48:05]  ========================================== 
+[01:48:05]  |                                        | 
+[01:48:05]  |         YSI version 5.05.0301          | 
+[01:48:05]  |         By Alex "Y_Less" Cole          | 
+[01:48:05]  |                                        | 
+[01:48:05]  | Unable to check the latest YSI version | 
+[01:48:05]  | - please watch the forums and github:  | 
+[01:48:05]  |                                        | 
+[01:48:05]  |   https://git.io/5.x                   | 
+[01:48:05]  |                                        | 
+[01:48:05]  ========================================== 
+[01:48:05]  
+[01:48:05] 
+
+[01:48:05] ======================================================================================
+[01:48:05] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[01:48:05] ||  			   	       Version 1.0				    ||
+[01:48:05] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[01:48:05] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[01:48:05] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[01:48:05] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[01:48:05] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[01:48:05] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[01:48:05] ||										    ||
+[01:48:05] =======================================================================================
+[01:48:05]   Loaded 1 filterscripts.
+
+[01:48:06]  
+[01:48:06]  
+[01:48:06]  
+[01:48:06]  ========================================== 
+[01:48:06]  |                                        | 
+[01:48:06]  |         YSI version 5.05.0005          | 
+[01:48:06]  |         By Alex "Y_Less" Cole          | 
+[01:48:06]  |                                        | 
+[01:48:06]  | Unable to check the latest YSI version | 
+[01:48:06]  | - please watch the forums and github:  | 
+[01:48:06]  |                                        | 
+[01:48:06]  |   https://git.io/5.x                   | 
+[01:48:06]  |                                        | 
+[01:48:06]  ========================================== 
+[01:48:06]  
+[01:48:06]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[01:48:06]  
+[01:48:06] --------------------------------------
+[01:48:06]  Anticheat Nex-AC loaded!
+[01:48:06]  Anticheat version: 1.9.59
+[01:48:06]  Author: Nexius
+[01:48:06] --------------------------------------
+
+[01:48:16] [Database] Connected!
+[01:48:16] [MAPPING] Loaded mappings in 23ms
+[01:48:16] Economy Data Loaded.
+[01:48:16] Number of vehicle models: 7
+[01:48:16] [EMERGENCY] Loaded 11 emergency calls from database
+[01:48:16] [ACTOR] Loaded 96 Dynamic Actor from database
+[01:48:16] [ATM] Loaded 41 ATM from the database
+[01:48:16] [PUMP] Loaded 14 Fuel Pump from database
+[01:48:16] [BUSINESS] Loaded 28 Business from database
+[01:48:16] [DEALER] Loaded 7 dealership from database
+[01:48:16] [DROPITEM] Loaded 416 Dropped items from database.
+[01:48:16] [DOOR] Loaded 35 door from database
+[01:48:16] [FACTION] Loaded 8 faction from database
+[01:48:16] [FLAT] Loaded 129 Flat from database.
+[01:48:16] [GARAGE] Loaded 32 public garage from database.
+[01:48:16] [HOUSE] Loaded 187 House from the Database
+[01:48:16] [OBJECT] Loaded 4 Object from database
+[01:48:16] [RENTAL] Loaded 1 Rental from database
+[01:48:16] [SPEEDCAM] Loaded 6 Speed Camera from database
+[01:48:16] [SPRAYTAG] Loaded 93 spraytags from database
+[01:48:16] [TRASH] Loaded 46 Trash from database
+[01:48:16] [TREE] Loaded 71 tree from database
+[01:48:17] [WEED] Loaded 108 Weed from database
+[01:48:17] [WORKSHOP] Loaded 4 workshop from database.
+[01:48:17] [ROCK] Loaded 32 rock from database.
+[01:48:17] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[01:48:18] [FURNITURE] Loaded 3760 furniture from database.
+[01:48:44] [connection] incoming connection: 127.0.0.1:53503 id: 0
+[01:48:44] [join] vyn has joined the server (0:127.0.0.1)
+[01:48:55] [nick] vyn nick changed to Victor_Mendez
+[01:48:56] [CMD] Victor Mendez: /acc
+[01:49:11] [CMD] Victor Mendez: /acc
+[01:49:36] [CMD] Victor Mendez: /buy
+[01:49:47] [CMD] Victor Mendez: /acc
+[01:50:03] [CMD] Victor Mendez: /acc
+[01:50:38] [part] Victor_Mendez has left the server (0:1)
+[01:50:41] [PLAYER_VEH] Unloading player vehicleid 28.
+[01:52:23] [debug] Server received interrupt signal
+[01:52:23] [debug] Native backtrace:
+[01:52:23] [debug] #0 77c62e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[01:52:23] [debug] #1 7701764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[01:52:23] [debug] #2 0048d53c in ?? () in samp-server.exe
+[01:52:23] [debug] #3 0049b531 in ?? () in samp-server.exe
+[01:52:23] [debug] #4 0049b541 in ?? () in samp-server.exe
+[01:52:23] --- Server Shutting Down.
+[01:52:23] ** Saved server data in 0ms
+[01:52:23] ** Saved server economy in 0ms
+[01:52:23] ** Saved vehicle data in 0ms
+[01:52:23] ** Saved player data in 1ms
+[01:52:23] ** Saved tree data in 22ms.
+[01:52:23] ** Saved  weed data  in 39ms.
+[01:52:23] ** Saved speedcam data in 39ms
+[01:52:23] ** Saved dealer data in 45ms
+[01:52:23] ** Saved house data  in 114ms
+[01:52:23] ** Saved business data in 131ms
+[01:52:23] ** Saved tree data in 147ms
+[01:52:23] ** Saved flat data in 184ms
+[01:52:23] ** Saved pump data in 185ms
+[01:52:23] There is 0 player when the server shutdown.
+[01:52:27]  
+[01:52:27] --------------------------------------
+[01:52:27]  Statistics anticheat Nex-AC
+[01:52:27]  Detected and prevented:
+[01:52:27]   0 cheating attempts
+[01:52:27]   0 hacking attempts
+[01:52:27]   0 crashing attempts
+[01:52:27]   0 flooding attempts
+[01:52:27]   0 attacks
+[01:52:27]  Total detected and punished 0 cheaters
+[01:52:27] --------------------------------------
+
+[01:52:27] [Pawn.RakNet] plugin unloaded
+[01:52:27] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[01:52:27] 
+[01:52:27]  ===============================
+[01:52:27] 
+[01:52:27]      sscanf plugin unloaded.    
+[01:52:27] 
+[01:52:27]  ===============================
+[01:52:27] 
+[01:52:27] plugin.mysql: Unloading plugin...
+[01:52:27] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[16:24:29] password = ""  (string)
+[16:24:29] weburl = "www.sa-mp.com"  (string)
+[16:24:29] 
+[16:24:29] Server Plugins
+[16:24:29] --------------
+[16:24:29]  Loading plugin: crashdetect
+[16:24:29]   CrashDetect plugin 4.20
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: pawnraknet
+[16:24:29] [Pawn.RakNet] plugin v1.5.1 loading...
+[16:24:29] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: streamer
+[16:24:29] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: sscanf
+[16:24:29] 
+[16:24:29]  ===============================
+[16:24:29] 
+[16:24:29]       sscanf plugin loaded.     
+[16:24:29] 
+[16:24:29]          Version: 2.13.1
+[16:24:29] 
+[16:24:29]    (c) 2022 Alex "Y_Less" Cole  
+[16:24:29] 
+[16:24:29]  ===============================
+[16:24:29] 
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: mysql
+[16:24:29]  >> plugin.mysql: R41-4 successfully loaded.
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: samp_bcrypt
+[16:24:29] [SampBcrypt] [info]: Version: 0.3.4
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: samp-compat
+[16:24:29]   -- samp-compat for 0.3.7-R2 initialized
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: chrono
+[16:24:29]   Loaded.
+[16:24:29]  Loading plugin: mapandreas
+[16:24:29]   Loaded.
+[16:24:29]  Loaded 9 plugins.
+
+[16:24:29] 
+[16:24:29] Filterscripts
+[16:24:29] ---------------
+[16:24:29]   Loading filterscript 'PLE.amx'...
+[16:24:29]  
+[16:24:29]  ========================================== 
+[16:24:29]  |                                        | 
+[16:24:29]  |    Generating code, this may take a    | 
+[16:24:29]  |           little bit of time.          | 
+[16:24:29]  |                                        | 
+[16:24:29]  |             Please wait...             | 
+[16:24:29]  |                                        | 
+[16:24:29]  ========================================== 
+[16:24:29]  |                                        | 
+[16:24:29]  | Note that this code generation works   | 
+[16:24:29]  | best with the JIT plugin, which you    | 
+[16:24:29]  | are not currently using.  Get it here: | 
+[16:24:29]  |                                        | 
+[16:24:29]  |        https://git.io/jit-plugin       | 
+[16:24:29]  |                                        | 
+[16:24:29]  ========================================== 
+[16:24:29]  
+[16:24:30]  
+[16:24:30]  
+[16:24:30]  
+[16:24:30]  ========================================== 
+[16:24:30]  |                                        | 
+[16:24:30]  |         YSI version 5.05.0301          | 
+[16:24:30]  |         By Alex "Y_Less" Cole          | 
+[16:24:30]  |                                        | 
+[16:24:30]  | Unable to check the latest YSI version | 
+[16:24:30]  | - please watch the forums and github:  | 
+[16:24:30]  |                                        | 
+[16:24:30]  |   https://git.io/5.x                   | 
+[16:24:30]  |                                        | 
+[16:24:30]  ========================================== 
+[16:24:30]  
+[16:24:30] 
+
+[16:24:30] ======================================================================================
+[16:24:30] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[16:24:30] ||  			   	       Version 1.0				    ||
+[16:24:30] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[16:24:30] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[16:24:30] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[16:24:30] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[16:24:30] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[16:24:30] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[16:24:30] ||										    ||
+[16:24:30] =======================================================================================
+[16:24:30]   Loaded 1 filterscripts.
+
+[16:24:30]  
+[16:24:30]  
+[16:24:30]  
+[16:24:30]  ========================================== 
+[16:24:30]  |                                        | 
+[16:24:30]  |         YSI version 5.05.0005          | 
+[16:24:30]  |         By Alex "Y_Less" Cole          | 
+[16:24:30]  |                                        | 
+[16:24:30]  | Unable to check the latest YSI version | 
+[16:24:30]  | - please watch the forums and github:  | 
+[16:24:30]  |                                        | 
+[16:24:30]  |   https://git.io/5.x                   | 
+[16:24:30]  |                                        | 
+[16:24:30]  ========================================== 
+[16:24:30]  
+[16:24:30]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[16:24:30]  
+[16:24:30] --------------------------------------
+[16:24:30]  Anticheat Nex-AC loaded!
+[16:24:30]  Anticheat version: 1.9.59
+[16:24:30]  Author: Nexius
+[16:24:30] --------------------------------------
+
+[16:25:04] [Database] Connected!
+[16:25:05] [MAPPING] Loaded mappings in 20ms
+[16:25:05] Economy Data Loaded.
+[16:25:05] Number of vehicle models: 7
+[16:25:05] [EMERGENCY] Loaded 22 emergency calls from database
+[16:25:05] [ACTOR] Loaded 96 Dynamic Actor from database
+[16:25:05] [ATM] Loaded 41 ATM from the database
+[16:25:05] [PUMP] Loaded 14 Fuel Pump from database
+[16:25:05] [BUSINESS] Loaded 28 Business from database
+[16:25:05] [DEALER] Loaded 7 dealership from database
+[16:25:05] [DROPITEM] Loaded 420 Dropped items from database.
+[16:25:05] [DOOR] Loaded 35 door from database
+[16:25:05] [FACTION] Loaded 8 faction from database
+[16:25:05] [FLAT] Loaded 129 Flat from database.
+[16:25:05] [GARAGE] Loaded 32 public garage from database.
+[16:25:06] [HOUSE] Loaded 187 House from the Database
+[16:25:06] [OBJECT] Loaded 4 Object from database
+[16:25:06] [RENTAL] Loaded 1 Rental from database
+[16:25:06] [SPEEDCAM] Loaded 6 Speed Camera from database
+[16:25:06] [SPRAYTAG] Loaded 100 spraytags from database
+[16:25:06] [TRASH] Loaded 46 Trash from database
+[16:25:06] [TREE] Loaded 71 tree from database
+[16:25:06] [WEED] Loaded 5 Weed from database
+[16:25:06] [WORKSHOP] Loaded 4 workshop from database.
+[16:25:06] [ROCK] Loaded 32 rock from database.
+[16:25:06] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[16:25:07] [FURNITURE] Loaded 3809 furniture from database.
+[16:25:34] [connection] incoming connection: 127.0.0.1:55574 id: 0
+[16:25:34] [join] vyn has joined the server (0:127.0.0.1)
+[16:25:45] [nick] vyn nick changed to Victor_Mendez
+[16:25:58] [CMD] Victor Mendez: /acc
+[16:26:13] [CMD] Victor Mendez: /acc
+[16:26:39] [CMD] Victor Mendez: /acc
+[16:26:57] [part] Victor_Mendez has left the server (0:1)
+[16:27:00] [PLAYER_VEH] Unloading player vehicleid 28.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[16:56:25] password = ""  (string)
+[16:56:25] weburl = "www.sa-mp.com"  (string)
+[16:56:25] 
+[16:56:25] Server Plugins
+[16:56:25] --------------
+[16:56:25]  Loading plugin: crashdetect
+[16:56:25]   CrashDetect plugin 4.20
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: pawnraknet
+[16:56:25] [Pawn.RakNet] plugin v1.5.1 loading...
+[16:56:25] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: streamer
+[16:56:25] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: sscanf
+[16:56:25] 
+[16:56:25]  ===============================
+[16:56:25] 
+[16:56:25]       sscanf plugin loaded.     
+[16:56:25] 
+[16:56:25]          Version: 2.13.1
+[16:56:25] 
+[16:56:25]    (c) 2022 Alex "Y_Less" Cole  
+[16:56:25] 
+[16:56:25]  ===============================
+[16:56:25] 
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: mysql
+[16:56:25]  >> plugin.mysql: R41-4 successfully loaded.
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: samp_bcrypt
+[16:56:25] [SampBcrypt] [info]: Version: 0.3.4
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: samp-compat
+[16:56:25]   -- samp-compat for 0.3.7-R2 initialized
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: chrono
+[16:56:25]   Loaded.
+[16:56:25]  Loading plugin: mapandreas
+[16:56:25]   Loaded.
+[16:56:25]  Loaded 9 plugins.
+
+[16:56:25] 
+[16:56:25] Filterscripts
+[16:56:25] ---------------
+[16:56:25]   Loading filterscript 'PLE.amx'...
+[16:56:25]  
+[16:56:25]  ========================================== 
+[16:56:25]  |                                        | 
+[16:56:25]  |    Generating code, this may take a    | 
+[16:56:25]  |           little bit of time.          | 
+[16:56:25]  |                                        | 
+[16:56:25]  |             Please wait...             | 
+[16:56:25]  |                                        | 
+[16:56:25]  ========================================== 
+[16:56:25]  |                                        | 
+[16:56:25]  | Note that this code generation works   | 
+[16:56:25]  | best with the JIT plugin, which you    | 
+[16:56:25]  | are not currently using.  Get it here: | 
+[16:56:25]  |                                        | 
+[16:56:25]  |        https://git.io/jit-plugin       | 
+[16:56:25]  |                                        | 
+[16:56:25]  ========================================== 
+[16:56:25]  
+[16:56:25]  
+[16:56:25]  
+[16:56:25]  
+[16:56:25]  ========================================== 
+[16:56:25]  |                                        | 
+[16:56:25]  |         YSI version 5.05.0301          | 
+[16:56:25]  |         By Alex "Y_Less" Cole          | 
+[16:56:25]  |                                        | 
+[16:56:25]  | Unable to check the latest YSI version | 
+[16:56:25]  | - please watch the forums and github:  | 
+[16:56:25]  |                                        | 
+[16:56:25]  |   https://git.io/5.x                   | 
+[16:56:25]  |                                        | 
+[16:56:25]  ========================================== 
+[16:56:25]  
+[16:56:25] 
+
+[16:56:25] ======================================================================================
+[16:56:25] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[16:56:25] ||  			   	       Version 1.0				    ||
+[16:56:25] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[16:56:25] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[16:56:25] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[16:56:25] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[16:56:25] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[16:56:25] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[16:56:25] ||										    ||
+[16:56:25] =======================================================================================
+[16:56:25]   Loaded 1 filterscripts.
+
+[16:56:27]  
+[16:56:27]  
+[16:56:27]  
+[16:56:27]  ========================================== 
+[16:56:27]  |                                        | 
+[16:56:27]  |         YSI version 5.05.0005          | 
+[16:56:27]  |         By Alex "Y_Less" Cole          | 
+[16:56:27]  |                                        | 
+[16:56:27]  | Unable to check the latest YSI version | 
+[16:56:27]  | - please watch the forums and github:  | 
+[16:56:27]  |                                        | 
+[16:56:27]  |   https://git.io/5.x                   | 
+[16:56:27]  |                                        | 
+[16:56:27]  ========================================== 
+[16:56:27]  
+[16:56:27]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[16:56:27]  
+[16:56:27] --------------------------------------
+[16:56:27]  Anticheat Nex-AC loaded!
+[16:56:27]  Anticheat version: 1.9.59
+[16:56:27]  Author: Nexius
+[16:56:27] --------------------------------------
+
+[16:57:12] [Database] Connected!
+[16:57:12] [MAPPING] Loaded mappings in 22ms
+[16:57:12] Economy Data Loaded.
+[16:57:12] Number of vehicle models: 7
+[16:57:12] [EMERGENCY] Loaded 22 emergency calls from database
+[16:57:12] [ACTOR] Loaded 96 Dynamic Actor from database
+[16:57:12] [ATM] Loaded 41 ATM from the database
+[16:57:12] [PUMP] Loaded 14 Fuel Pump from database
+[16:57:12] [BUSINESS] Loaded 28 Business from database
+[16:57:12] [DEALER] Loaded 7 dealership from database
+[16:57:12] [DROPITEM] Loaded 420 Dropped items from database.
+[16:57:12] [DOOR] Loaded 35 door from database
+[16:57:12] [FACTION] Loaded 8 faction from database
+[16:57:12] [FLAT] Loaded 129 Flat from database.
+[16:57:12] [GARAGE] Loaded 32 public garage from database.
+[16:57:12] [HOUSE] Loaded 187 House from the Database
+[16:57:12] [OBJECT] Loaded 4 Object from database
+[16:57:12] [RENTAL] Loaded 1 Rental from database
+[16:57:12] [SPEEDCAM] Loaded 6 Speed Camera from database
+[16:57:12] [SPRAYTAG] Loaded 100 spraytags from database
+[16:57:13] [TRASH] Loaded 46 Trash from database
+[16:57:13] [TREE] Loaded 71 tree from database
+[16:57:13] [WEED] Loaded 5 Weed from database
+[16:57:13] [WORKSHOP] Loaded 4 workshop from database.
+[16:57:13] [ROCK] Loaded 32 rock from database.
+[16:57:13] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[16:57:14] [FURNITURE] Loaded 3811 furniture from database.
+[16:57:42] [connection] incoming connection: 127.0.0.1:62267 id: 0
+[16:57:43] [join] vyn has joined the server (0:127.0.0.1)
+[16:57:53] [nick] vyn nick changed to Victor_Mendez
+[16:58:02] [CMD] Victor Mendez: /acc
+[16:58:13] [CMD] Victor Mendez: /acc
+[16:58:26] [CMD] Victor Mendez: /cc
+[16:58:50] [CMD] Victor Mendez: /acc
+[16:59:56] [CMD] Victor Mendez: /acc
+[17:00:07] [CMD] Victor Mendez: /acc
+[17:00:17] [CMD] Victor Mendez: /acc
+[17:00:57] [CMD] Victor Mendez: /acc
+[17:01:45] [CMD] Victor Mendez: /acc
+[17:02:11] [nick] Victor_Mendez nick changed to vyn
+[17:02:11] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[17:02:23] password = ""  (string)
+[17:02:23] weburl = "www.sa-mp.com"  (string)
+[17:02:23] 
+[17:02:23] Server Plugins
+[17:02:23] --------------
+[17:02:23]  Loading plugin: crashdetect
+[17:02:23]   CrashDetect plugin 4.20
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: pawnraknet
+[17:02:23] [Pawn.RakNet] plugin v1.5.1 loading...
+[17:02:23] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: streamer
+[17:02:23] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: sscanf
+[17:02:23] 
+[17:02:23]  ===============================
+[17:02:23] 
+[17:02:23]       sscanf plugin loaded.     
+[17:02:23] 
+[17:02:23]          Version: 2.13.1
+[17:02:23] 
+[17:02:23]    (c) 2022 Alex "Y_Less" Cole  
+[17:02:23] 
+[17:02:23]  ===============================
+[17:02:23] 
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: mysql
+[17:02:23]  >> plugin.mysql: R41-4 successfully loaded.
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: samp_bcrypt
+[17:02:23] [SampBcrypt] [info]: Version: 0.3.4
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: samp-compat
+[17:02:23]   -- samp-compat for 0.3.7-R2 initialized
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: chrono
+[17:02:23]   Loaded.
+[17:02:23]  Loading plugin: mapandreas
+[17:02:23]   Loaded.
+[17:02:23]  Loaded 9 plugins.
+
+[17:02:23] 
+[17:02:23] Filterscripts
+[17:02:23] ---------------
+[17:02:23]   Loading filterscript 'PLE.amx'...
+[17:02:23]  
+[17:02:23]  ========================================== 
+[17:02:23]  |                                        | 
+[17:02:23]  |    Generating code, this may take a    | 
+[17:02:23]  |           little bit of time.          | 
+[17:02:23]  |                                        | 
+[17:02:23]  |             Please wait...             | 
+[17:02:23]  |                                        | 
+[17:02:23]  ========================================== 
+[17:02:23]  |                                        | 
+[17:02:23]  | Note that this code generation works   | 
+[17:02:23]  | best with the JIT plugin, which you    | 
+[17:02:23]  | are not currently using.  Get it here: | 
+[17:02:23]  |                                        | 
+[17:02:23]  |        https://git.io/jit-plugin       | 
+[17:02:23]  |                                        | 
+[17:02:23]  ========================================== 
+[17:02:23]  
+[17:02:23]  
+[17:02:23]  
+[17:02:23]  
+[17:02:23]  ========================================== 
+[17:02:23]  |                                        | 
+[17:02:23]  |         YSI version 5.05.0301          | 
+[17:02:23]  |         By Alex "Y_Less" Cole          | 
+[17:02:23]  |                                        | 
+[17:02:23]  | Unable to check the latest YSI version | 
+[17:02:23]  | - please watch the forums and github:  | 
+[17:02:23]  |                                        | 
+[17:02:23]  |   https://git.io/5.x                   | 
+[17:02:23]  |                                        | 
+[17:02:23]  ========================================== 
+[17:02:23]  
+[17:02:23] 
+
+[17:02:23] ======================================================================================
+[17:02:23] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[17:02:23] ||  			   	       Version 1.0				    ||
+[17:02:23] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[17:02:23] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[17:02:23] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[17:02:23] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[17:02:23] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[17:02:23] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[17:02:23] ||										    ||
+[17:02:23] =======================================================================================
+[17:02:23]   Loaded 1 filterscripts.
+
+[17:02:25]  
+[17:02:25]  
+[17:02:25]  
+[17:02:25]  ========================================== 
+[17:02:25]  |                                        | 
+[17:02:25]  |         YSI version 5.05.0005          | 
+[17:02:25]  |         By Alex "Y_Less" Cole          | 
+[17:02:25]  |                                        | 
+[17:02:25]  | Unable to check the latest YSI version | 
+[17:02:25]  | - please watch the forums and github:  | 
+[17:02:25]  |                                        | 
+[17:02:25]  |   https://git.io/5.x                   | 
+[17:02:25]  |                                        | 
+[17:02:25]  ========================================== 
+[17:02:25]  
+[17:02:25]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[17:02:25]  
+[17:02:25] --------------------------------------
+[17:02:25]  Anticheat Nex-AC loaded!
+[17:02:25]  Anticheat version: 1.9.59
+[17:02:25]  Author: Nexius
+[17:02:25] --------------------------------------
+
+[17:02:59] [Database] Connected!
+[17:02:59] [MAPPING] Loaded mappings in 20ms
+[17:02:59] Economy Data Loaded.
+[17:02:59] Number of vehicle models: 7
+[17:02:59] [EMERGENCY] Loaded 22 emergency calls from database
+[17:02:59] [ACTOR] Loaded 96 Dynamic Actor from database
+[17:02:59] [ATM] Loaded 41 ATM from the database
+[17:02:59] [PUMP] Loaded 14 Fuel Pump from database
+[17:02:59] [BUSINESS] Loaded 28 Business from database
+[17:02:59] [DEALER] Loaded 7 dealership from database
+[17:02:59] [DROPITEM] Loaded 420 Dropped items from database.
+[17:02:59] [DOOR] Loaded 35 door from database
+[17:02:59] [FACTION] Loaded 8 faction from database
+[17:02:59] [FLAT] Loaded 129 Flat from database.
+[17:02:59] [GARAGE] Loaded 32 public garage from database.
+[17:03:00] [HOUSE] Loaded 187 House from the Database
+[17:03:00] [OBJECT] Loaded 4 Object from database
+[17:03:00] [RENTAL] Loaded 1 Rental from database
+[17:03:00] [SPEEDCAM] Loaded 6 Speed Camera from database
+[17:03:00] [SPRAYTAG] Loaded 100 spraytags from database
+[17:03:00] [TRASH] Loaded 46 Trash from database
+[17:03:00] [TREE] Loaded 71 tree from database
+[17:03:00] [WEED] Loaded 5 Weed from database
+[17:03:00] [WORKSHOP] Loaded 4 workshop from database.
+[17:03:00] [ROCK] Loaded 32 rock from database.
+[17:03:00] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[17:03:01] [FURNITURE] Loaded 3811 furniture from database.
+[17:03:02] [connection] incoming connection: 127.0.0.1:55189 id: 0
+[17:03:02] [join] vyn has joined the server (0:127.0.0.1)
+[17:03:10] [chat] [vyn]: a
+[17:03:23] [nick] vyn nick changed to Victor_Mendez
+[17:03:25] [CMD] Victor Mendez: /acc
+[17:03:51] [CMD] Victor Mendez: /cc
+[17:04:24] [CMD] Victor Mendez: /acc
+[17:04:46] [CMD] Victor Mendez: /acc
+[17:04:51] [CMD] Victor Mendez: /acc
+[17:05:12] [CMD] Victor Mendez: /acc
+[17:05:55] [CMD] Victor Mendez: /acc
+[17:07:09] [part] Victor_Mendez has left the server (0:1)
+[17:07:12] [debug] Server received interrupt signal
+[17:07:12] [debug] Native backtrace:
+[17:07:12] [debug] #0 77ca2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[17:07:12] [debug] #1 76e3764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[17:07:12] [debug] #2 0048d53c in ?? () in samp-server.exe
+[17:07:12] [debug] #3 0049b531 in ?? () in samp-server.exe
+[17:07:12] [debug] #4 0049b541 in ?? () in samp-server.exe
+[17:07:12] --- Server Shutting Down.
+[17:07:12] ** Saved server data in 0ms
+[17:07:12] ** Saved server economy in 1ms
+[17:07:12] ** Saved vehicle data in 4ms
+[17:07:12] ** Saved player data in 4ms
+[17:07:12] ** Saved tree data in 20ms.
+[17:07:12] ** Saved  weed data  in 21ms.
+[17:07:12] ** Saved speedcam data in 22ms
+[17:07:12] ** Saved dealer data in 27ms
+[17:07:12] ** Saved house data  in 96ms
+[17:07:12] ** Saved business data in 112ms
+[17:07:12] ** Saved tree data in 128ms
+[17:07:12] ** Saved flat data in 164ms
+[17:07:12] ** Saved pump data in 165ms
+[17:07:12] There is 0 player when the server shutdown.
+[17:07:46]  
+[17:07:46] --------------------------------------
+[17:07:46]  Statistics anticheat Nex-AC
+[17:07:46]  Detected and prevented:
+[17:07:46]   0 cheating attempts
+[17:07:46]   0 hacking attempts
+[17:07:46]   0 crashing attempts
+[17:07:46]   0 flooding attempts
+[17:07:46]   0 attacks
+[17:07:46]  Total detected and punished 0 cheaters
+[17:07:46] --------------------------------------
+
+[17:07:46] [Pawn.RakNet] plugin unloaded
+[17:07:46] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[17:07:46] 
+[17:07:46]  ===============================
+[17:07:46] 
+[17:07:46]      sscanf plugin unloaded.    
+[17:07:46] 
+[17:07:46]  ===============================
+[17:07:46] 
+[17:07:46] plugin.mysql: Unloading plugin...
+[17:07:46] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[17:20:50] password = ""  (string)
+[17:20:50] weburl = "www.sa-mp.com"  (string)
+[17:20:50] 
+[17:20:50] Server Plugins
+[17:20:50] --------------
+[17:20:50]  Loading plugin: crashdetect
+[17:20:50]   CrashDetect plugin 4.20
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: pawnraknet
+[17:20:50] [Pawn.RakNet] plugin v1.5.1 loading...
+[17:20:50] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: streamer
+[17:20:50] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: sscanf
+[17:20:50] 
+[17:20:50]  ===============================
+[17:20:50] 
+[17:20:50]       sscanf plugin loaded.     
+[17:20:50] 
+[17:20:50]          Version: 2.13.1
+[17:20:50] 
+[17:20:50]    (c) 2022 Alex "Y_Less" Cole  
+[17:20:50] 
+[17:20:50]  ===============================
+[17:20:50] 
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: mysql
+[17:20:50]  >> plugin.mysql: R41-4 successfully loaded.
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: samp_bcrypt
+[17:20:50] [SampBcrypt] [info]: Version: 0.3.4
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: samp-compat
+[17:20:50]   -- samp-compat for 0.3.7-R2 initialized
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: chrono
+[17:20:50]   Loaded.
+[17:20:50]  Loading plugin: mapandreas
+[17:20:50]   Loaded.
+[17:20:50]  Loaded 9 plugins.
+
+[17:20:50] 
+[17:20:50] Filterscripts
+[17:20:50] ---------------
+[17:20:50]   Loading filterscript 'PLE.amx'...
+[17:20:50]  
+[17:20:50]  ========================================== 
+[17:20:50]  |                                        | 
+[17:20:50]  |    Generating code, this may take a    | 
+[17:20:50]  |           little bit of time.          | 
+[17:20:50]  |                                        | 
+[17:20:50]  |             Please wait...             | 
+[17:20:50]  |                                        | 
+[17:20:50]  ========================================== 
+[17:20:50]  |                                        | 
+[17:20:50]  | Note that this code generation works   | 
+[17:20:50]  | best with the JIT plugin, which you    | 
+[17:20:50]  | are not currently using.  Get it here: | 
+[17:20:50]  |                                        | 
+[17:20:50]  |        https://git.io/jit-plugin       | 
+[17:20:50]  |                                        | 
+[17:20:50]  ========================================== 
+[17:20:50]  
+[17:20:50]  
+[17:20:50]  
+[17:20:50]  
+[17:20:50]  ========================================== 
+[17:20:50]  |                                        | 
+[17:20:50]  |         YSI version 5.05.0301          | 
+[17:20:50]  |         By Alex "Y_Less" Cole          | 
+[17:20:50]  |                                        | 
+[17:20:50]  | Unable to check the latest YSI version | 
+[17:20:50]  | - please watch the forums and github:  | 
+[17:20:50]  |                                        | 
+[17:20:50]  |   https://git.io/5.x                   | 
+[17:20:50]  |                                        | 
+[17:20:50]  ========================================== 
+[17:20:50]  
+[17:20:50] 
+
+[17:20:50] ======================================================================================
+[17:20:50] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[17:20:50] ||  			   	       Version 1.0				    ||
+[17:20:50] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[17:20:50] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[17:20:50] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[17:20:50] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[17:20:50] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[17:20:50] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[17:20:50] ||										    ||
+[17:20:50] =======================================================================================
+[17:20:50]   Loaded 1 filterscripts.
+
+[17:20:53]  
+[17:20:53]  
+[17:20:53]  
+[17:20:53]  ========================================== 
+[17:20:53]  |                                        | 
+[17:20:53]  |         YSI version 5.05.0005          | 
+[17:20:53]  |         By Alex "Y_Less" Cole          | 
+[17:20:53]  |                                        | 
+[17:20:53]  | Unable to check the latest YSI version | 
+[17:20:53]  | - please watch the forums and github:  | 
+[17:20:53]  |                                        | 
+[17:20:53]  |   https://git.io/5.x                   | 
+[17:20:53]  |                                        | 
+[17:20:53]  ========================================== 
+[17:20:53]  
+[17:20:53]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[17:20:53]  
+[17:20:53] --------------------------------------
+[17:20:53]  Anticheat Nex-AC loaded!
+[17:20:53]  Anticheat version: 1.9.59
+[17:20:53]  Author: Nexius
+[17:20:53] --------------------------------------
+
+[17:21:26] [Database] Connected!
+[17:21:26] [MAPPING] Loaded mappings in 27ms
+[17:21:26] Economy Data Loaded.
+[17:21:26] Number of vehicle models: 7
+[17:21:26] [EMERGENCY] Loaded 22 emergency calls from database
+[17:21:26] [ACTOR] Loaded 96 Dynamic Actor from database
+[17:21:26] [ATM] Loaded 41 ATM from the database
+[17:21:26] [PUMP] Loaded 14 Fuel Pump from database
+[17:21:26] [BUSINESS] Loaded 28 Business from database
+[17:21:26] [DEALER] Loaded 7 dealership from database
+[17:21:26] [DROPITEM] Loaded 420 Dropped items from database.
+[17:21:26] [DOOR] Loaded 35 door from database
+[17:21:26] [FACTION] Loaded 8 faction from database
+[17:21:26] [FLAT] Loaded 129 Flat from database.
+[17:21:26] [GARAGE] Loaded 32 public garage from database.
+[17:21:26] [HOUSE] Loaded 187 House from the Database
+[17:21:26] [OBJECT] Loaded 4 Object from database
+[17:21:26] [RENTAL] Loaded 1 Rental from database
+[17:21:26] [SPEEDCAM] Loaded 6 Speed Camera from database
+[17:21:26] [SPRAYTAG] Loaded 100 spraytags from database
+[17:21:26] [TRASH] Loaded 46 Trash from database
+[17:21:26] [TREE] Loaded 71 tree from database
+[17:21:26] [WEED] Loaded 5 Weed from database
+[17:21:26] [WORKSHOP] Loaded 4 workshop from database.
+[17:21:26] [ROCK] Loaded 32 rock from database.
+[17:21:26] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[17:21:27] [FURNITURE] Loaded 3810 furniture from database.
+[17:21:50] [connection] incoming connection: 127.0.0.1:57891 id: 0
+[17:21:51] [join] vyn has joined the server (0:127.0.0.1)
+[17:22:00] [nick] vyn nick changed to Victor_Mendez
+[17:22:27] [CMD] Victor Mendez: /setvw 0 19
+[17:22:33] [CMD] Victor Mendez: /gotoco 1373.593750 1549.947143 3000.596435 19
+[17:22:44] [CMD] Victor Mendez: /flymode
+[17:22:48] [CMD] Victor Mendez: /flymode
+[17:22:57] [CMD] Victor Mendez: /setvw 0 19
+[17:22:59] [CMD] Victor Mendez: /gotoco 1373.593750 1549.947143 3000.596435 19
+[17:23:30] [CMD] Victor Mendez: /editfaction 0 locker
+[17:23:55] [CMD] Victor Mendez: /gotoco 1388.223510 1558.405029 3003.687988 19
+[17:24:19] [CMD] Victor Mendez: /mark set
+[17:24:24] [CMD] Victor Mendez: /editdoor
+[17:24:33] [CMD] Victor Mendez: /editdoor
+[17:25:08] [CMD] Victor Mendez: /creategate
+[17:25:24] [CMD] Victor Mendez: /editgate 33 modedl
+[17:25:30] [CMD] Victor Mendez: /editgate 33 model 19303
+[17:25:36] [CMD] Victor Mendez: /editgate 33 model 980
+[17:25:41] [CMD] Victor Mendez: /editgate 33 model 19325
+[17:25:57] [CMD] Victor Mendez: /editgate 0 
+[17:26:01] [CMD] Victor Mendez: /editgate 0 faction 0
+[17:26:11] [CMD] Victor Mendez: /editgate 0 location
+[17:26:14] [CMD] Victor Mendez: /editgate 0 faction 0
+[17:26:27] [CMD] Victor Mendez: /editgate 0 faction -1
+[17:26:38] [CMD] Victor Mendez: /editgate 33 location
+[17:26:40] [CMD] Victor Mendez: /editgate 33 location
+[17:26:46] [CMD] Victor Mendez: /editgate 33 pos
+[17:27:08] [CMD] Victor Mendez: /editgate 33 move
+[17:27:14] [CMD] Victor Mendez: /gate
+[17:27:17] [CMD] Victor Mendez: /gate
+[17:27:23] [CMD] Victor Mendez: /editgate 33 faction 0
+[17:27:24] [CMD] Victor Mendez: /gate
+[17:27:27] [CMD] Victor Mendez: /setleader 0 0
+[17:27:27] [CMD] Victor Mendez: /gate
+[17:27:28] [CMD] Victor Mendez: /gate
+[17:30:21] [CMD] Victor Mendez: /mark set
+[17:30:22] [CMD] Victor Mendez: /gotodoor 2
+[17:30:24] [CMD] Victor Mendez: /gotodoor 1
+[17:30:27] [CMD] Victor Mendez: /gotodoor 3
+[17:30:28] [CMD] Victor Mendez: /gotodoor 4
+[17:30:31] [CMD] Victor Mendez: /gotodoor 0
+[17:30:35] [CMD] Victor Mendez: /send 0 sapd
+[17:30:38] [CMD] Victor Mendez: /mark goto
+[17:30:44] [CMD] Victor Mendez: /editdoor 3 interior
+[17:30:48] [CMD] Victor Mendez: /gotodoor 3
+[17:30:49] [CMD] Victor Mendez: /gotodoor 4
+[17:31:28] [CMD] Victor Mendez: /gotodoor 5
+[17:31:30] [CMD] Victor Mendez: /gotodoor 6
+[17:31:32] [CMD] Victor Mendez: /gotodoor 7
+[17:31:34] [CMD] Victor Mendez: /gotodoor 8
+[17:31:35] [CMD] Victor Mendez: /gotodoor 9
+[17:31:37] [CMD] Victor Mendez: /gotodoor 10
+[17:31:39] [CMD] Victor Mendez: /gotodoor 11
+[17:31:42] [CMD] Victor Mendez: /gotodoor 12
+[17:31:44] [CMD] Victor Mendez: /gotodoor 13
+[17:31:45] [CMD] Victor Mendez: /gotodoor 14
+[17:31:48] [CMD] Victor Mendez: /gotodoor 15
+[17:31:54] [chat] [Victor_Mendez]: 15
+[17:31:59] [CMD] Victor Mendez: /editdoor 15 name SAPD Basement
+[17:32:02] [CMD] Victor Mendez: /gotodoor 16
+[17:32:05] [CMD] Victor Mendez: /gotodoor 17'
+[17:32:06] [CMD] Victor Mendez: /gotodoor 17
+[17:32:10] [CMD] Victor Mendez: /gotodoor 18
+[17:32:13] [CMD] Victor Mendez: /gotodoor 19
+[17:32:15] [CMD] Victor Mendez: /gotodoor 20
+[17:32:17] [CMD] Victor Mendez: /gotodoor 21
+[17:32:18] [CMD] Victor Mendez: /gotodoor 22
+[17:32:20] [CMD] Victor Mendez: /gotodoor 23
+[17:32:21] [CMD] Victor Mendez: /gotodoor 24
+[17:32:23] [CMD] Victor Mendez: /gotodoor 25
+[17:32:25] [CMD] Victor Mendez: /gotodoor 26
+[17:32:26] [CMD] Victor Mendez: /gotodoor 27
+[17:32:29] [CMD] Victor Mendez: /gotodoor 28
+[17:32:31] [CMD] Victor Mendez: /gotodoor 29
+[17:32:34] [CMD] Victor Mendez: /gotodoor 30
+[17:32:35] [CMD] Victor Mendez: /gotodoor 31
+[17:32:37] [CMD] Victor Mendez: /gotodoor 32
+[17:32:46] [CMD] Victor Mendez: /gotodoor 33
+[17:32:51] [CMD] Victor Mendez: /gotodoor 34
+[17:32:53] [CMD] Victor Mendez: /gotodoor 35
+[17:32:53] [Nex-AC debug] Dist: 2652.626953, dist set: 3139.704345, speed: 0, pos x, y, z: -254.884994, 2603.229980, 63.858200, old pos x, y, z: -2624.419921, 1412.170043, 8.093750
+[17:32:55] [CMD] Victor Mendez: /gotodoor 36
+[17:33:04] [CMD] Victor Mendez: /gotodoor 1
+[17:33:05] [CMD] Victor Mendez: /gotodoor 2
+[17:33:07] [CMD] Victor Mendez: /gotodoor 3
+[17:33:08] [CMD] Victor Mendez: /gotodoor 4
+[17:33:10] [CMD] Victor Mendez: /gotodoor 5
+[17:33:12] [CMD] Victor Mendez: /gotodoor 6
+[17:33:13] [CMD] Victor Mendez: /gotodoor 7'
+[17:33:14] [CMD] Victor Mendez: /gotodoor 7
+[17:33:17] [CMD] Victor Mendez: /gotodoor 8
+[17:33:18] [CMD] Victor Mendez: /gotodoor 9
+[17:33:19] [CMD] Victor Mendez: /gotodoor 10
+[17:33:20] [CMD] Victor Mendez: /gotodoor 11
+[17:33:25] [CMD] Victor Mendez: /gotodoor 12
+[17:33:26] [CMD] Victor Mendez: /gotodoor 13
+[17:33:28] [CMD] Victor Mendez: /gotodoor 14
+[17:33:30] [CMD] Victor Mendez: /gotodoor 15
+[17:33:50] [CMD] Victor Mendez: /gotodoor 16
+[17:33:52] [CMD] Victor Mendez: /gotodoor 17
+[17:33:54] [CMD] Victor Mendez: /gotodoor 19
+[17:33:56] [CMD] Victor Mendez: /gotodoor 20
+[17:33:57] [CMD] Victor Mendez: /gotodoor 21
+[17:33:58] [CMD] Victor Mendez: /gotodoor 22
+[17:33:59] [CMD] Victor Mendez: /gotodoor 23
+[17:34:00] [CMD] Victor Mendez: /gotodoor 24
+[17:34:01] [CMD] Victor Mendez: /gotodoor 25
+[17:34:36] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 0
+[17:34:47] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 2
+[17:34:55] [CMD] Victor Mendez: /setvw 0 0
+[17:34:56] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 2
+[17:34:59] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 2
+[17:35:23] [CMD] Victor Mendez: /gotoco 1759.338867 -1602.475585 1734.948852 2
+[17:35:25] [CMD] Victor Mendez: /gotoco 1759.338867 -1602.475585 1734.948852 2
+[17:35:27] [CMD] Victor Mendez: /gotoco 1759.338867 -1602.475585 1734.948852 2
+[17:35:41] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 3
+[17:35:42] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 4
+[17:35:43] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 5
+[17:35:45] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 6
+[17:35:46] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 7
+[17:35:48] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 8
+[17:35:49] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 9
+[17:35:50] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 10
+[17:35:50] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 11
+[17:35:51] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 12
+[17:35:52] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 13
+[17:35:52] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 14
+[17:35:53] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 15
+[17:35:54] [CMD] Victor Mendez: /gotoco 1360.5981 1575.5034 1468.7885 16
+[17:36:20] [CMD] Victor Mendez: /gotodoor 27
+[17:36:30] [CMD] Victor Mendez: /gotodoor 3
+[17:36:45] [CMD] Victor Mendez: /editdoor 15 interior
+[17:36:48] [CMD] Victor Mendez: /editdoor 15
+[17:36:52] [CMD] Victor Mendez: /editdoor 15 faction
+[17:36:54] [CMD] Victor Mendez: /editdoor 15 faction 0
+[17:36:57] [CMD] Victor Mendez: /f quit
+[17:39:34] [part] Victor_Mendez has left the server (0:1)
+[17:39:37] [debug] Server received interrupt signal
+[17:39:38] [debug] Native backtrace:
+[17:39:38] [debug] #0 77ca2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[17:39:38] [debug] #1 76e3764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[17:39:38] [debug] #2 0048d53c in ?? () in samp-server.exe
+[17:39:38] [debug] #3 0049b531 in ?? () in samp-server.exe
+[17:39:38] [debug] #4 0049b541 in ?? () in samp-server.exe
+[17:39:38] --- Server Shutting Down.
+[17:39:38] ** Saved server data in 0ms
+[17:39:38] ** Saved server economy in 1ms
+[17:39:38] ** Saved vehicle data in 4ms
+[17:39:38] ** Saved player data in 4ms
+[17:39:38] ** Saved tree data in 21ms.
+[17:39:38] ** Saved  weed data  in 22ms.
+[17:39:38] ** Saved speedcam data in 22ms
+[17:39:38] ** Saved dealer data in 27ms
+[17:39:38] ** Saved house data  in 94ms
+[17:39:38] ** Saved business data in 109ms
+[17:39:38] ** Saved tree data in 124ms
+[17:39:38] ** Saved flat data in 158ms
+[17:39:38] ** Saved pump data in 159ms
+[17:39:38] There is 0 player when the server shutdown.
+[17:39:48]  
+[17:39:48] --------------------------------------
+[17:39:48]  Statistics anticheat Nex-AC
+[17:39:48]  Detected and prevented:
+[17:39:48]   1 cheating attempts
+[17:39:48]   0 hacking attempts
+[17:39:48]   0 crashing attempts
+[17:39:48]   0 flooding attempts
+[17:39:48]   0 attacks
+[17:39:48]  Total detected and punished 1 cheaters
+[17:39:48] --------------------------------------
+
+[17:39:48] [Pawn.RakNet] plugin unloaded
+[17:39:48] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[17:39:48] 
+[17:39:48]  ===============================
+[17:39:48] 
+[17:39:48]      sscanf plugin unloaded.    
+[17:39:48] 
+[17:39:48]  ===============================
+[17:39:48] 
+[17:39:48] plugin.mysql: Unloading plugin...
+[17:39:48] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[17:52:33] password = ""  (string)
+[17:52:33] weburl = "www.sa-mp.com"  (string)
+[17:52:33] 
+[17:52:33] Server Plugins
+[17:52:33] --------------
+[17:52:33]  Loading plugin: crashdetect
+[17:52:33]   CrashDetect plugin 4.20
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: pawnraknet
+[17:52:33] [Pawn.RakNet] plugin v1.5.1 loading...
+[17:52:33] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: streamer
+[17:52:33] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: sscanf
+[17:52:33] 
+[17:52:33]  ===============================
+[17:52:33] 
+[17:52:33]       sscanf plugin loaded.     
+[17:52:33] 
+[17:52:33]          Version: 2.13.1
+[17:52:33] 
+[17:52:33]    (c) 2022 Alex "Y_Less" Cole  
+[17:52:33] 
+[17:52:33]  ===============================
+[17:52:33] 
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: mysql
+[17:52:33]  >> plugin.mysql: R41-4 successfully loaded.
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: samp_bcrypt
+[17:52:33] [SampBcrypt] [info]: Version: 0.3.4
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: samp-compat
+[17:52:33]   -- samp-compat for 0.3.7-R2 initialized
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: chrono
+[17:52:33]   Loaded.
+[17:52:33]  Loading plugin: mapandreas
+[17:52:33]   Loaded.
+[17:52:33]  Loaded 9 plugins.
+
+[17:52:33] 
+[17:52:33] Filterscripts
+[17:52:33] ---------------
+[17:52:33]   Loading filterscript 'PLE.amx'...
+[17:52:33]  
+[17:52:33]  ========================================== 
+[17:52:33]  |                                        | 
+[17:52:33]  |    Generating code, this may take a    | 
+[17:52:33]  |           little bit of time.          | 
+[17:52:33]  |                                        | 
+[17:52:33]  |             Please wait...             | 
+[17:52:33]  |                                        | 
+[17:52:33]  ========================================== 
+[17:52:33]  |                                        | 
+[17:52:33]  | Note that this code generation works   | 
+[17:52:33]  | best with the JIT plugin, which you    | 
+[17:52:33]  | are not currently using.  Get it here: | 
+[17:52:33]  |                                        | 
+[17:52:33]  |        https://git.io/jit-plugin       | 
+[17:52:33]  |                                        | 
+[17:52:33]  ========================================== 
+[17:52:33]  
+[17:52:33]  
+[17:52:33]  
+[17:52:33]  
+[17:52:33]  ========================================== 
+[17:52:33]  |                                        | 
+[17:52:33]  |         YSI version 5.05.0301          | 
+[17:52:33]  |         By Alex "Y_Less" Cole          | 
+[17:52:33]  |                                        | 
+[17:52:33]  | Unable to check the latest YSI version | 
+[17:52:33]  | - please watch the forums and github:  | 
+[17:52:33]  |                                        | 
+[17:52:33]  |   https://git.io/5.x                   | 
+[17:52:33]  |                                        | 
+[17:52:33]  ========================================== 
+[17:52:33]  
+[17:52:33] 
+
+[17:52:33] ======================================================================================
+[17:52:33] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[17:52:33] ||  			   	       Version 1.0				    ||
+[17:52:33] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[17:52:33] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[17:52:33] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[17:52:33] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[17:52:33] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[17:52:33] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[17:52:33] ||										    ||
+[17:52:33] =======================================================================================
+[17:52:33]   Loaded 1 filterscripts.
+
+[17:52:35]  
+[17:52:35]  
+[17:52:35]  
+[17:52:35]  ========================================== 
+[17:52:35]  |                                        | 
+[17:52:35]  |         YSI version 5.05.0005          | 
+[17:52:35]  |         By Alex "Y_Less" Cole          | 
+[17:52:35]  |                                        | 
+[17:52:35]  | Unable to check the latest YSI version | 
+[17:52:35]  | - please watch the forums and github:  | 
+[17:52:35]  |                                        | 
+[17:52:35]  |   https://git.io/5.x                   | 
+[17:52:35]  |                                        | 
+[17:52:35]  ========================================== 
+[17:52:35]  
+[17:52:35]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[17:52:35]  
+[17:52:35] --------------------------------------
+[17:52:35]  Anticheat Nex-AC loaded!
+[17:52:35]  Anticheat version: 1.9.59
+[17:52:35]  Author: Nexius
+[17:52:35] --------------------------------------
+
+[17:53:11] [Database] Connected!
+[17:53:11] [MAPPING] Loaded mappings in 21ms
+[17:53:11] Economy Data Loaded.
+[17:53:11] Number of vehicle models: 7
+[17:53:11] [EMERGENCY] Loaded 22 emergency calls from database
+[17:53:11] [ACTOR] Loaded 96 Dynamic Actor from database
+[17:53:11] [ATM] Loaded 41 ATM from the database
+[17:53:11] [PUMP] Loaded 14 Fuel Pump from database
+[17:53:12] [BUSINESS] Loaded 28 Business from database
+[17:53:12] [DEALER] Loaded 7 dealership from database
+[17:53:12] [DROPITEM] Loaded 416 Dropped items from database.
+[17:53:12] [DOOR] Loaded 35 door from database
+[17:53:12] [FACTION] Loaded 8 faction from database
+[17:53:12] [FLAT] Loaded 129 Flat from database.
+[17:53:12] [GARAGE] Loaded 32 public garage from database.
+[17:53:12] [HOUSE] Loaded 187 House from the Database
+[17:53:12] [OBJECT] Loaded 4 Object from database
+[17:53:12] [RENTAL] Loaded 1 Rental from database
+[17:53:12] [SPEEDCAM] Loaded 6 Speed Camera from database
+[17:53:12] [SPRAYTAG] Loaded 98 spraytags from database
+[17:53:12] [TRASH] Loaded 46 Trash from database
+[17:53:12] [TREE] Loaded 71 tree from database
+[17:53:13] [WEED] Loaded 5 Weed from database
+[17:53:13] [WORKSHOP] Loaded 4 workshop from database.
+[17:53:13] [ROCK] Loaded 32 rock from database.
+[17:53:13] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[17:53:16] [FURNITURE] Loaded 3811 furniture from database.
+[17:53:51] [connection] incoming connection: 127.0.0.1:65179 id: 0
+[17:53:51] [join] vyn has joined the server (0:127.0.0.1)
+[17:54:02] [nick] vyn nick changed to Victor_Mendez
+[17:54:16] [CMD] Victor Mendez: /gotoloc flat 122
+[17:54:26] [CMD] Victor Mendez: /flat menu
+[17:54:36] [CASH UPDATE] Victor_Mendez(vyn) | Before: $2,626.26 | After: $2,596.26 | Reason: Membeli furniture
+[17:54:37] [CMD] Victor Mendez: /flat menu
+[17:54:40] [CMD] Victor Mendez: /flat menu
+[17:54:45] [CMD] Victor Mendez: /flat menu
+[17:57:13] [CMD] Victor Mendez: /flat menu
+[17:57:44] [nick] Victor_Mendez nick changed to vyn
+[17:57:44] [CMD] vyn: /aduty
+[17:57:56] [CMD] vyn: /gotodoor 2
+[17:58:00] [CMD] vyn: /setvw 0 0
+[17:58:02] [CMD] vyn: /setint 0 0
+[17:58:09] [CMD] vyn: /setleader 0 0
+[18:05:17] [CMD] vyn: /gotoloc dealer 3
+[18:05:21] [CMD] vyn: /setvw 0 0
+[18:05:23] [CMD] vyn: /setint 0 0
+[18:05:26] [CMD] vyn: /buyvehicle
+[18:05:39] [CMD] vyn: /buyvehicle
+[18:05:39] [CMD] vyn: /buyvehicle
+[18:05:39] [chat] [vyn]: a
+[18:05:41] [chat] [vyn]: a
+[18:05:45] [CMD] vyn: /buyvehicle
+[18:05:49] [CMD] vyn: /v list
+[18:06:09] [CMD] vyn: /v list
+[18:06:15] [CMD] vyn: /v list
+[18:06:18] [CMD] vyn: /v spawn
+[18:06:23] [CMD] vyn: /createvip
+[18:06:27] [CMD] vyn: /generatevip
+[18:06:31] [CMD] vyn: /generatevip 3 30
+[18:06:34] [CMD] vyn: /redeem
+[18:06:35] [CMD] vyn: /redeemvip
+[18:06:41] [CMD] vyn: /redeemvip OT-BOWG7877
+[18:06:45] [CMD] vyn: /buyvehicle
+[18:06:50] [CASH UPDATE] vyn(vyn) | Before: $2,146.26 | After: $7,146.26 | Reason: Given from vyn
+[18:06:50] [CMD] vyn: /givecash 0 5000
+[18:06:51] [CMD] vyn: /buyvehicle
+[18:06:52] [CASH UPDATE] vyn(vyn) | Before: $7,146.26 | After: $1,146.26 | Reason: Membeli kendaraan
+[18:07:07] [nick] vyn nick changed to Victor_Mendez
+[18:07:07] [CMD] Victor Mendez: /aduty
+[18:07:23] [CMD] Victor Mendez: /createhouse
+[18:07:24] [CMD] Victor Mendez: /createhouse 1 3
+[18:07:28] [CMD] Victor Mendez: /house buy
+[18:07:30] [CMD] Victor Mendez: /house lock
+[18:07:33] [CMD] Victor Mendez: /house menu
+[18:07:38] [CMD] Victor Mendez: /house menu
+[18:07:42] [CASH UPDATE] Victor_Mendez(vyn) | Before: $943.26 | After: $913.26 | Reason: Membeli furniture
+[18:07:43] [CMD] Victor Mendez: /house menu
+[18:07:47] [CMD] Victor Mendez: /house menu
+[18:07:50] [CMD] Victor Mendez: /house menu
+[18:08:02] [CMD] Victor Mendez: /destroyhouse
+[18:08:04] [CMD] Victor Mendez: /destroyhouse 187
+[18:08:11] [nick] Victor_Mendez nick changed to vyn
+[18:08:11] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:08:44] password = ""  (string)
+[18:08:44] weburl = "www.sa-mp.com"  (string)
+[18:08:44] 
+[18:08:44] Server Plugins
+[18:08:44] --------------
+[18:08:44]  Loading plugin: crashdetect
+[18:08:44]   CrashDetect plugin 4.20
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: pawnraknet
+[18:08:44] [Pawn.RakNet] plugin v1.5.1 loading...
+[18:08:44] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: streamer
+[18:08:44] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: sscanf
+[18:08:44] 
+[18:08:44]  ===============================
+[18:08:44] 
+[18:08:44]       sscanf plugin loaded.     
+[18:08:44] 
+[18:08:44]          Version: 2.13.1
+[18:08:44] 
+[18:08:44]    (c) 2022 Alex "Y_Less" Cole  
+[18:08:44] 
+[18:08:44]  ===============================
+[18:08:44] 
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: mysql
+[18:08:44]  >> plugin.mysql: R41-4 successfully loaded.
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: samp_bcrypt
+[18:08:44] [SampBcrypt] [info]: Version: 0.3.4
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: samp-compat
+[18:08:44]   -- samp-compat for 0.3.7-R2 initialized
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: chrono
+[18:08:44]   Loaded.
+[18:08:44]  Loading plugin: mapandreas
+[18:08:44]   Loaded.
+[18:08:44]  Loaded 9 plugins.
+
+[18:08:44] 
+[18:08:44] Filterscripts
+[18:08:44] ---------------
+[18:08:44]   Loading filterscript 'PLE.amx'...
+[18:08:44]  
+[18:08:44]  ========================================== 
+[18:08:44]  |                                        | 
+[18:08:44]  |    Generating code, this may take a    | 
+[18:08:44]  |           little bit of time.          | 
+[18:08:44]  |                                        | 
+[18:08:44]  |             Please wait...             | 
+[18:08:44]  |                                        | 
+[18:08:44]  ========================================== 
+[18:08:44]  |                                        | 
+[18:08:44]  | Note that this code generation works   | 
+[18:08:44]  | best with the JIT plugin, which you    | 
+[18:08:44]  | are not currently using.  Get it here: | 
+[18:08:44]  |                                        | 
+[18:08:44]  |        https://git.io/jit-plugin       | 
+[18:08:44]  |                                        | 
+[18:08:44]  ========================================== 
+[18:08:44]  
+[18:08:44]  
+[18:08:44]  
+[18:08:44]  
+[18:08:44]  ========================================== 
+[18:08:44]  |                                        | 
+[18:08:44]  |         YSI version 5.05.0301          | 
+[18:08:44]  |         By Alex "Y_Less" Cole          | 
+[18:08:44]  |                                        | 
+[18:08:44]  | Unable to check the latest YSI version | 
+[18:08:44]  | - please watch the forums and github:  | 
+[18:08:44]  |                                        | 
+[18:08:44]  |   https://git.io/5.x                   | 
+[18:08:44]  |                                        | 
+[18:08:44]  ========================================== 
+[18:08:44]  
+[18:08:44] 
+
+[18:08:44] ======================================================================================
+[18:08:44] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[18:08:44] ||  			   	       Version 1.0				    ||
+[18:08:44] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[18:08:44] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[18:08:44] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[18:08:44] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[18:08:44] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[18:08:44] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[18:08:44] ||										    ||
+[18:08:44] =======================================================================================
+[18:08:44]   Loaded 1 filterscripts.
+
+[18:08:47]  
+[18:08:47]  
+[18:08:47]  
+[18:08:47]  ========================================== 
+[18:08:47]  |                                        | 
+[18:08:47]  |         YSI version 5.05.0005          | 
+[18:08:47]  |         By Alex "Y_Less" Cole          | 
+[18:08:47]  |                                        | 
+[18:08:47]  | Unable to check the latest YSI version | 
+[18:08:47]  | - please watch the forums and github:  | 
+[18:08:47]  |                                        | 
+[18:08:47]  |   https://git.io/5.x                   | 
+[18:08:47]  |                                        | 
+[18:08:47]  ========================================== 
+[18:08:47]  
+[18:08:47]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[18:08:47]  
+[18:08:47] --------------------------------------
+[18:08:47]  Anticheat Nex-AC loaded!
+[18:08:47]  Anticheat version: 1.9.59
+[18:08:47]  Author: Nexius
+[18:08:47] --------------------------------------
+
+[18:09:42] [Database] Connected!
+[18:09:42] [MAPPING] Loaded mappings in 30ms
+[18:09:42] Economy Data Loaded.
+[18:09:42] Number of vehicle models: 7
+[18:09:43] [EMERGENCY] Loaded 22 emergency calls from database
+[18:09:43] [ACTOR] Loaded 96 Dynamic Actor from database
+[18:09:43] [ATM] Loaded 41 ATM from the database
+[18:09:43] [PUMP] Loaded 14 Fuel Pump from database
+[18:09:43] [BUSINESS] Loaded 28 Business from database
+[18:09:43] [DEALER] Loaded 7 dealership from database
+[18:09:43] [DROPITEM] Loaded 416 Dropped items from database.
+[18:09:43] [DOOR] Loaded 35 door from database
+[18:09:43] [FACTION] Loaded 8 faction from database
+[18:09:43] [FLAT] Loaded 129 Flat from database.
+[18:09:43] [GARAGE] Loaded 32 public garage from database.
+[18:09:43] [HOUSE] Loaded 187 House from the Database
+[18:09:43] [OBJECT] Loaded 4 Object from database
+[18:09:43] [RENTAL] Loaded 1 Rental from database
+[18:09:43] [SPEEDCAM] Loaded 6 Speed Camera from database
+[18:09:43] [SPRAYTAG] Loaded 98 spraytags from database
+[18:09:43] [TRASH] Loaded 46 Trash from database
+[18:09:43] [TREE] Loaded 71 tree from database
+[18:09:43] [WEED] Loaded 5 Weed from database
+[18:09:43] [WORKSHOP] Loaded 4 workshop from database.
+[18:09:43] [ROCK] Loaded 32 rock from database.
+[18:09:43] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[18:09:44] [FURNITURE] Loaded 3812 furniture from database.
+[18:09:47] [connection] incoming connection: 127.0.0.1:56576 id: 0
+[18:09:47] [join] vyn has joined the server (0:127.0.0.1)
+[18:09:58] [nick] vyn nick changed to Victor_Mendez
+[18:10:09] [CMD] Victor Mendez: /gotoloc flat 122
+[18:10:13] [CMD] Victor Mendez: /buyvehicle
+[18:10:19] [CMD] Victor Mendez: /flat menu
+[18:11:15] [CMD] Victor Mendez: /flat menu
+[18:11:17] [CMD] Victor Mendez: /flat menu
+[18:11:18] [CMD] Victor Mendez: /flat menu
+[18:11:23] [CASH UPDATE] Victor_Mendez(vyn) | Before: $63.26 | After: $100,063.26 | Reason: Given from vyn
+[18:11:23] [CMD] Victor Mendez: /givecash 0 100000
+[18:11:24] [CMD] Victor Mendez: /flat menu
+[18:11:26] [CMD] Victor Mendez: /flat menu
+[18:11:28] [CMD] Victor Mendez: /flat menu
+[18:11:30] [CMD] Victor Mendez: /flat menu
+[18:11:39] [CMD] Victor Mendez: /flat menu
+[18:11:46] [CMD] Victor Mendez: /flat menu
+[18:11:59] [part] Victor_Mendez has left the server (0:1)
+[18:12:02] [debug] Server received interrupt signal
+[18:12:02] [debug] Native backtrace:
+[18:12:02] [debug] #0 77ca2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[18:12:02] [debug] #1 76e3764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[18:12:02] [debug] #2 0048d53c in ?? () in samp-server.exe
+[18:12:02] [debug] #3 0049b531 in ?? () in samp-server.exe
+[18:12:02] [debug] #4 0049b541 in ?? () in samp-server.exe
+[18:12:02] --- Server Shutting Down.
+[18:12:02] ** Saved server data in 0ms
+[18:12:02] ** Saved server economy in 0ms
+[18:12:02] ** Saved vehicle data in 3ms
+[18:12:02] ** Saved player data in 3ms
+[18:12:02] ** Saved tree data in 19ms.
+[18:12:02] ** Saved  weed data  in 20ms.
+[18:12:02] ** Saved speedcam data in 20ms
+[18:12:02] ** Saved dealer data in 24ms
+[18:12:02] ** Saved house data  in 93ms
+[18:12:02] ** Saved business data in 108ms
+[18:12:02] ** Saved tree data in 123ms
+[18:12:02] ** Saved flat data in 158ms
+[18:12:02] ** Saved pump data in 159ms
+[18:12:02] There is 0 player when the server shutdown.
+[18:12:28]  
+[18:12:28] --------------------------------------
+[18:12:28]  Statistics anticheat Nex-AC
+[18:12:28]  Detected and prevented:
+[18:12:28]   0 cheating attempts
+[18:12:28]   0 hacking attempts
+[18:12:28]   0 crashing attempts
+[18:12:28]   0 flooding attempts
+[18:12:28]   0 attacks
+[18:12:28]  Total detected and punished 0 cheaters
+[18:12:28] --------------------------------------
+
+[18:12:29] [Pawn.RakNet] plugin unloaded
+[18:12:29] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[18:12:29] 
+[18:12:29]  ===============================
+[18:12:29] 
+[18:12:29]      sscanf plugin unloaded.    
+[18:12:29] 
+[18:12:29]  ===============================
+[18:12:29] 
+[18:12:29] plugin.mysql: Unloading plugin...
+[18:12:29] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:14:05] password = ""  (string)
+[18:14:05] weburl = "www.sa-mp.com"  (string)
+[18:14:05] 
+[18:14:05] Server Plugins
+[18:14:05] --------------
+[18:14:05]  Loading plugin: crashdetect
+[18:14:05]   CrashDetect plugin 4.20
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: pawnraknet
+[18:14:05] [Pawn.RakNet] plugin v1.5.1 loading...
+[18:14:05] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: streamer
+[18:14:05] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: sscanf
+[18:14:05] 
+[18:14:05]  ===============================
+[18:14:05] 
+[18:14:05]       sscanf plugin loaded.     
+[18:14:05] 
+[18:14:05]          Version: 2.13.1
+[18:14:05] 
+[18:14:05]    (c) 2022 Alex "Y_Less" Cole  
+[18:14:05] 
+[18:14:05]  ===============================
+[18:14:05] 
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: mysql
+[18:14:05]  >> plugin.mysql: R41-4 successfully loaded.
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: samp_bcrypt
+[18:14:05] [SampBcrypt] [info]: Version: 0.3.4
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: samp-compat
+[18:14:05]   -- samp-compat for 0.3.7-R2 initialized
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: chrono
+[18:14:05]   Loaded.
+[18:14:05]  Loading plugin: mapandreas
+[18:14:05]   Loaded.
+[18:14:05]  Loaded 9 plugins.
+
+[18:14:05] 
+[18:14:05] Filterscripts
+[18:14:05] ---------------
+[18:14:05]   Loading filterscript 'PLE.amx'...
+[18:14:05]  
+[18:14:05]  ========================================== 
+[18:14:05]  |                                        | 
+[18:14:05]  |    Generating code, this may take a    | 
+[18:14:05]  |           little bit of time.          | 
+[18:14:05]  |                                        | 
+[18:14:05]  |             Please wait...             | 
+[18:14:05]  |                                        | 
+[18:14:05]  ========================================== 
+[18:14:05]  |                                        | 
+[18:14:05]  | Note that this code generation works   | 
+[18:14:05]  | best with the JIT plugin, which you    | 
+[18:14:05]  | are not currently using.  Get it here: | 
+[18:14:05]  |                                        | 
+[18:14:05]  |        https://git.io/jit-plugin       | 
+[18:14:05]  |                                        | 
+[18:14:05]  ========================================== 
+[18:14:05]  
+[18:14:05]  
+[18:14:05]  
+[18:14:05]  
+[18:14:05]  ========================================== 
+[18:14:05]  |                                        | 
+[18:14:05]  |         YSI version 5.05.0301          | 
+[18:14:05]  |         By Alex "Y_Less" Cole          | 
+[18:14:05]  |                                        | 
+[18:14:05]  | Unable to check the latest YSI version | 
+[18:14:05]  | - please watch the forums and github:  | 
+[18:14:05]  |                                        | 
+[18:14:05]  |   https://git.io/5.x                   | 
+[18:14:05]  |                                        | 
+[18:14:05]  ========================================== 
+[18:14:05]  
+[18:14:05] 
+
+[18:14:05] ======================================================================================
+[18:14:05] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[18:14:05] ||  			   	       Version 1.0				    ||
+[18:14:05] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[18:14:05] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[18:14:05] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[18:14:05] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[18:14:05] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[18:14:05] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[18:14:05] ||										    ||
+[18:14:05] =======================================================================================
+[18:14:05]   Loaded 1 filterscripts.
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:15:16] password = ""  (string)
+[18:15:16] weburl = "www.sa-mp.com"  (string)
+[18:15:16] 
+[18:15:16] Server Plugins
+[18:15:16] --------------
+[18:15:16]  Loading plugin: crashdetect
+[18:15:16]   CrashDetect plugin 4.20
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: pawnraknet
+[18:15:16] [Pawn.RakNet] plugin v1.5.1 loading...
+[18:15:16] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: streamer
+[18:15:16] 
+
+*** Streamer Plugin v2.9.5 by Incognito loaded ***
+
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: sscanf
+[18:15:16] 
+[18:15:16]  ===============================
+[18:15:16] 
+[18:15:16]       sscanf plugin loaded.     
+[18:15:16] 
+[18:15:16]          Version: 2.13.1
+[18:15:16] 
+[18:15:16]    (c) 2022 Alex "Y_Less" Cole  
+[18:15:16] 
+[18:15:16]  ===============================
+[18:15:16] 
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: mysql
+[18:15:16]  >> plugin.mysql: R41-4 successfully loaded.
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: samp_bcrypt
+[18:15:16] [SampBcrypt] [info]: Version: 0.3.4
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: samp-compat
+[18:15:16]   -- samp-compat for 0.3.7-R2 initialized
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: chrono
+[18:15:16]   Loaded.
+[18:15:16]  Loading plugin: mapandreas
+[18:15:16]   Loaded.
+[18:15:16]  Loaded 9 plugins.
+
+[18:15:16] 
+[18:15:16] Filterscripts
+[18:15:16] ---------------
+[18:15:16]   Loading filterscript 'PLE.amx'...
+[18:15:16]  
+[18:15:16]  ========================================== 
+[18:15:16]  |                                        | 
+[18:15:16]  |    Generating code, this may take a    | 
+[18:15:16]  |           little bit of time.          | 
+[18:15:16]  |                                        | 
+[18:15:16]  |             Please wait...             | 
+[18:15:16]  |                                        | 
+[18:15:16]  ========================================== 
+[18:15:16]  |                                        | 
+[18:15:16]  | Note that this code generation works   | 
+[18:15:16]  | best with the JIT plugin, which you    | 
+[18:15:16]  | are not currently using.  Get it here: | 
+[18:15:16]  |                                        | 
+[18:15:16]  |        https://git.io/jit-plugin       | 
+[18:15:16]  |                                        | 
+[18:15:16]  ========================================== 
+[18:15:16]  
+[18:15:16]  
+[18:15:16]  
+[18:15:16]  
+[18:15:16]  ========================================== 
+[18:15:16]  |                                        | 
+[18:15:16]  |         YSI version 5.05.0301          | 
+[18:15:16]  |         By Alex "Y_Less" Cole          | 
+[18:15:16]  |                                        | 
+[18:15:16]  | Unable to check the latest YSI version | 
+[18:15:16]  | - please watch the forums and github:  | 
+[18:15:16]  |                                        | 
+[18:15:16]  |   https://git.io/5.x                   | 
+[18:15:16]  |                                        | 
+[18:15:16]  ========================================== 
+[18:15:16]  
+[18:15:16] 
+
+[18:15:16] ======================================================================================
+[18:15:16] ||  			      Polygon Editor by [GvC] Abyss			    ||
+[18:15:16] ||  			   	       Version 1.0				    ||
+[18:15:16] ||  ______ _      _____    _ _ _               _                     _          _   ||
+[18:15:16] ||  | ___ \ |    |  ___|  | (_) |             | |                   | |        | |  ||
+[18:15:16] ||  | |_/ / |    | |__  __| |_| |_ ___  _ __  | |     ___   __ _  __| | ___  __| |  ||
+[18:15:16] ||  |  __/| |    |  __|/ _` | | __/ _ \| '__| | |    / _ \ / _` |/ _` |/ _ \/ _` |  ||
+[18:15:16] ||  | |   | |____| |__| (_| | | || (_) | |    | |___| (_) | (_| | (_| |  __/ (_| |  ||
+[18:15:16] ||  \_|   \_____/\____/\__,_|_|\__\___/|_|    \_____/\___/ \__,_|\__,_|\___|\__,_|  ||
+[18:15:16] ||										    ||
+[18:15:16] =======================================================================================
+[18:15:16]   Loaded 1 filterscripts.
+
+[18:15:19]  
+[18:15:19]  
+[18:15:19]  
+[18:15:19]  ========================================== 
+[18:15:19]  |                                        | 
+[18:15:19]  |         YSI version 5.05.0005          | 
+[18:15:19]  |         By Alex "Y_Less" Cole          | 
+[18:15:19]  |                                        | 
+[18:15:19]  | Unable to check the latest YSI version | 
+[18:15:19]  | - please watch the forums and github:  | 
+[18:15:19]  |                                        | 
+[18:15:19]  |   https://git.io/5.x                   | 
+[18:15:19]  |                                        | 
+[18:15:19]  ========================================== 
+[18:15:19]  
+[18:15:19]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[18:15:19]  
+[18:15:19] --------------------------------------
+[18:15:19]  Anticheat Nex-AC loaded!
+[18:15:19]  Anticheat version: 1.9.59
+[18:15:19]  Author: Nexius
+[18:15:19] --------------------------------------
+
+[18:16:03] [Database] Connected!
+[18:16:03] [MAPPING] Loaded mappings in 26ms
+[18:16:03] Economy Data Loaded.
+[18:16:03] Number of vehicle models: 7
+[18:16:03] [EMERGENCY] Loaded 22 emergency calls from database
+[18:16:03] [ACTOR] Loaded 96 Dynamic Actor from database
+[18:16:03] [ATM] Loaded 41 ATM from the database
+[18:16:03] [PUMP] Loaded 14 Fuel Pump from database
+[18:16:03] [BUSINESS] Loaded 28 Business from database
+[18:16:03] [DEALER] Loaded 7 dealership from database
+[18:16:04] [DROPITEM] Loaded 416 Dropped items from database.
+[18:16:04] [DOOR] Loaded 35 door from database
+[18:16:04] [FACTION] Loaded 8 faction from database
+[18:16:04] [FLAT] Loaded 129 Flat from database.
+[18:16:04] [GARAGE] Loaded 32 public garage from database.
+[18:16:04] [HOUSE] Loaded 187 House from the Database
+[18:16:04] [OBJECT] Loaded 4 Object from database
+[18:16:04] [RENTAL] Loaded 1 Rental from database
+[18:16:04] [SPEEDCAM] Loaded 6 Speed Camera from database
+[18:16:04] [SPRAYTAG] Loaded 98 spraytags from database
+[18:16:04] [TRASH] Loaded 46 Trash from database
+[18:16:04] [TREE] Loaded 71 tree from database
+[18:16:04] [WEED] Loaded 5 Weed from database
+[18:16:04] [WORKSHOP] Loaded 4 workshop from database.
+[18:16:04] [ROCK] Loaded 32 rock from database.
+[18:16:04] [FACTIONGARAGE] Loaded 8 faction garage from database.
+[18:16:05] [FURNITURE] Loaded 3812 furniture from database.
+[18:19:01] [connection] incoming connection: 127.0.0.1:53368 id: 0
+[18:19:01] [join] vyn has joined the server (0:127.0.0.1)
+[18:19:10] [nick] vyn nick changed to Victor_Mendez
+[18:19:19] [CMD] Victor Mendez: /send 0 sapd
+[18:19:31] [CMD] Victor Mendez: /editdoor 33
+[18:19:34] [CMD] Victor Mendez: /editdoor 15
+[18:19:38] [CMD] Victor Mendez: /editdoor 15 faction 0
+[18:19:43] [CMD] Victor Mendez: /f quit
+[18:21:13] [CMD] Victor Mendez: /gotoco -1610.247680 679.455688 7.917496 0
+[18:21:19] [CMD] Victor Mendez: /aslap 0
+[18:21:56] [CMD] Victor Mendez: /flipcoin
+[18:21:56] [CMD] Victor Mendez: /flipcoin
+[18:21:56] [CMD] Victor Mendez: /flipcoin
+[18:21:57] [CMD] Victor Mendez: /flipcoin
+[18:21:57] [CMD] Victor Mendez: /flipcoin
+[18:21:57] [CMD] Victor Mendez: /flipcoin
+[18:21:58] [CMD] Victor Mendez: /flipcoin
+[18:21:58] [CMD] Victor Mendez: /flipcoin
+[18:21:58] [CMD] Victor Mendez: /flipcoin
+[18:21:58] [CMD] Victor Mendez: /flipcoin
+[18:21:59] [CMD] Victor Mendez: /flipcoint
+[18:21:59] [CMD] Victor Mendez: /flipcoint
+[18:22:00] [CMD] Victor Mendez: /flipcoint
+[18:22:00] [CMD] Victor Mendez: /flipcoint
+[18:22:01] [CMD] Victor Mendez: /flipcoin
+[18:24:44] [CMD] Victor Mendez: /gotodoor 3
+[18:24:58] [CMD] Victor Mendez: /payticket
+[18:25:01] [CMD] Victor Mendez: /buyplate
+[18:25:07] [CMD] Victor Mendez: /unimpound
+[18:26:30] [CMD] Victor Mendez: /f quit
+[18:26:46] [CMD] Victor Mendez: /editdoor 15 faction 0
+[18:27:14] [nick] Victor_Mendez nick changed to vyn
+[18:27:14] [CMD] vyn: /aduty
+[18:27:26] [CMD] vyn: /jetpack
+[18:28:02] [part] vyn has left the server (0:1)
+[18:28:05] [PLAYER_VEH] Unloading player vehicleid 28.
+[18:28:07] [debug] Server received interrupt signal
+[18:28:07] [debug] Native backtrace:
+[18:28:07] [debug] #0 77ca2e3c in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[18:28:07] [debug] #1 76e3764f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[18:28:07] [debug] #2 0048d53c in ?? () in samp-server.exe
+[18:28:07] [debug] #3 0049b531 in ?? () in samp-server.exe
+[18:28:07] [debug] #4 0049b541 in ?? () in samp-server.exe
+[18:28:07] --- Server Shutting Down.
+[18:28:07] ** Saved server data in 1ms
+[18:28:07] ** Saved server economy in 1ms
+[18:28:07] ** Saved vehicle data in 2ms
+[18:28:07] ** Saved player data in 2ms
+[18:28:07] ** Saved tree data in 19ms.
+[18:28:07] ** Saved  weed data  in 20ms.
+[18:28:07] ** Saved speedcam data in 20ms
+[18:28:07] ** Saved dealer data in 25ms
+[18:28:07] ** Saved house data  in 99ms
+[18:28:07] ** Saved business data in 114ms
+[18:28:07] ** Saved tree data in 130ms
+[18:28:07] ** Saved flat data in 167ms
+[18:28:07] ** Saved pump data in 168ms
+[18:28:07] There is 0 player when the server shutdown.
+[18:28:47]  
+[18:28:47] --------------------------------------
+[18:28:47]  Statistics anticheat Nex-AC
+[18:28:47]  Detected and prevented:
+[18:28:47]   0 cheating attempts
+[18:28:47]   0 hacking attempts
+[18:28:47]   0 crashing attempts
+[18:28:47]   0 flooding attempts
+[18:28:47]   0 attacks
+[18:28:47]  Total detected and punished 0 cheaters
+[18:28:47] --------------------------------------
+
+[18:28:47] [Pawn.RakNet] plugin unloaded
+[18:28:47] 
+
+*** Streamer Plugin v2.9.5 by Incognito unloaded ***
+
+[18:28:47] 
+[18:28:47]  ===============================
+[18:28:47] 
+[18:28:47]      sscanf plugin unloaded.    
+[18:28:47] 
+[18:28:47]  ===============================
+[18:28:47] 
+[18:28:47] plugin.mysql: Unloading plugin...
+[18:28:47] plugin.mysql: Plugin unloaded.

@@ -93,6 +93,8 @@ Vehicle_ObjectEdit(playerid, vehicleid, slot, bool:text = false)
         if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
             DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
 
+		SetVehicleZAngle(vehicleid, 0.0);
+		
         new 
             Float:x,
             Float:y,
@@ -105,9 +107,6 @@ Vehicle_ObjectEdit(playerid, vehicleid, slot, bool:text = false)
         GetVehiclePos(vehicleid, x, y, z);
         VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
         VehicleObjects[vehicleid][slot][vehObject] = CreateDynamicObject(VehicleObjects[vehicleid][slot][vehObjectModel], x, y, z, rx, ry, rz);   
-
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 15);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 15);
         
         PlayerData[playerid][pEditing] = vehicleid;
         PlayerData[playerid][pListitem] = slot;
@@ -149,7 +148,6 @@ GetVehObjectNameByModel(model)
 
 Vehicle_RemoveObject(vehicleid) {
 
-
 	for(new slot = 0; slot < MAX_VEHICLE_OBJECT; slot++)
 	{
 		if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
@@ -159,6 +157,7 @@ Vehicle_RemoveObject(vehicleid) {
 
 		VehicleObjects[vehicleid][slot][vehObjectModel] = 0;
 		VehicleObjects[vehicleid][slot][vehObjectExists] = false;
+
 		
 		VehicleObjects[vehicleid][slot][vehObjectColor] = 1;
 
@@ -232,7 +231,6 @@ stock Vehicle_Delete(vid, bool:database = false)
 
 	if(IsValidVehicle(vid)) {
 
-		Vehicle_RemoveObject(vid);
 		DestroyVehicleEx(vid);
 	}
 	return 1;
@@ -954,9 +952,6 @@ Vehicle_SyncObject(vehicleid, slot)
 		if(VehicleData[vehicleid][vToyType][slot] == VEHICLE_TOY_TEXT) {
 			Vehicle_SyncText(vehicleid, slot);
 		}
-
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vehicleid][vToy][slot], E_STREAMER_DRAW_DISTANCE, 30.0);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleData[vehicleid][vToy][slot], E_STREAMER_STREAM_DISTANCE, 30.0);
 
         AttachDynamicObjectToVehicle(VehicleData[vehicleid][vToy][slot], vehicleid, x, y, z, rx, ry, rz);
         return 1;
@@ -1739,9 +1734,6 @@ Vehicle_AttachObject(vehicleid, slot)
 
         VehicleObjects[vehicleid][slot][vehObject] = CreateDynamicObject(model, vposx, vposy, vposz, rx, ry, rz);
 
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 50.0);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 50.0);
-
         if(VehicleObjects[vehicleid][slot][vehObjectType] == OBJECT_TYPE_BODY)
         {
             Vehicle_ObjectColorSync(vehicleid, slot);
@@ -1797,8 +1789,6 @@ Vehicle_ObjectUpdate(vehicleid, slot)
         Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_X, rx);
         Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_Y, ry);
         Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_R_Z, rz);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_DRAW_DISTANCE, 15);
-        Streamer_SetFloatData(STREAMER_TYPE_OBJECT, VehicleObjects[vehicleid][slot][vehObject], E_STREAMER_STREAM_DISTANCE, 15);
         return 1;
     }
     return 0;

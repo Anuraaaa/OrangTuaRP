@@ -79,7 +79,7 @@ Doors_Updatelabel(id)
 			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to enter", id, drData[id][dName]);
 			drData[id][dPickupext] = CreateDynamicPickup(19130, 23, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dExtvw], drData[id][dExtint], -1, 50);
 			drData[id][dLabelext] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]+0.35, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dExtvw], drData[id][dExtint]);
-			drData[id][dCP] = CreateDynamicCP(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], 2.5, drData[id][dExtvw], drData[id][dExtint], -1, 3.0);
+			drData[id][dCP] = CreateDynamicCP(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], 2.0, drData[id][dExtvw], drData[id][dExtint], -1, 3.0);
 		}
 		
         if(drData[id][dIntposX] != 0.0 && drData[id][dIntposY] != 0.0 && drData[id][dIntposZ] != 0.0)
@@ -183,7 +183,7 @@ CMD:createdoor(playerid, params[])
 	drData[did][dLocked] = 0;
 	drData[did][dAdmin] = 0;
 	drData[did][dVip] = 0;
-	drData[did][dFaction] = 0;
+	drData[did][dFaction] = -1;
 	drData[did][dFamily] = -1;
 	drData[did][dGarage] = 0;
 	drData[did][dCustom] = 0;
@@ -406,8 +406,6 @@ CMD:editdoor(playerid, params[])
         if(sscanf(string, "d", fid))
             return SendClientMessageEx(playerid, COLOR_WHITE, "[USAGE]: /editdoor [id] [faction] [faction id]");
 
-        if(fid < 0 || fid > 4)
-            return SendErrorMessage(playerid, "Invalid value. Use 0 - 4 for type.");
 
         drData[did][dFaction] = fid;
         Doors_Save(did);
@@ -493,7 +491,7 @@ CMD:editdoor(playerid, params[])
 		drData[did][dLocked] = 0;
 		drData[did][dAdmin] = 0;
 		drData[did][dVip] = 0;
-		drData[did][dFaction] = 0;
+		drData[did][dFaction] = -1;
 		drData[did][dFamily] = -1;
 		drData[did][dGarage] = 0;
 		drData[did][dCustom] = 0;

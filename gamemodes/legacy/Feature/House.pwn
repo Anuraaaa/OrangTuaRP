@@ -32,7 +32,8 @@ enum hData
 	STREAMER_TAG_MAP_ICON:houseIcon,
 	houseTaxPaid,
 	houseTaxState,
-	houseTaxDate
+	houseTaxDate,
+	houseFurnitureLevel
 
 };
 
@@ -355,6 +356,7 @@ stock House_Create(playerid, price, type)
 		HouseData[i][houseTaxDate] = gettime() + (14 * 86400);
 		HouseData[i][houseTaxState] = TAX_STATE_COOLDOWN;
 		HouseData[i][houseTaxPaid] = true;
+		HouseData[i][houseFurnitureLevel] = 1;
 
 		House_Spawn(i);
 
@@ -392,7 +394,7 @@ stock House_Save(houseid)
 	{
 		mysql_format(sqlcon,query, sizeof(query), "%s, `houseWeapon%d` = '%d', `houseAmmo%d` = '%d', `houseDurability%d` = '%d', `houseHighVelocity%d` = '%d'", query, i + 1, HouseData[houseid][houseWeapons][i], i + 1, HouseData[houseid][houseAmmo][i], i + 1, HouseData[houseid][houseDurability][i], i + 1, HouseData[houseid][houseHighVelocity][i]);
 	}
-	mysql_format(sqlcon,query, sizeof(query), "%s, `houseLocked` = '%d', `houseMoney` = '%d', `housePark` = '%d', `houseParkX` = '%f', `houseParkY` = '%f', `houseParkZ` = '%f', `houseVehInside` = '%d', `houseType` = '%d', `LastLogin` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `TaxState` = '%d' WHERE `houseID` = '%d'",
+	mysql_format(sqlcon,query, sizeof(query), "%s, `houseLocked` = '%d', `houseMoney` = '%d', `housePark` = '%d', `houseParkX` = '%f', `houseParkY` = '%f', `houseParkZ` = '%f', `houseVehInside` = '%d', `houseType` = '%d', `LastLogin` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `TaxState` = '%d', `FurnitureLevel` = '%d' WHERE `houseID` = '%d'",
 	    query,
 	    HouseData[houseid][houseLocked],
 	    HouseData[houseid][houseMoney],
@@ -406,6 +408,7 @@ stock House_Save(houseid)
 		HouseData[houseid][houseTaxPaid],
 		HouseData[houseid][houseTaxDate],
 		HouseData[houseid][houseTaxState],
+		HouseData[houseid][houseFurnitureLevel],
         HouseData[houseid][houseID]
 	);
 	return mysql_tquery(sqlcon, query);
@@ -603,7 +606,8 @@ FUNC::House_Load()
 			cache_get_value_name_int(i, "TaxPaid", HouseData[i][houseTaxPaid]);
 			cache_get_value_name_int(i, "TaxDate", HouseData[i][houseTaxDate]);
 			cache_get_value_name_int(i, "TaxState", HouseData[i][houseTaxState]);
-
+			cache_get_value_name_int(i, "FurnitureLevel", HouseData[i][houseFurnitureLevel]);
+			
 	        for (new j = 0; j < 10; j ++)
 			{
 	            format(str, 24, "houseWeapon%d", j + 1);
@@ -1078,6 +1082,7 @@ CMD:edithouse(playerid, params[])
 	else if(!strcmp(type, "asell", true))
 	{
 		HouseData[id][houseOwner] = 0;
+		format(HouseData[id][houseOwner], 24, "No Owner");
 		House_Refresh(id);
 		House_Save(id);
 		SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has aselled house ID: %d", PlayerData[playerid][pUCP], id);
@@ -1220,7 +1225,7 @@ task OnHouseAsellCheck[10000]() {
 			HouseData[i][houseLastLogin] = 0;
 
 			HouseData[i][houseOwner] = 0;
-			format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, "No Owner");
+			// format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, "No Owner");
 
 			House_Save(i);
 			House_Refresh(i);

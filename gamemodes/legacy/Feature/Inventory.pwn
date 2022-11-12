@@ -555,7 +555,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Rifle Material", 1);
 		GiveWeaponToPlayer(playerid, 33, 10, 500);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Rifle");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Rifle");
 	}
 	else if(!strcmp(name, "Desert Eagle Schematic"))
 	{
@@ -579,7 +579,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Desert Eagle Material", 1);
 		GiveWeaponToPlayer(playerid, 24, 21, 500);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Desert Eagle");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle");
 	}
 	else if(!strcmp(name, "9mm Silenced Schematic"))
 	{
@@ -600,7 +600,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "9mm Silenced Material", 1);
 		GiveWeaponToPlayer(playerid, 23, 34, 500);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}9mm Silenced");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced");
 	}
 	else if(!strcmp(name, "Shotgun Schematic"))
 	{
@@ -615,7 +615,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 			
 		Inventory_Remove(playerid, "Shotgun Material", 1);
 		GiveWeaponToPlayer(playerid, 25, 12, 500);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Shotgun");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Shotgun");
 	}
 	else if(!strcmp(name, "AK-47 Schematic")) {
 		if(Inventory_Count(playerid, "AK-47 Material") < 1)
@@ -632,7 +632,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "AK-47 Material", 1);
 		GiveWeaponToPlayer(playerid, 30, 30, 500);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}AK-47");	
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}AK-47");	
 	}
 	else if(!strcmp(name, "Rifle HV Schematic")) //HV
 	{
@@ -653,7 +653,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Rifle Material", 1);
 		GiveWeaponToPlayer(playerid, 33, 10, 500, 1);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Rifle (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Rifle (High Velocity)");
 	}
 	else if(!strcmp(name, "Desert Eagle HV Schematic"))
 	{
@@ -677,7 +677,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Desert Eagle Material", 1);
 		GiveWeaponToPlayer(playerid, 24, 21, 500, 1);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Desert Eagle (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle (High Velocity)");
 	}
 	else if(!strcmp(name, "AK-47 HV Schematic")) {
 		if(Inventory_Count(playerid, "AK-47 Material") < 1)
@@ -694,7 +694,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "AK-47 Material", 1);
 		GiveWeaponToPlayer(playerid, 30, 30, 500, 1);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}AK-47 (High Velocity)");	
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}AK-47 (High Velocity)");	
 	}
 	else if(!strcmp(name, "9mm Silenced HV Schematic"))
 	{
@@ -715,7 +715,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "9mm Silenced Material", 1);
 		GiveWeaponToPlayer(playerid, 23, 34, 500, 1);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}9mm Silenced (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced (High Velocity)");
 	}
 	else if(!strcmp(name, "Shotgun HV Schematic"))
 	{
@@ -730,7 +730,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 			
 		Inventory_Remove(playerid, "Shotgun Material", 1);
 		GiveWeaponToPlayer(playerid, 25, 12, 500, 1);
-		SendServerMessage(playerid, "Successfully crafting {FF0000}Shotgun (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Shotgun (High Velocity)");
 	}
 	else if(!strcmp(name, "7.62mm Caliber"))
 	{

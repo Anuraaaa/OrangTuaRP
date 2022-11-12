@@ -99,7 +99,13 @@ CMD:report(playerid, params[]) {
 	if(index == INVALID_ITERATOR_SLOT)
 		return SendErrorMessage(playerid, "Server ini tidak bisa menampung lebih banyak report.");
 
-	SendAdminMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%s.", GetName(playerid), playerid, reason);
+	if(strlen(reason) > 64) {
+		SendAdminMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%.64s", GetName(playerid), playerid, reason);
+		SendAdminMessage(-1, "...%s", reason[64]);
+	}
+	else {
+		SendAdminMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%s.", GetName(playerid), playerid, reason);
+	}
 	SendServerMessage(playerid, "Laporanmu berhasil dikirim ke administrator yang sedang online.");
 	reportDelay[playerid] = 300;
 	return 1;

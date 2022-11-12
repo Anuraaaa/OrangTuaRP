@@ -5,7 +5,6 @@ task MinuteUpdate[60000]()
 		if(WeedData[i][weedGrow] < MAX_GROW)
 		{
 			WeedData[i][weedGrow]++;
-			Weed_Save(i);
 		}
 	}
 	for(new i = 0; i < MAX_ADVERT; i ++) if(AdvertData[i][advertExists])
@@ -460,7 +459,7 @@ ptask DelayUpdate[1000](playerid)
 		{
 			PlayerData[playerid][pInjuredTime]--;
 		}
-		if(PlayerData[playerid][pJailTime] > 0)
+		if(PlayerData[playerid][pJailTime] > 0 && !PlayerData[playerid][pAduty])
 		{
 			PlayerData[playerid][pJailTime]--;
 			new hours, seconds, minutes;
@@ -478,8 +477,8 @@ ptask DelayUpdate[1000](playerid)
 			if(PlayerData[playerid][pJailTime] <= 0)
 			{
 		        PlayerData[playerid][pArrest] = 0;
-		        format(PlayerData[playerid][pJailBy], MAX_PLAYER_NAME, "");
-		        format(PlayerData[playerid][pJailReason], 32, "");
+		        format(PlayerData[playerid][pJailBy], MAX_PLAYER_NAME, "_");
+		        format(PlayerData[playerid][pJailReason], 32, "_");
 
 				SetPlayerInterior(playerid, 0);
 				SetPlayerVirtualWorld(playerid, 0);
@@ -487,7 +486,7 @@ ptask DelayUpdate[1000](playerid)
 				SetPlayerPos(playerid, -2450.5044,503.7565,30.0853);
 				Streamer_Update(playerid, -1);
 				
-				SendServerMessage(playerid, "You have been released from jail.");
+				SendServerMessage(playerid, "Kamu telah dikeluarkan dari penjara.");
 		        PlayerTextDrawHide(playerid, JAILTD[playerid]);
 				TogglePlayerControllable(playerid, 1);
 			}
@@ -612,16 +611,11 @@ ptask TimerPlayerCheck[1000](playerid) {
 	return 1;
 }
 
-task ServerUp[1000]()
+task timer_OnGlobalSec[1000]()
 {
-	SU_Seconds ++;
-	if(SU_Seconds == 60)
-	{
-	    SU_Seconds = 0, SU_Minutes ++;
-	    if(SU_Minutes == 60)
-	    {
-	        SU_Minutes = 0, SU_Hours ++;
-	        if(SU_Hours == 24) SU_Hours = 0, SU_Days ++;
+	if(rob_biz_delay > 0) {
+		if(--rob_biz_delay <= 0) {
+			rob_biz_delay = 0;
 		}
 	}
 	return 1;

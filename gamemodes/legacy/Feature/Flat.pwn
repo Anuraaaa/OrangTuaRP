@@ -27,7 +27,8 @@ enum flatData
 	flatLastLogin,
 	flatTaxDate,
 	flatTaxPaid,
-	flatTaxState
+	flatTaxState,
+	flatFurnitureLevel
 };
 
 new FlatData[MAX_FLAT][flatData], 
@@ -244,6 +245,7 @@ stock Flat_Create(Float:x, Float:y, Float:z, vw = 0, interior = 0, price = 0, ty
 		FlatData[index][flatExtInterior] = interior;
 		FlatData[index][flatMoney] = 0;
 		FlatData[index][flatOwner] = -1;
+		FlatData[index][flatFurnitureLevel] = 1;
 
 		format(FlatData[index][flatOwnerName], MAX_PLAYER_NAME, "_");
 
@@ -296,7 +298,7 @@ stock Flat_Save(index) {
 	{
 		mysql_format(sqlcon,query, sizeof(query), "%s, `Weapon%d` = '%d', `Ammo%d` = '%d', `Durability%d` = '%d', `HighVelocity%d` = '%d'", query, i + 1, FlatData[index][flatWeapons][i], i + 1, FlatData[index][flatAmmo][i], i + 1, FlatData[index][flatDurability][i], i + 1, FlatData[index][flatHighVelocity][i]);
 	}
-	mysql_format(sqlcon, query, sizeof(query), "%s, `IntWorld` = '%d', `IntInterior` = '%d', `ExtWorld` = '%d', `ExtInterior` = '%d', `LastLogin` = '%d', `TaxState` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d'",
+	mysql_format(sqlcon, query, sizeof(query), "%s, `IntWorld` = '%d', `IntInterior` = '%d', `ExtWorld` = '%d', `ExtInterior` = '%d', `LastLogin` = '%d', `TaxState` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `FurnitureLevel` = '%d'",
 		query, 
 		FlatData[index][flatIntWorld],
 		FlatData[index][flatIntInterior],
@@ -305,7 +307,8 @@ stock Flat_Save(index) {
 		FlatData[index][flatLastLogin],
 		FlatData[index][flatTaxState],
 		FlatData[index][flatTaxPaid],
-		FlatData[index][flatTaxDate]
+		FlatData[index][flatTaxDate],
+		FlatData[index][flatFurnitureLevel]
 	);
 	mysql_format(sqlcon, query, sizeof(query), "%s WHERE `ID` = '%d' LIMIT 1;", query, FlatData[index][flatID]);
 	return mysql_tquery(sqlcon, query);
@@ -477,6 +480,7 @@ FUNC::Flat_Load() {
 			cache_get_value_name_int(i, "TaxState", FlatData[i][flatTaxState]);
 			cache_get_value_name_int(i, "TaxPaid", FlatData[i][flatTaxPaid]);
 			cache_get_value_name_int(i, "TaxDate", FlatData[i][flatTaxDate]);
+			cache_get_value_name_int(i, "FurnitureLevel", FlatData[i][flatFurnitureLevel]);
 			
 	        for (new j = 0; j < 5; j ++)
 			{

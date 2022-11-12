@@ -347,6 +347,9 @@ public OnPlayerTargetActor(playerid, actorid, weaponid) {
 
 		if(!ActorData[idx][actorBeingRob] && !ActorData[idx][actorRobbed] && ActorData[idx][actorBusiness] != -1) {
 
+			if(rob_biz_delay)
+				return SendErrorMessage(playerid, "Tidak dapat melakukan perampokan (delay server %d detik)", rob_biz_delay);
+
 			if(Faction_CountDuty(FACTION_POLICE) < 4)
 				return SendErrorMessage(playerid, "Harus ada 4 SAPD OnDuty untuk melakukan perampokan.");
 
@@ -363,7 +366,7 @@ public OnPlayerTargetActor(playerid, actorid, weaponid) {
 
 				ActorData[idx][actorBeingRob] = true;
 				g_PlayerRobbingActor[playerid] = idx;
-				g_PlayerRobbingActorTimer[playerid] = repeat Actor_GiveRobberCash[4000](playerid, idx);
+				g_PlayerRobbingActorTimer[playerid] = repeat Actor_GiveRobberCash[15000](playerid, idx);
 				defer Actor_ApplyRobberyAnim[4000](idx);
 
 				bizid = Actor_ReturnBusinessID(idx);
@@ -386,6 +389,8 @@ public OnPlayerStopTargetActor(playerid, actorid, weaponid) {
 			if(ActorData[idx][actorBeingRob]) {
 				Actor_StopRobbery(idx);
 				stop g_PlayerRobbingActorTimer[playerid];
+
+				rob_biz_delay = 3600;
 			}
 		}
 	}
@@ -407,6 +412,8 @@ public OnPlayerShotActor(playerid, actorid, weaponid, bool:IsDynamicActor)
 				Actor_StopRobbery(idx);
 				stop g_PlayerRobbingActorTimer[playerid];
 				SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Perampokan diberhentikan karena NPC terkena tembakan.");
+
+				rob_biz_delay = 3600;
 			}		
 		}
 	}
@@ -437,6 +444,8 @@ timer Actor_GiveRobberCash[4000](playerid, actorid) {
 			Actor_StopRobbery(actorid);
 			stop g_PlayerRobbingActorTimer[playerid];
 			SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Perampokan telah selesai! semua uang telah diberikan.");
+
+			rob_biz_delay = 3600;
 		}
 	}
 	return 1;

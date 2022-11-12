@@ -11,7 +11,7 @@ new
 	ForkliftVehicle[6],
 	RumpoVehicle[6];
 
-stock ShowMDC(playerid)
+ShowMDC(playerid)
 {
 	if(!IsPlayerInAnyVehicle(playerid))
 		return SendErrorMessage(playerid, "You must inside faction vehicle!");
@@ -21,7 +21,7 @@ stock ShowMDC(playerid)
 		if(!IsPoliceVehicle(GetPlayerVehicleID(playerid)))
 			return SendErrorMessage(playerid, "You must be inside Police Vehicle!");
 
-		ShowPlayerDialog(playerid, DIALOG_MDC, DIALOG_STYLE_LIST, "MDC - Dashboard", "Recent 911 calls\nPlate Search\nCitizen Lookup\nVehicle Lookup", "Select", "Logout");
+		ShowPlayerDialog(playerid, DIALOG_MDC, DIALOG_STYLE_LIST, "MDC > Dashboard", "Recent 911 calls\nPlate Search\nCitizen Lookup\nVehicle Lookup", "Select", "Logout");
 		PlayerPlayNearbySound(playerid, MDC_OPEN);
 		SetPlayerChatBubble(playerid, "* Logs into the Mobile Data Computer *", COLOR_PURPLE, 15.0, 10000);
 	}
@@ -30,14 +30,14 @@ stock ShowMDC(playerid)
 		if(!IsMedicVehicle(GetPlayerVehicleID(playerid)))
 			return SendErrorMessage(playerid, "You must be inside Medic Vehicle!");		
 
-		ShowPlayerDialog(playerid, DIALOG_MDC, DIALOG_STYLE_LIST, "MDC - Dashboard", "Recent 911 calls", "Select", "Close");
+		ShowPlayerDialog(playerid, DIALOG_MDC, DIALOG_STYLE_LIST, "MDC > Dashboard", "Recent 911 calls", "Select", "Close");
 		PlayerPlayNearbySound(playerid, MDC_OPEN);
 		SetPlayerChatBubble(playerid, "* Logs into the Mobile Data Computer *", COLOR_PURPLE, 15.0, 10000);
 	}
 	return 1;
 }
 
-stock ReturnMDC(playerid) {
+ReturnMDC(playerid) {
 	PlayerPlayNearbySound(playerid, MDC_SELECT);
 	return ShowMDC(playerid);
 }
@@ -63,16 +63,46 @@ FUNC::OnLookupTicketMDC(playerid) {
 
 			strcat(str, sprintf("Date: %s | Reason: %s\n", date, reason));
 		}
-		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_LIST, "MDC - Unpaid Tickets Lookup", str, "Return", "");
+		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_LIST, "MDC > Unpaid Tickets Lookup", str, "Return", "");
 	}
 	DeletePVar(playerid, "LookupName");
 	return 1;
 }
 
+FUNC::OnLookupCrimeRecord(playerid) {
+	
+	new string[1512], count = 0;
+
+	strcat(string, "Date\tCharge\tIssued By\tStatus\n");
+	if(!cache_num_rows()) {
+		strcat(string, "There is no crime record to view.");
+		ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "MDC > Crime Record", string, "Close", "");
+	}
+	else {
+		for(new i = 0; i < cache_num_rows(); i++) {
+			new issuer_name[24],
+				date[18],
+				status,
+				description[64],
+				sql_id;
+
+			cache_get_value_name_int(i, "ID", sql_id);
+			cache_get_value_name(i, "Issuer", issuer_name, 24);
+			cache_get_value_name(i, "Date", date, 18);
+			cache_get_value_name_int(i, "Status", status);
+			cache_get_value_name(i, "Description", description, 64);
+
+			strcat(string, sprintf("%s\t%s\t%s\t%s\n", date, description, issuer_name, (status) ? (""YELLOW"Active") : (""RED"Not Active")));
+			ListedUniversal[playerid][count++] = sql_id;
+		}
+		ShowPlayerDialog(playerid, DIALOG_CRIMERECORD, DIALOG_STYLE_TABLIST_HEADERS, "MDC > Crime Record", string, "Toggle", "Close");
+	}
+	return 1;
+}
 FUNC::OnLookupArrestMDC(playerid) {
 
 	new name[MAX_PLAYER_NAME],
-		str[1012];
+		str[1312];
 
 	GetPVarString(playerid, "LookupName", name, MAX_PLAYER_NAME);
 
@@ -89,9 +119,9 @@ FUNC::OnLookupArrestMDC(playerid) {
 			cache_get_value_name(i, "reason", reason, 64);
 			cache_get_value_name(i, "date", date, 24);
 
-			strcat(str, sprintf("Date: %s | Reason: %s\n", date, reason));
+			strcat(str, sprintf("Date: %s >> Reason: %s\n", date, reason));
 		}
-		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_LIST, "MDC - Arrest History Lookup", str, "Return", "");
+		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_LIST, "MDC > Arrest History Lookup", str, "Return", "");
 	}
 	DeletePVar(playerid, "LookupName");
 	return 1;
@@ -169,7 +199,7 @@ FUNC::OnLookupInformationMDC(playerid) {
     }
 	cache_delete(veh_check);
 
-	ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC - Information Lookup", str, "Return", "");
+	ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC > Summary", str, "Return", "");
 	DeletePVar(playerid, "LookupName");
 	return 1;
 }
@@ -202,7 +232,7 @@ FUNC::OnLookupVehicle(playerid, string:plate[]) {
 			strcat(str, sprintf(""WHITE"Last Seen: "YELLOW"%s", GetLocation(x, y, z)));
 		}
 
-		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC - Vehicle Lookup", str, "Return", "");
+		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC > Vehicle Lookup", str, "Return", "");
 	}	
 	else SendErrorMessage(playerid, "There is an error when lookup vehicle data (report to developer)"), ReturnMDC(playerid);
 
@@ -220,10 +250,10 @@ FUNC::OnLookupMDC(playerid, string:namez[]) {
 	SetPVarString(playerid, "LookupName", name);
 	
 	SetPVarInt(playerid, "LookupID", sql_id);
-	ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC - Lookup Menu", "Information\nArrest history\nUnpaid tickets", "Select", "Close");
+	ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
 	return 1;
 }
-stock SendDutyMessage(faction, color, const str[], {Float,_}:...)
+SendDutyMessage(faction, color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -274,7 +304,7 @@ stock SendDutyMessage(faction, color, const str[], {Float,_}:...)
 	return 1;
 }
 
-stock SendFactionMessageEx(faction, color, const str[], {Float,_}:...)
+SendFactionMessageEx(faction, color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -325,7 +355,7 @@ stock SendFactionMessageEx(faction, color, const str[], {Float,_}:...)
 	return 1;
 }
 
-stock SendFactionMessage(factionid, color, const str[], {Float,_}:...)
+SendFactionMessage(factionid, color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -368,12 +398,12 @@ stock SendFactionMessage(factionid, color, const str[], {Float,_}:...)
 	return 1;
 }
 
-stock SetFactionSkin(playerid, model)
+SetFactionSkin(playerid, model)
 {
 	SetPlayerSkin(playerid, model);
 	PlayerData[playerid][pFactionSkin] = model;
 }
-stock ResetFaction(playerid)
+ResetFaction(playerid)
 {
     PlayerData[playerid][pFaction] = -1;
     PlayerData[playerid][pFactionID] = -1;
@@ -383,7 +413,7 @@ stock ResetFaction(playerid)
     SetPlayerColor(playerid, COLOR_WHITE);
 }
 
-stock CountFaction(faction)
+CountFaction(faction)
 {
 	new count = 0;
 	foreach(new i : Player) if(GetFactionType(i) == faction && PlayerData[i][pOnDuty])

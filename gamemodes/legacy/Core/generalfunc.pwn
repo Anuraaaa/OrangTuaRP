@@ -1043,6 +1043,35 @@ timer ToggleFreeze[5000](playerid)
 	return 1;
 }
 
+SendSplitMessage(playerid, color, msg[])
+{
+	new ml = 115, result[160], len = strlen(msg);
+	if(len > ml)
+	{
+		new repeat = (len / ml);
+		for(new i = 0; i <= repeat; i++)
+		{
+			result[0] = 0;
+			if(len - (i * ml) > ml)
+			{
+				strmid(result, msg, ml * i, ml * (i+1));
+				format(result, sizeof(result), "%s", result);
+			}
+			else
+			{
+				strmid(result, msg, ml * i, len);
+				format(result, sizeof(result), "%s", result);
+			}
+			SendClientMessage(playerid, color, result);
+		}
+	}
+	else
+	{
+		SendClientMessage(playerid, color, msg);
+	}
+	return true;
+}
+
 LoadRemoveBuilding(playerid)
 {
 	RemoveVendingMachines(playerid);
@@ -1750,20 +1779,6 @@ stock VariableConfig()
 	ToggleData[togOOC] = true;
 }
 
-stock SendSplitMessage(playerid, color, msg[])
-{
-	if(strlen(msg) > 64)
-	{
-		SendClientMessageEx(playerid, color, "%.64s", msg);
-		SendClientMessageEx(playerid, color, "...%s", msg[64]);
-	}
-	else
-	{
-		SendClientMessage(playerid, color, msg);
-	}
-	return 1;
-}
-
 stock IsDoorVehicle(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid))
@@ -2045,7 +2060,7 @@ DestroyVehicleEx(vehicleid) {
 	}*/
 	return DestroyVehicle(vehicleid);
 }
-stock ReturnDate()
+stock ReturnDate(bool:panjang = true)
 {
 	static
 	    date[36];
@@ -2053,7 +2068,10 @@ stock ReturnDate()
 	getdate(date[2], date[1], date[0]);
 	gettime(date[3], date[4], date[5]);
 
-	format(date, sizeof(date), "%02d/%02d/%d %02d:%02d", date[0], date[1], date[2], date[3], date[4]);
+	if(panjang) {
+		format(date, sizeof(date), "%02d/%02d/%d %02d:%02d", date[0], date[1], date[2], date[3], date[4]);
+	}
+	else format(date, sizeof(date), "%02d/%02d/%d", date[0], date[1], date[2]);
 	return date;
 }
 

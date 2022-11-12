@@ -87,7 +87,6 @@ CMD:cargo(playerid, params[])
 		if(cid == -1)
 			return SendErrorMessage(playerid, "Kamu sedang tidak mengangkat Cargo!");
 
-		
 		if(IsPlayerInRangeOfPoint(playerid, 3.0, -1862.1053,-145.7666,11.8984)) {
 
 			if(CrateData[cid][crateType] != CARGO_TYPE_COMPONENT)
@@ -98,7 +97,6 @@ CMD:cargo(playerid, params[])
 
 			if(StockData[stockComponent] + 50 >= 10000)
 				return SendErrorMessage(playerid, "Jumlah total stock component tidak bisa lebih dari 10.000!");
-
 
 			GiveMoney(playerid, 3000, "Sell cargo");
 			SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil menjual {FFFF00}%s Cargo {FFFFFF}dan mendapat {00FF00}$30.00", Crate_Name[CrateData[cid][crateType]]);
@@ -114,6 +112,7 @@ CMD:cargo(playerid, params[])
 		else {
 
 			new id = Business_NearestDeliver(playerid);
+
 			if(id == -1)
 				return SendErrorMessage(playerid, "Kamu tidak berada di Delivery Point manapun!");
 
@@ -123,6 +122,9 @@ CMD:cargo(playerid, params[])
 			if(CrateData[PlayerData[playerid][pCrate]][crateType] != BizData[id][bizType])
 				return SendErrorMessage(playerid, "Tipe Cargo tidak sesuai dengan Tipe business!");
 
+			if(!BizData[id][bizReq])
+				return  SendErrorMessage(playerid, "Bisnis ini tidak meminta untuk pengisian produk!");
+				
 			if(BizData[id][bizStock] >= 100)
 				return SendErrorMessage(playerid, "Stock pada business ini sudah penuh!");
 
@@ -178,6 +180,8 @@ CMD:cargo(playerid, params[])
 	}
 	else if(!strcmp(params, "buy", true))
 	{
+		new id = -1;
+		
 		if(PlayerData[playerid][pCrate] != -1)
 			return SendErrorMessage(playerid, "Kamu sedang mengangkat Cargo!");
 
@@ -189,7 +193,8 @@ CMD:cargo(playerid, params[])
 			if(GetMoney(playerid) < 1500)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
 
-			new id = Crate_Create(playerid, CARGO_TYPE_ELECTRO);
+			id = Crate_Create(playerid, CARGO_TYPE_ELECTRO);
+
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
 
@@ -201,7 +206,7 @@ CMD:cargo(playerid, params[])
 			if(GetMoney(playerid) < 1500)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
 
-			new id = Crate_Create(playerid, CARGO_TYPE_CLOTHES);
+			id = Crate_Create(playerid, CARGO_TYPE_CLOTHES);
 			
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
@@ -214,7 +219,7 @@ CMD:cargo(playerid, params[])
 			if(GetMoney(playerid) < 2000)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
 
-			new id = Crate_Create(playerid, CARGO_TYPE_247);
+			id = Crate_Create(playerid, CARGO_TYPE_247);
 			
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
@@ -227,7 +232,7 @@ CMD:cargo(playerid, params[])
 			if(GetMoney(playerid) < 2000)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
 
-			new id = Crate_Create(playerid, CARGO_TYPE_FASTFOOD);
+			id = Crate_Create(playerid, CARGO_TYPE_FASTFOOD);
 
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
@@ -240,7 +245,7 @@ CMD:cargo(playerid, params[])
 			if(GetMoney(playerid) < 2000)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
 
-			new id = Crate_Create(playerid, CARGO_TYPE_EQUIPMENT);
+			id = Crate_Create(playerid, CARGO_TYPE_EQUIPMENT);
 
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
@@ -253,7 +258,7 @@ CMD:cargo(playerid, params[])
 			if(StockData[stockRock] < 1)
 				return SendErrorMessage(playerid, "Tidak ada stok batu yang tersedia.");
 				
-			new id = Crate_Create(playerid, CARGO_TYPE_COMPONENT);
+			id = Crate_Create(playerid, CARGO_TYPE_COMPONENT);
 
 			if(id == -1)
 				return SendErrorMessage(playerid, "The server cannot create more cargo's!");

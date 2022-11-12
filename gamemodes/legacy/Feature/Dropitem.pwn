@@ -64,9 +64,10 @@ stock PickupItem(playerid, itemid)
 
 		if(id != -1) {
 			Item_Delete(itemid);
+			return 1;
 		}
 	}
-	return 1;
+	return 0;
 }
 
 FUNC::Dropped_Load()

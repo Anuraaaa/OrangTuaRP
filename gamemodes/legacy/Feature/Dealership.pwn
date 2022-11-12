@@ -16,7 +16,8 @@ enum dealer_data
 	dealerVIP,
 	STREAMER_TAG_MAP_ICON:dealerIcon,
 };
-new DealerData[MAX_DEALER][dealer_data];
+new DealerData[MAX_DEALER][dealer_data],
+	ListedDealer[MAX_PLAYERS][6];
 
 stock FormatStock(id, slot)
 {
@@ -236,27 +237,31 @@ stock Dealer_Save(id)
 
 CMD:buyvehicle(playerid, params[])
 {
-	new id = Dealer_Nearest(playerid);
+	new id = -1;
 
-	if(id == -1)
-		return SendErrorMessage(playerid, "You aren't in range of any dealerships!");
+	if((id = Dealer_Nearest(playerid)) != -1) {
 
-	if(DealerData[id][dealerVIP] && !GetPlayerVIPLevel(playerid))
-		return SendErrorMessage(playerid, "Dealership ini diperuntukkan kepada Donater Player.");
+		if(DealerData[id][dealerVIP] && !GetPlayerVIPLevel(playerid))
+			return SendErrorMessage(playerid, "Dealership ini diperuntukkan kepada Donater Player.");
+			
+		new str[512], bool:has = false, count = 0;
+		format(str, sizeof(str), "Price\tVehicle\tStock\n");
+		for(new i = 0; i < 6; i++) if(DealerData[id][dealerVehicle][i] != 19300)
+		{
+			format(str, sizeof(str), "%s"DARKGREEN"$%s\t"WHITE"%s\t"GREY"%s left\n", str, FormatNumber(DealerData[id][dealerCost][i]), ReturnDealerVehicle(DealerData[id][dealerVehicle][i]), FormatStock(id, i));
+			has = true;
+			ListedDealer[playerid][count++] = i;
+		}
+
+		PlayerData[playerid][pSelecting] = id;
+
+		if(has)
+			ShowPlayerDialog(playerid, DIALOG_DEALER_BUY, DIALOG_STYLE_TABLIST_HEADERS, "Purchase Vehicle", str, "Purchase", "Close");
+
+		else SendErrorMessage(playerid, "Tidak ada kendaraan pada dealer ini.");
 		
-	new str[512], bool:has = false;
-	format(str, sizeof(str), "Price\tVehicle\tStock\n");
-	forex(i, 6) if(DealerData[id][dealerVehicle][i] != 19300)
-	{
-		format(str, sizeof(str), "%s"DARKGREEN"$%s\t"WHITE"%s\t"GREY"%s left\n", str, FormatNumber(DealerData[id][dealerCost][i]), ReturnDealerVehicle(DealerData[id][dealerVehicle][i]), FormatStock(id, i));
-		has = true;
 	}
-
-	if(has)
-		ShowPlayerDialog(playerid, DIALOG_DEALER_BUY, DIALOG_STYLE_TABLIST_HEADERS, "Purchase Vehicle", str, "Purchase", "Close");
-	else SendErrorMessage(playerid, "Tidak ada kendaraan pada dealer ini.");
-	
-	PlayerData[playerid][pSelecting] = id;
+	else SendErrorMessage(playerid, "Kamu tidak berada di dealer-ship manapun.");
 	return 1;
 }
 
@@ -327,7 +332,7 @@ CMD:editdealer(playerid, params[])
 		format(str, sizeof(str), "Model\tStock\n");
 		forex(i, 6)
 		{
-			format(str, sizeof(str), "%s%s\t%d\n", str, ReturnDealerVehicle(DealerData[id][dealerVehicle][i]), DealerData[id][dealerStock][i], ReturnRestockPrice(DealerData[id][dealerCost][i]));
+			format(str, sizeof(str), "%s%s\t%d\n", str, ReturnDealerVehicle(DealerData[id][dealerVehicle][i]), DealerData[id][dealerStock][i]);
 		}
 		ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_LIST, DIALOG_STYLE_TABLIST_HEADERS, "Restock List", str, "Select", "Close");
 		PlayerData[playerid][pSelecting] = id;

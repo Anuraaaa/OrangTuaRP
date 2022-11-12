@@ -367,16 +367,12 @@ CMD:getmedkit(playerid, params[]) {
 
 CMD:getpills(playerid, params[]) {
 
-	new factionid = PlayerData[playerid][pFaction];
-
-	if (factionid == -1)
-		return SendErrorMessage(playerid, "You must be a faction member.");
 
 	if(GetFactionType(playerid) != FACTION_MEDIC)
 		return SendErrorMessage(playerid, "This command is only for Medical faction type.");
 
-	if (!IsNearFactionLocker(playerid))
-		return SendErrorMessage(playerid, "You are not in range of your faction's locker.");
+	if (!IsPlayerInRangeOfPoint(playerid, 6.0, -1437.7163,-1517.8572,3001.5059))
+		return SendErrorMessage(playerid, "You are not in range of pharmacy point.");
 
 	if(isnull(params))
 		return SendSyntaxMessage(playerid, "/getpills [1. Promethazine, 2. Acetaminophen]");

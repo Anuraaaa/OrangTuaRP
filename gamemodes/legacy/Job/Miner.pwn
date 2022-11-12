@@ -84,16 +84,16 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
             switch(rock_type) {
                 case 1: {
-                    bonus = RandomEx(1, 1000);
+                    bonus = RandomEx(1, 500);
                 }
                 case 2: {
-                    bonus = RandomEx(1, 2500);
+                    bonus = RandomEx(1, 1500);
                 }
                 case 3: {
-                    bonus = RandomEx(1, 4000);
+                    bonus = RandomEx(1, 2500);
                 }
                 case 4: {
-                    bonus = RandomEx(1, 6000);
+                    bonus = RandomEx(1, 4000);
                 }
             }
             gaji = rock_price[rock_type] + bonus;

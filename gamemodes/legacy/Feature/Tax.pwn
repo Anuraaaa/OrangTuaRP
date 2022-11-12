@@ -95,7 +95,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             id = g_ListedProp[playerid][listitem], price = 0;
 
             if(FlatData[id][flatTaxState] == TAX_STATE_COOLDOWN)
-                return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk flat ini."), SendErrorMessage(playerid, "Flat %d | State %d | Date %d", id, FlatData[id][flatTaxState], FlatData[id][flatTaxDate]);
+                return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk flat ini.");
 
 
             price = FlatData[id][flatPrice] * 5/100;
@@ -118,7 +118,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 }
 
 task house_OnTaxUpdate[60000]() {
-    foreach(new i : Flat) if(HouseData[i][houseTaxDate] != 0 && HouseData[i][houseOwner] != 0) {
+    foreach(new i : House) if(HouseData[i][houseTaxDate] != 0 && HouseData[i][houseOwner] != 0) {
         if(HouseData[i][houseTaxDate] <= gettime()) {
             if(HouseData[i][houseTaxState] == TAX_STATE_COOLDOWN) {
                 HouseData[i][houseTaxState] = TAX_STATE_DEADLINE;
@@ -126,7 +126,6 @@ task house_OnTaxUpdate[60000]() {
                 HouseData[i][houseTaxPaid] = false;
             }
             else {
-                // SendAdminMessage(X11_TOMATO, "HouseWarn: House ID %d telah di asell karena tidak membayar pajak.", i);
 
                 new string[256], msge[128];
                 format(msge, 128, "Rumahmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
@@ -134,14 +133,14 @@ task house_OnTaxUpdate[60000]() {
                 mysql_format(sqlcon, string, 256, "INSERT INTO `house_queue` (`Username`, `HouseID`, `Message`) VALUES('%e','%d','%e')", HouseData[i][houseOwnerName], i, msge);
                 mysql_tquery(sqlcon,string);
 
-                foreach(new id : Player) if(PlayerData[id][pID] == HouseData[i][houseOwner]) {
+                foreach(new id : Player) if(HouseData[i][houseOwner] == PlayerData[id][pID] && IsPlayerSpawned(id)) {
                     SendClientMessageEx(id, X11_LIGHTBLUE, "TAX: "WHITE"Rumahmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
                     break;
                 }
                 HouseData[i][houseLastLogin] = 0;
             
-                HouseData[i][houseOwner] = -1;
-                format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, "No Owner");
+                HouseData[i][houseOwner] = 0;
+                // format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, "No Owner");
 
                 House_Save(i);
                 House_Refresh(i);
@@ -158,11 +157,14 @@ task flat_OnTaxUpdate[10000]() {
                 FlatData[i][flatTaxState] = TAX_STATE_DEADLINE;
                 FlatData[i][flatTaxDate] = gettime() + (3 * 86400);
                 FlatData[i][flatTaxPaid] = false;
-                
-                printf("Called DUE DATE Flat ID: %d", i);
             }
             else {
                 // SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d telah di asell karena tidak membayar pajak.", i);
+
+                foreach(new id : Player) if(FlatData[i][flatOwner] == PlayerData[id][pID] && IsPlayerSpawned(id)) {
+                    SendClientMessageEx(id, X11_LIGHTBLUE, "TAX: "WHITE"Flatmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
+                    break;
+                }
 
                 new string[256], msge[128];
                 format(msge, 128, "Flat mu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);

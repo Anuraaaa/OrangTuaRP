@@ -63,8 +63,8 @@ enum E_LOGLEVEL
 #include <YSI_Coding\y_timers>
 #include <YSI_Server\y_colours>
 #include <YSI_Data\y_foreach>
-#include <YSI_Extra\y_inline_mysql>
 #include <YSI_Game\y_vehicledata>
+#include <YSI_Extra\y_inline_mysql>
 
 #include <sscanf2>
 #include <nex-ac_en.lang>
@@ -374,7 +374,8 @@ enum E_PLAYER_DATA
 	bool:pCallNews,
 	pColor1,
 	pColor2,
-	pLastNumber
+	pLastNumber,
+	bool:pToggleSpeed,
 
 };
 
@@ -390,6 +391,9 @@ new LoginTimer[MAX_PLAYERS],
 	bool:HasRubberBullet[MAX_PLAYERS],
 	bool:PlayerRubbed[MAX_PLAYERS],
 	g_ListedTenant[MAX_PLAYERS][10];
+
+new AOFCT[MAX_PLAYERS];
+new AOFCW[MAX_PLAYERS];
 
 new
     MarryWith[MAX_PLAYERS][24],
@@ -2220,173 +2224,215 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
 
 public OnPlayerUpdate(playerid)
 {
-	if(GetPlayerWeapon(playerid) != PlayerData[playerid][pWeapon])
-	{
-		PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
-
-		if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerData[playerid][pKicked])
-		{
-			SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
-			ResetWeapons(playerid);
-			KickEx(playerid);
-		}
-	}
-	if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
-	{
-		new keys,ud,lr;
-		GetPlayerKeys(playerid,keys,ud,lr);
+	if(IsPlayerSpawned(playerid)) {
 		
-
-		if(noclipdata[playerid][flmode] && (GetTickCount() - noclipdata[playerid][lastmove] > 100))
+		new Float:x,Float:y,Float:z;
+		GetPlayerCameraFrontVector(playerid,x,y,z);
+		if(floatcmp(1.0,floatabs(x))==-1 || floatcmp(1.0,floatabs(y))==-1 || floatcmp(1.0,floatabs(z))==-1)
 		{
-		    // If the last move was > 100ms ago, process moving the object the players camera is attached to
-		    MoveCamera(playerid);
+				if(AOFCT[playerid] < GetTickCount())
+					AOFCW[playerid] = 0;
+				else 
+					AOFCW[playerid]++;
+					
+				if(AOFCW[playerid] < 2) 
+					AOFCT[playerid]= GetTickCount()+1000; 
+				else {
+					SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(SA:MP Crasher)", GetName(playerid), PlayerData[playerid][pUCP]);
+					KickEx(playerid);
+				}
 		}
-
-		// Is the players current key state different than their last keystate?
-		if(noclipdata[playerid][udold] != ud || noclipdata[playerid][lrold] != lr)
+		if(GetPlayerWeapon(playerid) != PlayerData[playerid][pWeapon])
 		{
-			if((noclipdata[playerid][udold] != 0 || noclipdata[playerid][lrold] != 0) && ud == 0 && lr == 0)
-			{   // All keys have been released, stop the object the camera is attached to and reset the acceleration multiplier
-				StopDynamicObject(noclipdata[playerid][flyobject]);
-				noclipdata[playerid][flmode]      = 0;
-				noclipdata[playerid][accelmul]  = 0.0;
+			PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
+
+			if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerData[playerid][pKicked])
+			{
+				SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
+				ResetWeapons(playerid);
+				KickEx(playerid);
 			}
-			else
-			{   // Indicates a new key has been pressed
+		}
+		if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
+		{
+			new keys,ud,lr;
+			GetPlayerKeys(playerid,keys,ud,lr);
+			
 
-			    // Get the direction the player wants to move as indicated by the keys
-				noclipdata[playerid][flmode] = GetMoveDirectionFromKeys(ud, lr);
-
-				// Process moving the object the players camera is attached to
+			if(noclipdata[playerid][flmode] && (GetTickCount() - noclipdata[playerid][lastmove] > 100))
+			{
+				// If the last move was > 100ms ago, process moving the object the players camera is attached to
 				MoveCamera(playerid);
 			}
-		}
-		noclipdata[playerid][udold] = ud; noclipdata[playerid][lrold] = lr; // Store current keys pressed for comparison next update
-	}
-	if(StretcherHolding[playerid])
-	{
-		new Float:zX, Float:zY, Float:zZ, Float:Ang;
-		GetPlayerPos(playerid, zX, zY, zZ);
-		GetXYInFrontOfPlayer(playerid, zX, zY, 1.6);
-		GetPlayerFacingAngle(playerid, Ang);
 
-		if(IsValidDynamicObject(StretcherEquipped[playerid])) {
+			// Is the players current key state different than their last keystate?
+			if(noclipdata[playerid][udold] != ud || noclipdata[playerid][lrold] != lr)
+			{
+				if((noclipdata[playerid][udold] != 0 || noclipdata[playerid][lrold] != 0) && ud == 0 && lr == 0)
+				{   // All keys have been released, stop the object the camera is attached to and reset the acceleration multiplier
+					StopDynamicObject(noclipdata[playerid][flyobject]);
+					noclipdata[playerid][flmode]      = 0;
+					noclipdata[playerid][accelmul]  = 0.0;
+				}
+				else
+				{   // Indicates a new key has been pressed
 
-			SetDynamicObjectPos(StretcherEquipped[playerid], zX, zY, zZ - 1.0);
-			SetDynamicObjectRot(StretcherEquipped[playerid], 0.0, 0.0, Ang-180.0);
+					// Get the direction the player wants to move as indicated by the keys
+					noclipdata[playerid][flmode] = GetMoveDirectionFromKeys(ud, lr);
+
+					// Process moving the object the players camera is attached to
+					MoveCamera(playerid);
+				}
+			}
+			noclipdata[playerid][udold] = ud; noclipdata[playerid][lrold] = lr; // Store current keys pressed for comparison next update
 		}
-	}
-	if(IsValidDynamicObject(StretcherEquipped[playerid]) && StretcherPlayerID[playerid] != INVALID_PLAYER_ID)
-	{
-		if(IsPlayerConnected(StretcherPlayerID[playerid]))
+		if(StretcherHolding[playerid])
 		{
-			new Float:playerpos[4];
-			TogglePlayerControllable(StretcherPlayerID[playerid], 0);
-			GetPlayerFacingAngle(playerid, playerpos[3]);
-			SetPlayerFacingAngle(StretcherPlayerID[playerid], playerpos[3]);
-			GetPlayerPos(playerid, playerpos[0], playerpos[1], playerpos[2]);
-			GetXYInFrontOfPlayer(playerid, playerpos[0], playerpos[1], 2.0);
-			SetPlayerPos(StretcherPlayerID[playerid], playerpos[0], playerpos[1], playerpos[2] + 0.5);
-			SetCameraBehindPlayer(StretcherPlayerID[playerid]);
-			SetPlayerVirtualWorld(StretcherPlayerID[playerid], GetPlayerVirtualWorld(playerid));
-			SetPlayerInterior(StretcherPlayerID[playerid], GetPlayerInterior(playerid));
+			new Float:zX, Float:zY, Float:zZ, Float:Ang;
+			GetPlayerPos(playerid, zX, zY, zZ);
+			GetXYInFrontOfPlayer(playerid, zX, zY, 1.6);
+			GetPlayerFacingAngle(playerid, Ang);
 
-			ApplyAnimation(StretcherPlayerID[playerid],"BEACH", "bather", 4.0, 1, 0, 0, 1, -1, 1);
+			if(IsValidDynamicObject(StretcherEquipped[playerid])) {
+
+				SetDynamicObjectPos(StretcherEquipped[playerid], zX, zY, zZ - 1.0);
+				SetDynamicObjectRot(StretcherEquipped[playerid], 0.0, 0.0, Ang-180.0);
+			}
 		}
-		else StretcherPlayerID[playerid] = INVALID_PLAYER_ID;
-	}
-	if(Iter_Count(Spike) > 0) {
-		foreach(new i : Spike) if(IsPlayerInRangeOfPoint(playerid, 3.0, SpikeData[i][spikePos][0], SpikeData[i][spikePos][1], SpikeData[i][spikePos][2]) && GetPlayerVirtualWorld(playerid) == SpikeData[i][spikeWorld])
+		if(IsValidDynamicObject(StretcherEquipped[playerid]) && StretcherPlayerID[playerid] != INVALID_PLAYER_ID)
 		{
-			new
-				tires[4],
-				vehicleid = GetPlayerVehicleID(playerid);
+			if(IsPlayerConnected(StretcherPlayerID[playerid]))
+			{
+				new Float:playerpos[4];
+				TogglePlayerControllable(StretcherPlayerID[playerid], 0);
+				GetPlayerFacingAngle(playerid, playerpos[3]);
+				SetPlayerFacingAngle(StretcherPlayerID[playerid], playerpos[3]);
+				GetPlayerPos(playerid, playerpos[0], playerpos[1], playerpos[2]);
+				GetXYInFrontOfPlayer(playerid, playerpos[0], playerpos[1], 2.0);
+				SetPlayerPos(StretcherPlayerID[playerid], playerpos[0], playerpos[1], playerpos[2] + 0.5);
+				SetCameraBehindPlayer(StretcherPlayerID[playerid]);
+				SetPlayerVirtualWorld(StretcherPlayerID[playerid], GetPlayerVirtualWorld(playerid));
+				SetPlayerInterior(StretcherPlayerID[playerid], GetPlayerInterior(playerid));
 
-			GetVehicleDamageStatus(vehicleid, tires[0], tires[1], tires[2], tires[3]);
-
-			if (tires[3] != 1111) {
-				UpdateVehicleDamageStatus(vehicleid, tires[0], tires[1], tires[2], 1111);
+				ApplyAnimation(StretcherPlayerID[playerid],"BEACH", "bather", 4.0, 1, 0, 0, 1, -1, 1);
 			}
-			break;
+			else StretcherPlayerID[playerid] = INVALID_PLAYER_ID;
 		}
-	}
-    if (NetStats_GetConnectedTime(playerid) - WeaponTick[playerid] >= 250)
-    {
-        new weaponid, ammo, objectslot, count, index; 
-        for (new i = 2; i <= 7; i++)
-        {
-            GetPlayerWeaponData(playerid, i, weaponid, ammo);
-            index = weaponid - 22;           
-            if (weaponid && ammo && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)
-            {
-                objectslot = GetWeaponObjectSlot(weaponid);
- 
-                if(GetPlayerWeapon(playerid) != weaponid)
-                {
-                    SetPlayerAttachedObject(playerid, objectslot, GetWeaponModel(weaponid), WeaponSettings[playerid][index][Bone], WeaponSettings[playerid][index][Position][0], WeaponSettings[playerid][index][Position][1], WeaponSettings[playerid][index][Position][2], WeaponSettings[playerid][index][Position][3], WeaponSettings[playerid][index][Position][4], WeaponSettings[playerid][index][Position][5], 1.0, 1.0, 1.0);
-                }
-                else if (IsPlayerAttachedObjectSlotUsed(playerid, objectslot)) 
-                {
-                    RemovePlayerAttachedObject(playerid, objectslot);
-                }
-            }
-        }
-        for (new i= 4; i < 8; i++)
-        { 
-            if(IsPlayerAttachedObjectSlotUsed(playerid, i))
-            {
-                count = 0;    
-                for (new j = 22; j <= 34; j++) 
-                {
-                    if(PlayerHasWeaponAttachment(playerid, j) && GetWeaponObjectSlot(j) == i)
-                    {
-                        count++;
-                    }
-                }
-                if(!count) 
-                {
-                    RemovePlayerAttachedObject(playerid, i);
-                }
-            }
-        }
-        WeaponTick[playerid] = NetStats_GetConnectedTime(playerid);
-    }
+		if(Iter_Count(Spike) > 0) {
+			foreach(new i : Spike) if(IsPlayerInRangeOfPoint(playerid, 3.0, SpikeData[i][spikePos][0], SpikeData[i][spikePos][1], SpikeData[i][spikePos][2]) && GetPlayerVirtualWorld(playerid) == SpikeData[i][spikeWorld])
+			{
+				new
+					tires[4],
+					vehicleid = GetPlayerVehicleID(playerid);
 
-	new weaponid = GetWeapon(playerid);
-	if(weaponid >= 22 && weaponid <= 38) {
-		if(PlayerData[playerid][pGuns][g_aWeaponSlots[weaponid]] > 0) {
-			if(PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]) {
-				PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d~n~High_Velocity", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
-			}
-			else {
-				PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
+				GetVehicleDamageStatus(vehicleid, tires[0], tires[1], tires[2], tires[3]);
+
+				if (tires[3] != 1111) {
+					UpdateVehicleDamageStatus(vehicleid, tires[0], tires[1], tires[2], 1111);
+				}
+				break;
 			}
 		}
+		if (NetStats_GetConnectedTime(playerid) - WeaponTick[playerid] >= 250)
+		{
+			new weaponid, ammo, objectslot, count, index; 
+			for (new i = 2; i <= 7; i++)
+			{
+				GetPlayerWeaponData(playerid, i, weaponid, ammo);
+				index = weaponid - 22;           
+				if (weaponid && ammo && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)
+				{
+					objectslot = GetWeaponObjectSlot(weaponid);
+	
+					if(GetPlayerWeapon(playerid) != weaponid)
+					{
+						SetPlayerAttachedObject(playerid, objectslot, GetWeaponModel(weaponid), WeaponSettings[playerid][index][Bone], WeaponSettings[playerid][index][Position][0], WeaponSettings[playerid][index][Position][1], WeaponSettings[playerid][index][Position][2], WeaponSettings[playerid][index][Position][3], WeaponSettings[playerid][index][Position][4], WeaponSettings[playerid][index][Position][5], 1.0, 1.0, 1.0);
+					}
+					else if (IsPlayerAttachedObjectSlotUsed(playerid, objectslot)) 
+					{
+						RemovePlayerAttachedObject(playerid, objectslot);
+					}
+				}
+			}
+			for (new i= 4; i < 8; i++)
+			{ 
+				if(IsPlayerAttachedObjectSlotUsed(playerid, i))
+				{
+					count = 0;    
+					for (new j = 22; j <= 34; j++) 
+					{
+						if(PlayerHasWeaponAttachment(playerid, j) && GetWeaponObjectSlot(j) == i)
+						{
+							count++;
+						}
+					}
+					if(!count) 
+					{
+						RemovePlayerAttachedObject(playerid, i);
+					}
+				}
+			}
+			WeaponTick[playerid] = NetStats_GetConnectedTime(playerid);
+		}
+
+		new weaponid = GetWeapon(playerid);
+		if(weaponid >= 22 && weaponid <= 38) {
+			if(PlayerData[playerid][pGuns][g_aWeaponSlots[weaponid]] > 0) {
+				if(PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]) {
+					PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d~n~High_Velocity", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
+				}
+				else {
+					PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
+				}
+			}
+		}
+		else
+			PlayerTextDrawSetString(playerid,  AMMOTD[playerid], "_");
 	}
-	else
-		PlayerTextDrawSetString(playerid,  AMMOTD[playerid], "_");
-		
 	return 1;
 }
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(dialogid == DIALOG_CRIMERECORD) {
+		if(!response) {
+			ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
+		}
+		else {
+			new sql_id = ListedUniversal[playerid][listitem], Cache:result;
+
+			result = mysql_query(sqlcon, sprintf("SELECT * FROM `crime_record` WHERE `ID` = '%d' LIMIT 1;", sql_id));
+
+			if(cache_num_rows()) {
+				new status;
+
+				cache_get_value_name_int(0, "Status", status);
+
+				status = !(status);
+
+				mysql_tquery(sqlcon, sprintf("UPDATE `crime_record` SET `Status` = '%d' WHERE `ID` = '%d'", status, sql_id));
+				ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
+			}
+			else SendErrorMessage(playerid, "Terjadi kesalahan saat melakukan query.");
+
+			cache_delete(result);
+		}
+	}
 	if(dialogid == DIALOG_ADS_POST) {
 
-		new targetid = PlayerData[playerid][pTarget];
+		new targetid = PlayerData[playerid][pTarget], time;
 		if(response) {
 
 			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || targetid == INVALID_PLAYER_ID)
 				return SendErrorMessage(playerid, "The advertisement poster is no longer near you.");
 
-			SendClientMessage(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "GREEN"approved");
-			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "GREEN"approved "WHITE"the advertisement.");
+			Advert_Create(PlayerData[targetid][pPhoneNumber], AdvertText[targetid], PlayerData[targetid][pID], GetName(targetid, false), time);
 
-			Advert_Create(PlayerData[targetid][pPhoneNumber], AdvertText[targetid], PlayerData[targetid][pID], GetName(targetid, false));
+			SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "GREEN"approved "WHITE"and will be posted in %d minute.", time);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "GREEN"approved "WHITE"the advertisement.");
 		}
 		else {
-			SendClientMessage(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "RED"denied");
-			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "RED"denied "WHITE"the advertisement.");
+			SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "RED"denied");
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "RED"denied "WHITE"the advertisement.");
 		}
 	}
 	if(dialogid == DIALOG_ADS_TEXT) {
@@ -2434,12 +2480,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-				Furniture_Delete(id);
-
-				SendServerMessage(playerid, "You have successfully removed the furniture!");
-			}
-			if(listitem == 1)
-			{
 				if(Iter_Contains(Furniture, id))
 				{
 					PlayerData[playerid][pEditType] = EDIT_FURNITURE;
@@ -2449,19 +2489,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					SendServerMessage(playerid, "You are now in editing mode of furniture index id: %d", id);
 				}
 			}
-			if(listitem == 2)
+			if(listitem == 1)
 			{
 				ShowEditTextDraw(playerid);
 
 				SendServerMessage(playerid, "You are now in editing mode of furniture index id: %d", id);
 			}
 
-			if(listitem == 3) {
+			if(listitem == 2) {
 
 				if(GetComponent(playerid) < 10)
 					return SendErrorMessage(playerid, "Kamu membutuhkan 10 component untuk re-texture.");
 
 				ShowPlayerDialog(playerid, DIALOG_FURNITURE_TEXTURE, DIALOG_STYLE_INPUT, "Custom Texture", ""LIGHTBLUE"Masukkan texture object dengan format berikut: [modelid] [TXD Name] [texture]\n(contoh): "YELLOW"10101 2notherbuildsfe Bow_Abpave_Gen\n\n"WHITE"Kamu dapat mencari texture pada beberapa link berikut ini:\n"GREEN"- https://samp-textures.iamaul.me/\n- https://textures.xyin.ws/\n- https://www.gtxd.net/", "Set", "Cancel");
+			}
+			if(listitem == 3)
+			{
+				Furniture_Delete(id);
+
+				SendServerMessage(playerid, "You have successfully removed the furniture!");
 			}
 		}
 	}
@@ -3005,7 +3051,207 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"You have removed accessory index #%d.", id);
 				}
+				case 5: {
+					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", id), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+				}
 			}
+		}
+	}
+	if(dialogid == DIALOG_ACC_PRESET_SEARCH) {
+		if(response) {
+			if(isnull(inputtext)) {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "Silahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
+				return 1;
+
+			}
+
+			new Cache:query = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `PresetName` = '%s' LIMIT 1;", inputtext)), string[712];
+
+			if(cache_num_rows()) {
+
+				new Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:sx, Float:sy, Float:sz, bone, model, sql_id;
+
+				cache_get_value_name_int(0, "ID", sql_id);
+				SetPVarInt(playerid, "AccID", sql_id);
+
+				cache_get_value_name_float(0, "X", x);
+				cache_get_value_name_float(0, "Y", y);
+				cache_get_value_name_float(0, "Z", z);
+				cache_get_value_name_float(0, "RX", rx);
+				cache_get_value_name_float(0, "RY", ry);
+				cache_get_value_name_float(0, "RZ", rz);
+				cache_get_value_name_float(0, "SX", sx);
+				cache_get_value_name_float(0, "SY", sy);
+				cache_get_value_name_float(0, "SZ", sz);
+				cache_get_value_name_int(0, "Bone", bone);
+				cache_get_value_name_int(0, "Model", model);
+				strcat(string, sprintf(""GREEN"========== [ Preset %s ] ==========\n\n\n", inputtext));
+				strcat(string, sprintf(""WHITE"Model aksesoris yang digunakan: %d\n", model));
+				strcat(string, sprintf("Bone: %s\n", accBones[bone - 1]));
+				strcat(string, sprintf(""WHITE"X: %.2f\n", x));
+				strcat(string, sprintf(""WHITE"Y: %.2f\n", y));
+				strcat(string, sprintf(""WHITE"Z: %.2f\n", z));
+				strcat(string, sprintf(""WHITE"RX: %.2f\n", rx));
+				strcat(string, sprintf(""WHITE"RY: %.2f\n", ry));
+				strcat(string, sprintf(""WHITE"RZ: %.2f\n", rz));
+				strcat(string, sprintf(""WHITE"SX: %.2f\n", sx));
+				strcat(string, sprintf(""WHITE"SY: %.2f\n", sy));
+				strcat(string, sprintf(""WHITE"SZ: %.2f\n", sz));
+
+				strcat(string, "Silahkan pilih "YELLOW"YES "WHITE"jika anda ingin menggunakan preset ini.");
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_FOUND, DIALOG_STYLE_MSGBOX, "Preset found!", string, "Yes", "No");
+			}
+			else {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "(error) preset tidak ditemukan!\n\nSilahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
+			}
+			cache_delete(query);
+		}
+		else {
+			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+		}
+	}
+	if(dialogid == DIALOG_ACC_PRESET_FOUND) {
+		if(response) {
+			new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `ID` = '%d' LIMIT 1;", GetPVarInt(playerid, "AccID")));
+
+			if(cache_num_rows()) {
+
+				new id = PlayerData[playerid][pAksesoris], name[24];
+
+				cache_get_value_name(0, "PresetName", name, sizeof(name));
+				cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
+				cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
+				cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
+				cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
+				cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
+				cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
+				cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
+				cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
+				cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
+				cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
+
+				RemovePlayerAttachedObject(playerid, id);
+				Aksesoris_Attach(playerid, id);
+
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+			}
+			cache_delete(result);
+		}
+		else {
+			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+		}
+	}
+	if(dialogid == DIALOG_ACC_PRESET) {
+		if(response) {
+			if(listitem == 0) {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "Silahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
+			} 
+			if(listitem == 1) {
+				new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `Model` = '%d' LIMIT 15;", AccData[playerid][PlayerData[playerid][pAksesoris]][accModel]));
+
+				if(cache_num_rows()) {
+
+					new string[15 * 24], count = 0;
+
+					for(new i = 0; i < cache_num_rows(); i++) {
+						new preset_name[24], sqlid;
+						cache_get_value_name(i, "PresetName", preset_name, 24);
+						cache_get_value_name_int(i, "ID", sqlid);
+
+						strcat(string, sprintf("%d) %s\n", i + 1, preset_name));
+						ListedPreset[playerid][count++] = sqlid;
+					}
+					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "Preset found!", string, "Use", "Close");
+				}
+				else {
+					SendErrorMessage(playerid, "Tidak ada preset dengan model yang kamu gunakan!");
+					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+				}
+				cache_delete(result);
+			}
+			if(listitem == 2) {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "Silahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
+			}
+			if(listitem == 3) {
+
+				inline const ShowMyPreset() {
+					if(cache_num_rows()) {
+
+						new string[15 * 24], count = 0;
+
+						for(new i = 0; i < cache_num_rows(); i++) {
+							
+							new sqlid, presetname[24];
+
+							cache_get_value_name_int(i, "ID", sqlid);
+							cache_get_value_name(i, "PresetName", presetname, 24);
+
+							ListedPreset[playerid][count++] = sqlid;
+
+							strcat(string, sprintf("%d) %s\n", i + 1, presetname));
+						}
+						ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "My Preset", string, "Use", "Close");
+					}
+				}
+				MySQL_TQueryInline(sqlcon, using inline ShowMyPreset, "SELECT * FROM `acc_preset` WHERE `OwnerID` = '%d' ORDER BY `ID` ASC LIMIT 15;", PlayerData[playerid][pID]);
+			}
+		}
+	}
+	if(dialogid == DIALOG_ACC_PRESET_LISTED) {
+		if(response) {
+			new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `ID` = '%d'", ListedPreset[playerid][listitem]));
+
+			if(cache_num_rows()) {
+
+				new name[24], id = PlayerData[playerid][pAksesoris];
+				cache_get_value_name(0, "PresetName", name, 24);
+				cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
+				cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
+				cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
+				cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
+				cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
+				cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
+				cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
+				cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
+				cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
+				cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
+
+				RemovePlayerAttachedObject(playerid, id);
+				Aksesoris_Attach(playerid, id);
+
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+			}
+			cache_delete(result);
+		}
+		else {
+			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+		}
+	}
+	if(dialogid == DIALOG_ACC_PRESET_CREATE) {
+		if(response) {
+			if(strlen(inputtext) < 1 || strlen(inputtext) > 24) {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "Silahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
+				return 1;
+			}
+
+			new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `PresetName` = '%s'", inputtext));
+
+			if(!cache_num_rows()) {
+				new query[352], id = PlayerData[playerid][pAksesoris];
+
+				mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `acc_preset` (`OwnerID`,`PresetName`,`Model`,`Bone`,`X`,`Y`,`Z`,`RX`,`RY`,`RZ`,`SX`,`SY`,`SZ`) VALUES('%d','%e','%d','%d','%f','%f','%f','%f','%f','%f','%f','%f','%f')",
+					PlayerData[playerid][pID], inputtext,  AccData[playerid][id][accModel], AccData[playerid][id][accBone], AccData[playerid][id][accOffset][0], AccData[playerid][id][accOffset][1],AccData[playerid][id][accOffset][2], AccData[playerid][id][accRot][0], AccData[playerid][id][accRot][1], AccData[playerid][id][accRot][2], AccData[playerid][id][accScale][0], AccData[playerid][id][accScale][1], AccData[playerid][id][accScale][2]);
+				mysql_tquery(sqlcon, query);
+
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset aksesoris dengan nama "YELLOW"\"%s\" "WHITE"berhasil dibuat!", inputtext);
+			}
+			else {
+				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "(error) nama preset tersebut telah digunakan!\n\nSilahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
+			}
+			cache_delete(result);
+		}
+		else {
+			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
 		}
 	}
 	if(dialogid == DIALOG_ACC_MENU) {
@@ -3018,7 +3264,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return SendErrorMessage(playerid, "Tidak ada aksesoris pada slot ini.");
 				
 			format(string,sizeof(string),"Edit Accessory (#%d)",PlayerData[playerid][pAksesoris]);
-			format(gstr, sizeof(gstr), "Place %s\nChange Bone\nChange Placement\nChange Coordinate\nRemove from list", IsPlayerAttachedObjectSlotUsed(playerid, PlayerData[playerid][pAksesoris]) ? ("Off") : ("On"));
+			format(gstr, sizeof(gstr), "Place %s\nChange Bone\nChange Placement\nChange Coordinate\nRemove from list\n"ORANGE"Preset menu", IsPlayerAttachedObjectSlotUsed(playerid, PlayerData[playerid][pAksesoris]) ? ("Off") : ("On"));
 			ShowPlayerDialog(playerid, DIALOG_ACCESSORY, DIALOG_STYLE_LIST, string, gstr, "Select", "Exit");
 		}
 	}
@@ -3242,9 +3488,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new id = PlayerData[playerid][pSelecting],
-				slot = CountPlayerVehicleSlot(playerid);
+				slot = CountPlayerVehicleSlot(playerid),
+				index = ListedDealer[playerid][listitem];
 
-			if(DealerData[id][dealerVehicle][listitem] == 19300)
+			if(DealerData[id][dealerVehicle][index] == 19300)
 				return SendErrorMessage(playerid, "There is no vehicle on selected slot!");
 
 			if(Vehicle_Count(playerid) >= slot)
@@ -3253,21 +3500,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(DealerData[id][dealerSpawn][0] == 0)
 				return SendErrorMessage(playerid, "This dealership still doesn't have their Spawn Position!");
 
-			if(DealerData[id][dealerStock][listitem] < 1)
+			if(DealerData[id][dealerStock][index] < 1)
 				return SendErrorMessage(playerid, "The vehicle is out of stock!");
 
-			if(GetMoney(playerid) < DealerData[id][dealerCost][listitem])
+			if(GetMoney(playerid) < DealerData[id][dealerCost][index])
 				return SendErrorMessage(playerid, "You don't have enough money!");
 
-			new vehicleid = Vehicle_Create(DealerData[id][dealerVehicle][listitem], DealerData[id][dealerSpawn][0], DealerData[id][dealerSpawn][1], DealerData[id][dealerSpawn][2], DealerData[id][dealerSpawn][3], random(126), random(126));
+			new vehicleid = Vehicle_Create(DealerData[id][dealerVehicle][index], DealerData[id][dealerSpawn][0], DealerData[id][dealerSpawn][1], DealerData[id][dealerSpawn][2], DealerData[id][dealerSpawn][3], random(126), random(126));
 			Vehicle_SetOwner(vehicleid, playerid, true);
 			Vehicle_SetType(vehicleid, VEHICLE_TYPE_PLAYER);
-			VehicleData[vehicleid][vPrice] = DealerData[id][dealerCost][listitem];
+			VehicleData[vehicleid][vPrice] = DealerData[id][dealerCost][index];
 
-			SendServerMessage(playerid, "Kamu berhasil membeli {FFFF00}%s {FFFFFF}dengan harga {00FF00}$%s", ReturnVehicleModelName(DealerData[id][dealerVehicle][listitem]), FormatNumber(DealerData[id][dealerCost][listitem]));
-			GiveMoney(playerid, -DealerData[id][dealerCost][listitem], "Membeli kendaraan");
-			DealerData[id][dealerVault] += DealerData[id][dealerCost][listitem];
-			DealerData[id][dealerStock][listitem]--;
+			SendServerMessage(playerid, "Kamu berhasil membeli {FFFF00}%s {FFFFFF}dengan harga {00FF00}$%s", ReturnVehicleModelName(DealerData[id][dealerVehicle][index]), FormatNumber(DealerData[id][dealerCost][index]));
+			GiveMoney(playerid, -DealerData[id][dealerCost][index], "Membeli kendaraan");
+			DealerData[id][dealerVault] += DealerData[id][dealerCost][index];
+			DealerData[id][dealerStock][index]--;
 
 			Dealer_Save(id);
 		}	
@@ -3543,7 +3790,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				Flat_OpenStorage(playerid, Flat_Inside(playerid));
 			}
-			case 2: ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture", "Select", "Close");
+			case 2: ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture\n"YELLOW"Upgrade furniture slot ", "Select", "Close");
 		}
 	}
 	if(dialogid == DIALOG_ECONOMY_MOWER) {
@@ -4338,6 +4585,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response) {
 			if(listitem == 0) 
 			{
+				if(!GetPlayerVIPLevel(playerid))
+					return SendErrorMessage(playerid, "Hanya donatur yang dapat mengakses attachment sticker.");
+
 				if(Vehicle_ObjectAdd(playerid, PlayerData[playerid][pVehicle], 18661, OBJECT_TYPE_TEXT)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Attachment "YELLOW"sticker "WHITE"ditambahkan! gunakan "GREEN"/v attachment "WHITE"untuk mengatur.");
 				else SendErrorMessage(playerid, "Tidak ada slot attachment untuk kendaraan ini lagi!");
 			}
@@ -4365,7 +4615,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new vehicleid = PlayerData[playerid][pVehicle];
 
 			if(VehicleObjects[vehicleid][listitem][vehObjectExists]) {
-				ShowPlayerDialog(playerid, DIALOG_MODEDIT, DIALOG_STYLE_LIST, "Attachment > Edit", "Adjust Position "YELLOW"(click n drag)\n"WHITE"Adjust Position "YELLOW"(clickable textdraw)\n"WHITE"Change text >> (text only)\nChange font >> (text only)\nChange color >> (text only)\nChange size >> (text only)\n"RED"Delete attachment", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_MODEDIT, DIALOG_STYLE_LIST, "Attachment > Edit", "Adjust Position "YELLOW"(clickable textdraw)\n"WHITE"Adjust Position "YELLOW"(click n drag)\n"WHITE"Change text >> (text only)\nChange font >> (text only)\nChange color >> (text only)\nChange size >> (text only)\n"RED"Delete attachment", "Select", "Close");
 			}
 			else {
 				ShowPlayerDialog(playerid, DIALOG_MODSHOP_SELECT, DIALOG_STYLE_LIST, "Attachment > Add", "Sticker >> "GOLD"(donater only)\n"WHITE"Object [ price: $80,00 ]", "Select", "Close");
@@ -4385,6 +4635,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectText], 32, "%s", inputtext);
 		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Text diubah menjadi: \"%s"WHITE"\"", inputtext);
 	}	
 	if(dialogid == DIALOG_MODSHOP_SET_FONT) {
 
@@ -4396,6 +4647,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFont], 32, "%s", inputtext);
 		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Font diubah menjadi: \"%s\"", inputtext);
 	}
 	if(dialogid == DIALOG_MODSHOP_SET_COLOR) {
 		if(response) {
@@ -4405,6 +4657,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			
 			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontColor] = strval(inputtext);
 			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Warna diubah menjadi: \"%d\"", strval(inputtext));
 
 		}
 	}
@@ -4416,6 +4669,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontSize] = strval(inputtext);
 			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Size diubah  menjadi: \"%d\"", strval(inputtext));
 		}
 	}
 	if(dialogid == DIALOG_MODEDIT)
@@ -4522,7 +4776,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 		    new
-				items[50] = {-1, ...},
+				items[80] = {-1, ...},
 				count;
 
 		    for (new i = 0; i < sizeof(g_aFurnitureData); i ++) if (g_aFurnitureData[i][e_FurnitureType] == listitem + 1) {
@@ -4546,7 +4800,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			PlayerData[playerid][pEditing] = ListedFurniture[playerid][listitem];
 
-			ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, sprintf("Furniture Option(s) - %s", FurnitureData[PlayerData[playerid][pEditing]][furnitureName]), "Remove furniture\nEdit position (click n drag)\nEdit position (click textdraw)\n"RED"(beta) "WHITE"Change Texture", "Select", "Close");
+			ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, sprintf("Furniture Option(s) - %s", FurnitureData[PlayerData[playerid][pEditing]][furnitureName]), "Edit position (click n drag)\nEdit position (click textdraw)\n"RED"(beta) "WHITE"Change Texture\nRemove furniture", "Select", "Close");
 		}
 	}
 	if(dialogid == DIALOG_FLAT_FURNITURE)
@@ -4611,6 +4865,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				SendServerMessage(playerid, "You have removed all furniture on this flat!");
 				cmd_flat(playerid, "menu");
+			}
+			if(listitem == 3) {
+
+				new flat_id = Flat_Inside(playerid);
+
+				if(!Flat_IsOwner(playerid, flat_id))
+					return SendErrorMessage(playerid, "Hanya owner yang dapat mengakses opsi ini.");
+
+				if(FlatData[flat_id][flatFurnitureLevel] >= 10) {
+					return SendErrorMessage(playerid, "Furniture slot sudah tidak bisa di-upgrade lagi.");
+				}
+
+				new price = FlatData[flat_id][flatFurnitureLevel] * 15000;
+
+				if(GetMoney(playerid) < price)
+					return SendErrorMessage(playerid, "Kamu membutuhkan $%s untuk upgrade.", FormatNumber(price));
+
+				GiveMoney(playerid, -price);
+				FlatData[flat_id][flatFurnitureLevel] ++;
+
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", FlatData[flat_id][flatFurnitureLevel], FormatNumber(price));
+				Flat_Save(flat_id);
 			}
 		}
 	}
@@ -4677,6 +4953,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendServerMessage(playerid, "You have removed all furniture on this house!");
 				ShowHouseMenu(playerid);
 			}
+			if(listitem == 3) {
+				new id = House_Inside(playerid);
+
+				if(!House_IsOwner(playerid, id))
+					return SendErrorMessage(playerid, "Hanya owner yang dapat mengakses opsi ini.");
+
+				if(HouseData[id][houseFurnitureLevel] >= 10) {
+					return SendErrorMessage(playerid, "Furniture slot sudah tidak bisa di-upgrade lagi.");
+				}
+
+				new price = HouseData[id][houseFurnitureLevel] * 20000;
+
+				if(GetMoney(playerid) < price)
+					return SendErrorMessage(playerid, "Kamu membutuhkan $%s untuk upgrade.", FormatNumber(price));
+
+				GiveMoney(playerid, -price);
+				HouseData[id][houseFurnitureLevel] ++;
+
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", HouseData[id][houseFurnitureLevel], FormatNumber(price));
+				House_Save(id);
+			}
 		}
 	}
 	if(dialogid == DIALOG_HOUSE_MENU)
@@ -4685,7 +4982,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-				ShowPlayerDialog(playerid, DIALOG_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\nSelect Furniture "YELLOW"(only pc)\n"RED"Reset all furniture", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture\n"YELLOW"Upgrade furniture slot ", "Select", "Close");
 			}
 			if(listitem == 1)
 			{
@@ -5657,11 +5954,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			new amount = strval(inputtext), id = PlayerData[playerid][pSelecting], list = PlayerData[playerid][pListitem];
 			if(amount < 1)
-				return ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s - %s", ReturnDealerVehicle(DealerData[id][dealerVehicle][list]), ReturnRestockPrice(DealerData[id][dealerCost][list])), "ERROR: Invalid amount!\nPlease input amount for restock the selected vehicle:\nNote: Min 1 - Max 15", "Restock", "Close");
-			
-			if(DealerData[id][dealerStock][list]+amount > 15)
-				return ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s - %s", ReturnDealerVehicle(DealerData[id][dealerVehicle][list]), ReturnRestockPrice(DealerData[id][dealerCost][list])), "ERROR: Total stock cannot more than 15!\nPlease input amount for restock the selected vehicle:\nNote: Min 1 - Max 15", "Restock", "Close");
-		
+				return ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][list])), "ERROR: Invalid amount!\nPlease input amount for rethe selected vehicle:\nNote: Min 1.", "Restock", "Close");
+
 			DealerData[id][dealerStock][list] += amount;
 			Dealer_Save(id);
 			SendServerMessage(playerid, "Kamu telah merestock {FFFF00}%d {FFFFFF}kendaraan dealer.", amount);
@@ -5675,7 +5969,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(DealerData[id][dealerVehicle][listitem] == 19300)
 				return SendErrorMessage(playerid, "There is no vehicle on selected list!");
 
-			ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s - %s", ReturnDealerVehicle(DealerData[id][dealerVehicle][listitem]), ReturnRestockPrice(DealerData[id][dealerCost][listitem])), "Please input amount for restock the selected vehicle:\nNote: Min 1 - Max 15", "Restock", "Close");
+			ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][listitem])), "Please input amount for rethe selected vehicle:\nNote: Min 1.", "Restock", "Close");
 			PlayerData[playerid][pListitem] = listitem;
 		}
 	}
@@ -5857,6 +6151,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if (response)
 		{
+
+			if(!PlayerData[playerid][pCredit])
+				return SendErrorMessage(playerid, "Kamu tidak memiliki phone credit!");
+
 		    new number = strval(inputtext);
 
 		    if (isnull(inputtext) || !IsNumeric(inputtext))
@@ -6211,7 +6509,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(EmergencyData[i][emgSector] == ReturnSector(playerid) && count++ == listitem)
 				{
 					PlayerData[playerid][pListitem] = i;
-					ShowPlayerDialog(playerid, DIALOG_MDC_911_MENU, DIALOG_STYLE_LIST, "MDC - 911 Menu", "Show Details\nRespond Report\nRemove Report", "Select", "Return");
+					ShowPlayerDialog(playerid, DIALOG_MDC_911_MENU, DIALOG_STYLE_LIST, "MDC > 911 Menu", "Show Details\nRespond Report\nRemove Report", "Select", "Return");
 				}		
 			}	
 		}
@@ -6226,7 +6524,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			if(!strcmp(inputtext, "NONE", true) || !strcmp(inputtext, "RENTAL", true))
-				return ShowPlayerDialog(playerid, DIALOG_MDC_PLATE, DIALOG_STYLE_INPUT, "MDC - Plate Search", "ERROR: Can't found vehicle with specified number plate!\nPlease input the full vehicle plate you wish to search:", "Search", "Return");
+				return ShowPlayerDialog(playerid, DIALOG_MDC_PLATE, DIALOG_STYLE_INPUT, "MDC > Plate Search", "ERROR: Can't found vehicle with specified number plate!\nPlease input the full vehicle plate you wish to search:", "Search", "Return");
 			
 			new found = 0;
 			new str[512];
@@ -6242,9 +6540,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 			}
 			if(found)
-				ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_TABLIST_HEADERS, "MDC - Plate Search", str, "Return", "");
+				ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_TABLIST_HEADERS, "MDC > Plate Search", str, "Return", "");
 			else
-				ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC - Error", "There is no SpeedTrap last vehicle matching with the plate.", "Return", "Close");
+				ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC > Error", "There is no SpeedTrap last vehicle matching with the plate.", "Return", "Close");
 		}
 		else
 		{
@@ -6266,6 +6564,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(listitem == 2) {
 				mysql_tquery(sqlcon, sprintf("SELECT * FROM `tickets` WHERE `ID` = '%d' ORDER BY `ticketID` ASC;", sql_id), "OnLookupTicketMDC", "d", playerid);
 			}
+			if(listitem == 3) {
+				mysql_tquery(sqlcon, sprintf("SELECT * FROM `crime_record` WHERE `PlayerID` = '%d' ORDER BY `ID` ASC LIMIT 15;", sql_id), "OnLookupCrimeRecord", "d", playerid);
+			}
 		}
 	}
 	if(dialogid == DIALOG_MDC_CITIZEN) {
@@ -6279,7 +6580,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response) {
 
 			if(!strcmp(inputtext, "NONE", true) || !strcmp(inputtext, "RENTAL", true))
-				return ShowPlayerDialog(playerid, DIALOG_MDC_VEHICLE, DIALOG_STYLE_INPUT, "MDC - Vehicle Lookup", "Please input the Vehicle Plate you wish to lookup:", "Search", "Close");
+				return ShowPlayerDialog(playerid, DIALOG_MDC_VEHICLE, DIALOG_STYLE_INPUT, "MDC > Vehicle Lookup", "Please input the Vehicle Plate you wish to lookup:", "Search", "Close");
 
 			new query[244];
 			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `vehicle` WHERE `vehPlate` = '%e' ORDER BY `vehID` ASC LIMIT 1;", inputtext);
@@ -6301,13 +6602,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 1)
 			{
-				ShowPlayerDialog(playerid, DIALOG_MDC_PLATE, DIALOG_STYLE_INPUT, "MDC - Plate Search", "Please input the full vehicle plate you wish to search:", "Search", "Return");
+				ShowPlayerDialog(playerid, DIALOG_MDC_PLATE, DIALOG_STYLE_INPUT, "MDC > Plate Search", "Please input the full vehicle plate you wish to search:", "Search", "Return");
 			}
 			if(listitem == 2) {
-				ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN, DIALOG_STYLE_INPUT, "MDC - Citizen Lookup", "Please input the Citizen Name you wish to lookup:", "Search", "Close");
+				ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN, DIALOG_STYLE_INPUT, "MDC > Citizen Lookup", "Please input the Citizen Name you wish to lookup:", "Search", "Close");
 			}
 			if(listitem == 3) {
-				ShowPlayerDialog(playerid, DIALOG_MDC_VEHICLE, DIALOG_STYLE_INPUT, "MDC - Vehicle Lookup", "Please input the Vehicle Plate you wish to lookup:", "Search", "Close");
+				ShowPlayerDialog(playerid, DIALOG_MDC_VEHICLE, DIALOG_STYLE_INPUT, "MDC > Vehicle Lookup", "Please input the Vehicle Plate you wish to lookup:", "Search", "Close");
 			}
 		}
 		else
@@ -6501,8 +6802,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				strcat(string, "/biz buy - untuk membeli Business\n");
 				strcat(string, "/biz menu - untuk membuka menu Business (for owner)\n");
 				strcat(string, "/biz lock - untuk toggle lock/unlock Business\n");
-				strcat(string, "/biz reqstock - untuk meminta restock kepada Trucker\n");
-				strcat(string, "/biz convertfuel - untuk merestock Fuel stock (24/7 only)\n");
+				strcat(string, "/biz req- untuk meminta rekepada Trucker\n");
+				strcat(string, "/biz convertfuel - untuk mereFuel (24/7 only)\n");
 				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Business Commands", string, "Back", "");
 
 			}
@@ -7727,7 +8028,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(GetVehicleDriver(vehicleid) != INVALID_VEHICLE_ID)
 				return SendErrorMessage(playerid, "Kendaraan tersebut sedang dikendarai!");
 				
-			Vehicle_RemoveObject(vehicleid);
+
+			for(new slot = 0; slot < MAX_VEHICLE_OBJECT; slot++) if(VehicleObjects[vehicleid][slot][vehObjectExists])
+			{
+				if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+					DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
+
+				VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
+
+			}
+			for(new idx = 0; idx < 3; idx++) {
+
+				for(new i = 0; i < 2; i++) {
+					if(IsValidDynamicObject(NeonObject[vehicleid][idx][i])) {
+						DestroyDynamicObject(NeonObject[vehicleid][idx][i]);
+						NeonObject[vehicleid][idx][i] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+					}
+				}
+			}
+
 			Vehicle_GetStatus(vehicleid);
 
 			defer UnstuckPlayerVehicle[1000](playerid, vehicleid);
@@ -7741,7 +8060,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GetVehiclePos(i, pos[0], pos[1], pos[2]);
 			if(IsPlayerInRangeOfPoint(playerid, 5.0, pos[0], pos[1], pos[2]))
 			{
-				PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+				PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
 				VehicleData[i][vLocked] = !(VehicleData[i][vLocked]);
 				LockVehicle(i, VehicleData[i][vLocked]);
 
@@ -8450,6 +8769,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price);
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+							PlayerPlaySound(playerid, 32200, 0.0, 0.0, 0.0);
+							ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
 						}
 						if(listitem == 1)
 						{
@@ -8461,6 +8782,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price);
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+							PlayerPlaySound(playerid, 32200, 0.0, 0.0, 0.0);
+							ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
 						}
 						if(listitem == 2)
 						{
@@ -8472,6 +8795,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price);
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+							ApplyAnimation(playerid, "VENDING", "VEND_DRINK2_P", 4.1, 0, 0, 0, 0, 0, 1);
 						}
 					}
 					case 2:
@@ -8506,6 +8830,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price);
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+							Log_Write("Logs/maskid_log.txt", "[%s] %s(%s) new maskid: %d", ReturnDate(), GetName(playerid, false), GetUsername(playerid), PlayerData[playerid][pMaskID]);
 						}
 						if(listitem == 3)
 						{
@@ -9716,7 +10041,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
-stock SetValidColor(playerid)
+SetValidColor(playerid)
 {
 	if(!PlayerData[playerid][pOnDuty])
 	{
@@ -9750,25 +10075,37 @@ stock SetValidColor(playerid)
 }
 
 public OnPlayerFirstSpawn(playerid) {
-	mysql_tquery(sqlcon, sprintf("SELECT * FROM `business_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnBusinessQueue", "d", playerid);
-	mysql_tquery(sqlcon, sprintf("SELECT * FROM `house_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnHouseQueue", "d", playerid);
-	mysql_tquery(sqlcon, sprintf("SELECT * FROM `flat_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnFlatQueue", "d", playerid);
+	if(IsPlayerSpawned(playerid)) {
+		mysql_tquery(sqlcon, sprintf("SELECT * FROM `business_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnBusinessQueue", "d", playerid);
+		mysql_tquery(sqlcon, sprintf("SELECT * FROM `house_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnHouseQueue", "d", playerid);
+		mysql_tquery(sqlcon, sprintf("SELECT * FROM `flat_queue` WHERE `Username` = '%s'", GetName(playerid)), "OnFlatQueue", "d", playerid);
 
-	if(Biz_GetCount(playerid)) {
-		for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(playerid, i)) {
-			BizData[i][bizLastLogin] = 0;
+		if(Biz_GetCount(playerid)) {
+			for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(playerid, i)) {
+				BizData[i][bizLastLogin] = 0;
+			}
 		}
-	}
 
-	if(House_GetCount(playerid)) {
-		foreach(new i : House) if(House_IsOwner(playerid, i)) {
-			HouseData[i][houseLastLogin] = 0;
+		if(House_GetCount(playerid)) {
+			foreach(new i : House) if(House_IsOwner(playerid, i)) {
+				HouseData[i][houseLastLogin] = 0;
+			}
 		}
-	}
 
-	if(Flat_GetCount(playerid)) {
-		foreach(new i : Flat) if(Flat_IsOwner(playerid, i)) {
-			FlatData[i][flatLastLogin] = 0;
+		if(Flat_GetCount(playerid)) {
+			foreach(new i : Flat) if(Flat_IsOwner(playerid, i)) {
+				FlatData[i][flatLastLogin] = 0;
+			}
+		}
+
+		if(PlayerData[playerid][pMasked]) {
+
+			PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(sprintf("Mask_%d", PlayerData[playerid][pMaskID]), COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
+			
+			foreach(new i : Player)
+			{
+				ShowPlayerNameTagForPlayer(i, playerid, 0);
+			}
 		}
 	}
 	return 1;
@@ -9832,6 +10169,7 @@ public OnPlayerSpawn(playerid)
 			SendClientMessageEx(playerid, -1, "{FF0000}AMOTD: {FFFF00}%s", MotdData[motdAdmin]);
 
 		SendServerMessage(playerid, "Today is {FFFF00}%s", ConvertTimestamp(Timestamp:Now()));		
+		CallLocalFunction("OnPlayerFirstSpawn", "d", playerid);
 
 		foreach(new i : Player) if(!PlayerData[i][pTogLogin])
 		{
@@ -9839,7 +10177,7 @@ public OnPlayerSpawn(playerid)
 			GetPlayerCountry(playerid, country, sizeof(country));
 			GetPlayerCity(playerid, city, sizeof(city));
 
-			format(str, sizeof(str), "* "YELLOW"%s "WHITE"is now connected to "SERVER_NAME"%s.", ReturnName(playerid), !strcmp(country, "Unknown", true) ? ("") : sprintf("(%s, %s)", city, country));
+			format(str, sizeof(str), "* "YELLOW"%s "WHITE"is now connected to "SERVER_NAME"%s.", GetName(playerid, false), !strcmp(country, "Unknown", true) ? ("") : sprintf("(%s, %s)", city, country));
 			SendClientMessage(i, X11_WHITE, str);
 		}
 
@@ -9856,8 +10194,6 @@ public OnPlayerSpawn(playerid)
 			SetPlayerFacingAngle(playerid, 134.7111);
 			SendServerMessage(playerid, "Spawn-mu dipindahkan karena ada error saat meload posisi terakhir.");
 		}
-
-		CallLocalFunction("OnPlayerFirstSpawn", "d", playerid);
 	}
 	if(PlayerData[playerid][pJailTime] > 0)
 	{
@@ -9966,8 +10302,6 @@ public OnPlayerShootRightLeg(playerid, targetid, Float:amount, weaponid)
 				PlayerData[targetid][pDamages][5] = 0.0;
 			}
 		}
-		if(!IsPlayerInAnyVehicle(playerid))
-			ApplyAnimation(targetid,"ped","FALL_COLLAPSE",4.1,0,1,1,0,0,1);
 	}
     return 1;
 }
@@ -9984,8 +10318,6 @@ public OnPlayerShootLeftLeg(playerid, targetid, Float:amount, weaponid)
 				PlayerData[targetid][pDamages][6] = 0;
 			}
 		}
-		if(!IsPlayerInAnyVehicle(playerid))
-			ApplyAnimation(targetid,"ped","FALL_COLLAPSE",4.1,0,1,1,0,0,1);
 	}
     return 1;
 }
@@ -10490,6 +10822,11 @@ House_LimitFurniture(id) {
 		case 2: limit = 45;
 		case 3: limit = 50;
 	}
+
+	if(HouseData[id][houseFurnitureLevel] > 1) {
+		new total_new_furn = HouseData[id][houseFurnitureLevel] * 5;
+		limit += total_new_furn;
+	}
 	return limit;
 }
 Flat_LimitFurniture(flatid) {
@@ -10498,6 +10835,11 @@ Flat_LimitFurniture(flatid) {
 		case FLAT_TYPE_LOW: limit = 30;
 		case FLAT_TYPE_MEDIUM: limit = 35;
 		case FLAT_TYPE_HIGH: limit = 40;
+	}
+
+	if(FlatData[flatid][flatFurnitureLevel] > 1) {
+		new total_new_furn = FlatData[flatid][flatFurnitureLevel] * 5;
+		limit += total_new_furn;
 	}
 	return limit;
 }
@@ -10560,7 +10902,7 @@ IsPlayerOnJob(playerid) {
 
 	
 }
-stock Flat_FurnitureCount(id)
+Flat_FurnitureCount(id)
 {
 	new count = 0;
 
@@ -10624,7 +10966,7 @@ Garage_ReturnID(garage_sqlid) {
 	}
 	return index;
 }
-stock ReturnWeaponCount(playerid)
+ReturnWeaponCount(playerid)
 {
 	new
 		count,
@@ -10800,7 +11142,7 @@ FUNC::OnAdminSetName(playerid, userid, newname[]) {
 	format(PlayerData[userid][pName], MAX_PLAYER_NAME, newname);
 	return 1;
 }
-stock CountPlayerShootWound(playerid) {
+CountPlayerShootWound(playerid) {
 
 	new total = 0;
 
@@ -10809,7 +11151,7 @@ stock CountPlayerShootWound(playerid) {
 	}
 	return total;
 }
-stock RandomLetter()
+RandomLetter()
     return 65 + random(25);
 
 PayCheck(playerid) {
@@ -11058,29 +11400,6 @@ task OnServerDataUpdate[1800000]() {
 	woodPrice = RandomEx(2500, 5000);
 	return 1;
 }
-timer EnterWorkshop[5000](playerid, wsidx, vehicleid) {
-
-
-	if(!Iter_Contains(Workshop, wsidx))
-		return 0;
-
-	if(!IsValidVehicle(vehicleid))
-		return 0;
-
-	DisableRemoteVehicleCollisions(playerid, 0);
-	SetVehicleInterior(vehicleid, 2);
-	SetVehicleVirtualWorld(vehicleid, WorkshopData[wsidx][wsWorld]);
-	SetVehiclePos(vehicleid, 1424.1827,1311.7906,10.5928);
-	SetVehicleZAngle(vehicleid, 0.2209);
-
-	foreach(new i : VehicleOccupant(vehicleid)){
-		SetPlayerVirtualWorld(i, WorkshopData[wsidx][wsWorld]);
-		SetPlayerInterior(i, 2);
-		PlayerData[i][pInWorkshop] = wsidx;
-		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-	}
-	return 1;
-}
 
 timer WeatherRotator[2400000]()
 {
@@ -11117,6 +11436,7 @@ timer UnstuckPlayerVehicle[1000](playerid, vehicleid) {
 	SetVehicleZAngle(vehicleid, VehicleData[vehicleid][vPos][3]);
 	SendServerMessage(playerid, "Your "YELLOW"%s "WHITE"has been unstucked.", GetVehicleName(vehicleid));
 
+	ChangeVehicleColor(vehicleid,  VehicleData[vehicleid][vColor][0], VehicleData[vehicleid][vColor][1]);
 	for(new i = 0; i < MAX_VEHICLE_OBJECT; i++) if(VehicleObjects[vehicleid][i][vehObjectExists]) {
 		Vehicle_AttachObject(vehicleid, i);
 	}

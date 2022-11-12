@@ -34,6 +34,12 @@ CMD:selltostate(playerid, params[]) {
 	return 1;
 }
 
+CMD:flipcoin(playerid, params[]) {
+	new result = RandomEx(1, 3);
+
+	SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s flips a coin landing on "RED"%s", ReturnName(playerid), (result == 2) ? ("head") : ("tail"));
+	return 1;
+}
 CMD:dice(playerid, params[])
 {
     static
@@ -314,9 +320,9 @@ CMD:toggle(playerid, params[])
 		SendSyntaxMessage(playerid, "/tog(gle) [Names]");
 
 		if(PlayerData[playerid][pAdmin])
-			SendClientMessage(playerid, COLOR_SERVER, "Names: {FFFFFF}amsg, pmlog, hud, chatanim, login, ooc, pm, autopc");
+			SendClientMessage(playerid, COLOR_SERVER, "Names: {FFFFFF}amsg, pmlog, hud, chatanim, login, ooc, pm, autopc, speedcam");
 		else
-			SendClientMessage(playerid, COLOR_SERVER, "Names: {FFFFFF}hud, chatanim, login, ooc, pm, autopc");
+			SendClientMessage(playerid, COLOR_SERVER, "Names: {FFFFFF}hud, chatanim, login, ooc, pm, autopc, speedcam");
 		return 1;
 	}
 	if(!strcmp(params, "hud", true))
@@ -342,6 +348,13 @@ CMD:toggle(playerid, params[])
 
 			ShowPlayerHUD(playerid);
 		}
+	}
+	else if(!strcmp(params, "speedcam", true)) {
+		if(GetFactionType(playerid) != FACTION_POLICE)
+			return SendErrorMessage(playerid, "Opsi ini hanya bisa untuk Police Department!");
+
+		PlayerData[playerid][pToggleSpeed] = !(PlayerData[playerid][pToggleSpeed]);
+		SendServerMessage(playerid, "Speedcam Notification has been %s", (PlayerData[playerid][pToggleSpeed]) ? (""GREEN"enabled.") : (""RED"disabled."));
 	}
 	else if(!strcmp(params, "autopc", true)) {
 
@@ -1105,13 +1118,20 @@ CMD:ask(playerid, params[])
 		return SendSyntaxMessage(playerid, "/ask [question]");
 
 	if(strlen(params) >= 128)
-		return SendErrorMessage(playerid, "Panjang teks tidak bisa lebih dari 64 huruf!");
+		return SendErrorMessage(playerid, "Panjang teks tidak bisa lebih dari 128 huruf!");
 
 	format(PlayerData[playerid][pAsk], 128, params);
 	PlayerData[playerid][pAsking] = true;
-	SendAdminMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%s", GetName(playerid), playerid, params);
 	SendServerMessage(playerid, "Berhasil mengirim pertanyaan ke Administrator!");
 	askDelay[playerid] = 180;
+
+	if(strlen(params) > 64) {
+		SendAdminMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%.64s", GetName(playerid), playerid, params);
+		SendAdminMessage(-1, "...%s", params[64]);
+	}
+	else {
+		SendAdminMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%s", GetName(playerid), playerid, params);
+	}
 	return 1;
 }
 
@@ -1372,7 +1392,7 @@ CMD:hangup(playerid, params[])
 
 CMD:autotreatment(playerid, params[])
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 4.5, -1772.3304, -2013.1531, 1500.7853))
+	if(!IsPlayerInRangeOfPoint(playerid, 4.5, -1436.1725,-1528.6896,3001.5059))
 		return SendErrorMessage(playerid, "Kamu tidak berada di Hospital!");
 
 	if(CountFaction(FACTION_MEDIC) >= 1)
@@ -1552,7 +1572,7 @@ CMD:help(playerid, params[])
 
 CMD:unimpound(playerid, params[])
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1382.0933,1532.1388,1510.9011))
+	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1378.8019,1557.6079,3001.0859))
 		return SendErrorMessage(playerid, "You're not at SAPD lobby!");
 
 	mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehType` = '%d' AND `vehExtraID` = '%d' AND `vehState` = '%d' ORDER BY `vehID` ASC;", VEHICLE_TYPE_PLAYER, PlayerData[playerid][pID], VEHICLE_STATE_IMPOUNDED), "Vehicle_OnUnimpound", "d", playerid);
@@ -1561,7 +1581,7 @@ CMD:unimpound(playerid, params[])
 
 CMD:buyplate(playerid, params[])
 {
-	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1384.4253,1532.2789,1510.9011))
+	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1380.9594,1557.6090,3001.0859))
 		return SendErrorMessage(playerid, "You're not at SAPD lobby!");
 
 	new str[512], bool:found = false, count = 0;
@@ -2023,7 +2043,7 @@ CMD:enter(playerid, params[])
 				if(drData[did][dLocked])
 					return SendErrorMessage(playerid, "This entrance is locked at the moment.");
 					
-				if(drData[did][dFaction] > 0)
+				if(drData[did][dFaction] != -1)
 				{
 					if(drData[did][dFaction] != PlayerData[playerid][pFaction])
 						return SendErrorMessage(playerid, "This door only for faction.");
@@ -2164,7 +2184,7 @@ CMD:v(playerid, params[])
 			if(!IsEngineVehicle(vehicleid))
 				return SendErrorMessage(playerid, "You're not inside of any engine vehicle!");
 
-			if((Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) && !Vehicle_IsOwner(playerid, vehicleid) && !Vehicle_IsShared(playerid, vehicleid))
+			if((Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) && !Vehicle_IsOwner(playerid, vehicleid) && !Vehicle_IsShared(playerid, vehicleid) && !PlayerData[playerid][pAduty])
 				return ShowMessage(playerid, "~r~ERROR ~w~Kamu tidak memiliki kunci kendaraan ini!", 2);
 				
 			if(VehicleData[vehicleid][vTireLock])
@@ -2453,7 +2473,7 @@ CMD:v(playerid, params[])
 			if(!Vehicle_IsOwner(playerid, vehicleid) && !Vehicle_IsShared(playerid, vehicleid))
 				return SendClientMessage(playerid, -1, "You don't have key for this vehicle!");
 
-			PlayerPlaySound(playerid, 1145, 0.0, 0.0, 0.0);
+			PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
 			VehicleData[vehicleid][vLocked] = !(VehicleData[vehicleid][vLocked]);
 			LockVehicle(vehicleid, VehicleData[vehicleid][vLocked]);
 
@@ -2520,5 +2540,6 @@ CMD:fixmask(playerid, params[]) {
 
 	PlayerData[playerid][pMaskID] = PlayerData[playerid][pID]+random(90000) + 10000;
 	SendServerMessage(playerid, "Mask ID mu telah difix! "YELLOW"("WHITE"%d"YELLOW")", PlayerData[playerid][pMaskID]);
+	Log_Write("Logs/maskid_log.txt", "[%s] %s(%s) new maskid: %d", ReturnDate(), GetName(playerid, false), GetUsername(playerid), PlayerData[playerid][pMaskID]);
 	return 1;
 }

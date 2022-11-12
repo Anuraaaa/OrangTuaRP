@@ -66,12 +66,12 @@ FUNC::CheckPlayerUCP(playerid)
 	    cache_get_value_name(0, "email", UcpData[playerid][ucpEmail]);
 		cache_get_value_name(0, "Password", UcpData[playerid][uPassword], 128);
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
-	    if(banned == 1)
+	    if(banned)
 	    {
 	    	TimestampToDate(bantime, date[2], date[1], date[0], date[3], date[4], date[5]);
 
-			new zstr[325];
-			format(zstr, sizeof(zstr),"{FFFFFF}Your UCP has been Banned from this server\n{FF0000}Reason: {FFFFFF}%s\n{FF0000}Banned By: {FFFFFF}%s\n{FF0000}Banned Date: {FFFFFF}%i/%02d/%02d %02d:%02d\n{FFFFFF}For Unbanned please visit our discord at {FF0000}https://discord.gg/WQKYCW8pzQ", banreason, banby, date[2], date[0], date[1], date[3], date[4]);
+			new zstr[425];
+			format(zstr, sizeof(zstr),"{FFFFFF}Your UCP has been Banned from this server\n{FF0000}Reason: {FFFFFF}%s\n{FF0000}Banned By: {FFFFFF}%s\n{FF0000}Banned Date: {FFFFFF}%i/%02d/%02d %02d:%02d\n{FF0000}IP Address: {FFFFFF}%s\n{FFFFFF}Ingin melakukan unbanned? kunjungi "YELLOW"https://discord.gg/EZxPE4Q8Uf", banreason, banby, date[2], date[0], date[1], date[3], date[4],ReturnIP(playerid));
 			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "{FFFFFF}Banned Alert - UCP Ban", zstr, "Close", "");	 
 			KickEx(playerid);   	
 	    }
@@ -214,6 +214,7 @@ SQL_SaveCharacter(playerid)
 		mysql_format(sqlcon, query, sizeof(query), "%s`HaulingDelay`='%d', ", query, PlayerData[playerid][pHaulingDelay]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`MarryWith`='%s', ", query, MarryWith[playerid]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`MarryDate`='%s', ", query, MarryDate[playerid]);
+		mysql_format(sqlcon,  query, sizeof(query), "%s`Masked`='%d', ", query, PlayerData[playerid][pMasked]);
 		forex(i, 10)
 		{
 			mysql_format(sqlcon, query, sizeof(query), "%s`Fish%d` = '%.1f', `FishName%d` = '%s', ", query, i + 1, FishWeight[playerid][i], i + 1, FishName[playerid][i]);
@@ -294,7 +295,7 @@ FUNC::LoadCharacterData(playerid)
 	cache_get_value_name_int(0, "BusDelay", PlayerData[playerid][pBusDelay]);
 	cache_get_value_name_int(0, "MaskID", PlayerData[playerid][pMaskID]);
 	cache_get_value_name_int(0, "HaulingDelay", PlayerData[playerid][pHaulingDelay]);
-	
+	cache_get_value_name_int(0, "Masked",  PlayerData[playerid][pMasked]);
 	cache_get_value_name_float(0, "Head", PlayerData[playerid][pDamages][0]);
 	cache_get_value_name_float(0, "Torso", PlayerData[playerid][pDamages][1]);
 	cache_get_value_name_float(0, "RightArm", PlayerData[playerid][pDamages][2]);
@@ -685,6 +686,7 @@ stock ResetPlayerStatistics(playerid)
 	
 	PlayerData[playerid][pAdoLabel] = Text3D:INVALID_3DTEXT_ID;
 	PlayerData[playerid][pMaskLabel] = Text3D:INVALID_3DTEXT_ID;
+	PlayerData[playerid][pToggleSpeed] = true;
 	
 	PlayerData[playerid][pAhide] = false;
 	PlayerData[playerid][pMineDelay] = 0;

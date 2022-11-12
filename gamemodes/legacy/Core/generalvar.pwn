@@ -412,7 +412,14 @@ enum
 	DIALOG_ADS_TEXT,
 	DIALOG_ADS_POST,
 	DIALOG_REPLY,
-	DIALOG_FURNITURE_TEXTURE
+	DIALOG_FURNITURE_TEXTURE,
+	DIALOG_CRIMERECORD,
+	DIALOG_ACC_PRESET,
+	DIALOG_ACC_PRESET_SEARCH,
+	DIALOG_ACC_PRESET_LISTED,
+	DIALOG_ACC_PRESET_CREATE,
+	DIALOG_ACC_PRESET_MY,
+	DIALOG_ACC_PRESET_FOUND
 };
 
 enum {
@@ -663,10 +670,6 @@ new pv_lights[2][0] =
 	{1024}
 };
 
-new SU_Days,
-	SU_Hours,
-	SU_Minutes,
-	SU_Seconds;
 
 
 enum houseInteriors {
@@ -757,6 +760,7 @@ new PlayerChar[MAX_PLAYERS][MAX_CHARS][MAX_PLAYER_NAME + 1];
 new PlayerLevel[MAX_PLAYERS][MAX_CHARS];
 new PlayerLastLogin[MAX_PLAYERS][MAX_CHARS];
 new tempUCP[MAX_PLAYERS][64];
+new ListedUniversal[MAX_PLAYERS][100];
 
 new g_aMaleSkins[] = {
 	1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -849,3 +853,5 @@ stock const g_aPreloadLibs[][] =
     "TRUCK",        "UZI",          "VAN",          "VENDING",      "VORTEX",
     "WAYFARER",     "WEAPONS",      "WOP",          "WUZI"
 };
+
+new rob_biz_delay = 0;

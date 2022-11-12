@@ -16,7 +16,8 @@ enum acc {
 
 new
     AccData[MAX_PLAYERS][MAX_ACC][acc],
-    ListedAcc[MAX_PLAYERS][MAX_ACC];
+    ListedAcc[MAX_PLAYERS][MAX_ACC],
+    ListedPreset[MAX_PLAYERS][15];
 
 stock const accBones[][24] = {
     {"Spine"},
@@ -406,21 +407,29 @@ FUNC::OnAksesorisCreated(playerid, id)
     return 1;
 }
 
-
-CMD:acc(playerid, params[])
-{
+ShowAksesorisMenu(playerid) {
 	new 
-		string[352]
+		string[552]
 	;
 	
-	format(string,sizeof(string),"Index\tName\tBone\n");
-	for (new id = 0; id != MAX_ACC; id++)
+	format(string,sizeof(string),"Index\tName\tStatus\n");
+	for (new id = 0; id < MAX_ACC; id++)
 	{
+        if(id == -1) 
+            return SendErrorMessage(playerid, "Tidak dapat membuka aksesoris menu! lapor ini kepada developer terganteng se abad jagat raya slebew :b");
+
         if(AccData[playerid][id][accExists])
-		    format(string,sizeof(string),"%s"WHITE"#%d\t%s\t%s\n", string, id, AccData[playerid][id][accName], accBones[AccData[playerid][id][accBone]-1]);
+		    format(string,sizeof(string),"%s"WHITE"#%d\t%s\t%s\n", string, id, AccData[playerid][id][accName], (AccData[playerid][id][accShow]) ? ("attached") : ("not attached"));
         else 
             format(string, sizeof(string), "%s"GREY"Empty slot\n", string);
 	}
 	ShowPlayerDialog(playerid, DIALOG_ACC_MENU, DIALOG_STYLE_TABLIST_HEADERS, "Editing Accessory", string, "Select","Exit");
+
+    return 1;
+}
+
+CMD:acc(playerid, params[])
+{
+    ShowAksesorisMenu(playerid);
     return 1;
 }

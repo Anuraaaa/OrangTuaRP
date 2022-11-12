@@ -8,21 +8,9 @@
     #error could not find a_samp.inc, please check your server includes.
 #endif
 
-#if !defined _INC_y_iterate
-    #tryinclude <YSI_Data\y_iterate>
-#endif
+#include <YSI_Data\y_foreach>
+#include <YSI_Coding\y_hooks>
 
-#if !defined _INC_y_iterate
-    #error Cannot find y_iterate library
-#endif
-
-#if !defined _INC_y_hooks
-    #tryinclude <YSI_Coding\y_hooks>
-#endif
-
-#if !defined _INC_y_iterate
-    #error Cannot find y_hooks library
-#endif
 
 #if !defined _streamer_included
     #tryinclude <streamer>

@@ -371,6 +371,30 @@ CMD:take(playerid, params[])
     return 1;
 }
 
+CMD:su(playerid, params[]) {
+    new targetid, description[64];
+
+    if(GetFactionType(playerid) != FACTION_POLICE)
+        return SendErrorMessage(playerid, "This command is only for San Andreas Police Departement!");
+
+    if(sscanf(params, "us[64]", targetid, description))
+        return SendSyntaxMessage(playerid, "/su [playerid/PartOfName] [charge/description]");
+
+    if(targetid == INVALID_PLAYER_ID)
+        return SendErrorMessage(playerid, "You have specified invalid player.");
+
+    if(strlen(description) > 64)
+        return SendErrorMessage(playerid, "Karakter deskripsi tidak dapat lebih dari 64 huruf.");
+
+    new query[712];
+    mysql_format(sqlcon, query, 712, "INSERT INTO `crime_record` (`PlayerID`, `Issuer`, `Description`, `Status`, `Date`) VALUES('%d','%e','%e','%d','%e')", PlayerData[targetid][pID], GetName(playerid, false), description, 1, ReturnDate(false));
+    mysql_tquery(sqlcon, query);
+
+    SendFactionMessage(PlayerData[playerid][pFaction], X11_BLUE, "CRIME RECORD: "WHITE"Suspect: [ %s ] Issued By: [ %s ]", GetName(targetid, false), GetName(playerid, false));
+    SendFactionMessage(PlayerData[playerid][pFaction], X11_BLUE, "CRIME RECORD: "WHITE"Charge: [ %s ] Status: [ "YELLOW"Active "WHITE"]", description);
+    return 1;
+
+}
 CMD:tazer(playerid, params[])
 {
     if(GetFactionType(playerid) != FACTION_POLICE)

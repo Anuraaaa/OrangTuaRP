@@ -177,7 +177,10 @@ CMD:sms(playerid, params[])
 
     if(PlayerData[targetid][pPhoneOff])
         return SendErrorMessage(playerid, "The recipient has their cellphone powered off.");
-    
+
+	if(!PlayerData[playerid][pCredit])
+		return SendErrorMessage(playerid, "Kamu tidak memiliki phone credit!");
+
 	PlayerData[playerid][pCredit] -= 3;
 
 	if(PlayerData[playerid][pCredit] < 0)
@@ -206,7 +209,7 @@ CMD:reply(playerid, params[]) {
 
 		new str[156];
 		format(str, sizeof(str), ""WHITE"Reply to: "YELLOW"%d\n"WHITE"Message: "GREEN"(input below)");
-		ShowPlayerDialog(playerid, DIALOG_REPLY, DIALOG_STYLE_MSGBOX, "Reply Message", str, "Send", "Close");
+		ShowPlayerDialog(playerid, DIALOG_REPLY, DIALOG_STYLE_INPUT, "Reply Message", str, "Send", "Close");
 	}
 	else SendErrorMessage(playerid, "Pengirim pesan terakhir tidak dapat dijangkau.");
 
@@ -261,14 +264,19 @@ CMD:call(playerid, params[])
 		PlayerPlayNearbySound(playerid, 3600);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
 		SendClientMessage(playerid, COLOR_YELLOW, "OPERATOR:{FFFFFF} The taxi department has been notified of your call.");
-		SendJobMessage(JOB_TAXI, COLOR_YELLOW, "TAXI CALL: {FFFFFF}%s[%d] is requesting a taxi at %s (use /taxi calls to accept).", GetName(playerid), PlayerData[playerid][pPhoneNumber], GetSpecificLocation(playerid));
+		
+		foreach(new i : Player) if(CheckPlayerJob(i, JOB_TAXI) && PlayerData[i][pJobduty]) {
+			SendClientMessageEx(i, X11_YELLOW, "[1222]: "WHITE"%s[%d] membutuhkan Taxi pada lokasi %s (/taxi calls untuk menerima)", GetName(playerid, false), PlayerData[playerid][pPhoneNumber], GetSpecificLocation(playerid));
+		}
 	}
 	else if (number == 143)
 	{
 	    PlayerPlayNearbySound(playerid, 3600);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
 		SendClientMessage(playerid, COLOR_LIGHTGREEN, "OPERATOR:{FFFFFF} The mechanic has been notified of your call.");
-		SendJobMessage(JOB_MECHANIC, COLOR_LIGHTGREEN, "MECH CALL: {FFFFFF}%s is requesting a mechanic at %s (%d)", GetName(playerid), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
+		foreach(new i : Player) if(CheckPlayerJob(i, JOB_MECHANIC) && PlayerData[i][pJobduty])  {
+			SendClientMessageEx(i, COLOR_LIGHTGREEN, "[143]: {FFFFFF}%s is requesting a mechanic at %s (%d)", GetName(playerid, false), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
+		}
 	}
 	else if(number == 193) {
 

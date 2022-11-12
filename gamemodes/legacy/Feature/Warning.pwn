@@ -5,7 +5,7 @@ enum
 	TYPE_JAIL,
 	TYPE_BAN
 }
-stock JailUser(playerid, targetid, minutes, reason[])
+JailUser(playerid, targetid, minutes, reason[])
 {
 	PlayerData[targetid][pJailTime] = minutes* 60;
 	format(PlayerData[targetid][pJailReason], 32, reason);
@@ -30,7 +30,7 @@ FUNC::OnWarnUser(playerid, targetid, reason[])
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been warned by %s", GetName(targetid), PlayerData[playerid][pUCP]);
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
 }
-stock WarnUser(playerid, targetid, reason[])
+WarnUser(playerid, targetid, reason[])
 {
 	new string [192];
 	mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `warnings` (`Owner`, `Type`, `Reason`, `Admin`, `Date`) VALUES('%d', '%d', '%e', '%e', CURRENT_TIMESTAMP())", PlayerData[targetid][pID], TYPE_WARN, reason, PlayerData[playerid][pUCP]);
@@ -38,7 +38,7 @@ stock WarnUser(playerid, targetid, reason[])
 	return 1;
 }
 
-stock OfflineWarnUser(playerid, name[], reason[])
+OfflineWarnUser(playerid, name[], reason[])
 {
 	new sqlid;
 	new string [192];
@@ -62,7 +62,7 @@ stock OfflineWarnUser(playerid, name[], reason[])
 	return 1;
 }
 
-stock ShowPlayerWarning(playerid, targetid)
+ShowPlayerWarning(playerid, targetid)
 {
 
 	new const warntype[][] = {

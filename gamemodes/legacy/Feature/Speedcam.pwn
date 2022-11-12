@@ -249,10 +249,14 @@ hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 			Speed_RefreshText(speedid);
 			GetPlayer2DZone(playerid, location, MAX_ZONE_NAME);
 
-			SendDutyMessage(FACTION_POLICE, X11_LIGHTBLUE, "SPEEDTRAP: "YELLOW"[ "WHITE"%s(%s) "YELLOW"] [ "WHITE"Speed: %d/%.1fKMH "YELLOW" ] [ "WHITE"Location: %s "YELLOW"]", GetVehicleName(vehicleid), VehicleData[vehicleid][vPlate], GetVehicleSpeedKMH(vehicleid), SpeedData[speedid][speedLimit], location);
-			PlayerPlaySound(playerid, 1085, 0.0, 0.0, 0.0);
+			foreach(new i : Player) if(GetFactionType(i) == FACTION_POLICE && !PlayerData[i][pToggleSpeed]) {
+				SendClientMessageEx(i, X11_LIGHTBLUE, "SPEEDTRAP: "YELLOW"[ "WHITE"%s(%s) "YELLOW"] [ "WHITE"Speed: %d/%.1fKMH "YELLOW" ] [ "WHITE"Location: %s "YELLOW"]", GetVehicleName(vehicleid), VehicleData[vehicleid][vPlate], GetVehicleSpeedKMH(vehicleid), SpeedData[speedid][speedLimit], location);
+			}
+			
 
-			ShowMessage(playerid, sprintf("~r~WARNING:~w~_You're speeding_~y~%i/%.0f_KMH", GetVehicleSpeedKMH(vehicleid), SpeedData[speedid][speedLimit]), 3);
+			new string[256];
+			format(string, sizeof(string), "~y~Speed camera ~w~merekam dan mencatat data kendaraanmu dikarenakan...~n~melewati ~r~batas maksimum ~w~kecepatan! ~b~[%d/%.1f KM/H]", GetVehicleSpeedKMH(vehicleid), SpeedData[speedid][speedLimit]);
+			ShowMessage(playerid, string, 4, 1);
 			Speed_Save(speedid);
 		}
 	}

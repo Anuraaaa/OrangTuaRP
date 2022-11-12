@@ -23,14 +23,10 @@ SetupPlayerMask(playerid)
 
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s takes out a mask and puts it on.", ReturnName(playerid));
 
-		new Float:hp, Float:arm;
-		GetPlayerHealth(playerid, hp);
-		GetPlayerArmour(playerid, arm);
-
 		if(!IsPlayerInAnyVehicle(playerid))
 			ApplyAnimation(playerid, "shop","ROB_Shifty", 4.1, 0, 0, 0, 0, 0, 1);
 
-		format(str, sizeof(str), "Mask_%d", PlayerData[playerid][pMaskID], hp, arm);
+		format(str, sizeof(str), "Mask_%d", PlayerData[playerid][pMaskID]);
 
 		PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(str, COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
 		
@@ -38,6 +34,8 @@ SetupPlayerMask(playerid)
 		{
 			ShowPlayerNameTagForPlayer(i, playerid, 0);
 		}
+
+		PlayerPlaySound(playerid, 20803, 0.0, 0.0, 0.0);
 
 	}
 	return 1;

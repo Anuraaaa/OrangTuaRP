@@ -44,7 +44,7 @@ Advert_CountPlayer(playerid)
 	}
 	return count;
 }
-Advert_Create(number, text[], pid, name[])
+Advert_Create(number, text[], pid, name[], &time)
 {
 	for(new i = 0; i < MAX_ADVERT; i ++) if(!AdvertData[i][advertExists])
 	{
@@ -54,6 +54,7 @@ Advert_Create(number, text[], pid, name[])
 	    format(AdvertData[i][advertName], 32, name);
 	    AdvertData[i][advertNumber] = number;
 	    AdvertData[i][advertTime] = RandomEx(1, 3);
+		time = AdvertData[i][advertTime];
 	    return i;
 	}
 	return -1;
@@ -99,8 +100,9 @@ CMD:ad(playerid, params[])
 	    return SendErrorMessage(playerid, "You need $%s to make advertisement", FormatNumber(strlen(params)*50));
 
 	GiveMoney(playerid, -strlen(params)*50);
-	Advert_Create(PlayerData[playerid][pPhoneNumber], params, PlayerData[playerid][pID], GetName(playerid, false));
-	SendClientMessage(playerid, COLOR_SERVER, "ADS: {FFFFFF}Your advertisement will be appear 2 minutes from now.");
+	new time = 1;
+	Advert_Create(PlayerData[playerid][pPhoneNumber], params, PlayerData[playerid][pID], GetName(playerid, false), time);
+	SendClientMessageEx(playerid, COLOR_SERVER, "ADS: {FFFFFF}Your advertisement will be appear %d minutes from now.", time);
 	return 1;
 }
 
@@ -116,7 +118,7 @@ CMD:postad(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/postad [playerid/PartOfName]");
 
-	if(!IsPlayerNearPlayer(playerid, targetid, 6.0) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerNearPlayer(playerid, targetid, 9.0) || targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	if(!PlayerHasItem(targetid, "Cellphone"))
@@ -133,4 +135,4 @@ CMD:postad(playerid, params[]) {
 
 	return 1;
 
-}
+}//

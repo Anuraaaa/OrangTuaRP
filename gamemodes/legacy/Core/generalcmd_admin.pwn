@@ -9,7 +9,7 @@ CMD:ahelp(playerid, params[])
 		SendClientMessage(playerid, COLOR_YELLOW, "Helper: {FFFFFF}/ans, /ban, /unban, /oban, /kick, /jail, /unjail, /asay, /setinterior");
 		SendClientMessage(playerid, COLOR_YELLOW, "Helper: {FFFFFF}/freeze, /unfreeze, /spec, /unspec, /aslap, /ojail, /checkvehicle");
 		SendClientMessage(playerid, COLOR_YELLOW, "Helper: {FFFFFF}/warn, /owarn, /checkwarn, /checkchar, /checkucp, /(get/ban/unban)ip");
-		SendClientMessage(playerid, COLOR_YELLOW, "Helper: {FFFFFF}/sendtoveh, /sendvehto, /send, /arevive, /acure");
+		SendClientMessage(playerid, COLOR_YELLOW, "Helper: {FFFFFF}/sendtoveh, /sendvehto, /send, /arevive, /acure, /adamages");
 	}
 	if(PlayerData[playerid][pAdmin] >= 2)
 	{
@@ -1690,6 +1690,9 @@ CMD:ban(playerid, params[])
 	mysql_format(sqlcon, query,sizeof(query),"UPDATE `playerucp` SET `Banned` = 1, `BannedBy` = '%s', `BannedReason` = '%s', `BannedTime` = '%d' WHERE `UCP` = '%s'", PlayerData[playerid][pUCP], reason, temptime,PlayerData[targetid][pUCP]);
 	mysql_tquery(sqlcon, query);	
 
+	mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `banip` (`IP`, `Admin`, `Reason`) VALUES('%e', '%e', '%e')", ReturnIP(targetid), GetUsername(playerid), reason);
+	mysql_tquery(sqlcon, query);
+
 	format(query, sizeof(query),"{FFFFFF}Your UCP has been Banned from this server\n{FF0000}Reason: {FFFFFF}%s\n{FF0000}Banned By: {FFFFFF}%s\n{FF0000}Banned Date: {FFFFFF}%i/%02d/%02d %02d:%02d\n{FFFFFF}For Unbanned please visit our discord at {FF0000}https://discord.gg/WQKYCW8pzQ", reason, PlayerData[playerid][pUCP], date[2], date[0], date[1], date[3], date[4]);
 	ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "{FFFFFF}Banned Alert - UCP Ban", query, "Close", "");	
 
@@ -2224,7 +2227,26 @@ CMD:givecash(playerid, params[])
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has give $%s cash to %s", PlayerData[playerid][pUCP], FormatNumber(strcash(amount)), GetName(targetid));
-	GiveMoney(targetid, strcash(amount), "Given from admin");
+	GiveMoney(targetid, strcash(amount), sprintf("Given from %s", GetUsername(playerid)));
+	return 1;
+}
+
+CMD:giveallcash(playerid, params[]) {
+
+	if(PlayerData[playerid][pAdmin] < 7)
+		return SendErrorMessage(playerid, "You don't have permission to use this command!");
+
+	new amount[32], cash = 0;
+
+	if(sscanf(params, "s[32]", amount))
+		return SendSyntaxMessage(playerid, "/giveallcash [amount]");
+
+	cash = strcash(amount);
+
+	SendClientMessageToAllEx(X11_TOMATO, "AdmCmd: %s memberikan uang sebanyak $%s kepada seluruh player.", GetUsername(playerid), FormatNumber(cash));
+	foreach(new i : Player) if(IsPlayerSpawned(i)) {
+		GiveMoney(i, cash, "Given all from admin");
+	}
 	return 1;
 }
 CMD:jetpack(playerid, params[])

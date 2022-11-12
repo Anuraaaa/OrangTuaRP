@@ -173,7 +173,7 @@ CMD:adamages(playerid, params[]) {
         return SendErrorMessage(playerid, NO_PERMISSION);
 
     if(sscanf(params, "u", targetid))
-        return Damage_Show(playerid, playerid);
+        return SendSyntaxMessage(playerid, "/adamages [playerid/PartOfName]");
 
     if (targetid == INVALID_PLAYER_ID)
         return SendErrorMessage(playerid, "That player is disconnected.");
