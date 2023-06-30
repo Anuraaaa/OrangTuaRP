@@ -5,11 +5,11 @@ new
 	BusVehicle[3],
 	Bus2Vehicle[2],
 	SweeperVehicle[3],
-	PizzaVehicle[4],
 	TrashVehicle[3],
 	MowerVehicle[4],
 	ForkliftVehicle[6],
-	RumpoVehicle[6];
+	RumpoVehicle[6],
+	CourierVehicle[5];
 
 ShowMDC(playerid)
 {
@@ -42,7 +42,7 @@ ReturnMDC(playerid) {
 	return ShowMDC(playerid);
 }
 
-FUNC::OnLookupTicketMDC(playerid) {
+function OnLookupTicketMDC(playerid) {
 	
 	new name[MAX_PLAYER_NAME],
 		str[1012];
@@ -69,7 +69,7 @@ FUNC::OnLookupTicketMDC(playerid) {
 	return 1;
 }
 
-FUNC::OnLookupCrimeRecord(playerid) {
+function OnLookupCrimeRecord(playerid) {
 	
 	new string[1512], count = 0;
 
@@ -93,13 +93,13 @@ FUNC::OnLookupCrimeRecord(playerid) {
 			cache_get_value_name(i, "Description", description, 64);
 
 			strcat(string, sprintf("%s\t%s\t%s\t%s\n", date, description, issuer_name, (status) ? (""YELLOW"Active") : (""RED"Not Active")));
-			ListedUniversal[playerid][count++] = sql_id;
+			ListedItems[playerid][count++] = sql_id;
 		}
 		ShowPlayerDialog(playerid, DIALOG_CRIMERECORD, DIALOG_STYLE_TABLIST_HEADERS, "MDC > Crime Record", string, "Toggle", "Close");
 	}
 	return 1;
 }
-FUNC::OnLookupArrestMDC(playerid) {
+function OnLookupArrestMDC(playerid) {
 
 	new name[MAX_PLAYER_NAME],
 		str[1312];
@@ -126,7 +126,7 @@ FUNC::OnLookupArrestMDC(playerid) {
 	DeletePVar(playerid, "LookupName");
 	return 1;
 }
-FUNC::OnLookupInformationMDC(playerid) {
+function OnLookupInformationMDC(playerid) {
 
 	if(!cache_num_rows()) {
 		SendErrorMessage(playerid, "We couldn't find data for specified name.");
@@ -205,7 +205,7 @@ FUNC::OnLookupInformationMDC(playerid) {
 }
 
 
-FUNC::OnLookupVehicle(playerid, string:plate[]) {
+function OnLookupVehicle(playerid, string:plate[]) {
 	if(!cache_num_rows())
 		return SendErrorMessage(playerid, "Data for plate \"%s\" not found.", plate), ReturnMDC(playerid);
 
@@ -239,7 +239,7 @@ FUNC::OnLookupVehicle(playerid, string:plate[]) {
 	cache_delete(result);
 	return 1;
 }
-FUNC::OnLookupMDC(playerid, string:namez[]) {
+function OnLookupMDC(playerid, string:namez[]) {
 	if(!cache_num_rows())
 		return SendErrorMessage(playerid, "Citizen with name %s is unregistered name.", namez), ReturnMDC(playerid);
 
@@ -469,7 +469,7 @@ CMD:callsign(playerid, params[])
  		DestroyDynamic3DTextLabel(vehicle3Dtext[vehicleid]);
 	    vehiclecallsign[vehicleid] = 0;
 
-	    SendClientMessage(playerid, COLOR_SERVER, "CALLSIGN: {FFFFFF}Vehicle Callsign removed.");
+	    SendClientMessage(playerid, COLOR_SERVER, "(Callsign) {FFFFFF}Vehicle Callsign removed.");
 	    return 1;
 	}
 	if(sscanf(params, "s[32]",string))
@@ -684,10 +684,13 @@ CMD:detain(playerid, params[])
 
 CMD:factions(playerid, params[])
 {
-	new str[512];
-	forex(i, MAX_FACTIONS) if(FactionData[i][factionExists])
+	new str[512]; 
+	for(new i = 0; i < MAX_FACTIONS; i++) if(FactionData[i][factionExists])
 	{
-		format(str, sizeof(str), "%s{FFFFFF}[ID: %d] {%06x}%s\n", str, i, FactionData[i][factionColor] >>> 8, FactionData[i][factionName]);
+		if(FactionData[i][factionType] == FACTION_FAMILY) 
+			format(str, sizeof(str), "%s{FFFFFF}[ID: %d] {%06x}%s\n", str, i, FactionData[i][factionColor] >>> 8, FactionData[i][factionName]);
+		else 
+			format(str, sizeof(str), "%s{FFFFFF}[ID: %d] {%06x}%s - (%d duty)\n", str, i, FactionData[i][factionColor] >>> 8, FactionData[i][factionName], Faction_CountDutyByID(i));
 	}
 	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Faction List", str, "Close", "");
 	return 1;

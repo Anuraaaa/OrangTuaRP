@@ -26,8 +26,8 @@ stock CheckPlayerTest(playerid)
 {
 	if(PlayerData[playerid][pIndexTest] < 6)
 	{
-		SendClientMessageEx(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu dinyatakan {FF0000}gagal {FFFFFF}dalam test teori");
-		SendClientMessageEx(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu hanya menjawab {FFFF00}%d {FFFFFF}pertanyaan benar dari {FFFF00}7 {FFFFFF}pertanyaan", PlayerData[playerid][pIndexTest]);
+		SendClientMessageEx(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Kamu dinyatakan {FF0000}gagal {FFFFFF}dalam test teori");
+		SendClientMessageEx(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Kamu hanya menjawab {FFFF00}%d {FFFFFF}pertanyaan benar dari {FFFF00}7 {FFFFFF}pertanyaan", PlayerData[playerid][pIndexTest]);
 		PlayerData[playerid][pIndexTest] = 0;
 		PlayerData[playerid][pOnTest] = false;
 	}
@@ -43,9 +43,9 @@ stock CheckPlayerTest(playerid)
 		PlayerData[playerid][pOnDMV] = true;
 		PlayerData[playerid][pIndexDMV] = 0;
 		SetPlayerCheckpoint(playerid, DMVPoint[PlayerData[playerid][pIndexDMV]][0], DMVPoint[PlayerData[playerid][pIndexDMV]][1], DMVPoint[PlayerData[playerid][pIndexDMV]][2], 3.4);
-		SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu dinyatakan {00FF00}lulus {FFFFFF}dalam test teori!");
-		SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Langkah selanjutnya adalah test mengemudi, silahkan ikuti semua Marker yang ada di radar!");
-		SendClientMessage(playerid, COLOR_SERVER, "DMV: "WHITE"Gunakan "YELLOW"/v engine "WHITE"untuk menyalakan mesin kendaraan.");
+		SendClientMessage(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Kamu dinyatakan {00FF00}lulus {FFFFFF}dalam test teori!");
+		SendClientMessage(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Langkah selanjutnya adalah test mengemudi, silahkan ikuti semua Marker yang ada di radar!");
+		SendClientMessage(playerid, COLOR_SERVER, "(DMV) "WHITE"Gunakan "YELLOW"/v engine "WHITE"untuk menyalakan mesin kendaraan.");
 	}
 	return 1;
 }

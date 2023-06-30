@@ -41,7 +41,7 @@ stock Weed_Delete(id)
 	WeedData[id][weedID] = 0;
 	return 1;
 }
-FUNC::HarvestWeed(playerid, wid)
+function HarvestWeed(playerid, wid)
 {
 	if(!WeedData[wid][weedExists])
 		return 0;
@@ -49,7 +49,7 @@ FUNC::HarvestWeed(playerid, wid)
 	ClearAnimations(playerid, 1);
 	Weed_Delete(wid);
 	Inventory_Add(playerid, "Weed", 1578, 1);
-	SendClientMessage(playerid, COLOR_SERVER, "DRUGS: {FFFFFF}Item added to inventory: {FFFF00}Weed +1");
+	SendClientMessage(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Item added to inventory: {FFFF00}Weed +1");
 	return 1;
 }
 stock Weed_Nearest(playerid)
@@ -77,15 +77,15 @@ stock Weed_Count()
 }
 
 
-FUNC::Combined(playerid)
+function Combined(playerid)
 {
 	ClearAnimations(playerid, 1);
-	SendClientMessage(playerid, COLOR_SERVER, "DRUGS: {FFFFFF}Item added to inventory: {FFFF00}Rolled Weed +1");
+	SendClientMessage(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Item added to inventory: {FFFF00}Rolled Weed +1");
 	Inventory_Add(playerid, "Rolled Weed", 3027, 1);
 	return 1;
 }
 
-FUNC::PlantWeed(playerid, Float:x, Float:y, Float:z)
+function PlantWeed(playerid, Float:x, Float:y, Float:z)
 {
 	if(Weed_Count() >= MAX_WEED)
 		return SendErrorMessage(playerid, "The server cannot create more Weeds!");
@@ -117,7 +117,7 @@ stock Weed_Create(Float:x, Float:y, Float:z)
 	return -1;
 }
 
-FUNC::OnWeedCreated(id)
+function OnWeedCreated(id)
 {
 	WeedData[id][weedID] = cache_insert_id();
 	Weed_Save(id);
@@ -143,7 +143,7 @@ stock Weed_Refresh(plantid)
 }
 
 
-FUNC::Weed_Load()
+function Weed_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -205,3 +205,9 @@ hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 	}*/
 }
 
+task timer_SaveWeedData[1200000]() {
+	for(new i = 0; i < MAX_WEED; i++) if(WeedData[i][weedExists]) {
+		Weed_Save(i);
+	}
+	return 1;
+}

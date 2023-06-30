@@ -35,7 +35,7 @@ Vehicle_ShowRegistration(showto, vehicleid) {
 	ShowPlayerDialog(showto, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Vehicle Details", string, "Close", "");
 	return 1;
 }
-stock Vehicle_ReturnState(veh_state) {
+Vehicle_ReturnState(veh_state) {
 	new str[56];
 
 	new const veh_state_str[][] = {
@@ -51,7 +51,7 @@ stock Vehicle_ReturnState(veh_state) {
 	return str;
 }
 
-stock Vehicle_Nearest(playerid, Float:range = 4.5)
+Vehicle_Nearest(playerid, Float:range = 4.5)
 {
 	new index = -1;
 	foreach(new i : Vehicle) if(IsValidVehicle(i) && IsVehicleStreamedIn(i, playerid)) {
@@ -66,7 +66,7 @@ stock Vehicle_Nearest(playerid, Float:range = 4.5)
 	return index;
 }
 
-stock RespawnVehicle(vehicleid)
+RespawnVehicle(vehicleid)
 {
 	if(!Iter_Contains(Vehicle, vehicleid))
 		return 0;
@@ -121,7 +121,7 @@ Vehicle_ObjectEdit(playerid, vehicleid, slot, bool:text = false)
     return 0;
 }
 
-FUNC::Vehicle_ObjectDB(vehicleid, slot)
+function Vehicle_ObjectDB(vehicleid, slot)
 {
 	if(VehicleObjects[vehicleid][slot][vehObjectExists] == false)
 		return 0;
@@ -176,21 +176,7 @@ Vehicle_RemoveObject(vehicleid) {
 	return 1;
 }
 
-stock Vehicle_RemoveCrate(vehicleid) {
-
-	foreach(new c : Crate) if(CrateData[c][crateVehicle] == VehicleData[vehicleid][vID])
-	{
-		CrateData[c][crateExists] = false;
-		CrateData[c][crateVehicle] = -1;
-		CrateData[c][crateType] = 0;
-
-		new next_js = c;
-
-		Iter_SafeRemove(Crate, next_js, c);
-	}
-	return 1;
-}
-stock Vehicle_Delete(vid, bool:database = false)
+Vehicle_Delete(vid, bool:database = false)
 {
 	if(!Iter_Contains(Vehicle, vid))
 		return 0;
@@ -208,9 +194,11 @@ stock Vehicle_Delete(vid, bool:database = false)
 		DestroyDynamicObject(VehicleData[vid][vCrateObject]);
 		VehicleData[vid][vCrateObject] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
 	}
- 
+
 	if(vehiclecallsign[vid]) {
-		DestroyDynamic3DTextLabel(vehicle3Dtext[vid]);
+		if(IsValidDynamic3DTextLabel(vehicle3Dtext[vid]))
+			DestroyDynamic3DTextLabel(vehicle3Dtext[vid]);
+			
 		vehiclecallsign[vid] = 0;
 	}
 
@@ -296,7 +284,7 @@ timer Vehicle_SaveExtraID[2000](vehicleid) {
 	Vehicle_Save(vehicleid, true);
 	return 1;
 }
-stock Vehicle_Inside(playerid)
+Vehicle_Inside(playerid)
 {
 	new vehicleid = GetPlayerVehicleID(playerid);
 
@@ -306,7 +294,7 @@ stock Vehicle_Inside(playerid)
 	return vehicleid;
 }
 
-FUNC::Vehicle_OnVehicleCreated(carid)
+function Vehicle_OnVehicleCreated(carid)
 {
 	if(!Iter_Contains(Vehicle, carid))
 		return 0;
@@ -326,7 +314,7 @@ SetVehicleInterior(vehicleid, interiorid) {
 	VehicleData[vehicleid][vInterior] = interiorid;
 	return 1;
 }
-FUNC::Vehicle_GetStatus(carid)
+function Vehicle_GetStatus(carid)
 {
 	if(IsValidVehicle(carid) && Iter_Contains(Vehicle, carid))
 	{
@@ -340,7 +328,7 @@ FUNC::Vehicle_GetStatus(carid)
 	return 1;
 }
 
-stock Vehicle_IsOwner(playerid, carid)
+Vehicle_IsOwner(playerid, carid)
 {
 	if(PlayerData[playerid][pID] == -1)
 		return 0;
@@ -354,7 +342,7 @@ stock Vehicle_IsOwner(playerid, carid)
 	return 0;
 }
 
-stock Vehicle_OwnerName(carid)
+Vehicle_OwnerName(carid)
 {
 	static Oname[MAX_PLAYER_NAME];
 	foreach(new i : Player)
@@ -368,7 +356,7 @@ stock Vehicle_OwnerName(carid)
 	return Oname;
 }
 
-stock Crate_Count(vid)
+Crate_Count(vid)
 {
 	if(!Iter_Contains(Vehicle, vid))
 		return 0;
@@ -381,7 +369,7 @@ stock Crate_Count(vid)
 	return count;
 }
 
-FUNC::OnLoadCrate(carid)
+function OnLoadCrate(carid)
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -407,7 +395,7 @@ FUNC::OnLoadCrate(carid)
 	return 1;
 }
 
-stock Vehicle_HaveAccess(playerid, carid)
+Vehicle_HaveAccess(playerid, carid)
 {
 	if(PlayerData[playerid][pID] == -1)
 		return 0;
@@ -418,7 +406,7 @@ stock Vehicle_HaveAccess(playerid, carid)
 	return 0;
 }
 
-stock Vehicle_SetType(vehicleid, veh_type = VEHICLE_TYPE_ADMIN) {
+Vehicle_SetType(vehicleid, veh_type = VEHICLE_TYPE_ADMIN) {
 
 	if(!Iter_Contains(Vehicle, vehicleid))
 		return 0;
@@ -427,7 +415,7 @@ stock Vehicle_SetType(vehicleid, veh_type = VEHICLE_TYPE_ADMIN) {
 	return 1;
 }
 
-stock Vehicle_SetState(vehicleid, veh_state = VEHICLE_STATE_SPAWNED) {
+Vehicle_SetState(vehicleid, veh_state = VEHICLE_STATE_SPAWNED) {
 
 	if(!Iter_Contains(Vehicle, vehicleid))
 		return 0;
@@ -436,29 +424,36 @@ stock Vehicle_SetState(vehicleid, veh_state = VEHICLE_STATE_SPAWNED) {
 	return 1;
 }
 
-stock UnloadRentalVehicle(playerid) {
+UnloadRentalVehicle(playerid) {
 
 	if(!IsPlayerSpawned(playerid))
 		return 0;
 
 	foreach(new vehicleid : Vehicle) if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL && VehicleData[vehicleid][vExtraID] == PlayerData[playerid][pID])
 	{
-		Vehicle_Save(vehicleid, true);
+		Vehicle_Save(vehicleid, false);
 
 		defer Vehicle_SafeUnload[2000](vehicleid);
 	}
 	return 1;
 }
 
-stock UnloadPlayerVehicle(playerid) {
+UnloadPlayerVehicle(playerid) {
 
 	if(!IsPlayerSpawned(playerid))
 		return 0;
 
 	foreach(new vehicleid : Vehicle) if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vExtraID] == PlayerData[playerid][pID])
 	{
-		Vehicle_Save(vehicleid);
+		printf("vehicleid: %d", vehicleid);
+		Vehicle_Save(vehicleid, false);
 
+		new Float:health;
+		GetVehicleHealth(vehicleid, health);
+
+		if(IsVehicleUpsideDown(vehicleid) && health <= 800.0) {
+			SendAdminMessage(X11_TOMATO, "VehWarn: %s kemungkinan disconnect dari server ketika kendaraan %s miliknya terbalik.", GetName(playerid, false), GetVehicleName(vehicleid));
+		}
 		defer Vehicle_SafeUnload[2000](vehicleid);
 	}
 	return 1;
@@ -494,6 +489,9 @@ timer Vehicle_SafeUnload[2000](vehicleid) {
 			CarStorage[vehicleid][i][cItemModel] = 0;
 			CarStorage[vehicleid][i][cItemQuantity] = 0;
 		}
+
+		VehicleData[vehicleid][vExtraID] = -1;
+		
 		if(IsValidVehicle(vehicleid))
 			DestroyVehicleEx(vehicleid);
 
@@ -501,15 +499,12 @@ timer Vehicle_SafeUnload[2000](vehicleid) {
 	}
 	return 1;
 }
-stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, siren = 0, database = true, plate[] = "NONE")
+Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, siren = 0, database = true, plate[] = "NONE")
 {
 
 	new vehicleid = INVALID_VEHICLE_ID;
-	if(Iter_Free(Vehicle) != INVALID_ITERATOR_SLOT) {
+	if((vehicleid = CreateVehicle(modelid, x, y, z, angle, color1, color2, -1, siren)) != INVALID_VEHICLE_ID) {
 
-		vehicleid = CreateVehicle(modelid, x, y, z, angle, color1, color2, -1, siren);
-
-		Iter_Add(Vehicle, vehicleid);
 		format(VehicleData[vehicleid][vPlate], 16, plate);
 
 		VehicleData[vehicleid][vModel] = modelid;
@@ -526,6 +521,7 @@ stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, co
 		VehicleData[vehicleid][vInsuranced] = false;
 		VehicleData[vehicleid][vFuel] = 100;
 		VehicleData[vehicleid][vHealth] = 1000.0;
+		VehicleData[vehicleid][vDeathTime] = 0;
 		VehicleData[vehicleid][vRentTime] = 0;
 		VehicleData[vehicleid][vRental] = -1;
 		VehicleData[vehicleid][vHouse] = -1;
@@ -546,6 +542,7 @@ stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, co
 		VehicleData[vehicleid][vBodyUpgrade] = 0;
 		VehicleData[vehicleid][vGarageID] = -1;
 		VehicleData[vehicleid][vNeonStatus] = false;
+		VehicleData[vehicleid][vELM] = false;
 		
 		Vehicle_SetState(vehicleid, VEHICLE_STATE_SPAWNED);
 		Vehicle_SetType(vehicleid, VEHICLE_TYPE_ADMIN);
@@ -580,9 +577,9 @@ stock Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, co
 			mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = '%d' WHERE `vehID` = '%d'", VEHICLE_STATE_STUCK, VehicleData[i][vID]));
 					
 			new v_str[256];
-			format(v_str, 256, ""RED"VEHICLE: "YELLOW"Your vehicle "LIGHTBLUE"(%s) "YELLOW"has been despawned due to collide with other vehicle.", GetVehicleName(i));
+			format(v_str, 256, ""RED"(Vehicle) "YELLOW"Your vehicle "LIGHTBLUE"(%s) "YELLOW"has been despawned due to collide with other vehicle.", GetVehicleName(i));
 			NotifyVehicleOwner(i, v_str);
-			format(v_str, 256, ""RED"VEHICLE: "YELLOW"Use "LIGHTBLUE"\"/v spawn\" to spawn vehicle back.");
+			format(v_str, 256, ""RED"(Vehicle) "YELLOW"Use "LIGHTBLUE"\"/v spawn\" to spawn vehicle back.");
 			NotifyVehicleOwner(i, v_str);
 
 			defer Vehicle_SafeUnload[1000](i);
@@ -795,7 +792,7 @@ Vehicle_ShowTrunk(playerid, vehicleid)
 	return 1;
 }
 
-FUNC::Vehicle_ShowList(playerid) {
+function Vehicle_ShowList(playerid) {
 
 	new bool:have = false;
 
@@ -836,7 +833,7 @@ FUNC::Vehicle_ShowList(playerid) {
 	return 1;
 }
 
-FUNC::Vehicle_OnUnimpound(playerid) {
+function Vehicle_OnUnimpound(playerid) {
 	if(!cache_num_rows()) {
 		SendErrorMessage(playerid, "Kendaraanmu tidak ada pada impound lot.");
 		return 1;
@@ -860,7 +857,7 @@ FUNC::Vehicle_OnUnimpound(playerid) {
 	ShowPlayerDialog(playerid, DIALOG_UNIMPOUND, DIALOG_STYLE_LIST, "Impounded Vehicles", str, "Select", "Close");
 	return 1;
 }
-FUNC::Vehicle_AdminShowList(playerid, targetid) {
+function Vehicle_AdminShowList(playerid, targetid) {
 
 	if(!cache_num_rows())
 		return SendErrorMessage(playerid, "%s tidak memiliki kendaraan.", GetName(targetid));
@@ -959,7 +956,7 @@ Vehicle_SyncObject(vehicleid, slot)
     return 0;
 }
 
-FUNC::OnVehicleLoaded() {
+function OnVehicleLoaded() {
 
 	new count = cache_num_rows(), str[156];
 
@@ -968,20 +965,17 @@ FUNC::OnVehicleLoaded() {
 		for(new z = 0; z < count; z++)
 		{
 		    new i = INVALID_ITERATOR_SLOT, modelid, color[2], Float:pos[4];
-			if((i = Iter_Free(Vehicle)) != INVALID_ITERATOR_SLOT) 
+
+			cache_get_value_name_int(z, "vehModel", modelid);
+			cache_get_value_name_int(z, "vehColor1", color[0]);
+			cache_get_value_name_int(z, "vehColor2", color[1]);
+			cache_get_value_name_float(z, "vehX", pos[0]);
+			cache_get_value_name_float(z, "vehY", pos[1]);
+			cache_get_value_name_float(z, "vehZ", pos[2]);
+			cache_get_value_name_float(z, "vehA", pos[3]);
+
+			if((i = CreateVehicle(modelid, pos[0], pos[1], pos[2], pos[3], color[0], color[1], -1, false)) != INVALID_VEHICLE_ID) 
 			{
-		
-				cache_get_value_name_int(z, "vehModel", modelid);
-				cache_get_value_name_int(z, "vehColor1", color[0]);
-				cache_get_value_name_int(z, "vehColor2", color[1]);
-				cache_get_value_name_float(z, "vehX", pos[0]);
-				cache_get_value_name_float(z, "vehY", pos[1]);
-				cache_get_value_name_float(z, "vehZ", pos[2]);
-				cache_get_value_name_float(z, "vehA", pos[3]);
-
-				i = CreateVehicle(modelid, pos[0], pos[1], pos[2], pos[3], color[0], color[1], -1, false);
-
-				Iter_Add(Vehicle, i);
 
 				cache_get_value_name_int(z, "vehID", VehicleData[i][vID]);
 				cache_get_value_name_int(z, "vehExtraID", VehicleData[i][vExtraID]);
@@ -1156,9 +1150,9 @@ FUNC::OnVehicleLoaded() {
 					mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = '%d' WHERE `vehID` = '%d'", VEHICLE_STATE_STUCK, VehicleData[vehicleid][vID]));
 							
 					new v_str[256];
-					format(v_str, 256, ""RED"VEHICLE: "YELLOW"Your vehicle "CYAN"(%s) "YELLOW"has been despawned due to collide with other vehicle.", GetVehicleName(vehicleid));
+					format(v_str, 256, ""RED"(Vehicle) "YELLOW"Your vehicle "CYAN"(%s) "YELLOW"has been despawned due to collide with other vehicle.", GetVehicleName(vehicleid));
 					NotifyVehicleOwner(vehicleid, v_str);
-					format(v_str, 256, ""RED"VEHICLE: "YELLOW"Use "CYAN"\"/v spawn\" "YELLOW"to spawn vehicle back.");
+					format(v_str, 256, ""RED"(Vehicle) "YELLOW"Use "CYAN"\"/v spawn\" "YELLOW"to spawn vehicle back.");
 					NotifyVehicleOwner(vehicleid, v_str);
 
 					
@@ -1197,9 +1191,9 @@ public OnLoadCarStorage(carid)
 	}
 	return 1;
 }
-stock Vehicle_Save(vehicleid, bool:extraid = false)
+Vehicle_Save(vehicleid, bool:extraid = false)
 {
-	if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid)  ==  VEHICLE_TYPE_RENTAL) 
+	if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid)  ==  VEHICLE_TYPE_RENTAL && IsValidVehicle(vehicleid)) 
 	{
 		Vehicle_GetStatus(vehicleid);
 
@@ -1342,7 +1336,7 @@ Vehicle_SetBodyLevel(vehicleid, level) {
 	}
 	return 1;
 }
-FUNC::EngineStatus(playerid, vehicleid)
+function EngineStatus(playerid, vehicleid)
 {
 	if(!GetEngineStatus(vehicleid))
 	{
@@ -1367,7 +1361,7 @@ FUNC::EngineStatus(playerid, vehicleid)
 	return 1;
 }
 
-FUNC::Vehicle_TurnOnEngine(playerid) {
+function Vehicle_TurnOnEngine(playerid) {
 
 	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
 		new vehicleid = GetPlayerVehicleID(playerid);
@@ -1385,18 +1379,18 @@ FUNC::Vehicle_TurnOnEngine(playerid) {
 	}
 	return 1;
 }
-stock Vehicle_GetFuel(vehicleid)
+Vehicle_GetFuel(vehicleid)
 {
 	return VehicleData[vehicleid][vFuel];
 }
 
-stock IsVehicleSupportsNeonLights(modelid){
+IsVehicleSupportsNeonLights(modelid){
 	
 	modelid -= 400;
 	return !(NeonOffsetData[modelid][NeonX] == 0.0 && NeonOffsetData[modelid][NeonY] == 0.0 && NeonOffsetData[modelid][NeonZ] == 0.0);
 }
 
-stock Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED, slotid = 0){
+Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED, slotid = 0){
 
 	if(!IsValidVehicle(vehicleid)) 
 		return 0;
@@ -1416,8 +1410,8 @@ stock Vehicle_SetNeon(vehicleid, bool:enable = true, color = VEHICLE_NEON_RED, s
 	if(!enable) 
 		return 0;
 
-	NeonObject[vehicleid][slotid][0] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
-	NeonObject[vehicleid][slotid][1] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0);
+	NeonObject[vehicleid][slotid][0] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0, .streamdistance  = 30.0, .drawdistance = 30.0);
+	NeonObject[vehicleid][slotid][1] = CreateDynamicObject(color,0.0,0.0,0.0,0.0,0.0,0.0, .streamdistance  = 30.0, .drawdistance = 30.0);
 	AttachDynamicObjectToVehicle(NeonObject[vehicleid][slotid][0],vehicleid,NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
 	AttachDynamicObjectToVehicle(NeonObject[vehicleid][slotid][1],vehicleid,-NeonOffsetData[modelid][NeonX], NeonOffsetData[modelid][NeonY],NeonOffsetData[modelid][NeonZ],0.0,0.0,0.0);
 	return 1;
@@ -1466,7 +1460,7 @@ hook OnVehicleUpdate(playerid, vehicleid) {
         }
 	}
 }
-stock Car_GetItemID(carid, item[])
+Car_GetItemID(carid, item[])
 {
 	if (!Iter_Contains(Vehicle, carid))
 	    return 0;
@@ -1481,7 +1475,7 @@ stock Car_GetItemID(carid, item[])
 	return -1;
 }
 
-stock Car_GetFreeID(carid)
+Car_GetFreeID(carid)
 {
 	if (!Iter_Contains(Vehicle, carid))
 	    return 0;
@@ -1494,14 +1488,14 @@ stock Car_GetFreeID(carid)
 	return -1;
 }
 
-stock Car_AddItem(carid, item[], model, quantity = 1, slotid = -1)
+Car_AddItem(carid, item[], model, quantity = 1, slotid = -1)
 {
     if (!Iter_Contains(Vehicle, carid))
 	    return 0;
 
 	new
 		itemid = Car_GetItemID(carid, item),
-		string[128];
+		string[256];
 
 	if (itemid == -1)
 	{
@@ -1535,7 +1529,7 @@ stock Car_AddItem(carid, item[], model, quantity = 1, slotid = -1)
 	return itemid;
 }
 
-stock Car_RemoveItem(carid, item[], quantity = 1)
+Car_RemoveItem(carid, item[], quantity = 1)
 {
     if (!Iter_Contains(Vehicle, carid))
 	    return 0;
@@ -1591,7 +1585,7 @@ public OnCarStorageAdd(carid, itemid)
 	return 1;
 }
 
-FUNC::Vehicle_ObjectLoad(vehicleid)
+function Vehicle_ObjectLoad(vehicleid)
 {
 	if(cache_num_rows())
 	{

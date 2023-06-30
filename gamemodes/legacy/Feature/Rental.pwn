@@ -46,7 +46,7 @@ stock Rental_Create(playerid, veh1, veh2)
 	return -1;
 }
 
-FUNC::OnRentalCreated(id)
+function OnRentalCreated(id)
 {
 	if (id == -1 || !RentData[id][rentExists])
 	    return 0;
@@ -57,7 +57,7 @@ FUNC::OnRentalCreated(id)
 	return 1;
 }
 
-FUNC::Rental_Load()
+function Rental_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -182,7 +182,7 @@ CMD:unrentvehicle(playerid, params[])
 			if(VehicleData[pvid][vRental] != i)
 				return SendErrorMessage(playerid, "Disini bukan tempat penyewaan kendaraan ini.");
 
-			SendClientMessageEx(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}Kamu telah mengembalikan %s Rental milikmu!", GetVehicleName(vehicleid));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Rental) {FFFFFF}Kamu telah mengembalikan %s Rental milikmu!", GetVehicleName(vehicleid));
 
 			Vehicle_Delete(pvid, true);
 
@@ -251,7 +251,7 @@ CMD:editrental(playerid, params[])
     if(sscanf(params, "ds[24]S()[128]", id, type, string))
     {
         SendSyntaxMessage(playerid, "/editrental [id] [name]");
-        SendClientMessage(playerid, COLOR_SERVER, "Names:{FFFFFF} location, spawn, vehicle(1-2), price(1-2), delete");
+        SendClientMessage(playerid, COLOR_SERVER, "(Names){FFFFFF} location, spawn, vehicle(1-2), price(1-2), delete");
         return 1;
     }
     if((id < 0 || id >= MAX_RENTAL))
@@ -335,9 +335,9 @@ CMD:editrental(playerid, params[])
 
 CMD:renthelp(playerid, params[])
 {
-	SendClientMessage(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}/rentvehicle - Untuk merental kendaraan");
-	SendClientMessage(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}/unrentvehicle - Untuk mengembalikan kendaraan rental");
-	SendClientMessage(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}/rentinfo - Untuk melihat semua kendaraan yang dirental");
+	SendClientMessage(playerid, COLOR_SERVER, "(Rental) {FFFFFF}/rentvehicle - Untuk merental kendaraan");
+	SendClientMessage(playerid, COLOR_SERVER, "(Rental) {FFFFFF}/unrentvehicle - Untuk mengembalikan kendaraan rental");
+	SendClientMessage(playerid, COLOR_SERVER, "(Rental) {FFFFFF}/rentinfo - Untuk melihat semua kendaraan yang dirental");
 	return 1;
 }
 

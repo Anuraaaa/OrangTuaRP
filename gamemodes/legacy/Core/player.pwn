@@ -6,25 +6,36 @@ stock CheckAccount(playerid)
 	return 1;
 }
 
-FUNC::PlayerCheck(playerid, rcc)
+function PlayerCheck(playerid, rcc)
 {
 	if(rcc != g_RaceCheck{playerid})
 	    return Kick(playerid);
 
 	TogglePlayerSpectating(playerid, true);
-    InterpolateCameraPos(playerid, -3077.4265, 431.7690, 69.0493, -2442.3191, 496.1073, 125.3368, 25000, CAMERA_MOVE);
-	InterpolateCameraLookAt(playerid, -3076.4797, 432.0866, 68.5543, -2443.1770, 496.6155, 124.8367, 25000, CAMERA_MOVE);
 
+	new itrpt_rnd = random(2);
+
+	SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Jika panel register/login belum muncul, "YELLOW"Harap tunggu!");
+	if(itrpt_rnd == 0) {
+	
+		InterpolateCameraPos(playerid, -3077.4265, 431.7690, 69.0493, -2442.3191, 496.1073, 125.3368, 25000, CAMERA_MOVE);
+		InterpolateCameraLookAt(playerid, -3076.4797, 432.0866, 68.5543, -2443.1770, 496.6155, 124.8367, 25000, CAMERA_MOVE);
+	}
+	else {
+		InterpolateCameraPos(playerid, -2397.553710, 1436.038452, 140.798019, -2876.055175, 1382.189697, 159.150161, 17000);
+		InterpolateCameraLookAt(playerid, -2401.776855, 1438.431640, 139.599197, -2872.188964, 1384.818359, 157.377395, 17000);
+	}
 	SetPlayerColor(playerid, COLOR_GREY);
 	SyncPlayerTime(playerid);
 
 	new query[256];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banip` WHERE `IP` = '%e' LIMIT 1;", ReturnIP(playerid));
 	mysql_tquery(sqlcon, query, "OnBanIPCheck", "d", playerid);
+
 	return true;
 }
 
-FUNC::OnBanIPCheck(playerid) {
+function OnBanIPCheck(playerid) {
 
 	if(cache_num_rows()) {
 
@@ -43,7 +54,7 @@ FUNC::OnBanIPCheck(playerid) {
 
 	return 1;
 }
-FUNC::CheckPlayerUCP(playerid)
+function CheckPlayerUCP(playerid)
 {
 	new rows = cache_num_rows();
 	new banned, banby[24], banreason[32], bantime;
@@ -84,7 +95,7 @@ FUNC::CheckPlayerUCP(playerid)
 			{
 				ShowLoginMenu(playerid);
 				LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
-				SendClientMessage(playerid, X11_RED, "SECURITY: "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
+				SendClientMessage(playerid, X11_RED, "(Security) "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
 			}
 		}
 	}
@@ -97,7 +108,7 @@ FUNC::CheckPlayerUCP(playerid)
 	return 1;
 }
 
-FUNC::KickLogin(playerid) {
+function KickLogin(playerid) {
 
 	if(IsPlayerSpawned(playerid))
 		return 0;
@@ -127,6 +138,31 @@ stock SetupPlayerData(playerid)
     return 1;
 }
 
+SQL_SavePlayerPos(playerid) {
+	if(IsPlayerSpawned(playerid)) {
+		GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+		GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+
+		GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+
+		new query[1012];
+		mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `PosX` = '%.4f', `PosY` = '%.4f', `PosZ` = '%.4f', `Health` = '%.4f', `Armor` = '%.4f'",
+			PlayerData[playerid][pPos][0],
+			PlayerData[playerid][pPos][1],
+			PlayerData[playerid][pPos][2],
+			PlayerData[playerid][pHealth],
+			PlayerData[playerid][pArmor]
+		);
+		mysql_format(sqlcon, query,  sizeof(query), "%s, `Interior` = '%d', `World` = '%d' WHERE `pID` = '%d'",
+			query,
+			GetPlayerInterior(playerid),
+			GetPlayerVirtualWorld(playerid),
+			PlayerData[playerid][pID]
+		);
+		mysql_tquery(sqlcon, query);	
+	}
+	return 1;
+}
 SQL_SaveCharacter(playerid)
 {
 	new query[3612];
@@ -215,6 +251,8 @@ SQL_SaveCharacter(playerid)
 		mysql_format(sqlcon, query, sizeof(query), "%s`MarryWith`='%s', ", query, MarryWith[playerid]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`MarryDate`='%s', ", query, MarryDate[playerid]);
 		mysql_format(sqlcon,  query, sizeof(query), "%s`Masked`='%d', ", query, PlayerData[playerid][pMasked]);
+		mysql_format(sqlcon, query, sizeof(query), "%s`HudType`='%d', ", query, PlayerData[playerid][pHudType]);
+		mysql_format(sqlcon, query, sizeof(query), "%s`AdminPoint`='%d', ", query, PlayerData[playerid][pAdminPoint]);
 		forex(i, 10)
 		{
 			mysql_format(sqlcon, query, sizeof(query), "%s`Fish%d` = '%.1f', `FishName%d` = '%s', ", query, i + 1, FishWeight[playerid][i], i + 1, FishName[playerid][i]);
@@ -227,6 +265,7 @@ SQL_SaveCharacter(playerid)
 		{
 			mysql_format(sqlcon, query, sizeof(query), "%s`Bullet%d` = '%d', ", query, i + 1, PlayerData[playerid][pBullets][i]);
 		}
+		mysql_format(sqlcon, query, sizeof(query), "%s`CourierDelay`='%d', ", query, PlayerData[playerid][pCourierDelay]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`TogLogin`='%d', ", query, PlayerData[playerid][pTogLogin]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`AutoPaycheck`='%d', ", query, PlayerData[playerid][pAutoPaycheck]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`InWorkshop`='%d', ", query, PlayerData[playerid][pInWorkshop]);
@@ -236,11 +275,12 @@ SQL_SaveCharacter(playerid)
 		mysql_format(sqlcon, query, sizeof(query), "%s`Quitjob`='%d', `DriverDelay`='%d', `LumberDelay` = '%d' ", query, PlayerData[playerid][pQuitjob], PlayerData[playerid][pDriverDelay], PlayerData[playerid][pLumberDelay]);
 	    mysql_format(sqlcon, query, sizeof(query), "%sWHERE `pID` = %d", query, PlayerData[playerid][pID]);
 		mysql_tquery(sqlcon, query);
+		SQL_SavePlayerPos(playerid);
 	}
 	return 1;
 }
 
-FUNC::LoadCharacterData(playerid)
+function LoadCharacterData(playerid)
 {
 
 	if(!IsPlayerConnected(playerid))
@@ -331,9 +371,11 @@ FUNC::LoadCharacterData(playerid)
 	cache_get_value_name_int(0, "FactionHour", PlayerData[playerid][pFactionHour]);
 	cache_get_value_name_int(0, "FactionMinute", PlayerData[playerid][pFactionMinute]);
 	cache_get_value_name_int(0, "FactionSecond", PlayerData[playerid][pFactionSecond]);
-
+	cache_get_value_name_int(0, "CourierDelay", PlayerData[playerid][pCourierDelay]);
 	cache_get_value_name(0, "MarryWith", MarryWith[playerid], 24);
 	cache_get_value_name(0, "MarryDate", MarryDate[playerid], 28);
+	cache_get_value_name_int(0, "HudType", PlayerData[playerid][pHudType]);
+	cache_get_value_name_int(0, "AdminPoint", PlayerData[playerid][pAdminPoint]);
 
 	SetPlayerName(playerid, PlayerData[playerid][pName]);
 	forex(i, 7)
@@ -390,6 +432,9 @@ FUNC::LoadCharacterData(playerid)
     SetSpawnInfo(playerid, 0, PlayerData[playerid][pSkin], PlayerData[playerid][pPos][0] + 0.3, PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2], 0.0, 0, 0, 0, 0, 0, 0);
     TogglePlayerSpectating(playerid, false);
 
+	mysql_tquery(sqlcon, sprintf("UPDATE `characters` SET `LastIP` = '%s' WHERE `Name` = '%s'", ReturnIP(playerid), GetName(playerid)));
+	mysql_tquery(sqlcon, sprintf("UPDATE `playerucp` SET `LastIP` = '%s' WHERE `UCP` = '%s'", ReturnIP(playerid), GetUsername(playerid)));
+	
     LoadPlayerVehicle(playerid);
 	LoadRentalVehicle(playerid);
 
@@ -400,7 +445,7 @@ FUNC::LoadCharacterData(playerid)
     return 1;
 }
 
-FUNC::OnPlayerPasswordChange(playerid, hashid)
+function OnPlayerPasswordChange(playerid, hashid)
 {
 	new
 		query[256],
@@ -414,7 +459,7 @@ FUNC::OnPlayerPasswordChange(playerid, hashid)
 	SendServerMessage(playerid, "Password akunmu berhasil diubah!");
 	return 1;
 }
-FUNC::HashPlayerPassword(playerid, hashid)
+function HashPlayerPassword(playerid, hashid)
 {
 	new
 		query[356],
@@ -430,7 +475,7 @@ FUNC::HashPlayerPassword(playerid, hashid)
 	return 1;
 }
 
-FUNC::OnPasswordCreated(playerid) {
+function OnPasswordCreated(playerid) {
 	UcpData[playerid][ucpID] = cache_insert_id();
 
 
@@ -469,7 +514,7 @@ stock HideCharacter(playerid)
 	return 1;
 }
 
-FUNC::LoadCharacter(playerid)
+function LoadCharacter(playerid)
 {
 	for (new i = 0; i < MAX_CHARS; i ++)
 	{
@@ -499,7 +544,7 @@ stock ShowCharacterList(playerid)
 	return 1;
 }
 
-FUNC::LoadCharacter(playerid)
+function LoadCharacter(playerid)
 {
 	for (new i = 0; i < MAX_CHARS; i ++)
 	{
@@ -534,7 +579,7 @@ stock ShowLoginMenu(playerid) {
 	format(str, sizeof(str), ""WHITE"Selamat datang kembali di "LIGHTBLUE"%s\n\n"WHITE"Akun-mu telah terdaftar di server.\nMasukkan password akun-mu untuk login:", SERVER_NAME);
 	return ShowPlayerDialog(playerid, DIALOG_LOGIN, DIALOG_STYLE_PASSWORD, "OT:RP - Login", str, "Login", "Exit");
 }
-FUNC::OnPlayerPasswordChecked(playerid, bool:success)
+function OnPlayerPasswordChecked(playerid, bool:success)
 {
 
 	if(!success)
@@ -572,7 +617,7 @@ stock IsNameUsed(playerid, name[]) {
 	return ada;
 }
 //-----[Textdraw Login]
-/*FUNC::InsertPlayerName(playerid, name[])
+/*function InsertPlayerName(playerid, name[])
 {
 	new count = cache_num_rows();
 	if(count > 0)
@@ -588,7 +633,7 @@ stock IsNameUsed(playerid, name[]) {
 	return 1;
 }*/
 
-FUNC::InsertPlayerName(playerid, name[])
+function InsertPlayerName(playerid, name[])
 {
 	if(cache_num_rows())
 	{
@@ -610,7 +655,7 @@ stock ReturnName(playerid)
     GetPlayerName(playerid, name, sizeof(name));
     if(PlayerData[playerid][pMasked])
     {
-        format(name, sizeof(name), "Mask_#%d", PlayerData[playerid][pMaskID]);
+        format(name, sizeof(name), "Unknown_#%d", PlayerData[playerid][pMaskID]);
 	}
 	else
 	{
@@ -667,10 +712,13 @@ stock ResetPlayerStatistics(playerid)
 {
 
 	PlayerData[playerid][pLastNumber] = 0;
+	PlayerData[playerid][pCourierDelay] = 0;
+	PlayerData[playerid][pHudType] = 1;
 
 	format(MarryWith[playerid], 24, "Unknown");
 	format(MarryDate[playerid], 28, "None");
-	
+	format(PlayerData[playerid][pUCP], 24, "None");
+
 	HasRubberBullet[playerid] = false;
 	PlayerRubbed[playerid] = false;
 	PlayerData[playerid][pID] = -1;
@@ -771,7 +819,7 @@ stock ResetPlayerStatistics(playerid)
 	PlayerData[playerid][pFunds] = false;
 	PlayerData[playerid][pTazed] = false;
 	PlayerData[playerid][pTazer] = false;
-	PlayerData[playerid][pAxe] = false;
+	g_EquipItem[playerid] = EQUIP_ITEM_NONE;
 	WeaponTick[playerid] = 0;
 	EditingWeapon[playerid] = 0;
 	PlayerData[playerid][pCutting] = -1;
@@ -1284,16 +1332,39 @@ SendAdminMessage(color, const str[], {Float,_}:...)
 
 stock UpdateHBE(playerid)
 {
+	new Float:lapar, Float:haus, Float:divided;
+
 	if(PlayerData[playerid][pSpawned] && !PlayerData[playerid][pTogHud])
 	{
-		new Float:lapar, Float:haus;
-		lapar = PlayerData[playerid][pHunger] * 59.5/100;
-	    PlayerTextDrawTextSize(playerid, HUNGERTD[playerid], lapar, 6.5);
-	    PlayerTextDrawShow(playerid, HUNGERTD[playerid]);
+		if(PlayerData[playerid][pHudType] == 1) {
+			
+			divided = floatdiv(59.5,100);
+			lapar = floatmul(PlayerData[playerid][pHunger], divided);
+			PlayerTextDrawTextSize(playerid, HUNGERTD[playerid], lapar, 6.5);
+			PlayerTextDrawShow(playerid, HUNGERTD[playerid]);
 
-	    haus = PlayerData[playerid][pThirst] * 59.5/100;
-	    PlayerTextDrawTextSize(playerid,THIRSTTD[playerid], haus, 6.5);
-	    PlayerTextDrawShow(playerid,THIRSTTD[playerid]);
+
+			divided = floatdiv(59.5,100);
+			haus = floatmul(PlayerData[playerid][pThirst], divided);
+			PlayerTextDrawTextSize(playerid,THIRSTTD[playerid], haus, 6.5);
+			PlayerTextDrawShow(playerid,THIRSTTD[playerid]);
+		}
+		else {
+
+			
+			divided = floatdiv(23.399999,100);
+			lapar = floatmul(PlayerData[playerid][pHunger], divided);
+			PlayerTextDrawTextSize(playerid, HUNGERBAR_2[playerid], lapar, 3.5);
+			PlayerTextDrawColor(playerid, HUNGERBAR_2[playerid], ConvertHBEColor(PlayerData[playerid][pHunger]));
+			PlayerTextDrawShow(playerid, HUNGERBAR_2[playerid]);
+
+			divided = floatdiv( 23.899999,100);
+			haus = floatmul(PlayerData[playerid][pThirst], divided);
+			
+			PlayerTextDrawTextSize(playerid, THIRSTBAR_2[playerid], haus, 3.5);
+			PlayerTextDrawColor(playerid, THIRSTBAR_2[playerid], ConvertHBEColor(PlayerData[playerid][pThirst]));
+			PlayerTextDrawShow(playerid, THIRSTBAR_2[playerid]);		
+		}
 	}
 	return 1;
 }
@@ -1303,28 +1374,47 @@ stock ShowPlayerHUD(playerid) {
 	if(PlayerData[playerid][pTogHud])
 		return 0;
 
-	for(new i = 0; i < 4; i++) 
-		PlayerTextDrawShow(playerid, HUDTD[playerid][i]);
-
-	PlayerTextDrawShow(playerid, HBEBOX[playerid]);
-	PlayerTextDrawShow(playerid, MONEYTD[playerid]);
-	PlayerTextDrawShow(playerid, HUNGERTD[playerid]);
-	PlayerTextDrawShow(playerid, THIRSTTD[playerid]);
-	PlayerTextDrawShow(playerid, TIMEGUI[playerid][0]);
-	PlayerTextDrawShow(playerid, TIMEGUI[playerid][1]);
-	PlayerTextDrawShow(playerid, AMMOTD[playerid]);
-
-	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-
-		for(new i = 4; i < 11; i++) 
+	if(PlayerData[playerid][pHudType] == 1) {
+		for(new i = 0; i < 4; i++) 
 			PlayerTextDrawShow(playerid, HUDTD[playerid][i]);
 
-		PlayerTextDrawShow(playerid, VHPTD[playerid]);
-		PlayerTextDrawShow(playerid, FUELTD[playerid]);
-		PlayerTextDrawShow(playerid, ENGINETD[playerid]);
-		PlayerTextDrawShow(playerid, KMHTD[playerid]);
-		PlayerTextDrawShow(playerid, VEHNAMETD[playerid]);
-		PlayerTextDrawShow(playerid, LOCATIONTD[playerid]);
+		PlayerTextDrawShow(playerid, HBEBOX[playerid]);
+		PlayerTextDrawShow(playerid, MONEYTD[playerid]);
+		PlayerTextDrawShow(playerid, HUNGERTD[playerid]);
+		PlayerTextDrawShow(playerid, THIRSTTD[playerid]);
+		PlayerTextDrawShow(playerid, TIMEGUI[playerid][0]);
+		PlayerTextDrawShow(playerid, TIMEGUI[playerid][1]);
+		PlayerTextDrawShow(playerid, AMMOTD[playerid]);
+
+		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+
+			for(new i = 4; i < 11; i++) 
+				PlayerTextDrawShow(playerid, HUDTD[playerid][i]);
+
+			PlayerTextDrawShow(playerid, VHPTD[playerid]);
+			PlayerTextDrawShow(playerid, FUELTD[playerid]);
+			PlayerTextDrawShow(playerid, ENGINETD[playerid]);
+			PlayerTextDrawShow(playerid, KMHTD[playerid]);
+			PlayerTextDrawShow(playerid, VEHNAMETD[playerid]);
+			PlayerTextDrawShow(playerid, LOCATIONTD[playerid]);
+		}
+	}
+	else if(PlayerData[playerid][pHudType] == 2) {
+		
+		for(new i = 0; i < 13; i++) {
+			TextDrawShowForPlayer(playerid, HUD2_TD[i]);
+		}
+
+		PlayerTextDrawShow(playerid, HUNGERBAR_2[playerid]);
+		PlayerTextDrawShow(playerid, THIRSTBAR_2[playerid]);
+		PlayerTextDrawShow(playerid, AMMOTD[playerid]);
+
+		PlayerTextDrawShow(playerid, TIMEGUI[playerid][0]);
+		PlayerTextDrawShow(playerid, TIMEGUI[playerid][1]);
+
+		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+			PlayerTextDrawShow(playerid, SPEEDO_2[playerid]);
+		}
 	}
 	return 1;
 }
@@ -1341,9 +1431,20 @@ stock HidePlayerHUD(playerid) {
 	PlayerTextDrawHide(playerid, TIMEGUI[playerid][0]);
 	PlayerTextDrawHide(playerid, TIMEGUI[playerid][1]);
 	PlayerTextDrawHide(playerid, AMMOTD[playerid]);
+
+	// Type 2
+	for(new i = 0; i < 13; i++) {
+		TextDrawHideForPlayer(playerid, HUD2_TD[i]);
+	}
+
+	PlayerTextDrawHide(playerid, HUNGERBAR_2[playerid]);
+	PlayerTextDrawHide(playerid, THIRSTBAR_2[playerid]);
+
+	// == //
+
 	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
 
-		for(new i = 5; i < 11; i++) 
+		for(new i = 4; i < 11; i++) 
 			PlayerTextDrawHide(playerid, HUDTD[playerid][i]);
 
 		PlayerTextDrawHide(playerid, VHPTD[playerid]);
@@ -1352,7 +1453,12 @@ stock HidePlayerHUD(playerid) {
 		PlayerTextDrawHide(playerid, KMHTD[playerid]);
 		PlayerTextDrawHide(playerid, VEHNAMETD[playerid]);
 		PlayerTextDrawHide(playerid, LOCATIONTD[playerid]);
+
+		// Type 2
+		PlayerTextDrawHide(playerid, SPEEDO_2[playerid]);
 	}
+
+
 	return 1;
 }
 
@@ -1362,7 +1468,7 @@ stock UpdatePlayerSkin(playerid, skinid)
 	PlayerData[playerid][pSkin] = skinid;
 }
 
-FUNC::BandageUpdate(playerid)
+function BandageUpdate(playerid)
 {
 
 	if(!PlayerData[playerid][pBandage])
@@ -1384,7 +1490,7 @@ FUNC::BandageUpdate(playerid)
 	return 1;
 }
 
-FUNC::FirstAidUpdate(playerid)
+function FirstAidUpdate(playerid)
 {
 	static
 	    Float:health;
@@ -1490,7 +1596,7 @@ stock SendNearbyMessage(playerid, Float:radius, color, const str[], {Float,_}:..
 	return 1;
 }
 
-FUNC::OnUCPBanned(playerid, name[], reason[])
+function OnUCPBanned(playerid, name[], reason[])
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -1509,7 +1615,7 @@ FUNC::OnUCPBanned(playerid, name[], reason[])
 	return 1;
 }
 
-FUNC::OnUCPUnban(playerid, name[])
+function OnUCPUnban(playerid, name[])
 {
 	new rows = cache_num_rows();
 	new ban;
@@ -1591,27 +1697,24 @@ stock SetPlayerSeatbelt(playerid)
 	return 1;
 }
 
-stock SetPlayerAxe(playerid, bool:use)
-{
-	if(use)
-	{
-		for(new i=MAX_PLAYER_ATTACHED_OBJECTS-1; i!=0; i--)
-		{
-			if(!IsPlayerAttachedObjectSlotUsed(playerid, i))
-			{
-				SetPlayerAttachedObject(playerid, i, 19631, 6, 0.0659, 0.0180, 0.0000, -93.7999, -80.1999, -2.4000, 1.0000, 1.0000, 1.0000, 0xFFFFFFFF, 0xFFFFFFFF);
-				SetPVarInt(playerid, "Hammer_Index", i);
-				PlayerData[playerid][pAxe] = true;
-				return 1;
-			}
+GetEquipedItem(playerid) {
+	return g_EquipItem[playerid];
+}
+
+EquipItem(playerid, equip) {
+
+	g_EquipItem[playerid] = equip;
+
+	switch(equip) {
+		case EQUIP_ITEM_NONE: {
+			RemovePlayerAttachedObject(playerid, 9);
 		}
-		return -1;
-	}
-	else
-	{
-		RemovePlayerAttachedObject(playerid, GetPVarInt(playerid, "Hammer_Index"));
-		DeletePVar(playerid, "Hammer_Index");
-		PlayerData[playerid][pAxe] = false;
+		case EQUIP_ITEM_AXE: {
+			SetPlayerAttachedObject(playerid, 9, 19631, 6, 0.0659, 0.0180, 0.0000, -93.7999, -80.1999, -2.4000, 1.0000, 1.0000, 1.0000, 0xFFFFFFFF, 0xFFFFFFFF);
+		}
+		case EQUIP_ITEM_ROD: {
+			SetPlayerAttachedObject(playerid, 9, 18632, 6, 0.1, 0.05, 0, 0, 180, 180, 0);
+		}
 	}
 	return 1;
 }
@@ -1673,7 +1776,7 @@ stock DisplayHealth(playerid, userid)
 	return 1;
 }
 
-FUNC::UnTazer(playerid)
+function UnTazer(playerid)
 {
 	if(!PlayerData[playerid][pTazed])
 		return 0;
@@ -1693,7 +1796,7 @@ stock GetNumberOwner(number)
 	return INVALID_PLAYER_ID;
 }
 
-FUNC::SetPlayerToUnfreeze(playerid)
+function SetPlayerToUnfreeze(playerid)
 {
     TogglePlayerControllable(playerid, 1);
     PlayerData[playerid][pFreeze] = 0;

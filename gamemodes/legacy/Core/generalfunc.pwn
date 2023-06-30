@@ -25,7 +25,7 @@ stock IsVehicleUpsideDown(vehicleid)
 	return ((angle > 90.0) || (angle < -90.0));
 }
 
-SetVehicleSpeed(vehicleid, Float:speed, bool:kmh = true)
+SetVehicleSpeed(vehicleid, Float:speed)
 {
     if(!IsValidVehicle(vehicleid))
         return 1;
@@ -34,7 +34,7 @@ SetVehicleSpeed(vehicleid, Float:speed, bool:kmh = true)
     
     GetVehicleVelocity(vehicleid,vPos[0],vPos[1],vPos[2]);
     GetVehicleZAngle(vehicleid, vPos[3]);
-    speed = (kmh ? (speed / 136.666667) : (speed / 85.4166672));
+    speed = (speed / 136.666667);
     return SetVehicleVelocity(vehicleid, speed * floatsin(-vPos[3], degrees), speed * floatcos(-vPos[3], degrees), (vPos[2]-0.005));
 }
 
@@ -301,7 +301,7 @@ stock ShowBox(playerid, header[] = "", text[] = "", time)
 }
 
 
-FUNC::HidePlayerBoxTD(playerid)
+function HidePlayerBoxTD(playerid)
 {
 	if(!PlayerData[playerid][pShowBox])
 		return 0;
@@ -334,7 +334,7 @@ stock ShowMessage(playerid, string[], time = 3, sound = 0)//Time in Sec.
 }
 
 
-FUNC::HidePlayerMessage(playerid) {
+function HidePlayerMessage(playerid) {
 
     if(!PlayerData[playerid][pShowMessage])
         return 0;
@@ -362,7 +362,7 @@ stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z)
 	return 1;
 }
 
-FUNC::UnFreeze(playerid)
+function UnFreeze(playerid)
 {
     TogglePlayerControllable(playerid, true);
 }
@@ -439,25 +439,6 @@ stock GetVehicleDriver(vehicleid) {
 	return driver_id;
 }
 
-GetPlayerSpeed(playerid, bool:kmh)
-{
-    new 
-        Float:Vx,
-        Float:Vy,
-        Float:Vz,
-        Float:rtn;
-
-    if(IsPlayerInAnyVehicle(playerid)) {
-        GetVehicleVelocity(GetPlayerVehicleID(playerid), Vx, Vy, Vz);
-    } else {
-        GetPlayerVelocity(playerid, Vx, Vy, Vz);        
-    }
-
-    rtn = floatsqroot(floatabs(floatpower(Vx + Vy + Vz, 2)));
-    return kmh ? floatround(rtn * 100 * 1.61) : floatround(rtn * 100);
-}
-
-
 stock GetVehicleModelByName(const name[])
 {
 	if(IsNumeric(name) && (strval(name) >= 400 && strval(name) <= 611))
@@ -487,13 +468,16 @@ ReturnVehicleModelName(model)
 
 stock GetVehicleSpeedKMH(vehicleid)
 {
-	new Float:speed_x, Float:speed_y, Float:speed_z, Float:temp_speed, round_speed;
-	GetVehicleVelocity(vehicleid, speed_x, speed_y, speed_z);
-
-	temp_speed = temp_speed = floatsqroot(((speed_x*speed_x) + (speed_y*speed_y)) + (speed_z*speed_z)) * 136.666667;
-
-	round_speed = floatround(temp_speed);
-	return round_speed;
+    new
+        Float:x,
+        Float:y,
+        Float:z,
+        Float:speed;
+        
+    GetVehicleVelocity(vehicleid, x, y, z);
+    speed = VectorSize(x, y, z);
+    
+    return floatround(speed * 195.12); 
 }
 
 GetEngineStatus(vehicleid)
@@ -875,7 +859,7 @@ IsDriveByWeapon(playerid)
     return 0;
 }
 
-FUNC::PressJump(playerid)
+function PressJump(playerid)
 {
     PlayerPressedJump[playerid] = 0; // Reset the variable
     ApplyAnimation(playerid, "PED", "GETUP_FRONT", 4.0, 0, 1, 1, 0, 0);
@@ -899,7 +883,7 @@ stock strcash(value[])
 	return strval(totalcash);
 }
 
-FUNC::SyncPlayerTime(playerid)
+function SyncPlayerTime(playerid)
 {
 	new hour, minutes, second;
 	gettime(hour, minutes, second);
@@ -1617,24 +1601,25 @@ stock RemoveDrag(playerid)
 	return 1;
 }
 
-FUNC::LoginTime(playerid)
+function LoginTime(playerid)
 {
 	SendServerMessage(playerid, "Kamu di-kick dari server karena telalu lama memasukan password.");
 	Kick(playerid);
 	return 1;
 }
 
-FUNC::OnUCPCheck(playerid, name[]) {
+function OnUCPCheck(playerid, name[]) {
 
 	if(!cache_num_rows())	
 		return SendErrorMessage(playerid, "Tidak ada UCP dengan karakter %s.", name);
 
-	new ucp[24];
+	new ucp[24], ip[26];
+	cache_get_value_name(0, "LastIP", ip, 26);
 	cache_get_value_name(0, "UCP", ucp, 24);
-	SendAdminAction(playerid, "UCP dengan karakter %s adalah %s.", name, ucp);
+	SendAdminAction(playerid, "UCP dengan karakter %s adalah %s. (IP Terakhir: %s)", name, ucp, ip);
 	return 1;
 }
-FUNC::OnCharCheck(playerid, ucpname[]) {
+function OnCharCheck(playerid, ucpname[]) {
 
 	if(!cache_num_rows())	
 		return SendErrorMessage(playerid, "Tidak ada karakter dengan UCP %s.", ucpname);
@@ -1642,9 +1627,11 @@ FUNC::OnCharCheck(playerid, ucpname[]) {
 	SendClientMessageEx(playerid, X11_GREY, "==== %s Character List ====", ucpname);
 	for(new i = 0; i < cache_num_rows(); i++) {
 
-		new name[24];
+		new name[24], ip[26];
 		cache_get_value_name(i, "Name", name, 24);
-		SendClientMessageEx(playerid, -1, "%d) %s", i + 1, name);
+		cache_get_value_name(i, "LastIP", ip, 26);
+
+		SendClientMessageEx(playerid, -1, "%d) %s - Last IP: %s", i + 1, name, ip);
 	}
 	return 1;
 }
@@ -1661,7 +1648,7 @@ stock GetNameFromSQLID(sqlid)
 	return name;
 }
 
-FUNC::HidePlayerBox(playerid, PlayerText:boxid)
+function HidePlayerBox(playerid, PlayerText:boxid)
 {
 	if (!IsPlayerConnected(playerid))
 	    return 0;
@@ -1687,7 +1674,7 @@ stock PlayerText:ShowPlayerBox(playerid, color)
 	return textid;
 }
 
-FUNC::StopChatting(playerid)
+function StopChatting(playerid)
 {
     ApplyAnimation(playerid, "CARRY", "crry_prtial", 4.0, 0, 0, 0, 0, 0);
 }
@@ -1980,6 +1967,33 @@ stock TimestampToDate(Timestamp, &year, &month, &day, &hour, &minute, &second, H
 	return 1;
 }
 
+ConvertHBEColor(value)
+{
+    new color;
+    if(value >= 90 && value <= 100)
+        color = 0x15a014FF;
+    else if(value >= 80 && value < 90)
+        color = 0x1b9913FF;
+    else if(value >= 70 && value < 80)
+        color = 0x1a7f08FF;
+    else if(value >= 60 && value < 70)
+        color = 0x326305FF;
+    else if(value >= 50 && value < 60)
+        color = 0x375d04FF;
+    else if(value >= 40 && value < 50)
+        color = 0x603304FF;
+    else if(value >= 30 && value < 40)
+        color = 0xd72800FF;
+    else if(value >= 10 && value < 30)
+        color = 0xfb3508FF;
+    else if(value >= 0 && value < 10)
+        color = 0xFF0000FF;
+    else
+        color = 0x15a014FF;
+
+    return color;
+}
+
 stock IsLeapYear(year)
 {
 	if(year % 4 == 0) return true;
@@ -2045,19 +2059,9 @@ stock SendClientMessageToAllEx(color, const text[], {Float, _}:...)
 
 DestroyVehicleEx(vehicleid) {
 
-	/*
-	foreach(new i : Player) {
-		new labelid;
-
-		if(!IsValidDynamic3DTextLabel(PlayerData[i][pAdoLabel])) 
-			continue;
-
-		labelid = Streamer_GetIntData(STREAMER_TYPE_3D_TEXT_LABEL, PlayerData[i][pAdoLabel], E_STREAMER_ATTACHED_VEHICLE);
-
-		if(labelid == vehicleid) {
-			DestroyDynamic3DTextLabel(PlayerData[i][pAdoLabel]);
-		}
-	}*/
+	if(FlashTime[vehicleid]) {
+		KillTimer(FlashTime[vehicleid]);
+	}
 	return DestroyVehicle(vehicleid);
 }
 stock ReturnDate(bool:panjang = true)
@@ -2164,7 +2168,7 @@ stock Log_Write(const path[], const str[], {Float,_}:...)
 	return 1;
 }
 
-FUNC::splits(const strsrc[], strdest[][], delimiter)
+function splits(const strsrc[], strdest[][], delimiter)
 {
 	new i, li;
 	new aNum;
@@ -2344,7 +2348,7 @@ stock GetVehicleNearExceptThisVehicle(playerid, what_vehicle) {
 	}	
 	return vehicleid;
 }
-stock RemovePlayerADO(playerid)
+RemovePlayerADO(playerid)
 {
 	if(IsValidDynamic3DTextLabel(PlayerData[playerid][pAdoLabel]))
 		DestroyDynamic3DTextLabel(PlayerData[playerid][pAdoLabel]);
@@ -2415,7 +2419,7 @@ stock RemoveVendingMachines(playerid)
 	RemoveBuildingForPlayer(playerid, 1776, -17.0036,-90.9709,1003.5469, 20.0); //Snach vender @ Others 24/7 stores
 }
 
-FUNC::UnfreezeHospital(playerid)
+function UnfreezeHospital(playerid)
 {
 	ClearAnimations(playerid, 1);
 	TogglePlayerControllable(playerid, 1);
@@ -2424,7 +2428,7 @@ FUNC::UnfreezeHospital(playerid)
 	return 1;
 }
 
-stock GetDate()
+GetDate()
 {
 	new date[5], datestring[24];
 
@@ -2433,16 +2437,4 @@ stock GetDate()
 
 	format(datestring, sizeof(datestring), "%i-%02d-%02d %02d:%02d", date[0], date[1], date[2], date[3], date[4]);
 	return datestring;
-}
-
-Acronym(string[])
-{
-    new phrase[32], index = 0;
-
-    for (new i = 0, len = strlen(string); i != len; i ++)
-    {
-        if (('A' <= string[i] <= 'Z') && (i == 0 || string[i - 1] == ' '))
-            phrase[index++] = string[i];
-    }
-    return phrase;
 }

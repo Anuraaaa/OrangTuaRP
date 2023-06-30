@@ -71,7 +71,7 @@ hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid) {
 hook OnPlayerInjured(playerid) {
     if(SmugglerData[smugCarrier] == playerid) {
         Smuggler_Drop(playerid);
-        SendClientMessage(playerid, X11_TOMATO, "SMUGGLER: "WHITE"Paket terjatuh dikarenakan kamu injured.");
+        SendClientMessage(playerid, X11_TOMATO, "(Smuggler) "WHITE"Paket terjatuh dikarenakan kamu injured.");
     }
 }
 
@@ -88,9 +88,9 @@ hook OnPlayerEnterRaceCP(playerid) {
 
             AddSalary(playerid, "Delivering Packet (smuggler)", salary);
 
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "SMUGGLER: "WHITE"Berhasil mengantarkan paket dan mendapatkan "GREEN"$%s", FormatNumber(salary));
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Smuggler) "WHITE"Berhasil mengantarkan paket dan mendapatkan "GREEN"$%s", FormatNumber(salary));
 
-            SendJobMessage(JOB_SMUGGLER, X11_LIGHTBLUE, "SMUGGLER: "WHITE"Smuggler Packet berhasil diantarkan ke tujuan! packet akan kembali dalam 60 menit.");
+            SendJobMessage(JOB_SMUGGLER, X11_LIGHTBLUE, "(Smuggler) "WHITE"Smuggler Packet berhasil diantarkan ke tujuan! packet akan kembali dalam 60 menit.");
             DisablePlayerRaceCheckpoint(playerid);
 
             SmugglerData[smugTime] = SMUGGLER_RECOVER_TIME;
@@ -151,14 +151,14 @@ task timer_SmugglerUpdate[1000]() {
             SmugglerData[smugOnTaked] = false;
             SmugglerData[smugCarrier] = INVALID_PLAYER_ID;
 
-            SendJobMessage(JOB_SMUGGLER, X11_RED, "SMUGGLER: "WHITE"Packet is now available! type "YELLOW"/trackpacket "WHITE"to track.");
+            SendJobMessage(JOB_SMUGGLER, X11_RED, "(Smuggler) "WHITE"Packet is now available! type "YELLOW"/trackpacket "WHITE"to track.");
         }
     }
 
     if(SmugglerData[smugHaveTaken]) {
         if(--SmugglerData[smugDeliverTime] <= 0) {
 
-            SendJobMessage(JOB_SMUGGLER, X11_LIGHTBLUE, "SMUGGLER: "WHITE"Paket kembali diambil dikarenakan tidak diantar dalam 30 menit.");
+            SendJobMessage(JOB_SMUGGLER, X11_LIGHTBLUE, "(Smuggler) "WHITE"Paket kembali diambil dikarenakan tidak diantar dalam 30 menit.");
             DisablePlayerRaceCheckpoint(SmugglerData[smugCarrier]);
 
             SmugglerData[smugTime] = SMUGGLER_RECOVER_TIME;
@@ -248,7 +248,7 @@ CMD:spawnpacket(playerid, params[]) {
     SmugglerData[smugHaveTaken] = false;
     SmugglerData[smugDeliverTime] = 0;
     SmugglerData[smugTime] = 0;
-    SendJobMessage(JOB_SMUGGLER, X11_RED, "SMUGGLER: "WHITE"Packet is now available! type "YELLOW"/trackpacket "WHITE"to track.");
+    SendJobMessage(JOB_SMUGGLER, X11_RED, "(Smuggler) "WHITE"Packet is now available! type "YELLOW"/trackpacket "WHITE"to track.");
 
     SendAdminAction(playerid, "You have respawned smuggler packet.");
 
@@ -314,7 +314,7 @@ CMD:trackpacket(playerid, params[]) {
             carrier = SmugglerData[smugCarrier];
 
         if(carrier == INVALID_PLAYER_ID) {
-            SendClientMessage(playerid, X11_LIGHTBLUE, "SMUGGLER: "WHITE"Smuggler packet is "LIGHTGREEN"standing still");
+            SendClientMessage(playerid, X11_LIGHTBLUE, "(Smuggler) "WHITE"Smuggler packet is "LIGHTGREEN"standing still");
 
             SetPlayerCheckpoint(playerid, SmugglerData[smugX], SmugglerData[smugY], SmugglerData[smugZ], 5.0);
             PlayerData[playerid][pTracking] = true;
@@ -330,7 +330,7 @@ CMD:trackpacket(playerid, params[]) {
                 new Float:x, Float:y, Float:z;
                 ReturnSpecificLocation(carrier, x, y, z);
 
-                SendClientMessage(playerid, X11_LIGHTBLUE, "SMUGGLER: "WHITE"Smuggler packet is "TOMATO"moving");
+                SendClientMessage(playerid, X11_LIGHTBLUE, "(Smuggler) "WHITE"Smuggler packet is "TOMATO"moving");
 
                 SetPlayerCheckpoint(playerid, x, y, z, 5.0);
                 PlayerData[playerid][pTracking] = true;

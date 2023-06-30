@@ -37,7 +37,7 @@ CMD:selltostate(playerid, params[]) {
 CMD:flipcoin(playerid, params[]) {
 	new result = RandomEx(1, 3);
 
-	SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s flips a coin landing on "RED"%s", ReturnName(playerid), (result == 2) ? ("head") : ("tail"));
+	SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s flips a coin landing on "RED"%s", ReturnName(playerid), (result == 2) ? ("head") : ("tail"));
 	return 1;
 }
 CMD:dice(playerid, params[])
@@ -53,10 +53,10 @@ CMD:dice(playerid, params[])
 
     switch(dice)
     {
-        case 1: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d.", ReturnName(playerid), (random(6) + 1));
-        case 2: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1));
-        case 3: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1));
-        case 4: SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s rolls a dice landing on the number "RED"%d-%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1), (random(6) + 1));
+        case 1: SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s rolls a dice landing on the number "RED"%d.", ReturnName(playerid), (random(6) + 1));
+        case 2: SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s rolls a dice landing on the number "RED"%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1));
+        case 3: SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s rolls a dice landing on the number "RED"%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1));
+        case 4: SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s rolls a dice landing on the number "RED"%d-%d-%d-%d.", ReturnName(playerid), (random(6) + 1), (random(6) + 1), (random(6) + 1), (random(6) + 1));
     }
     return 1;
 }
@@ -126,16 +126,33 @@ CMD:rcp(playerid, params[]) {
 	if(SmugglerData[smugCarrier] == playerid) {
 		SetPlayerRaceCheckpoint(playerid, 2, SmugglerData[smugDelivX], SmugglerData[smugDelivY], SmugglerData[smugDelivZ], 0.0, 0.0, 0.0, 5.0);
 	}
+	if(g_CourierState[playerid] == COURIER_STATE_ONFINISH) {
+		SetPlayerCheckpoint(playerid, -1941.6987,-1040.1519,32.1719,  3.5);
+	}
 	return 1;
 }
 
+CMD:hudtype(playerid, params[]) {
+
+	if(PlayerData[playerid][pTogHud])
+		return SendErrorMessage(playerid, "Kamu masih mematikan HUD display.");
+
+	ShowPlayerDialog(playerid, DIALOG_HUD_TYPE, DIALOG_STYLE_LIST, "Change HUD", "HUD Type #1\nHUD Type #2", "Select", "Close");
+	return 1;
+}
 CMD:changepassword(playerid, params[])
 {
 	ShowPlayerDialog(playerid, DIALOG_CHANGEPASS, DIALOG_STYLE_PASSWORD, "Change Password", "Silahkan masukkan password-mu yang terbaru:\n(note) Untuk keamanan, Jangan menggunakan password yang mirip dengan sebelumnya.", "Change", "Cancel");
 	return 1;
 }
 
-
+CMD:svd(playerid, params[]) {
+	if(IsPlayerSpawned(playerid))  {
+		SQL_SaveCharacter(playerid);
+		SendServerMessage(playerid, "Data karaktermu berhasil "YELLOW"diperbaharui");
+	}
+	return 1;
+}
 CMD:refuel(playerid, params[])
 {
     static index, vehicleid;
@@ -335,12 +352,12 @@ CMD:toggle(playerid, params[])
 
 			TextDrawHideForPlayer(playerid,sen);
 			TextDrawHideForPlayer(playerid,koma2);
-			SendClientMessage(playerid, COLOR_CLIENT, "HUD: {FFFFFF}You have {FF0000}disabled {FFFFFF}the HUD");
+			SendClientMessage(playerid, COLOR_CLIENT, "(HUD) {FFFFFF}You have {FF0000}disabled {FFFFFF}the HUD");
 		}
 		else
 		{
 			PlayerData[playerid][pTogHud] = false;
-			SendClientMessage(playerid, COLOR_CLIENT, "HUD: {FFFFFF}You have {00FF00}enabled {FFFFFF}the HUD");
+			SendClientMessage(playerid, COLOR_CLIENT, "(HUD) {FFFFFF}You have {00FF00}enabled {FFFFFF}the HUD");
 
 
 			TextDrawShowForPlayer(playerid,sen);
@@ -370,7 +387,7 @@ CMD:toggle(playerid, params[])
 			return SendErrorMessage(playerid, "Opsi ini hanya untuk admin.");
 
 		PlayerData[playerid][pPMLog] = !(PlayerData[playerid][pPMLog]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "PMLOG: {FFFFFF}You have %s {FFFFFF}Private Message logs.", (!PlayerData[playerid][pPMLog]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(PMLog) {FFFFFF}You have %s {FFFFFF}Private Message logs.", (!PlayerData[playerid][pPMLog]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	else if(!strcmp(params, "amsg", true)) {
 
@@ -378,32 +395,32 @@ CMD:toggle(playerid, params[])
 			return SendErrorMessage(playerid, "Opsi ini hanya untuk admin.");
 
 		PlayerData[playerid][pAMSG] = !(PlayerData[playerid][pAMSG]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "AMSG: {FFFFFF}You have %s {FFFFFF}Admin Messages.", (!PlayerData[playerid][pAMSG]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(AMSG) {FFFFFF}You have %s {FFFFFF}Admin Messages.", (!PlayerData[playerid][pAMSG]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	else if(!strcmp(params, "ooc", true))
 	{
 		PlayerData[playerid][pTogGlobal] = !(PlayerData[playerid][pTogGlobal]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "OOC: {FFFFFF}You have %s {FFFFFF}Global OOC chat's!", (PlayerData[playerid][pTogGlobal]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(OOC) {FFFFFF}You have %s {FFFFFF}Global OOC chat's!", (PlayerData[playerid][pTogGlobal]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	else if(!strcmp(params, "login", true))
 	{
 		PlayerData[playerid][pTogLogin] = !(PlayerData[playerid][pTogLogin]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "LOGIN: {FFFFFF}You have %s {FFFFFF}Login message's!", (PlayerData[playerid][pTogLogin]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(Login) {FFFFFF}You have %s {FFFFFF}Login message's!", (PlayerData[playerid][pTogLogin]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	else if(!strcmp(params, "pm", true))
 	{
 		PlayerData[playerid][pTogPM] = !(PlayerData[playerid][pTogPM]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "PM: {FFFFFF}You have %s {FFFFFF}Private Message!", (PlayerData[playerid][pTogPM]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(PM) {FFFFFF}You have %s {FFFFFF}Private Message!", (PlayerData[playerid][pTogPM]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	else if(!strcmp(params, "buy", true))
 	{
 		PlayerData[playerid][pTogBuy] = !(PlayerData[playerid][pTogBuy]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "BUY: {FFFFFF}You have changed /buy display to %s", (PlayerData[playerid][pTogBuy]) ? ("{FF0000}TextDraw") : ("{00FF00}Dialog list"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(BUY) {FFFFFF}You have changed /buy display to %s", (PlayerData[playerid][pTogBuy]) ? ("{FF0000}TextDraw") : ("{00FF00}Dialog list"));
 	}
 	else if(!strcmp(params, "chatanim", true))
 	{
 		PlayerData[playerid][pTogAnim] = !(PlayerData[playerid][pTogAnim]);
-		SendClientMessageEx(playerid, COLOR_CLIENT, "ANIM: {FFFFFF}You have %s {FFFFFF}Chat animation!", (PlayerData[playerid][pTogAnim]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
+		SendClientMessageEx(playerid, COLOR_CLIENT, "(Animation) {FFFFFF}You have %s {FFFFFF}Chat animation!", (PlayerData[playerid][pTogAnim]) ? ("{FF0000}disabled") : ("{00FF00}enabled"));
 	}
 	return 1;
 }
@@ -437,17 +454,17 @@ CMD:time(playerid, params[])
 	ApplyAnimation(playerid, "COP_AMBIENT", "Coplook_watch", 4.1, 0, 0, 0, 0, 0);
 	if(PlayerData[playerid][pPaycheck] > 0)
 	{
-	    SendClientMessageEx(playerid, COLOR_SERVER, "INFO: {FFFFFF}Kamu dapat mengambil Paycheck dalam %d Menit lagi.", PlayerData[playerid][pPaycheck]/60);
+	    SendClientMessageEx(playerid, COLOR_SERVER, "(Info) {FFFFFF}Kamu dapat mengambil Paycheck dalam %d Menit lagi.", PlayerData[playerid][pPaycheck]/60);
 	}
 	else
 	{
-	    SendClientMessage(playerid, COLOR_SERVER, "INFO: {FFFFFF}Kamu sudah bisa mengambil Paycheck di Bank/ATM sekarang!");
+	    SendClientMessage(playerid, COLOR_SERVER, "(Info) {FFFFFF}Kamu sudah bisa mengambil Paycheck di Bank/ATM sekarang!");
 	}
 	if(PlayerData[playerid][pOnDuty])
 	{
 		new hour, minute, second;
 		GetElapsedTime(PlayerData[playerid][pDutyTime], hour, minute, second);
-		SendClientMessageEx(playerid, COLOR_SERVER, "SALARYINFO: {FFFFFF}Salary dari faction akan di-issue dalam %02d menit dan %02d detik.", minute, second);
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Salary) {FFFFFF}Salary dari faction akan di-issue dalam %02d menit dan %02d detik.", minute, second);
 	}
 	return 1;
 }
@@ -476,7 +493,7 @@ CMD:untow(playerid, params[])
 	    return SendErrorMessage(playerid, "There is no vehicle hooked onto the truck.");
 
 	DetachTrailerFromVehicle(GetPlayerVehicleID(playerid));
-	SendNearbyMessage(playerid, 20.0, X11_PLUM, "* %s has unhooked the %s from the tow truck.", ReturnName(playerid), ReturnVehicleModelName(GetVehicleModel(trailerid)));
+	SendNearbyMessage(playerid, 20.0, X11_PLUM, "** %s has unhooked the %s from the tow truck.", ReturnName(playerid), ReturnVehicleModelName(GetVehicleModel(trailerid)));
 
 	return 1;
 }
@@ -498,7 +515,7 @@ CMD:tow(playerid, params[])
 	    return SendErrorMessage(playerid, "You can't tow this vehicle.");
 
 	AttachTrailerToVehicle(vehicleid, GetPlayerVehicleID(playerid));
-	SendNearbyMessage(playerid, 20.0, X11_PLUM, "* %s has hooked a %s onto their tow truck.", ReturnName(playerid), ReturnVehicleModelName(GetVehicleModel(vehicleid)));
+	SendNearbyMessage(playerid, 20.0, X11_PLUM, "** %s has hooked a %s onto their tow truck.", ReturnName(playerid), ReturnVehicleModelName(GetVehicleModel(vehicleid)));
 	return 1;
 }
 
@@ -528,7 +545,7 @@ CMD:helm(playerid,params[])
             Helmet[playerid] = 1;
             SetPlayerAttachedObject(playerid,9 , 18645, 2, 0.07, 0.017, 0, 88, 75, 9);
             SendClientMessage(playerid, X11_GREEN, "You have put on a bike helmet. This will supress the impact of a crash.");
-            SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s reaches for their helmet, and takes it off.", ReturnName(playerid));
+            SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s reaches for their helmet, and takes it off.", ReturnName(playerid));
         }
     }
     else if(IsPlayerInAnyVehicle(playerid) && Helmet[playerid] == 1)
@@ -537,7 +554,7 @@ CMD:helm(playerid,params[])
         {
             Helmet[playerid] = 0;
             SendClientMessage(playerid, X11_GREEN, "You have taken off your helmet. You will no longer be protected from crashes.");
-            SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s reaches for their helmet, and unbuckles it.", ReturnName(playerid));
+            SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s reaches for their helmet, and unbuckles it.", ReturnName(playerid));
             if(IsPlayerAttachedObjectSlotUsed(playerid, 9)) 
 				RemovePlayerAttachedObject(playerid, 9);
         }
@@ -611,7 +628,7 @@ CMD:licenses(playerid, params[])
 	else SendClientMessageEx(userid, COLOR_WHITE, "Hauling License: {AA3333}Not Passed");
 
 	SendClientMessage(userid, COLOR_GREY, "-----------------------------------------------------------");
-	SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s takes out their licenses and shows them to %s.", ReturnName(playerid), ReturnName(userid));
+	SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s takes out their licenses and shows them to %s.", ReturnName(playerid), ReturnName(userid));
 	return 1;
 }
 
@@ -689,7 +706,7 @@ CMD:pr(playerid, params[])
 	    return SendErrorMessage(playerid, "You must have a portable radio.");
 	    
 	if (isnull(params))
-	    return SendSyntaxMessage(playerid, "/pr [radio chat]"), SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING: {FFFFFF}Radio chat is only for IC purposes!");
+	    return SendSyntaxMessage(playerid, "/pr [radio chat]"), SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning) {FFFFFF}Radio chat is only for IC purposes!");
 
 	if (!PlayerData[playerid][pChannel])
 	    return SendErrorMessage(playerid, "Your portable radio is disabled (/setfreq).");
@@ -713,7 +730,7 @@ CMD:pr(playerid, params[])
 				SendClientMessageEx(i, 0xFFFF90FF, string);
 			}
 
-			format(string, sizeof(string), "...%s", PlayerData[playerid][pChannel], GetName(playerid, false), params[64]);
+			format(string, sizeof(string), "...%s", params[64]);
 			SendClientMessageEx(i, 0xFFFF90FF, string);
 		}
 		else
@@ -743,7 +760,7 @@ CMD:setfreq(playerid, params[])
 	 	SendSyntaxMessage(playerid, "/setfreq [radio channel] (0 to disable)");
 
 	 	if (PlayerData[playerid][pChannel] > 0)
-			SendClientMessageEx(playerid, COLOR_YELLOW, "NOTE:{FFFFFF} Your current radio channel is set to %d.", PlayerData[playerid][pChannel]);
+			SendClientMessageEx(playerid, COLOR_YELLOW, "(Note){FFFFFF} Your current radio channel is set to %d.", PlayerData[playerid][pChannel]);
 
 		return 1;
 	}
@@ -768,7 +785,7 @@ CMD:levelinfo(playerid, params[]) {
 	new nxtlevel = PlayerData[playerid][pLevel] + 1,
 		expamount = nxtlevel * 3;
 
-	SendClientMessageEx(playerid, X11_LIGHTBLUE, "LEVEL: "WHITE"Kamu membutuhkan %d jam lagi untuk ke level selanjutnya.", expamount - PlayerData[playerid][pExp]);
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Level) "WHITE"Kamu membutuhkan %d jam lagi untuk ke level selanjutnya.", expamount - PlayerData[playerid][pExp]);
 	return 1;
 }
 
@@ -789,12 +806,11 @@ CMD:s(playerid, params[])
 		new
 			len = strlen(params);
 
+		static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 		for(new i = 0; i < len / 2; i++) {
 
-
-			params[i] = (random('Z' - 'A' + 1) + 'A');
-
+			params[i] = (charset[random(sizeof charset)]);
 		}
 	}
 
@@ -886,7 +902,7 @@ CMD:health(playerid, params[])
 CMD:accept(playerid, params[])
 {
 	if(isnull(params))
-		return SendSyntaxMessage(playerid, "/accept [Options]"), SendClientMessage(playerid, COLOR_SERVER, "Option: {FFFFFF}death, frisk, drag, vehicle, flat, house, marriage");
+		return SendSyntaxMessage(playerid, "/accept [Options]"), SendClientMessage(playerid, COLOR_SERVER, "(Option) {FFFFFF}death, frisk, drag, vehicle, flat, house, marriage");
 
 	if(!strcmp(params, "death", true))
 	{
@@ -901,7 +917,6 @@ CMD:accept(playerid, params[])
 
 		if(CountPlayerShootWound(playerid) > 0) {
 			
-		
 			TogglePlayerControllable(playerid, 1);
 			SetPlayerInterior(playerid, 0);
 			SetPlayerVirtualWorld(playerid, 0);
@@ -934,10 +949,6 @@ CMD:accept(playerid, params[])
 		RemoveDrag(playerid);
 
 		DragCheck(playerid);
-
-		if(IsValidDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]))
-			DestroyDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]);
-
 	}
 	else if(!strcmp(params, "divorce", true)) {
 		if(DivorceOffer[playerid] == INVALID_PLAYER_ID)
@@ -954,8 +965,8 @@ CMD:accept(playerid, params[])
 		format(MarryDate[playerid], 28, "_");
 		format(MarryDate[targetid], 28, "_");
 
-		SendClientMessageEx(targetid, X11_LIGHTBLUE, "DIVORCE: "YELLOW"%s "WHITE"is accepting your divorce offer, you are no longer married with "YELLOW"%s", ReturnName(playerid), ReturnName(playerid));
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "DIVORCE: "WHITE"You have accepted the divorce offer, you are no longer married with "YELLOW"%s", ReturnName(targetid));
+		SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Divorce) "YELLOW"%s "WHITE"is accepting your divorce offer, you are no longer married with "YELLOW"%s", ReturnName(playerid), ReturnName(playerid));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Divorce) "WHITE"You have accepted the divorce offer, you are no longer married with "YELLOW"%s", ReturnName(targetid));
 
 		DivorceOffer[playerid] = INVALID_PLAYER_ID;
 	}
@@ -1002,6 +1013,8 @@ CMD:accept(playerid, params[])
 		HouseData[houseid][houseTaxState] = TAX_STATE_COOLDOWN;
 		HouseData[houseid][houseTaxPaid] = true;
 
+		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept house(ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), houseid, GetName(sellerid), GetUsername(sellerid));
+
 		House_Refresh(houseid);
 		House_Save(houseid);
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci rumah dari %s.", ReturnName(sellerid));
@@ -1035,6 +1048,8 @@ CMD:accept(playerid, params[])
 		Flat_Sync(flatid);
 		Flat_Save(flatid);
 
+		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept flat (ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), flatid, GetName(sellerid), GetUsername(sellerid));
+
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci flat dari %s.", ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci flat, sekarang flat tersebut miliknya.", ReturnName(playerid));
 
@@ -1060,8 +1075,11 @@ CMD:accept(playerid, params[])
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci kendaraan %s dari %s.", GetVehicleName(vehicleid), ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci %s, sekarang kendaraan tersebut miliknya.", ReturnName(playerid), GetVehicleName(vehicleid));
 
+		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept vehicle(%s) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), GetVehicleName(vehicleid), GetName(sellerid), GetUsername(sellerid));
+
 		PlayerData[playerid][pVehicleOffer] = -1;
 		PlayerData[playerid][pVehicleOfferID] = INVALID_PLAYER_ID;
+
 	}
 	else if(!strcmp(params, "drag", true))
 	{
@@ -1071,7 +1089,7 @@ CMD:accept(playerid, params[])
 
 		IsDragging[dragerid] = playerid;
 
-		SendNearbyMessage(dragerid, 20.0, X11_PLUM, "* %s grabs hold of %s and starts dragging them.", ReturnName(dragerid), ReturnName(playerid));
+		SendNearbyMessage(dragerid, 20.0, X11_PLUM, "** %s grabs hold of %s and starts dragging them.", ReturnName(dragerid), ReturnName(playerid));
 		SendServerMessage(dragerid, "You are now start dragging {FFFF00}%s {FFFFFF}type {00FFFF}/undrag {FFFFFF}to stop.", ReturnName(dragerid));
 	}
 	else if(!strcmp(params, "frisk", true))
@@ -1083,7 +1101,7 @@ CMD:accept(playerid, params[])
 		ShowInventory(targetid, playerid);
 
 		if(PlayerData[playerid][pInjured] && !PlayerData[targetid][pAdmin]) 
-			SendClientMessage(targetid, X11_TOMATO, "WARNING: "WHITE"Dilarang untuk looting player yang sedang injured!");
+			SendClientMessage(targetid, X11_TOMATO, "(Warning) "WHITE"Dilarang untuk looting player yang sedang injured!");
 			
 		PlayerData[playerid][pFrisked] = INVALID_PLAYER_ID;
 	}
@@ -1112,7 +1130,7 @@ CMD:ask(playerid, params[])
 		return SendErrorMessage(playerid, "Tidak bisa menggunakan command ini sekarang.");
 
 	if(PlayerData[playerid][pAsking])
-		return SendErrorMessage(playerid, "You already have an active ask.");
+		return SendErrorMessage(playerid, "Kamu sudah memiliki pertanyaan pending.");
 
 	if(isnull(params))
 		return SendSyntaxMessage(playerid, "/ask [question]");
@@ -1205,12 +1223,12 @@ CMD:me(playerid, params[])
 
 	if (strlen(params) > 64)
 	{
-	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s %.64s", ReturnName(playerid), params);
+	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s %.64s", ReturnName(playerid), params);
 	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "...%s", params[64]);
 	}
 	else
 	{
-	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s %s", ReturnName(playerid), params);
+	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s %s", ReturnName(playerid), params);
 	}
 	return 1;
 }
@@ -1274,11 +1292,11 @@ CMD:l(playerid, params[])
 		new
 			len = strlen(params);
 
+		static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 		for(new i = 0; i < len / 2; i++) {
 
-			params[i] = (random('Z' - 'A' + 1) + 'A');
-
+			params[i] = (charset[random(sizeof charset)]);
 		}
 	}
 
@@ -1317,7 +1335,7 @@ CMD:do(playerid, params[])
 	}
 	else 
 	{
-	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s (( %s ))", params, ReturnName(playerid));
+	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s (( %s ))", params, ReturnName(playerid));
 	}
 	return 1;
 }
@@ -1341,7 +1359,7 @@ CMD:answer(playerid, params[])
     SendClientMessageEx(playerid, X11_GREY, "Kamu telah menerima panggilan, gunakan text chat biasa untuk berkomunikasi.");
     SendClientMessageEx(targetid, X11_GREY, "Penerima telah menerima panggilan, gunakan text chat biasa untuk berkomunikasi.");
 
-	SendNearbyMessage(playerid, 10.0, X11_PLUM, "* %s has accepted the incoming call.", ReturnName(playerid));
+	SendNearbyMessage(playerid, 10.0, X11_PLUM, "** %s has accepted the incoming call.", ReturnName(playerid));
 	if(!IsPlayerInAnyVehicle(playerid))
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USECELLPHONE);
 
@@ -1371,8 +1389,8 @@ CMD:hangup(playerid, params[])
         SendClientMessage(playerid, X11_GREY, "Kamu telah mengakhiri panggilan...");
 	    SendClientMessage(targetid, X11_GREY, "Panggilan berakhir...");
 
-	    SendNearbyMessage(playerid, 10.0, X11_PLUM, "* %s has hung up their cellphone.", ReturnName(playerid));
-	    SendNearbyMessage(targetid, 10.0, X11_PLUM, "* %s has hung up their cellphone.", ReturnName(targetid));
+	    SendNearbyMessage(playerid, 10.0, X11_PLUM, "** %s has hung up their cellphone.", ReturnName(playerid));
+	    SendNearbyMessage(targetid, 10.0, X11_PLUM, "** %s has hung up their cellphone.", ReturnName(targetid));
 
 	    SetPlayerSpecialAction(targetid, SPECIAL_ACTION_STOPUSECELLPHONE);
 	    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_STOPUSECELLPHONE);
@@ -1441,9 +1459,9 @@ CMD:ado(playerid, params[])
     GetPlayerPos(playerid, x, y, z);
 
 	if (sscanf(params,"s[128]",msg))
-		return SendClientMessage(playerid,COLOR_GREY, "USAGE: {FFFFFF}/ado [text]");
+		return SendSyntaxMessage(playerid, "/ado [text]");
 
-	SendClientMessage(playerid,COLOR_GREY,"INFO: {FFFFFF}ADO Has been placed, use {FFFF00}/deleteado {FFFFFF}to remove your ADO.");
+	SendClientMessage(playerid,COLOR_GREY,"(Info) {FFFFFF}ADO Has been placed, use {FFFF00}/deleteado {FFFFFF}to remove your ADO.");
 
 	RemovePlayerADO(playerid);
 	PlayerData[playerid][pAdoLabel] = CreateDynamic3DTextLabel(sprintf("%s\n(( %s ))", msg, ReturnName(playerid)), X11_PLUM, x, y, z, 20);
@@ -1490,7 +1508,7 @@ CMD:undrag(playerid, params[])
 
 	new targetid = IsDragging[playerid];
 	TogglePlayerControllable(targetid, 1);
-	SendNearbyMessage(playerid, 20.0, X11_PLUM, "* %s releases their grip on %s and lets them go.", ReturnName(playerid), ReturnName(targetid));
+	SendNearbyMessage(playerid, 20.0, X11_PLUM, "** %s releases their grip on %s and lets them go.", ReturnName(playerid), ReturnName(targetid));
 	IsDragging[playerid] = INVALID_PLAYER_ID;
 	return true;
 }
@@ -1502,7 +1520,7 @@ CMD:buycomponent(playerid, params[])
 
 	new amount;
 	if(sscanf(params, "d", amount))
-		return SendSyntaxMessage(playerid, "/buycomponent [amount]"), SendClientMessage(playerid, COLOR_YELLOW, "INFO: {FFFFFF}Harga component adalah {00FF00}$0.50 {FFFFFF}per 1 Component.");
+		return SendSyntaxMessage(playerid, "/buycomponent [amount]"), SendClientMessage(playerid, COLOR_YELLOW, "(Info) {FFFFFF}Harga component adalah {00FF00}$0.50 {FFFFFF}per 1 Component.");
 
 	if(amount < 1)
 		return SendErrorMessage(playerid, "Invalid component amount!");
@@ -1610,7 +1628,7 @@ CMD:weapon(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
 	    SendSyntaxMessage(playerid, "/weapon [Name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Name:{FFFFFF} give, view, attachment");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Name){FFFFFF} give, view, attachment");
 	    return 1;
 	}
 	if(!strcmp(type, "view", true))
@@ -1678,7 +1696,7 @@ CMD:weapon(playerid, params[])
 				    
 		PassWeaponToPlayer(targetid, weaponid, ammo, PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]], PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]);
 		ResetWeapon(playerid, weaponid);
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s has passed their %s to %s.", GetName(playerid, false), ReturnWeaponName(weaponid), GetName(targetid, false));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s has passed their %s to %s.", GetName(playerid, false), ReturnWeaponName(weaponid), GetName(targetid, false));
 		Log_Write("Logs/weapon_log.txt", "[%s] %s memberikan senjata %s kepada %s", ReturnDate(), GetName(playerid, false), ReturnWeaponName(weaponid), GetName(targetid, false));
 	}
 	return 1;
@@ -1732,12 +1750,12 @@ CMD:transfer(playerid, params[])
 
        	PlayerData[playerid][pBank] -= strval(totalcash); 
 		PlayerData[id][pBank] += strval(totalcash);
-		SendClientMessageEx(playerid, COLOR_SERVER, "TRANSFER: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
-		SendClientMessageEx(id, COLOR_SERVER, "TRANSFER: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Transfer) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
+		SendClientMessageEx(id, COLOR_SERVER, "(Transfer) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 		Log_Write("Logs/transfer_log.txt", "[%s] %s(%s) has transfer to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 	
 		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "TRANSFERWARN: "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+			SendAdminDutyMessage(X11_YELLOW, "(TransferLog) "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		}
 	}
 	else
@@ -1753,12 +1771,12 @@ CMD:transfer(playerid, params[])
 
        	PlayerData[playerid][pBank] -= strval(totalcash); 
 		PlayerData[id][pBank] += strval(totalcash);
-		SendClientMessageEx(playerid, COLOR_SERVER, "TRANSFER: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
-		SendClientMessageEx(id, COLOR_SERVER, "TRANSFER: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Transfer) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}", FormatNumber(strval(totalcash)), GetName(id));
+		SendClientMessageEx(id, COLOR_SERVER, "(Transfer) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 		Log_Write("Logs/transfer_log.txt", "[%s] %s(%s) has transfer to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 	
 		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "TRANSFERWARN: "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+			SendAdminDutyMessage(X11_YELLOW, "(TransferLog) "WHITE"%s(%s) transfer to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		}
 	}
     return 1;
@@ -1792,7 +1810,7 @@ CMD:deposit(playerid, params[])
 
 	GiveMoney(playerid, -amount, "Deposit ke bank");
 	PlayerData[playerid][pBank] += amount;
-	SendClientMessageEx(playerid, COLOR_SERVER, "BANK: {FFFFFF}Kamu berhasil menyimpan {009000}$%s {FFFFFF}ke akun Bank!", FormatNumber(amount));
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Bank) {FFFFFF}Kamu berhasil menyimpan {009000}$%s {FFFFFF}ke akun Bank!", FormatNumber(amount));
 	return 1;
 }
 
@@ -1817,7 +1835,7 @@ CMD:withdraw(playerid, params[])
 
 		GiveMoney(playerid, strval(totalcash), "Withdraw dari bank");
 		PlayerData[playerid][pBank] -= strval(totalcash);
-		SendClientMessageEx(playerid, COLOR_SERVER, "BANK: {FFFFFF}Kamu berhasil mengambil {009000}$%s {FFFFFF}dari akun Bank!", FormatNumber(strval(totalcash)));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Bank) {FFFFFF}Kamu berhasil mengambil {009000}$%s {FFFFFF}dari akun Bank!", FormatNumber(strval(totalcash)));
 	}
 	else
 	{
@@ -1832,7 +1850,7 @@ CMD:withdraw(playerid, params[])
 
 		GiveMoney(playerid, strval(totalcash), "Withdraw dari bank");
 		PlayerData[playerid][pBank] -= strval(totalcash);
-		SendClientMessageEx(playerid, COLOR_SERVER, "BANK: {FFFFFF}Kamu berhasil mengambil {009000}$%s {FFFFFF}dari akun Bank!", FormatNumber(strval(totalcash)));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Bank) {FFFFFF}Kamu berhasil mengambil {009000}$%s {FFFFFF}dari akun Bank!", FormatNumber(strval(totalcash)));
 	}
 	return 1;
 }
@@ -1874,9 +1892,9 @@ CMD:pay(playerid, params[])
 
        	GiveMoney(playerid, -strval(totalcash), sprintf("Pay to %s", GetName(id)));
 		GiveMoney(id, strval(totalcash), sprintf("Pay from %s", GetName(playerid)));
-		SendClientMessageEx(id, COLOR_SERVER, "PAYINFO: {FFFFFF}You've received {009000}$%s {FFFFFF}from {00FFFF}%s", FormatNumber(strval(totalcash)), ReturnName(playerid));
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s takes out $%s from their wallet and hands it to %s.", ReturnName(playerid), FormatNumber(strval(totalcash)), ReturnName(id));
-		SendClientMessageEx(playerid, COLOR_SERVER, "PAYINFO: {FFFFFF}You've given {009000}$%s {FFFFFF}to {00FFFF}%s", FormatNumber(strval(totalcash)), ReturnName(id));
+		SendClientMessageEx(id, COLOR_SERVER, "(PayInfo) {FFFFFF}You've received {009000}$%s {FFFFFF}from "YELLOW"%s", FormatNumber(strval(totalcash)), ReturnName(playerid));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s takes out $%s from their wallet and hands it to %s.", ReturnName(playerid), FormatNumber(strval(totalcash)), ReturnName(id));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(PayInfo) {FFFFFF}You've given {009000}$%s {FFFFFF}to "YELLOW"%s", FormatNumber(strval(totalcash)), ReturnName(id));
 		PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 		PlayerPlaySound(id, 1052, 0.0, 0.0, 0.0);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
@@ -1890,7 +1908,7 @@ CMD:pay(playerid, params[])
         	SetPlayerToFacePlayer(id, playerid);
 
 		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "PAYWARN: "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+			SendAdminDutyMessage(X11_YELLOW, "(PayLog) "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		}
 	}
 	else
@@ -1906,9 +1924,9 @@ CMD:pay(playerid, params[])
 
        	GiveMoney(playerid, -strval(totalcash), sprintf("Pay to %s", GetName(id)));
 		GiveMoney(id, strval(totalcash), sprintf("Pay from %s", GetName(playerid)));
-		SendClientMessageEx(id, COLOR_SERVER, "PAYINFO: {FFFFFF}You've received {009000}$%s {FFFFFF}from {00FFFF}%s", FormatNumber(strval(totalcash)), ReturnName(playerid));
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s takes out $%s from their wallet and hands it to %s.", ReturnName(playerid), FormatNumber(strval(totalcash)), ReturnName(id));
-		SendClientMessageEx(playerid, COLOR_SERVER, "PAYINFO: {FFFFFF}You've given {009000}$%s {FFFFFF}to {00FFFF}%s", FormatNumber(strval(totalcash)), ReturnName(id));
+		SendClientMessageEx(id, COLOR_SERVER, "(PayInfo) {FFFFFF}You've received {009000}$%s {FFFFFF}from "YELLOW"%s", FormatNumber(strval(totalcash)), ReturnName(playerid));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s takes out $%s from their wallet and hands it to %s.", ReturnName(playerid), FormatNumber(strval(totalcash)), ReturnName(id));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(PayInfo) {FFFFFF}You've given {009000}$%s {FFFFFF}to "YELLOW"%s", FormatNumber(strval(totalcash)), ReturnName(id));
 		PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 		PlayerPlaySound(id, 1052, 0.0, 0.0, 0.0);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
@@ -1923,7 +1941,7 @@ CMD:pay(playerid, params[])
 
 
 		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "PAYWARN: "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
+			SendAdminDutyMessage(X11_YELLOW, "(PayLog) "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		}
 	}
     return 1;
@@ -1944,8 +1962,8 @@ CMD:frisk(playerid, params[])
 		return SendErrorMessage(playerid, "You must close to that player!");
 
 	PlayerData[targetid][pFrisked] = playerid;
-	SendClientMessageEx(playerid, COLOR_SERVER, "INFO: {FFFFFF}You've requested {FFFF00}%s {FFFFFF}For Frisk.",ReturnName(targetid));
-	SendClientMessageEx(targetid, COLOR_SERVER, "INFO: {FFFF00}%s {FFFFFF}requested for frisking you, use {00FFFF}/accept frisk", ReturnName(playerid));
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Info) {FFFFFF}You've requested {FFFF00}%s {FFFFFF}For Frisk.",ReturnName(targetid));
+	SendClientMessageEx(targetid, COLOR_SERVER, "(Info) {FFFF00}%s {FFFFFF}requested for frisking you, use {00FFFF}/accept frisk", ReturnName(playerid));
 	return 1;
 }
 
@@ -1963,6 +1981,9 @@ CMD:enter(playerid, params[])
 
 				if(BizData[bid][bizOwner] == -1)
 					return SendErrorMessage(playerid, "This business is closed.");
+
+				if(BizData[bid][bizSealed])
+					return SendErrorMessage(playerid, "This business is sealed by the authority.");
 
 				GetPlayerOutsideInfo(playerid);
 				PlayerData[playerid][pInBiz] = bid;
@@ -1983,6 +2004,9 @@ CMD:enter(playerid, params[])
 	    {
 	        if (HouseData[id][houseLocked])
 	            return ShowText(playerid, "~r~Locked", 2);
+
+			if(HouseData[id][houseSealed])
+				return SendErrorMessage(playerid, "This house is sealed by the authority");
 
 			GetPlayerOutsideInfo(playerid);
 			//SetPlayerCompensatedPos(playerid, HouseData[id][houseInt][0], HouseData[id][houseInt][1], HouseData[id][houseInt][2], _, HouseData[id][houseID] + 5000, HouseData[id][houseInterior]);
@@ -2011,6 +2035,9 @@ CMD:enter(playerid, params[])
 		{
 			if(FlatData[id][flatLocked])
 				return ShowText(playerid, "~r~Locked", 2);
+
+			if(FlatData[id][flatSealed])
+				return SendErrorMessage(playerid, "This flat is sealed by the authority.");
 
 			GetPlayerOutsideInfo(playerid);
 
@@ -2123,19 +2150,18 @@ CMD:w(playerid, params[])
 	    return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
 	if (userid == playerid)
-		return SendErrorMessage(playerid, "You can't whisper yourself.");
+		return SendErrorMessage(playerid, "Kamu tidak dapat berbisik kepada diri sendiri.");
 
 	if(PlayerData[playerid][pDrugCondition]) {
 
 		new
-			len = strlen(text);
+			len = strlen(params);
 
+		static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 		for(new i = 0; i < len / 2; i++) {
 
-
-			text[i] = (random('Z' - 'A' + 1) + 'A');
-
+			params[i] = (charset[random(sizeof charset)]);
 		}
 	}
 
@@ -2154,7 +2180,7 @@ CMD:w(playerid, params[])
 	    SendClientMessageEx(userid, COLOR_YELLOW, "* Whisper from %s (%d): %s **", ReturnName(playerid), playerid, text);
 	    SendClientMessageEx(playerid, COLOR_YELLOW, "* Whisper to %s (%d): %s **", ReturnName(userid), userid, text);
 	}
-	SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s mutters something in %s's ear.", ReturnName(playerid), ReturnName(userid));
+	SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s mutters something in %s's ear.", ReturnName(playerid), ReturnName(userid));
     Log_Write("Logs/whisper_log.txt", "[%s] ** %s Whisper to %s (%d): %s **", ReturnDate(), GetName(playerid, false), GetName(userid, false), userid, text);
 	return 1;
 }
@@ -2172,8 +2198,8 @@ CMD:v(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
 	    SendSyntaxMessage(playerid, "/v(ehicle) [entity]");
-	    SendClientMessage(playerid, COLOR_SERVER, "Entity:{FFFFFF} list, lock, engine, hood, trunk, light");
-		SendClientMessage(playerid, COLOR_SERVER, "Entity:{FFFFFF} attachment, give, storage, detail, neon");
+	    SendClientMessage(playerid, COLOR_SERVER, "(Entity){FFFFFF} list, lock, engine, hood, trunk, light");
+		SendClientMessage(playerid, COLOR_SERVER, "(Entity){FFFFFF} attachment, give, storage, detail, neon");
 	    return 1;
 	}
 	if(!strcmp(type, "engine", true))
@@ -2195,7 +2221,7 @@ CMD:v(playerid, params[])
 
 			if(GetEngineStatus(vehicleid))
 			{
-			    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s inserts the key into the ignition and stops the engine.", ReturnName(playerid));
+			    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s inserts the key into the ignition and stops the engine.", ReturnName(playerid));
 
 				SwitchVehicleEngine(vehicleid, false);
 				ShowMessage(playerid, "Engine turned ~r~OFF", 3);
@@ -2206,7 +2232,7 @@ CMD:v(playerid, params[])
 				if(VehicleData[vehicleid][vHandbrake])
 					return SendErrorMessage(playerid, "Please disable vehicle handbrake first!");
 
-				SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s inserts the key into the ignition and starts the engine.", ReturnName(playerid));
+				SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s inserts the key into the ignition and starts the engine.", ReturnName(playerid));
 				StartPlayerLoadingBar(playerid, 50, "Turning_on_engine...", 40, "Vehicle_TurnOnEngine");
 			}
 		}
@@ -2227,7 +2253,7 @@ CMD:v(playerid, params[])
 			Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 2);
 			VehicleData[vehicleid][vNeonStatus] = true;
 
-			SendClientMessage(playerid, X11_LIGHTBLUE, "VEHICLE: "WHITE"Vehicle neon has been "GREEN"turned on");
+			SendClientMessage(playerid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Vehicle neon has been "GREEN"turned on");
 		}
 		else {
 			Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 0);
@@ -2235,7 +2261,7 @@ CMD:v(playerid, params[])
 			Vehicle_SetNeon(vehicleid, false, VehicleData[vehicleid][vNeonColor], 2);
 			VehicleData[vehicleid][vNeonStatus] = false;		
 
-			SendClientMessage(playerid, X11_LIGHTBLUE, "VEHICLE: "WHITE"Vehicle neon has been "RED"turned off");	
+			SendClientMessage(playerid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Vehicle neon has been "RED"turned off");	
 		}
 
 		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
@@ -2417,12 +2443,12 @@ CMD:v(playerid, params[])
 				case false:
 				{
 					SwitchVehicleLight(vehicleid, true);
-					SendClientMessage(playerid, COLOR_SERVER, "VEHICLE: {FFFFFF}Lights {00FF00}ON");
+					SendClientMessage(playerid, COLOR_SERVER, "(Vehicle) {FFFFFF}Lights {00FF00}ON");
 				}
 				case true:
 				{
 					SwitchVehicleLight(vehicleid, false);
-					SendClientMessage(playerid, COLOR_SERVER, "VEHICLE: {FFFFFF}Lights {FF0000}OFF");
+					SendClientMessage(playerid, COLOR_SERVER, "(Vehicle) {FFFFFF}Lights {FF0000}OFF");
 				}
 			}
 		}
@@ -2517,7 +2543,7 @@ CMD:v(playerid, params[])
 			return SendErrorMessage(playerid, "Turn off your vehicle engine first!");
 
 		VehicleData[vehicleid][vHandbrake] = (!VehicleData[vehicleid][vHandbrake]);
-		SendClientMessageEx(playerid, COLOR_SERVER, "VEHICLE: {FFFFFF}You have successfully %s {FFFFFF}vehicle Handbrake!", (VehicleData[vehicleid][vHandbrake]) ? ("{00FF00}engaged") : ("{FF0000}disengaged"));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Vehicle) {FFFFFF}You have successfully %s {FFFFFF}vehicle Handbrake!", (VehicleData[vehicleid][vHandbrake]) ? ("{00FF00}engaged") : ("{FF0000}disengaged"));
 		GetVehiclePos(vehicleid, VehicleData[vehicleid][vHandbrakePos][0], VehicleData[vehicleid][vHandbrakePos][1], VehicleData[vehicleid][vHandbrakePos][2]);
 		GetVehicleZAngle(vehicleid, VehicleData[vehicleid][vHandbrakePos][3]);
 	}

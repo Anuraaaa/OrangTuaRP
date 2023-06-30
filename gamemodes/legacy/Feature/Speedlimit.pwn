@@ -28,7 +28,7 @@ CMD:limitspeed(playerid, params[])
 
     if(sscanf(params, "i", speed)) {
     	if(vehicle_limit{playerid} >= MIN_SPEED_LIMIT) {
-    		SendClientMessage(playerid, X11_LIGHTBLUE, "LIMITSPEED: "WHITE"Batas kecepatan kendaraan "RED"dinonaktifkan"WHITE".");
+    		SendClientMessage(playerid, X11_LIGHTBLUE, "(Limit Speed) "WHITE"Batas kecepatan kendaraan "RED"dinonaktifkan"WHITE".");
     		vehicle_limit{playerid} = 0;
     	}
     	else SendSyntaxMessage(playerid, "/limitspeed [speed ("#MIN_SPEED_LIMIT"-"#MAX_SPEED_LIMIT")]");
@@ -40,7 +40,7 @@ CMD:limitspeed(playerid, params[])
     	return SendErrorMessage(playerid, "Kecepatan dibatasi dengan jarak ("#MIN_SPEED_LIMIT"-"#MAX_SPEED_LIMIT")");
 
     vehicle_limit{playerid} = speed;
-    SendClientMessageEx(playerid, X11_LIGHTBLUE, "LIMITSPEED: "WHITE"Kecepatan kendaraan telah dibatasi menjadi "YELLOW"%d km/h", speed);
-    SendClientMessage(playerid, X11_LIGHTBLUE, "LIMITSPEED: "WHITE"Gunakan "YELLOW"/limitspeed "WHITE"kembali untuk menonaktifkan.");
+    SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Limit Speed) "WHITE"Kecepatan kendaraan telah dibatasi menjadi "YELLOW"%d km/h", speed);
+    SendClientMessage(playerid, X11_LIGHTBLUE, "(Limit Speed) "WHITE"Gunakan "YELLOW"/limitspeed "WHITE"kembali untuk menonaktifkan.");
 	return 1;
 }

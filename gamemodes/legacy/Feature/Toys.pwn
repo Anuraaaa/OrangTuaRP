@@ -16,7 +16,6 @@ enum acc {
 
 new
     AccData[MAX_PLAYERS][MAX_ACC][acc],
-    ListedAcc[MAX_PLAYERS][MAX_ACC],
     ListedPreset[MAX_PLAYERS][15];
 
 stock const accBones[][24] = {
@@ -352,7 +351,7 @@ Aksesoris_Sync(playerid)
     return 1;
 }
 //a
-FUNC::Aksesoris_Load(playerid)
+function Aksesoris_Load(playerid)
 {
     if(cache_num_rows())
     {
@@ -391,7 +390,7 @@ FUNC::Aksesoris_Load(playerid)
     }
     return 1;
 }
-FUNC::OnAksesorisCreated(playerid, id)
+function OnAksesorisCreated(playerid, id)
 {
     AccData[playerid][id][accID] = cache_insert_id();
     Aksesoris_Save(playerid, id);
@@ -403,7 +402,7 @@ FUNC::OnAksesorisCreated(playerid, id)
         format(string,sizeof(string),"%s%s\n",string,accBones[i]);
     }
     ShowPlayerDialog(playerid, DIALOG_BONE, DIALOG_STYLE_LIST, "Edit Bone",string,"Select","Close");
-    SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"Aksesoris berhasil dibuat! gunakan "YELLOW"/acc "WHITE"untuk mengatur.");
+    SendCustomMessage(playerid, X11_LIGHTBLUE, "Accessory",""WHITE"Aksesoris berhasil dibuat! gunakan "YELLOW"/acc "WHITE"untuk mengatur.");
     return 1;
 }
 

@@ -44,7 +44,7 @@ hook OnPlayerLogin(playerid) {
     mysql_tquery(sqlcon, sprintf("SELECT * FROM `donation_characters` WHERE `pID` = '%d' LIMIT 1;", PlayerData[playerid][pID]), "OnPlayerVIPChecked", "d", playerid);
 }
 
-FUNC::OnPlayerVIPChecked(playerid) {
+function OnPlayerVIPChecked(playerid) {
 
     new level, expired;
 
@@ -81,7 +81,7 @@ stock RemovePlayerVIP(playerid) {
 }
 
 
-FUNC::OnRedeemCode(playerid, code[]) {
+function OnRedeemCode(playerid, code[]) {
 
     if(cache_num_rows()) {
 
@@ -111,7 +111,7 @@ FUNC::OnRedeemCode(playerid, code[]) {
 }
 
 
-FUNC::OnVIPCheckMask(playerid, maskid) {
+function OnVIPCheckMask(playerid, maskid) {
 
     if(cache_num_rows()) {
         return SendErrorMessage(playerid, "Mask dengan ID \"%d\" sudah digunakan!", maskid);
@@ -122,7 +122,7 @@ FUNC::OnVIPCheckMask(playerid, maskid) {
     PlayerData[playerid][pMaskID] = maskid;
     return 1;
 }
-FUNC::OnVIPCheckNumber(playerid, number) {
+function OnVIPCheckNumber(playerid, number) {
     if(cache_num_rows()) 
         return SendErrorMessage(playerid, "Nomor handphone \"%d\" sudah digunakan!", number);
 

@@ -1434,7 +1434,7 @@ Query: SELECT * FROM `business`
 
 [2022-06-30 17:13]
 Error ID: 2002
-Callback: Dealer_Load
+Callback: SQL_LoadDealership
 Query: SELECT * FROM `dealer`
 [!] Can't connect to MySQL server on '103.55.39.44' (10065)
 
@@ -1735,7 +1735,7 @@ Query: SELECT * FROM `business`
 
 [2022-09-01 23:16]
 Error ID: 2002
-Callback: Dealer_Load
+Callback: SQL_LoadDealership
 Query: SELECT * FROM `dealer`
 [!] Can't connect to MySQL server on '103.55.39.44' (10060)
 
@@ -1885,7 +1885,7 @@ Query: SELECT * FROM `business`
 
 [2022-09-01 23:34]
 Error ID: 2002
-Callback: Dealer_Load
+Callback: SQL_LoadDealership
 Query: SELECT * FROM `dealer`
 [!] Can't connect to MySQL server on '103.55.39.44' (10060)
 

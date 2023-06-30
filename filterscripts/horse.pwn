@@ -10,7 +10,7 @@
 
 #define MAX_HORSES      MAX_PLAYERS
 #define HORSE_INDEX     3
-#define function%0(%1)          forward%0(%1); public%0(%1)
+#define function %0(%1)          forward%0(%1); public%0(%1)
 
 enum E_HORSE_DATA
 {

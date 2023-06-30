@@ -10,7 +10,7 @@ enum objectData {
 };
 new ObjectData[MAX_MAPOBJECTS][objectData];
 
-FUNC::Object_Load()
+function Object_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -36,7 +36,7 @@ FUNC::Object_Load()
     return 1;
 }        
             
-FUNC::OnObjectCreated(id)
+function OnObjectCreated(id)
 {
 	if (id == -1 || !ObjectData[id][mobjExists])
 	    return 0;
@@ -173,18 +173,6 @@ stock Object_Delete(id)
 	}
 	return 1;
 }
-
-Object_Nearest(playerid)
-{
-    for (new i = 0; i != MAX_MAPOBJECTS; i ++) if (ObjectData[i][mobjExists] && IsPlayerInRangeOfPoint(playerid, 3.0, ObjectData[i][mobjPos][0], ObjectData[i][mobjPos][1], ObjectData[i][mobjPos][2]))
-	{
-		if (GetPlayerInterior(playerid) == ObjectData[i][mobjInterior] && GetPlayerVirtualWorld(playerid) == ObjectData[i][mobjWorld])
-			return i;
-	}
-	return -1;
-}
-
-
 CMD:maphelp(playerid)
 {
 	if(PlayerData[playerid][pAdmin] < 5) return SendErrorMessage(playerid, NO_PERMISSION);
@@ -194,14 +182,19 @@ CMD:maphelp(playerid)
 
 CMD:nearobj(playerid, params[])
 {
-	new id;
+	new count = 0;
 
     if(PlayerData[playerid][pAdmin] < 5) return SendErrorMessage(playerid, NO_PERMISSION);
 
-	if((id = Object_Nearest(playerid)) >= 0)
+	SendClientMessageEx(playerid, -1, "========= [ Object Near ] =========");
+	for(new i = 0; i < MAX_MAPOBJECTS; i++) if(ObjectData[i][mobjExists] && IsPlayerInRangeOfPoint(playerid, 20.0, ObjectData[i][mobjPos][0], ObjectData[i][mobjPos][1], ObjectData[i][mobjPos][2])) 
 	{
-		SendServerMessage(playerid, "Object ID: %i.", id);
+		SendClientMessageEx(playerid, -1, "- ID: %d [ Range: %.2f ]", i, GetPlayerDistanceFromPoint(playerid, ObjectData[i][mobjPos][0], ObjectData[i][mobjPos][1], ObjectData[i][mobjPos][2]));
+		count++;
 	}
+
+	if(!count)
+		SendClientMessageEx(playerid, -1, "- Tidak ada object didekatmu");
 	return 1;
 }
 

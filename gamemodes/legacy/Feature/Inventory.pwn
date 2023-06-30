@@ -23,6 +23,8 @@ enum e_InventoryItems
 
 new const g_aInventoryItems[][e_InventoryItems] =
 {
+	{"Nitrous Oxide", 1010, 10},
+	{"Spraycan", 365, 10},
 	{"GPS", 18875, 1},
 	{"Cellphone", 18867, 1},
 	{"Medkit", 1580, 15},
@@ -264,13 +266,13 @@ stock Inventory_Add(playerid, item[], model, quantity = 1)
 	return itemid;
 }
 
-FUNC::OnInventoryAdd(playerid, itemid)
+function OnInventoryAdd(playerid, itemid)
 {
 	InventoryData[playerid][itemid][invID] = cache_insert_id();
 	return 1;
 }
 
-FUNC::ShowInventory(playerid, targetid)
+function ShowInventory(playerid, targetid)
 {
     if (!IsPlayerConnected(playerid))
 	    return 0;
@@ -335,7 +337,7 @@ stock OpenInventory(playerid)
 	return 1;
 }
 
-FUNC::LoadPlayerItems(playerid)
+function LoadPlayerItems(playerid)
 {
 	new name[128];
 	new count = cache_num_rows();
@@ -357,7 +359,7 @@ FUNC::LoadPlayerItems(playerid)
 	return 1;
 }
 
-FUNC::OnPlayerUseItem(playerid, itemid, name[])
+function OnPlayerUseItem(playerid, itemid, name[])
 {
 	if(!strcmp(name, "Snack"))
 	{
@@ -370,7 +372,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
         PlayerData[playerid][pHunger] += 10;
 		Inventory_Remove(playerid, "Snack", 1);
 		ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
-        SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s takes a snack and eats it.", ReturnName(playerid));
+        SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s takes a snack and eats it.", ReturnName(playerid));
 	}
 	else if(!strcmp(name, "Cigarettes")) {
 
@@ -389,7 +391,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 		Inventory_Remove(playerid, "Cigarettes", 1);
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_SMOKE_CIGGY);
 
-		SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s takes out a Cigarette and lights it...", ReturnName(playerid));
+		SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s takes out a Cigarette and lights it...", ReturnName(playerid));
 
 		if(PlayerData[playerid][pCough] < 10)
 			PlayerData[playerid][pCough]++;
@@ -480,7 +482,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 		PlayerData[playerid][pDrugTime] = 15;
 
 		ApplyAnimation(playerid, "SMOKING", "M_smk_in", 4.1, 0, 0, 0, 0, 0, 1);
-		SendNearbyMessage(playerid, 10.0, X11_PLUM, "* %s takes a Rolled Weed and snorts it.", ReturnName(playerid));
+		SendNearbyMessage(playerid, 10.0, X11_PLUM, "** %s takes a Rolled Weed and snorts it.", ReturnName(playerid));
 
 		if(armour+10.0 >= 100.0)
 			SetPlayerArmour(playerid, 100.0);
@@ -506,7 +508,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
         PlayerData[playerid][pThirst] += 10;
 		Inventory_Remove(playerid, "Water", 1);
 		ApplyAnimation(playerid, "VENDING", "VEND_DRINK2_P", 4.1, 0, 0, 0, 0, 0, 1);
-        SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s takes a water mineral and drinks it.", ReturnName(playerid));
+        SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s takes a water mineral and drinks it.", ReturnName(playerid));
 	}
 	else if(!strcmp(name, "Cellphone"))
 	{
@@ -522,18 +524,20 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 	}
 	else if(!strcmp(name, "Axe"))
 	{
-		if(!PlayerData[playerid][pAxe])
-		{
-			SetPlayerArmedWeapon(playerid, 0);
-			SendServerMessage(playerid, "You have {00FF00}equipped {FFFFFF}your Axe.");
-			SetPlayerAxe(playerid, true);
-			PlayerData[playerid][pAxe] = true;
+		if(GetEquipedItem(playerid) == EQUIP_ITEM_AXE) {
+			EquipItem(playerid, EQUIP_ITEM_NONE);
 		}
-		else
-		{
-			SendServerMessage(playerid, "You have {FF0000}unequipped {FFFFFF}your Axe.");
-			SetPlayerAxe(playerid, false);
-			PlayerData[playerid][pAxe] = false;
+		else {
+			EquipItem(playerid, EQUIP_ITEM_AXE);
+		}
+	}
+	else if(!strcmp(name, "Fish Rod"))
+	{
+		if(GetEquipedItem(playerid) == EQUIP_ITEM_ROD) {
+			EquipItem(playerid, EQUIP_ITEM_NONE);
+		}
+		else {
+			EquipItem(playerid, EQUIP_ITEM_ROD);
 		}
 	}
 	else if(!strcmp(name, "Rifle Schematic"))
@@ -555,7 +559,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Rifle Material", 1);
 		GiveWeaponToPlayer(playerid, 33, 10, 500);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Rifle");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Rifle");
 	}
 	else if(!strcmp(name, "Desert Eagle Schematic"))
 	{
@@ -579,7 +583,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Desert Eagle Material", 1);
 		GiveWeaponToPlayer(playerid, 24, 21, 500);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle");
 	}
 	else if(!strcmp(name, "9mm Silenced Schematic"))
 	{
@@ -600,7 +604,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "9mm Silenced Material", 1);
 		GiveWeaponToPlayer(playerid, 23, 34, 500);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced");
 	}
 	else if(!strcmp(name, "Shotgun Schematic"))
 	{
@@ -615,7 +619,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 			
 		Inventory_Remove(playerid, "Shotgun Material", 1);
 		GiveWeaponToPlayer(playerid, 25, 12, 500);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Shotgun");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Shotgun");
 	}
 	else if(!strcmp(name, "AK-47 Schematic")) {
 		if(Inventory_Count(playerid, "AK-47 Material") < 1)
@@ -632,7 +636,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "AK-47 Material", 1);
 		GiveWeaponToPlayer(playerid, 30, 30, 500);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}AK-47");	
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}AK-47");	
 	}
 	else if(!strcmp(name, "Rifle HV Schematic")) //HV
 	{
@@ -653,7 +657,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Rifle Material", 1);
 		GiveWeaponToPlayer(playerid, 33, 10, 500, 1);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Rifle (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Rifle (High Velocity)");
 	}
 	else if(!strcmp(name, "Desert Eagle HV Schematic"))
 	{
@@ -677,7 +681,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "Desert Eagle Material", 1);
 		GiveWeaponToPlayer(playerid, 24, 21, 500, 1);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Desert Eagle (High Velocity)");
 	}
 	else if(!strcmp(name, "AK-47 HV Schematic")) {
 		if(Inventory_Count(playerid, "AK-47 Material") < 1)
@@ -694,7 +698,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "AK-47 Material", 1);
 		GiveWeaponToPlayer(playerid, 30, 30, 500, 1);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}AK-47 (High Velocity)");	
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}AK-47 (High Velocity)");	
 	}
 	else if(!strcmp(name, "9mm Silenced HV Schematic"))
 	{
@@ -715,7 +719,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 
 		Inventory_Remove(playerid, "9mm Silenced Material", 1);
 		GiveWeaponToPlayer(playerid, 23, 34, 500, 1);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}9mm Silenced (High Velocity)");
 	}
 	else if(!strcmp(name, "Shotgun HV Schematic"))
 	{
@@ -730,7 +734,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 			
 		Inventory_Remove(playerid, "Shotgun Material", 1);
 		GiveWeaponToPlayer(playerid, 25, 12, 500, 1);
-		SendClientMessage(playerid, X11_LIGHTBLUE, "CRAFTING: "WHITE"Kamu berhasil merakit {FF0000}Shotgun (High Velocity)");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Crafting) "WHITE"Kamu berhasil merakit {FF0000}Shotgun (High Velocity)");
 	}
 	else if(!strcmp(name, "7.62mm Caliber"))
 	{
@@ -860,7 +864,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 		GetPlayerPos(playerid, x, y, z);
 		
 		Inventory_Remove(playerid, "Weed Seed", 1);
-		SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s plants some weed seeds into the ground.", ReturnName(playerid));
+		SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s plants some weed seeds into the ground.", ReturnName(playerid));
 		StartPlayerLoadingBar(playerid, 5, "Planting_weed", 1000);
 		SetTimerEx("PlantWeed", 5000, false, "dfff", playerid, x, y, z);
 		ApplyAnimation(playerid, "BOMBER", "BOM_Plant_Loop", 4.1, 1, 0, 0, 1, 0, 1);
@@ -882,7 +886,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 	    PlayerData[playerid][pBandage] = true;
 	    PlayerData[playerid][pAidTimer] = SetTimerEx("BandageUpdate", 5000, false, "d", playerid);
 
-	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s opens a bandage kit and uses it.", ReturnName(playerid));
+	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s opens a bandage kit and uses it.", ReturnName(playerid));
 	    Inventory_Remove(playerid, "Bandage", 1);
 	}
 	else if(!strcmp(name, "Medkit"))
@@ -902,7 +906,7 @@ FUNC::OnPlayerUseItem(playerid, itemid, name[])
 	    PlayerData[playerid][pFirstAid] = true;
 	    PlayerData[playerid][pAidTimer] = SetTimerEx("FirstAidUpdate", 1000, true, "d", playerid);
 
-	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s opens a medkit kit and uses it.", ReturnName(playerid));
+	    SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s opens a medkit kit and uses it.", ReturnName(playerid));
 	    Inventory_Remove(playerid, "Medkit");
 	}
 	return 1;
@@ -935,7 +939,7 @@ CMD:setitem(playerid, params[])
 	{
         Inventory_Set(userid, g_aInventoryItems[i][e_InventoryItem], g_aInventoryItems[i][e_InventoryModel], amount);
 		SendServerMessage(playerid, "You have set %s's \"%s\" to %d.", ReturnName(userid), item, amount);
-		SendClientMessageEx(userid, X11_LIGHTBLUE, "INVENTORY: "WHITE"Admin "RED"%s "WHITE"has set your "YELLOW"%s "WHITE"to "YELLOW"%d", GetUsername(playerid), item, amount);
+		SendClientMessageEx(userid, X11_LIGHTBLUE, "(Inventory) "WHITE"Admin "RED"%s "WHITE"has set your "YELLOW"%s "WHITE"to "YELLOW"%d", GetUsername(playerid), item, amount);
 		return 1;
 	}
 	SendErrorMessage(playerid, "Invalid item name (use /itemlist for a list).");

@@ -46,13 +46,13 @@ stock Ticket_Remove(playerid, ticketid)
     return 1;
 }
 
-FUNC::OnTicketCreated(playerid, ticketid)
+function OnTicketCreated(playerid, ticketid)
 {
     TicketData[playerid][ticketid][ticketID] = cache_insert_id();
     return 1;
 }
 
-FUNC::LoadPlayerTicket(playerid)
+function LoadPlayerTicket(playerid)
 {
     new count = cache_num_rows();
     if(count > 0)

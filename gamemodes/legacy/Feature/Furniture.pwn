@@ -16,7 +16,7 @@ enum furnitureData {
 };
 
 new FurnitureData[MAX_FURNITURE][furnitureData];
-new ListedFurniture[MAX_PLAYERS][50];
+new ListedFurniture[MAX_PLAYERS][150];
 new Iterator:Furniture<MAX_FURNITURE>;
 
 enum {
@@ -325,7 +325,7 @@ new const g_aFurnitureData[][e_FurnitureData] = {
 
 };
 
-FUNC::OnLoadFurniture()
+function OnLoadFurniture()
 {
 	for(new i = 0; i < cache_num_rows(); i++)
 	{
@@ -479,7 +479,7 @@ Furniture_Add(propid, name[], vw, int, modelid, type, Float:x, Float:y, Float:z,
 	return id;
 }
 
-FUNC::OnFurnitureCreated(furnitureid)
+function OnFurnitureCreated(furnitureid)
 {
 	FurnitureData[furnitureid][furnitureID] = cache_insert_id();
     Furniture_Spawn(furnitureid);
@@ -511,5 +511,11 @@ Furniture_Delete(furnitureid, bool:safe_remove = false)
             Iter_SafeRemove(Furniture, next, furnitureid);
         }
 	}
+	return 1;
+}
+
+
+ShowFurnitureEditMenu(playerid) {
+	ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, sprintf("Furniture Option(s) - %s", FurnitureData[PlayerData[playerid][pEditing]][furnitureName]), "Edit position (click n drag)\nEdit position (click textdraw)\n"RED"(beta) "WHITE"Change Texture\nRemove furniture", "Select", "Close");
 	return 1;
 }

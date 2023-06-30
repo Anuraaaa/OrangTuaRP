@@ -15,6 +15,10 @@ enum E_PLAYER_RACING {
     Timer:raceTimer,
 };
 
+enum {
+    RACE_CP_NORMAL = 0,
+    RACE_CP_FINISH
+};
 new
     RaceData[MAX_PLAYERS][E_PLAYER_RACING],
     RaceWith[MAX_PLAYERS],
@@ -103,24 +107,26 @@ Race_ProgressCP(playerid) {
 
         if(RaceData[racing][raceWinner] == playerid) {
             foreach(new i : Player) if(InRace[i] && RaceWith[i] == racing) {
-                SendClientMessageEx(i, X11_LIGHTBLUE, "RACE: "WHITE"Posisi finish pertama didapatkan oleh "YELLOW"%s", ReturnName(playerid));
+                SendClientMessageEx(i, X11_LIGHTBLUE, "(Race) "WHITE"Posisi finish pertama didapatkan oleh "YELLOW"%s", ReturnName(playerid));
             }
         }
 
         Race_ResetPlayer(playerid);
 
         if(Race_IsAnyPlayerInRace(racing) == INVALID_PLAYER_ID) {
-            SendClientMessage(racing, X11_LIGHTBLUE, "RACE: "WHITE"Balapan selesai, semua player yang ikut balapan sudah memasuki checkpoint finish!");
+            SendClientMessage(racing, X11_LIGHTBLUE, "(Race) "WHITE"Balapan selesai, semua player yang ikut balapan sudah memasuki checkpoint finish!");
 
             RaceData[racing][raceStarted] = false;
         }
     }
     else if(RaceIndex[playerid] == RaceData[racing][raceFinish] - 1) {
         SetPlayerRaceCheckpoint(playerid, 1, RaceData[racing][raceX][index],  RaceData[racing][raceY][index],  RaceData[racing][raceZ][index], 0.0, 0.0, 0.0, 5.0);
+        RemovePlayerMapIcon(playerid, 98);
     }
     else {
         PlayerPlaySound(playerid, 1139, 0.0, 0.0, 0.0);
         SetPlayerRaceCheckpoint(playerid, 0, RaceData[racing][raceX][index],  RaceData[racing][raceY][index],  RaceData[racing][raceZ][index], RaceData[racing][raceX][index + 1],  RaceData[racing][raceY][index + 1],  RaceData[racing][raceZ][index + 1], 5.0);
+        SetPlayerMapIcon(playerid, 98, RaceData[racing][raceX][index + 1],  RaceData[racing][raceY][index + 1],  RaceData[racing][raceZ][index + 1], 56, X11_WHITE, MAPICON_GLOBAL);
     }
     return 1;
 }
@@ -172,6 +178,51 @@ hook OnPlayerDisconnectEx(playerid) {
         SendServerMessage(playerid, "Penyelenggara balapan keluar dari server, balapan otomatis dihentikan.");
     }
 }
+
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+    if(dialogid == DIALOG_LOAD_RACE) {
+        if(response) {
+            inline const OnLoadRace() {
+
+                if(cache_num_rows()) {
+
+                    RaceData[playerid][raceFinish] = -1;
+
+                    for(new i = 0; i < MAX_RACING_CP; i++) {
+                        RaceData[playerid][raceX][i] = 0.0;
+                        RaceData[playerid][raceY][i] = 0.0;
+                        RaceData[playerid][raceZ][i] = 0.0;
+                        RaceData[playerid][racePosExists][i] = false;
+                    }
+
+                    for(new i = 0; i < cache_num_rows(); i++) {
+                        new race_idx[16], type = cache_get_field_int(i, "Type"), 
+                            Float:x,
+                            Float:y,
+                            Float:z
+                        ;
+                        cache_get_value_name(i, "CPIndex", race_idx, sizeof(race_idx));
+                        cache_get_value_name_float(i, "PosX", x);
+                        cache_get_value_name_float(i, "PosY", y);
+                        cache_get_value_name_float(i, "PosZ", z);
+
+                        RaceData[playerid][raceX][i] = x;
+                        RaceData[playerid][raceY][i] = y;
+                        RaceData[playerid][raceZ][i] = z;
+                        RaceData[playerid][racePosExists][i] = true;
+
+                        if(type == RACE_CP_FINISH) {
+                            RaceData[playerid][raceFinish] = i;
+                        }
+                    }
+                    SendClientMessage(playerid, X11_YELLOW, "(Race) "WHITE"Kamu berhasil me-load map race.");
+                }
+            }
+            MySQL_TQueryInline(sqlcon, using inline OnLoadRace, "SELECT * FROM `race_cps` WHERE `RaceID` = '%d' ORDER BY `ID` ASC;", ListedItems[playerid][listitem]);
+        }
+    }
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
 timer Race_Countdown[1000](playerid) {
 
     if(RaceData[playerid][raceCountdown] == 0) {
@@ -195,6 +246,26 @@ timer Race_Countdown[1000](playerid) {
             PlayerPlaySound(i, 1056, 0,0,0);
         }
     }
+}
+
+function OnRaceListCreated(playerid) {
+    
+    new get_id = cache_insert_id();
+    new string[512];
+
+    for(new i = 0; i < 50; i++) if(RaceData[playerid][racePosExists][i]) {
+
+        if(i == RaceData[playerid][raceFinish]) {
+
+            mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `race_cps` (`RaceID`, `Type`, `PosX`, `PosY`, `PosZ`, `CPIndex`) VALUES('%d', '%d', '%f', '%f', '%f', 'Index_%d')", get_id, RACE_CP_FINISH, RaceData[playerid][raceX][i], RaceData[playerid][raceY][i], RaceData[playerid][raceZ][i], i);
+            mysql_tquery(sqlcon, string);
+        } 
+        else {
+            mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `race_cps` (`RaceID`, `Type`, `PosX`, `PosY`, `PosZ`, `CPIndex`) VALUES('%d', '%d', '%f', '%f', '%f', 'Index_%d')", get_id, RACE_CP_NORMAL, RaceData[playerid][raceX][i], RaceData[playerid][raceY][i], RaceData[playerid][raceZ][i], i);
+            mysql_tquery(sqlcon, string);
+        }
+    }
+    return 1;
 }
 /* Commands */
 
@@ -224,6 +295,54 @@ CMD:race(playerid, params[]) {
             return SendErrorMessage(playerid, "Checkpoint ke %d masih belum ada! kamu harus set Checkpoint sebelumnya terlebih dahulu!", real_index);
 
         Race_SetCheckpoint(playerid, real_index);
+    }
+    else if(!strcmp(type, "save", true)) {
+
+        if(!IsPlayerHasRaceCP(playerid))
+            return SendErrorMessage(playerid, "Kamu belum mengatur checkpoint satupun!");
+
+        if(RaceData[playerid][raceFinish] == -1)
+            return SendErrorMessage(playerid, "Kamu belum mengatur checkpoint finish!");
+            
+        if(isnull(string))
+            return SendSyntaxMessage(playerid, "/race [save] <name>");
+
+        if(strlen(string) > 24)
+            return SendErrorMessage(playerid, "Nama map balapan tidak boleh lebih dari 24 huruf.");
+
+        inline const CheckRaceName() {
+            if(cache_num_rows()) {
+                SendErrorMessage(playerid, "Nama map ini sudah digunakan!");
+            }
+            else {
+                new query[352];
+                mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `race_list` (`OwnerID`, `RaceName`, `CreationDate`) VALUES('%d','%e','%e')", PlayerData[playerid][pID], string, ReturnDate(false));
+                mysql_tquery(sqlcon, query, "OnRaceListCreated", "d", playerid);
+            }
+        }
+        MySQL_TQueryInline(sqlcon, using inline CheckRaceName, "SELECT * FROM `race_list` WHERE `RaceName` = '%s'", string);
+
+    }
+    else if(!strcmp(type, "load", true)) {
+
+        inline const OnLoadRaceCheck() {
+
+            new e_str[512], count = 0;
+            if(cache_num_rows()) {
+                for(new i = 0; i < cache_num_rows(); i++) {
+                    new race_name[24], build_date[26], id;
+                    cache_get_value_name(i, "RaceName", race_name);
+                    cache_get_value_name(i, "CreationDate", build_date);
+                    id = cache_get_field_int(i, "ID");
+
+                    strcat(e_str, sprintf("%s\t%s\n", race_name, build_date));
+
+                    ListedItems[playerid][count++] = id;
+                }
+                ShowPlayerDialog(playerid, DIALOG_LOAD_RACE, DIALOG_STYLE_TABLIST, "Race List", e_str, "Load", "Close");
+            }
+        }
+        MySQL_TQueryInline(sqlcon, using inline OnLoadRaceCheck, "SELECT * FROM `race_list` WHERE `OwnerID` = '%d'", PlayerData[playerid][pID]);
     }
     else if(!strcmp(type, "removefinish", true)) {
 
@@ -270,7 +389,7 @@ CMD:race(playerid, params[]) {
 
         
         Race_ResetPlayer(playerid);
-        SendClientMessage(playerid, X11_LIGHTBLUE, "RACE: "WHITE"Kamu telah keluar dari balapan.");
+        SendClientMessage(playerid, X11_LIGHTBLUE, "(Race) "WHITE"Kamu telah keluar dari balapan.");
     }
     else if(!strcmp(type, "invite", true)) {
         new targetid;
@@ -342,11 +461,10 @@ CMD:race(playerid, params[]) {
         RaceWith[playerid] = playerid;
         Race_SetStart(playerid, time + 1);
 
-        if(freeze == 0) {
-            foreach(new i : Player) if(RaceWith[i] == playerid) {
-                TogglePlayerControllable(i, 0);
-                SetCameraBehindPlayer(i);
-            }
+        foreach(new i : Player) if(RaceWith[i] == playerid) {
+            TogglePlayerControllable(i, freeze);
+            SetCameraBehindPlayer(i);
+            SendClientMessageEx(i, X11_YELLOW, "(Race) "WHITE"%s telah menginisiasikan untuk memulai balapan dalam %d detik.", ReturnName(playerid), time);
         }
     }
     return 1;

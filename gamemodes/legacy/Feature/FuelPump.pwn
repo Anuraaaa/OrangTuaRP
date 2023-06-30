@@ -109,7 +109,7 @@ Pump_Nearest(playerid, Float:range = 5.0)
     return id;
 } 
 
-FUNC::Pump_Load() 
+function Pump_Load() 
 {
     new idx, rows = cache_num_rows();
     if(rows)
@@ -135,7 +135,7 @@ FUNC::Pump_Load()
     return 1;       
 }
 
-FUNC::Pump_OnCreated(idx) 
+function Pump_OnCreated(idx) 
 {
     PumpData[idx][pumpID] = cache_insert_id();
     Pump_Save(idx);

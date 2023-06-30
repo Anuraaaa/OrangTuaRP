@@ -17,7 +17,7 @@ enum speedData
 
 new SpeedData[MAX_SPEEDCAM][speedData];
 
-FUNC::Speed_Load()
+function Speed_Load()
 {
 	new rows = cache_num_rows();
  	if(rows)
@@ -170,7 +170,7 @@ stock Speed_Create(playerid, Float:limit, Float:range)
 	return -1;
 }
 
-FUNC::OnSpeedCreated(speedid)
+function OnSpeedCreated(speedid)
 {
 	if (speedid == -1 || !SpeedData[speedid][speedExists])
 	    return 0;

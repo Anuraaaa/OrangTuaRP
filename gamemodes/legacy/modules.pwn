@@ -85,6 +85,9 @@
 #include "legacy\Feature\FactionVault.pwn"
 #include "legacy\Feature\Vote.pwn"
 #include "legacy\Feature\FlyMode.pwn"
+// #include "legacy\Feature\Spectate.pwn"
+#include "legacy\Feature\ELM.pwn"
+#include "legacy\Feature\SealProperty.pwn"
 
 /* Job Modules */
 #include "legacy\Job\Smuggler.pwn"
@@ -103,6 +106,7 @@
 #include "legacy\Job\DeliveryDriver.pwn"
 #include "legacy\Job\Miner.pwn"
 #include "legacy\Job\Hauling.pwn"
+#include "legacy\Job\BoxCourier.pwn"
 
 /* Other Important Modules */
 #include "legacy\Core\player.pwn"
@@ -113,4 +117,4 @@
 
 /* Raknet */
 
-#include "legacy\Core\pawnraknet.pwn"
+// #include "legacy\Core\pawnraknet.pwn"

@@ -38,7 +38,7 @@ FactionGarage_Create(faction_id, Float:x, Float:y, Float:z) {
     return id;
 }
 
-FUNC::OnFactionGarageCreated(id) {
+function OnFactionGarageCreated(id) {
     if(Iter_Contains(FactionGarages, id)) {
         FactionGarage[id][fgID] = cache_insert_id();
         FactionGarage_Save(id);
@@ -98,12 +98,12 @@ FactionGarage_Nearest(playerid) {
     return index;
 }
 
-FUNC::OnVehicleGarageAdded(playerid, garage_id, modelid) {
+function OnVehicleGarageAdded(playerid, garage_id, modelid) {
     SendAdminAction(playerid, "You have added \"%s\" to Garage ID:%d", ReturnVehicleModelName(modelid), garage_id);
     return 1;
 }
 
-FUNC::FactionGarage_Load() {
+function FactionGarage_Load() {
     if(cache_num_rows()) {
         for(new i = 0; i < cache_num_rows(); i++) {
 

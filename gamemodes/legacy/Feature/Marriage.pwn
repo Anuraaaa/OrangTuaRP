@@ -4,10 +4,10 @@ hook OnPlayerConnect(playerid) {
     DivorceOffer[playerid] = INVALID_PLAYER_ID;
 }
 
-
+/*
 ShowMarriageCertificate(playerid, showto) {
 
-}
+}*/
 
 CMD:propose(playerid, params[]) {
     new targetid;
@@ -32,8 +32,8 @@ CMD:propose(playerid, params[]) {
             return SendErrorMessage(playerid, "Come on.. you're not gonna be a %s person.", (PlayerData[playerid][pGender] == 1) ? ("Gay") : ("Lesbians"));
 
         MarryOffer[targetid] = playerid;
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "MARRIAGE: "WHITE"You've proposed to "YELLOW"%s"WHITE", awaiting his/her approval.", GetName(targetid, false));
-        SendClientMessageEx(targetid, X11_LIGHTBLUE, "MARRIAGE: "YELLOW"%s "WHITE"just proposed you "CYAN"(/accept marriage) "WHITE"to accept.", GetName(playerid, false));    
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Marriage) "WHITE"You've proposed to "YELLOW"%s"WHITE", awaiting his/her approval.", GetName(targetid, false));
+        SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Marriage) "YELLOW"%s "WHITE"just proposed you "CYAN"(/accept marriage) "WHITE"to accept.", GetName(playerid, false));    
     }
     else SendErrorMessage(playerid, "You have already married with someone.");
 
@@ -57,8 +57,8 @@ CMD:divorce(playerid, params[]) {
         return SendErrorMessage(playerid, "That player is not married to you!");
 
 
-    SendClientMessageEx(playerid, X11_LIGHTBLUE, "DIVORCE: "WHITE"You have asking "YELLOW"%s "WHITE"for a divorce.", ReturnName(targetid));
-    SendClientMessageEx(targetid, X11_LIGHTBLUE, "DIVORCE: "YELLOW"%s "WHITE"is asking you for a Divorce "CYAN"(/accept divorce) "WHITE"to accept.", ReturnName(playerid));
+    SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Divorce) "WHITE"You have asking "YELLOW"%s "WHITE"for a divorce.", ReturnName(targetid));
+    SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Divorce) "YELLOW"%s "WHITE"is asking you for a Divorce "CYAN"(/accept divorce) "WHITE"to accept.", ReturnName(playerid));
     DivorceOffer[targetid] = playerid;
     return 1;
 }

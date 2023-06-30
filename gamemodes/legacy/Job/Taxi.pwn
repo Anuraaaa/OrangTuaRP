@@ -1,4 +1,4 @@
-FUNC::UpdateFare(playerid, driverid)
+function UpdateFare(playerid, driverid)
 {
 	if(IsPlayerSpawned(playerid) && IsPlayerSpawned(driverid) && GetVehicleSpeedKMH(GetPlayerVehicleID(driverid)) > 1) {
 
@@ -68,12 +68,12 @@ CMD:taxi(playerid, params[])
 	if(!strcmp(type, "duty", true))
 	{
 		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
-			return SendErrorMessage(playerid, "You must be inside Taxi Vehicle!");		
+			return SendErrorMessage(playerid, "Kamu harus berada didalam taxi.");		
 
 		new modelid = GetVehicleModel(GetPlayerVehicleID(playerid));
 
 		if(modelid != 438 && modelid != 420)
-			return SendErrorMessage(playerid, "You must be inside Taxi Vehicle!");
+			return SendErrorMessage(playerid, "Kamu harus berada didalam taxi.");
 
 	    if(PlayerData[playerid][pThirst] < 15)
 	    	return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja!");
@@ -82,7 +82,7 @@ CMD:taxi(playerid, params[])
 		{
 			PlayerData[playerid][pJobduty] = true;
 			SetPlayerColor(playerid, COLOR_YELLOW);
-			SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You're now onduty as {FFFF00}Taxi Driver {FFFFFF}you will receive any calls.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu sekarang bertugas sebaga "YELLOW"Taxi Driver "WHITE"kamu akan menerima panggilan taxi.");
 			CreateTaxi(playerid);
 			PlayerTextDrawSetString(playerid, FARETD[playerid], "Fare: ~g~$2,50");
 		}
@@ -91,13 +91,13 @@ CMD:taxi(playerid, params[])
 			HideTaxi(playerid);
 			PlayerData[playerid][pJobduty] = false;
 			SetPlayerColor(playerid, COLOR_WHITE);
-			SendClientMessage(playerid, COLOR_SERVER, "JOB: {FFFFFF}You are no longer onduty as {FFFF00}Taxi Driver");
+			SendClientMessage(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu tidak lagi bertugas sebagai {FFFF00}Taxi Driver");
 		}
 	}
 	else if(!strcmp(type, "calls", true))
 	{
 		if(!PlayerData[playerid][pJobduty])
-			return SendErrorMessage(playerid, "You must jobduty first!");
+			return SendErrorMessage(playerid, "Kamu sedang tidak bertugas sebagai taxi driver.");
 
 		Taxi_ShowCalls(playerid);	
 	}
@@ -123,7 +123,7 @@ CMD:taxi(playerid, params[])
 
 		PlayerData[playerid][pFare] = amount;	
 		PlayerTextDrawSetString(playerid, FARETD[playerid], sprintf("Fare: ~g~$%s", FormatNumber(PlayerData[playerid][pFare])));
-		SendClientMessageEx(playerid, COLOR_SERVER, "JOB: {FFFFFF}You've adjusted the taxi fare to {00FF00}$%s", FormatNumber(PlayerData[playerid][pFare]));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}You've adjusted the taxi fare to {00FF00}$%s", FormatNumber(PlayerData[playerid][pFare]));
 	}*/
 	return 1;
 }

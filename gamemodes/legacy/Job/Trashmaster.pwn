@@ -1,6 +1,8 @@
+#include <YSI_Coding\y_hooks>
+
 #define     TRASH_BAG_VALUE     (800)    	// value of a collected trash bag (default: 125)
 #define     REFILL_TIME         (300)   	// trash container refill time - in seconds (default: 300)
-#define     ATTACHMENT_INDEX    (0)     	// for setplayerattachedobject (default: 4)
+#define     ATTACHMENT_INDEX    (9)     	// for setplayerattachedobject (default: 4)
 #define     TRASH_LIMIT         (10)    	// trashmaster capacity (default: 10)
 
 new Text3D: FactoryLabel,
@@ -9,7 +11,7 @@ new Text3D: FactoryLabel,
 	FactoryIcons[MAX_PLAYERS],
 	TrashIcons[MAX_PLAYERS][MAX_TRASH];
 
-enum	e_trashdata
+enum E_TRASH_DATA
 {
 	TrashID,
 	bool: TrashExists,
@@ -27,7 +29,7 @@ enum	e_trashdata
 	TrashTimer	
 }
 
-new	TrashData[MAX_TRASH][e_trashdata];
+new	TrashData[MAX_TRASH][E_TRASH_DATA];
 
 new
 	OnTrash[MAX_PLAYERS],
@@ -37,12 +39,12 @@ new
     PlayerText: CapacityText[MAX_PLAYERS],
     PlayerBar: CapacityBar[MAX_PLAYERS];
 
-FUNC::Trash_Load()
+function Trash_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
 	{
-	    forex(i, rows)
+	    for(new i = 0; i < rows; i++)
 	    {
             TrashData[i][TrashExists] = true;
             cache_get_value_name_int(i, "TrashID", TrashData[i][TrashID]);
@@ -61,7 +63,7 @@ FUNC::Trash_Load()
     }
 }    
 
-stock Trash_Create(playerid, type)
+Trash_Create(playerid, type)
 {
 	new
 	    Float:x,
@@ -98,7 +100,7 @@ stock Trash_Create(playerid, type)
 	return -1;
 }
 
-FUNC::OnTrashCreated(id)
+function OnTrashCreated(id)
 {
 	if (id == -1 || !TrashData[id][TrashExists])
 	    return 0;
@@ -109,7 +111,7 @@ FUNC::OnTrashCreated(id)
 	return 1;
 }
 
-stock Trash_Delete(id)
+Trash_Delete(id)
 {
     if (id != -1 && TrashData[id][TrashExists])
 	{
@@ -130,7 +132,7 @@ stock Trash_Delete(id)
 	return 1;
 }
 
-stock Trash_Spawn(id)
+Trash_Spawn(id)
 {
 	if(id != -1 && TrashData[id][TrashExists])
 	{		    
@@ -180,7 +182,7 @@ stock Trash_Spawn(id)
 	return 1;
 }
 
-stock Trash_Refresh(id)
+Trash_Refresh(id)
 {
 	new string[156];
 	if(id != -1 && TrashData[id][TrashExists])
@@ -224,7 +226,7 @@ stock Trash_Refresh(id)
 	return 1;
 }
 
-stock Trash_Save(id)
+Trash_Save(id)
 {
 	new query[512];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `trash` SET ");
@@ -240,7 +242,7 @@ stock Trash_Save(id)
 	return 1;
 }
 
-stock Trash_InitPlayer(playerid)
+Trash_InitPlayer(playerid)
 {
     HasTrash[playerid] = false;
     TrashCP[playerid] = -1;
@@ -286,7 +288,7 @@ Trash_ResetPlayer(playerid, removeUI = 0)
 	return 1;
 }
 
-stock Trash_ShowCapacity(playerid)
+Trash_ShowCapacity(playerid)
 {
     new vehicleid = GetPlayerVehicleID(playerid), capacity_string[32];
     format(capacity_string, sizeof(capacity_string), "Vehicle Capacity (%d/%d)", LoadedTrash[vehicleid], TRASH_LIMIT);
@@ -298,7 +300,7 @@ stock Trash_ShowCapacity(playerid)
 	return 1;
 }
 
-stock Trash_Closest(playerid)
+Trash_Closest(playerid)
 {
 	new closest_id = -1, Float: dist = 3.0, Float: tempdist;
     for(new i; i < sizeof(TrashData); i++)
@@ -315,7 +317,7 @@ stock Trash_Closest(playerid)
 	return closest_id;
 }
 
-stock IsTrashmasterVehicle(carid)
+IsTrashmasterVehicle(carid)
 {
     for(new v = 0; v < sizeof(TrashVehicle); v++) {
         if(carid == TrashVehicle[v]) return 1;
@@ -323,7 +325,7 @@ stock IsTrashmasterVehicle(carid)
     return 0;
 }
 
-FUNC::FillTrash(id)
+function FillTrash(id)
 {
 	TrashData[id][TrashLevel]++;
 	if(TrashData[id][TrashType] == 1 && TrashData[id][TrashLevel] > 1) TrashData[id][TrashLevel] = 1;
@@ -345,7 +347,7 @@ FUNC::FillTrash(id)
 	return 1;
 }
 
-FUNC::TrashDone(playerid)
+function TrashDone(playerid)
 {
 	new string[128], reson[50], vehicleid = PlayerData[playerid][pTrashVehicleID], cash = 5000;
 
@@ -371,7 +373,7 @@ FUNC::TrashDone(playerid)
 
 	VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 100;
 	SetVehicleToRespawn(GetPlayerVehicleID(playerid));
-	SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}di {FFFF00}/salary", FormatNumber(cash));
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}di {FFFF00}/salary", FormatNumber(cash));
 	return 1;	
 }
 
@@ -430,24 +432,28 @@ CMD:pickup(playerid, params[])
     new Float: x, Float: y, Float: z;
 
 	if(IsPlayerInAnyVehicle(playerid)) 
-		return SendErrorMessage(playerid, "You can't do at this moment.");
+		return SendErrorMessage(playerid, "Kamu harus keluar dari kendaraan terlebih dahulu");
+
 	if(OnTrash[playerid] < 1)
 		return SendErrorMessage(playerid, "Kamu tidak bekerja sebagai Trashmaster!");
+
 	if(!IsTrashmasterVehicle(vehicleid)) 	
-		return SendErrorMessage(playerid, "Your last vehicle has to be a Trashmaster.");
+		return SendErrorMessage(playerid, "Kendaraan terakhirmu harus Trashmaster!");
+
     if(HasTrash[playerid]) 
-		return SendErrorMessage(playerid, "You're already carrying a trash bag.");
+		return SendErrorMessage(playerid, "Kamu sudah membawa kantung sampah.");
 
 	new id = Trash_Closest(playerid);
 	if(id == -1) 
-		return SendErrorMessage(playerid, "You're not near any trash.");
+		return SendErrorMessage(playerid, "Kamu tidak didekat tempat sampah manapun.");
+
 	if(TrashData[id][TrashLevel] < 1) 
-		return SendErrorMessage(playerid, "There's nothing here.");
+		return SendErrorMessage(playerid, "Tidak ada sampah pada tempat sampah ini.");
 
     GetVehicleBoot(vehicleid, x, y, z);
 
     if(GetPlayerDistanceFromPoint(playerid, x, y, z) >= 30.0) 
-		return SendErrorMessage(playerid, "You're not near your Trashmaster.");
+		return SendErrorMessage(playerid, "Kamu harus berada didekat Trashmaster yang kamu gunakan.");
 
 	TrashData[id][TrashLevel]--;
 	KillTimer(TrashData[id][TrashTimer]);
@@ -458,20 +464,31 @@ CMD:pickup(playerid, params[])
 	SetPlayerAttachedObject(playerid, ATTACHMENT_INDEX, 1264, 6, 0.222, 0.024, 0.128, 1.90, -90.0, 0.0, 0.5,0.5, 0.5);
 	
 	Trash_Refresh(id);
-	SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}You can press {FFFF00}N {FFFFFF}to remove the trash bag.");
+	SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat menekan "YELLOW"N "WHITE"untuk menghilangkan kantung sampah.");
 	return 1;
 }
 CMD:trash(playerid, params[])
 {
 	new id = Trash_Closest(playerid);
 	if(id == -1) 	
-		return SendErrorMessage(playerid, "You're not near any trash.");
+		return SendErrorMessage(playerid, "Kamu tidak berada didekat tempat sampah manapun.");
+
 	if(TrashData[id][TrashLevel] < 1) 
-		return SendErrorMessage(playerid, "There's nothing here.");
+		return SendErrorMessage(playerid, "Tidak ada sampah pada tempat sampah ini.");
+
     if(PlayerData[playerid][pTrash] < 0)
-		return SendErrorMessage(playerid, "Kamu tidak mempunyai sampah di inventory mu!.");
+		return SendErrorMessage(playerid, "Kamu tidak mempunyai sampah di inventory mu!");
 
 	PlayerData[playerid][pTrash] -= 1;
 	SendServerMessage(playerid, "Kamu Telah membuang sampah ke tempatnya");
 	return 1;
+}
+
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+	if((newkeys & KEY_NO) && HasTrash[playerid])
+	{
+		Trash_ResetPlayer(playerid);
+		SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu telah membuang kantung sampah.");
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }

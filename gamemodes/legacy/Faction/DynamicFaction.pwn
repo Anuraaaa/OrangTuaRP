@@ -26,6 +26,7 @@ enum factionData
 	factionDurability[10],
 	factionHighVelocity[10],
 	factionSalary[15],
+	factionWeaponMinRank[10],
 	Text3D:factionText3D,
 	STREAMER_TAG_PICKUP:factionPickup,
 	Float:SpawnX,
@@ -37,7 +38,7 @@ enum factionData
 new FactionData[MAX_FACTIONS][factionData];
 new FactionRanks[MAX_FACTIONS][15][32];
 
-stock GetInitials(const string[])
+GetInitials(const string[])
 {
 	new
 	    ret[32],
@@ -51,7 +52,7 @@ stock GetInitials(const string[])
 	return ret;
 }
 
-stock IsNearFactionLocker(playerid)
+IsNearFactionLocker(playerid)
 {
 	new factionid = PlayerData[playerid][pFaction];
 
@@ -64,7 +65,7 @@ stock IsNearFactionLocker(playerid)
 	return 0;
 }
 
-stock GetFactionByID(sqlid)
+GetFactionByID(sqlid)
 {
 	forex(i, MAX_FACTIONS) if (FactionData[i][factionExists] && FactionData[i][factionID] == sqlid)
 	    return i;
@@ -72,7 +73,7 @@ stock GetFactionByID(sqlid)
 	return -1;
 }
 
-stock SetFaction(playerid, id)
+SetFaction(playerid, id)
 {
 	if (id != -1 && FactionData[id][factionExists])
 	{
@@ -82,11 +83,11 @@ stock SetFaction(playerid, id)
 	return 1;
 }
 
-stock RemoveAlpha(color) {
+RemoveAlpha(color) {
     return (color & ~0xFF);
 }
 
-stock SetFactionColor(playerid)
+SetFactionColor(playerid)
 {
 	new factionid = PlayerData[playerid][pFaction];
 
@@ -96,7 +97,7 @@ stock SetFactionColor(playerid)
 	return 0;
 }
 
-stock Faction_Update(factionid)
+Faction_Update(factionid)
 {
 	if (factionid != -1 || FactionData[factionid][factionExists])
 	{
@@ -109,7 +110,7 @@ stock Faction_Update(factionid)
 	return 1;
 }
 
-stock Faction_Refresh(factionid)
+Faction_Refresh(factionid)
 {
 	if (factionid != -1 && FactionData[factionid][factionExists])
 	{
@@ -118,25 +119,30 @@ stock Faction_Refresh(factionid)
 		    static
 		        string[128];
 
-			if (IsValidDynamicPickup(FactionData[factionid][factionPickup]))
-			    DestroyDynamicPickup(FactionData[factionid][factionPickup]);
-
-			if (IsValidDynamic3DTextLabel(FactionData[factionid][factionText3D]))
-			    DestroyDynamic3DTextLabel(FactionData[factionid][factionText3D]);
-
-			FactionData[factionid][factionPickup] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
-
 			format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Type {FFFF00}/faction locker {FFFFFF}to access the locker.", factionid);
-	  		FactionData[factionid][factionText3D] = CreateDynamic3DTextLabel(string, -1, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], 5.0, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 0, FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
+
+			if (IsValidDynamicPickup(FactionData[factionid][factionPickup])) {
+				Streamer_SetItemPos(STREAMER_TYPE_PICKUP, FactionData[factionid][factionPickup], FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2]);
+			}
+			else {
+				FactionData[factionid][factionPickup] = CreateDynamicPickup(1239, 23, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
+			}
+			if (IsValidDynamic3DTextLabel(FactionData[factionid][factionText3D])) {
+			    Streamer_SetItemPos(STREAMER_TYPE_3D_TEXT_LABEL, FactionData[factionid][factionText3D], FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2]);
+				UpdateDynamic3DTextLabelText(FactionData[factionid][factionText3D], -1, string);
+			}
+			else {
+				FactionData[factionid][factionText3D] = CreateDynamic3DTextLabel(string, -1, FactionData[factionid][factionLockerPos][0], FactionData[factionid][factionLockerPos][1], FactionData[factionid][factionLockerPos][2], 5.0, INVALID_VEHICLE_ID, INVALID_PLAYER_ID, 0, FactionData[factionid][factionLockerWorld], FactionData[factionid][factionLockerInt]);
+			}
 		}
 	}
 	return 1;
 }
 
-stock Faction_Save(factionid)
+Faction_Save(factionid)
 {
 	static
-	    query[2448];
+	    query[2548];
 
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `factions` SET `factionName` = '%s', `factionColor` = '%d', `factionType` = '%d', `factionRanks` = '%d', `factionLockerX` = '%.4f', `factionLockerY` = '%.4f', `factionLockerZ` = '%.4f', `factionLockerInt` = '%d', `factionLockerWorld` = '%d', `SpawnX` = '%f', `SpawnY` = '%f', `SpawnZ` = '%f', `SpawnInterior` = '%d', `SpawnVW` = '%d'",
 		FactionData[factionid][factionName],
@@ -156,7 +162,7 @@ stock Faction_Save(factionid)
 	);
 	forex(i, 10)
 	{
-		mysql_format(sqlcon, query, sizeof(query), "%s, `factionSkin%d` = '%d', `factionWeapon%d` = '%d', `factionAmmo%d` = '%d', `factionDurability%d` = '%d', `factionHighVelocity%d` = '%d'", query, i + 1, FactionData[factionid][factionSkins][i], i + 1, FactionData[factionid][factionWeapons][i], i + 1, FactionData[factionid][factionAmmo][i], i + 1, FactionData[factionid][factionDurability][i], i + 1, FactionData[factionid][factionHighVelocity][i]);
+		mysql_format(sqlcon, query, sizeof(query), "%s, `factionSkin%d` = '%d', `factionWeapon%d` = '%d', `factionAmmo%d` = '%d', `factionDurability%d` = '%d', `factionHighVelocity%d` = '%d', `factionWeaponMinRank%d` = '%d'", query, i + 1, FactionData[factionid][factionSkins][i], i + 1, FactionData[factionid][factionWeapons][i], i + 1, FactionData[factionid][factionAmmo][i], i + 1, FactionData[factionid][factionDurability][i], i + 1, FactionData[factionid][factionHighVelocity][i], i + 1, FactionData[factionid][factionWeaponMinRank][i]);
 	}
 	forex(i, 15)
 	{
@@ -169,7 +175,7 @@ stock Faction_Save(factionid)
 	return mysql_tquery(sqlcon, query);
 }
 
-stock Faction_SaveRanks(factionid)
+Faction_SaveRanks(factionid)
 {
 	static
 	    query[768];
@@ -232,7 +238,7 @@ Faction_Delete(factionid)
 	return 1;
 }
 
-stock GetFactionType(playerid)
+GetFactionType(playerid)
 {
 	if (PlayerData[playerid][pFaction] == -1)
 	    return 0;
@@ -240,7 +246,7 @@ stock GetFactionType(playerid)
 	return (FactionData[PlayerData[playerid][pFaction]][factionType]);
 }
 
-stock Faction_ShowSalary(playerid, factionid)
+Faction_ShowSalary(playerid, factionid)
 {
     if (factionid != -1 && FactionData[factionid][factionExists])
 	{
@@ -258,7 +264,7 @@ stock Faction_ShowSalary(playerid, factionid)
 	return 1;
 }
 
-stock Faction_ShowRanks(playerid, factionid)
+Faction_ShowRanks(playerid, factionid)
 {
     if (factionid != -1 && FactionData[factionid][factionExists])
 	{
@@ -276,7 +282,7 @@ stock Faction_ShowRanks(playerid, factionid)
 	return 1;
 }
 
-stock Faction_Create(name[], type)
+Faction_Create(name[], type)
 {
 	forex(i, MAX_FACTIONS) if (!FactionData[i][factionExists])
 	{
@@ -310,14 +316,22 @@ stock Faction_Create(name[], type)
 	return -1;
 }
 
-Faction_CountDuty(factiontype) {
+Faction_CountDutyByID(factionid) {
 	new count = 0;
-	foreach(new i : Player) if(GetFactionType(i) == factiontype && PlayerData[i][pOnDuty]) {
+	foreach(new i : Player) if(IsPlayerSpawned(i) && PlayerData[i][pFaction] == factionid && PlayerData[i][pOnDuty]) {
 		count++;
 	}
 	return count;
 }
-FUNC::OnFactionCreated(factionid)
+
+Faction_CountDuty(factiontype) {
+	new count = 0;
+	foreach(new i : Player) if(IsPlayerSpawned(i) && GetFactionType(i) == factiontype && PlayerData[i][pOnDuty]) {
+		count++;
+	}
+	return count;
+}
+function OnFactionCreated(factionid)
 {
 	if (factionid == -1 || !FactionData[factionid][factionExists])
 	    return 0;
@@ -329,11 +343,11 @@ FUNC::OnFactionCreated(factionid)
 
 	return 1;
 }
-FUNC::Faction_Load()
+function Faction_Load()
 {
 	new
 	    rows = cache_num_rows(),
-		str[56];
+		str[150];
 
 	if(rows)
 	{
@@ -374,6 +388,10 @@ FUNC::Faction_Load()
 
 				cache_get_value_name_int(i, str, FactionData[i][factionDurability][j]);
 
+		        format(str, sizeof(str), "factionWeaponMinRank%d", j + 1);
+
+				cache_get_value_name_int(i, str, FactionData[i][factionWeaponMinRank][j]);
+
 		        format(str, sizeof(str), "factionHighVelocity%d", j + 1);
 
 				cache_get_value_name_int(i, str, FactionData[i][factionHighVelocity][j]);
@@ -395,7 +413,7 @@ FUNC::Faction_Load()
 	return 1;
 }
 
-stock Faction_GetName(playerid)
+Faction_GetName(playerid)
 {
     new
 		factionid = PlayerData[playerid][pFaction],
@@ -408,7 +426,7 @@ stock Faction_GetName(playerid)
 	return name;
 }
 
-stock Faction_GetRank(playerid)
+Faction_GetRank(playerid)
 {
     new
 		factionid = PlayerData[playerid][pFaction],
@@ -470,7 +488,7 @@ CMD:createfaction(playerid, params[])
 	if (sscanf(params, "ds[32]", type, name))
 	{
 	    SendSyntaxMessage(playerid, "/createfaction [type] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Police | 2: News | 3: Medical | 4: Government | 5: Family");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Type){FFFFFF} 1: Police | 2: News | 3: Medical | 4: Government | 5: Family");
 		return 1;
 	}
 	if (type < 1 || type > 5)
@@ -498,7 +516,7 @@ CMD:editfaction(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfaction [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, color, type, models, locker, ranks, maxranks, salary");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} name, color, type, models, locker, ranks, maxranks, salary");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
@@ -555,7 +573,7 @@ CMD:editfaction(playerid, params[])
 	    if (sscanf(string, "d", typeint))
      	{
 		 	SendSyntaxMessage(playerid, "/editfaction [id] [type] [faction type]");
-            SendClientMessage(playerid, COLOR_YELLOW, "[TYPES]:{FFFFFF} 1: Police | 2: News | 3: Medical | 4: Government | 5: Family");
+            SendClientMessage(playerid, COLOR_YELLOW, "(Type){FFFFFF} 1: Police | 2: News | 3: Medical | 4: Government | 5: Family");
             return 1;
 		}
 		if (typeint < 1 || typeint > 5)

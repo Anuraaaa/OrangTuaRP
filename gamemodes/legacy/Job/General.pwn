@@ -169,7 +169,7 @@ CMD:quitjob(playerid, params[])
 
 CMD:jobdelay(playerid, params[])
 {
-	new str[512];
+	new str[612];
 	strcat(str, "Job Name\tTime\n");
 	strcat(str, sprintf("Street Sweeper\t%d Minute\n", PlayerData[playerid][pSweeperDelay]/60));
 	strcat(str, sprintf("Bus Driver\t%d Minute\n", PlayerData[playerid][pBusDelay]/60));
@@ -179,6 +179,7 @@ CMD:jobdelay(playerid, params[])
 	strcat(str, sprintf("Delivery Driver\t%d Minute\n", PlayerData[playerid][pDriverDelay]/60));
 	strcat(str, sprintf("Lumberjack\t%d Minute\n", PlayerData[playerid][pLumberDelay]/60));
 	strcat(str, sprintf("Hauling\t%d Minute\n", PlayerData[playerid][pHaulingDelay]/60));
-	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "Delay's information", str, "Close", "");
+	strcat(str, sprintf("Box Courier\t%d Minute\n", PlayerData[playerid][pCourierDelay]/60));
+	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "Delay information", str, "Close", "");
 	return 1;
 }

@@ -113,7 +113,7 @@ stock DestroyBoombox(playerid)
 			DestroyDynamic3DTextLabel(PlayerData[playerid][pBoomboxText]);
 
 		PlayerData[playerid][pBoomboxObject] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
-		PlayerData[playerid][pBoomboxText] = STREAMER_TAG_3D_TEXT_LABEL:INVALID_STREAMER_ID;
+		PlayerData[playerid][pBoomboxText] = Text3D:INVALID_STREAMER_ID;
         PlayerData[playerid][pBoomboxPlaced] = 0;
         PlayerData[playerid][pBoomboxURL] = 0;
 	}

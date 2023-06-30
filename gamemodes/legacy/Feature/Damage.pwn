@@ -67,7 +67,7 @@ Damage_Add(playerid, weaponid, bodypart) {
     return 1;
 }
 
-FUNC::OnDamageAdded(playerid, slot) {
+function OnDamageAdded(playerid, slot) {
     DamageData[playerid][slot][DAMAGE_ID] = cache_insert_id();
     Damage_Save(playerid, slot);
 
@@ -139,7 +139,7 @@ Damage_Show(playerid, showto) {
     return ShowPlayerDialog(showto, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, sprintf("%s Damage Log", ReturnName(playerid)), string, "Close", "");
 }
 
-FUNC::OnDamageLoaded(playerid) {
+function OnDamageLoaded(playerid) {
     if(cache_num_rows()) {
 
         for(new i = 0; i < cache_num_rows(); i++) {

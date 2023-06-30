@@ -33,7 +33,7 @@ CMD:vms(playerid, params[]){
 	return 1;
 }
 
-FUNC::SpeedUpTimer() {
+function SpeedUpTimer() {
 
     foreach(new playerid : Player) {
         new vehicleid,Float:speed,Float:vX,Float:vY,Float:vZ,Float:maxSpeed,Float:newMaxSpeed,keys;

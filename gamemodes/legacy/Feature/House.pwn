@@ -33,7 +33,8 @@ enum hData
 	houseTaxPaid,
 	houseTaxState,
 	houseTaxDate,
-	houseFurnitureLevel
+	houseFurnitureLevel,
+	houseSealed
 
 };
 
@@ -64,7 +65,7 @@ new house_type[][] = {
 	"High"
 };
 
-stock House_WeaponStorage(playerid, houseid)
+House_WeaponStorage(playerid, houseid)
 {
 	static
 	    string[712];
@@ -83,7 +84,7 @@ stock House_WeaponStorage(playerid, houseid)
 	return 1;
 }
 
-stock House_OpenStorage(playerid, houseid)
+House_OpenStorage(playerid, houseid)
 {
 	new
 		items[2],
@@ -103,7 +104,7 @@ stock House_OpenStorage(playerid, houseid)
 }
 
 
-stock House_ShowItems(playerid, houseid)
+House_ShowItems(playerid, houseid)
 {
     if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -145,7 +146,7 @@ House_TenantLimit(type) {
 	}
 	return limit;
 }
-stock House_GetItemID(houseid, item[])
+House_GetItemID(houseid, item[])
 {
 	if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -160,7 +161,7 @@ stock House_GetItemID(houseid, item[])
 	return -1;
 }
 
-stock House_GetFreeID(houseid)
+House_GetFreeID(houseid)
 {
 	if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -173,14 +174,14 @@ stock House_GetFreeID(houseid)
 	return -1;
 }
 
-stock House_AddItem(houseid, item[], model, quantity = 1, slotid = -1)
+House_AddItem(houseid, item[], model, quantity = 1, slotid = -1)
 {
     if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
 
 	new
 		itemid = House_GetItemID(houseid, item),
-		string[128];
+		string[256];
 
 	if (itemid == -1)
 	{
@@ -214,13 +215,13 @@ stock House_AddItem(houseid, item[], model, quantity = 1, slotid = -1)
 	return itemid;
 }
 
-FUNC::OnStorageAdd(houseid, itemid)
+function OnStorageAdd(houseid, itemid)
 {
 	HouseStorage[houseid][itemid][hItemID] = cache_insert_id();
 	return 1;
 }
 
-stock House_RemoveItem(houseid, item[], quantity = 1)
+House_RemoveItem(houseid, item[], quantity = 1)
 {
     if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -254,7 +255,7 @@ stock House_RemoveItem(houseid, item[], quantity = 1)
 	return 0;
 }
 
-stock House_Inside(playerid)
+House_Inside(playerid)
 {
 	if (PlayerData[playerid][pInHouse] != -1)
 	{
@@ -265,7 +266,7 @@ stock House_Inside(playerid)
 	return -1;
 }
 
-stock House_Nearest(playerid)
+House_Nearest(playerid)
 {
     foreach(new i : House) if (IsPlayerInRangeOfPoint(playerid, 3.0, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2]))
 	{
@@ -274,7 +275,7 @@ stock House_Nearest(playerid)
 	return -1;
 }
 
-stock HousePark_Nearest(playerid)
+HousePark_Nearest(playerid)
 {
 	foreach(new i : House) if(IsPlayerInDynamicCP(playerid, HouseData[i][houseParkCP]))
 	{
@@ -283,7 +284,7 @@ stock HousePark_Nearest(playerid)
 	return 1;
 }
 
-stock House_IsOwner(playerid, houseid)
+House_IsOwner(playerid, houseid)
 {
 	if (PlayerData[playerid][pID] == -1)
 	    return 0;
@@ -294,36 +295,40 @@ stock House_IsOwner(playerid, houseid)
 	return 0;
 }
 
-stock House_Spawn(i)
+House_Spawn(i)
 {
 	static
-	    string[256];
+	    string[296];
 
 	if(HouseData[i][houseParkPos][0] != 0 && HouseData[i][houseParkPos][1] != 0 && HouseData[i][houseParkPos][2] != 0 && HouseData[i][housePark] != 0)
 	{
 		new str[156];
 		format(str, sizeof(str), "[ID: %d]\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Type {FF0000}/house park {FFFFFF}to access", i, HouseData[i][housePark]);
 
-		HouseData[i][houseParkCP] = CreateDynamicCP(HouseData[i][houseParkPos][0], HouseData[i][houseParkPos][1], HouseData[i][houseParkPos][2], 3.0, -1, -1, -1, 3.0);
+		HouseData[i][houseParkCP] = CreateDynamicCP(HouseData[i][houseParkPos][0], HouseData[i][houseParkPos][1], HouseData[i][houseParkPos][2], 2.5, -1, -1, -1, 1.5);
 		HouseData[i][houseParkLabel] = CreateDynamic3DTextLabel(str, 0x007FFFFF, HouseData[i][houseParkPos][0], HouseData[i][houseParkPos][1], HouseData[i][houseParkPos][2], 15.0);
 	}
+
 	if (!HouseData[i][houseOwner])
 	{
 		format(string, sizeof(string), "[ID: %d]\n{33CC33}This house for sell\n{FFFFFF}House Type: {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Price: {FFFF00}$%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Type /house buy to purchase", i, House_GetType(HouseData[i][houseType]), GetLocation(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2]), FormatNumber(HouseData[i][housePrice]), HouseData[i][housePark]);
-        HouseData[i][houseText3D] = CreateDynamic3DTextLabel(string, 0x007FFFFF, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], 7.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
-        HouseData[i][housePickup] = CreateDynamicPickup(1272, 23, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
 		HouseData[i][houseIcon] = CreateDynamicMapIcon(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], 31, -1, -1, -1, -1, 30.0);
 	}
 	else
 	{
-		format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owner: {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", i, HouseData[i][houseOwnerName], GetLocation(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2]), HouseData[i][housePark]);
-		HouseData[i][houseText3D] = CreateDynamic3DTextLabel(string, 0x007FFFFF, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], 7.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
-        HouseData[i][housePickup] = CreateDynamicPickup(1272, 23, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
+		if(!HouseData[i][houseSealed])
+			format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owned by {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", i, HouseData[i][houseOwnerName], GetLocation(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2]), HouseData[i][housePark]);
+		else
+			format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owned by {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n"WHITE"This house is sealed by "RED"authority\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", i, HouseData[i][houseOwnerName], GetLocation(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2]), HouseData[i][housePark]);
+		
 		HouseData[i][houseIcon] = CreateDynamicMapIcon(HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], 32, -1, -1, -1, -1, 15.0);
 	}
+
+	HouseData[i][houseText3D] = CreateDynamic3DTextLabel(string, 0x007FFFFF, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], 7.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
+	HouseData[i][housePickup] = CreateDynamicPickup(1272, 23, HouseData[i][housePos][0], HouseData[i][housePos][1], HouseData[i][housePos][2], HouseData[i][houseExteriorVW], HouseData[i][houseExterior]);
 	return 1;
 }
-stock House_Create(playerid, price, type)
+House_Create(playerid, price, type)
 {
 	static
 	    Float:x,
@@ -345,6 +350,7 @@ stock House_Create(playerid, price, type)
         HouseData[i][housePos][3] = angle;
         HouseData[i][housePark] = 0;
 		HouseData[i][houseVehInside] = 0;
+		HouseData[i][houseSealed] = 0;
 
 		HouseData[i][houseType] = type;
 
@@ -369,7 +375,7 @@ stock House_Create(playerid, price, type)
 	return -1;
 }
 
-stock House_Save(houseid)
+House_Save(houseid)
 {
 	new
 	    query[2836];
@@ -394,7 +400,7 @@ stock House_Save(houseid)
 	{
 		mysql_format(sqlcon,query, sizeof(query), "%s, `houseWeapon%d` = '%d', `houseAmmo%d` = '%d', `houseDurability%d` = '%d', `houseHighVelocity%d` = '%d'", query, i + 1, HouseData[houseid][houseWeapons][i], i + 1, HouseData[houseid][houseAmmo][i], i + 1, HouseData[houseid][houseDurability][i], i + 1, HouseData[houseid][houseHighVelocity][i]);
 	}
-	mysql_format(sqlcon,query, sizeof(query), "%s, `houseLocked` = '%d', `houseMoney` = '%d', `housePark` = '%d', `houseParkX` = '%f', `houseParkY` = '%f', `houseParkZ` = '%f', `houseVehInside` = '%d', `houseType` = '%d', `LastLogin` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `TaxState` = '%d', `FurnitureLevel` = '%d' WHERE `houseID` = '%d'",
+	mysql_format(sqlcon,query, sizeof(query), "%s, `houseLocked` = '%d', `houseMoney` = '%d', `housePark` = '%d', `houseParkX` = '%f', `houseParkY` = '%f', `houseParkZ` = '%f', `houseVehInside` = '%d', `houseType` = '%d', `LastLogin` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `TaxState` = '%d', `FurnitureLevel` = '%d', `houseSealed` = '%d' WHERE `houseID` = '%d'",
 	    query,
 	    HouseData[houseid][houseLocked],
 	    HouseData[houseid][houseMoney],
@@ -409,6 +415,7 @@ stock House_Save(houseid)
 		HouseData[houseid][houseTaxDate],
 		HouseData[houseid][houseTaxState],
 		HouseData[houseid][houseFurnitureLevel],
+		HouseData[houseid][houseSealed],
         HouseData[houseid][houseID]
 	);
 	return mysql_tquery(sqlcon, query);
@@ -425,7 +432,7 @@ CMD:sethwep(playerid, params[]) {
 	mysql_tquery(sqlcon, query);
 	return 1;
 }
-stock House_CountVehicle(id)
+House_CountVehicle(id)
 {
 	return HouseData[id][houseVehInside];
 }
@@ -433,7 +440,7 @@ stock House_CountVehicle(id)
 ShowHouseMenu(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_HOUSE_MENU, DIALOG_STYLE_LIST, "House Menu", "Manage Furniture\nAccess Storage\nKey Management", "Select", "Close");
 }
-FUNC::OnHouseCreated(houseid)
+function OnHouseCreated(houseid)
 {
 	if (houseid == -1 || !HouseData[houseid][houseExists])
 	    return 0;
@@ -444,7 +451,7 @@ FUNC::OnHouseCreated(houseid)
 	return 1;
 }
 
-stock House_HaveAccess(playerid, id) {
+House_HaveAccess(playerid, id) {
 
 	new bool:access = false;
 
@@ -472,7 +479,7 @@ stock House_HaveAccess(playerid, id) {
 }
 
 
-FUNC::House_CheckSharedKey(playerid, id) {
+function House_CheckSharedKey(playerid, id) {
 	if(!cache_num_rows())
 		return ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "House Shared Key", "Tidak ada player yang memiliki kunci rumah ini.", "Close", "");
 
@@ -499,7 +506,7 @@ House_ShowKeyMenu(playerid, id) {
 	return 1;
 }
 
-stock IsPlayerHouseGuest(playerid) {
+IsPlayerHouseGuest(playerid) {
 	new is_guest = 0,
 		Cache:execute;
 
@@ -513,7 +520,7 @@ stock IsPlayerHouseGuest(playerid) {
 	return is_guest;
 }
 
-stock House_FurnitureCount(houseid)
+House_FurnitureCount(houseid)
 {
 	new count;
 
@@ -523,7 +530,7 @@ stock House_FurnitureCount(houseid)
 	return count;
 }
 /*
-stock Furniture_Spawn(furnitureid)
+Furniture_Spawn(furnitureid)
 {
 	if(Iter_Contains(Furniture, furnitureid))
 	{
@@ -560,7 +567,7 @@ stock Furniture_Spawn(furnitureid)
 */
 
 
-FUNC::House_Load()
+function House_Load()
 {
 	new owner[64], str[128];
 	
@@ -587,6 +594,7 @@ FUNC::House_Load()
             cache_get_value_name_float(i,"houseIntZ",HouseData[i][houseInt][2]);
             cache_get_value_name_float(i,"houseIntA",HouseData[i][houseInt][3]);
 
+			cache_get_value_name_int(i, "houseSealed", HouseData[i][houseSealed]);
             cache_get_value_name_int(i,"houseInterior",HouseData[i][houseInterior]);
             cache_get_value_name_int(i,"houseExterior",HouseData[i][houseExterior]);
 			cache_get_value_name_int(i,"houseExteriorVW",HouseData[i][houseExteriorVW]);
@@ -703,7 +711,7 @@ House_SetInterior(houseid) {
 	}
 	return 1;
 }
-FUNC::OnLoadStorage(houseid)
+function OnLoadStorage(houseid)
 {
 	static
 		str[32];
@@ -724,7 +732,8 @@ FUNC::OnLoadStorage(houseid)
 	}
 	return 1;
 }
-stock House_Refresh(houseid)
+
+House_Refresh(houseid)
 {
 	if (houseid != -1 && HouseData[houseid][houseExists])
 	{
@@ -733,6 +742,7 @@ stock House_Refresh(houseid)
 		{
 			new str[156];
 			format(str, sizeof(str), "[ID: %d]\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Type {FF0000}/house park {FFFFFF}to access", houseid, HouseData[houseid][housePark]);
+			
 			UpdateDynamic3DTextLabelText(HouseData[houseid][houseParkLabel], 0x007FFFFF, str);
 
 			Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, HouseData[houseid][houseParkLabel], E_STREAMER_X, HouseData[houseid][houseParkPos][0]);
@@ -743,13 +753,16 @@ stock House_Refresh(houseid)
 			Streamer_SetFloatData(STREAMER_TYPE_CP, HouseData[houseid][houseParkCP], E_STREAMER_Y, HouseData[houseid][houseParkPos][1]);
 			Streamer_SetFloatData(STREAMER_TYPE_CP, HouseData[houseid][houseParkCP], E_STREAMER_Z, HouseData[houseid][houseParkPos][2]);
 		}
-		if(HouseData[houseid][houseOwner] < 1)
+		if(!HouseData[houseid][houseOwner])
 		{
 			format(string, sizeof(string), "[ID: %d]\n{33CC33}This house for sell\n{FFFFFF}House Type: {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Price: {FFFF00}$%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Type /house buy to purchase", houseid, House_GetType(HouseData[houseid][houseType]), GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]), FormatNumber(HouseData[houseid][housePrice]), HouseData[houseid][housePark]);
 		}
 		else
 		{
-			format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owned by {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", houseid, HouseData[houseid][houseOwnerName], GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]), HouseData[houseid][housePark]);
+			if(!HouseData[houseid][houseSealed])
+				format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owned by {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", houseid, HouseData[houseid][houseOwnerName], GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]), HouseData[houseid][housePark]);
+			else
+				format(string, sizeof(string), "[ID: %d]\n{FFFFFF}Owned by {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Parking Slot: {FF6347}%d\n"WHITE"This house is sealed by "RED"authority\n{FFFFFF}Press {FF0000}ENTER {FFFFFF}to enter house", houseid, HouseData[houseid][houseOwnerName], GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]), HouseData[houseid][housePark]);
 		}
 
 		UpdateDynamic3DTextLabelText(HouseData[houseid][houseText3D], 0x007FFFFF, string);
@@ -760,18 +773,19 @@ stock House_Refresh(houseid)
 		Streamer_SetFloatData(STREAMER_TYPE_PICKUP, HouseData[houseid][housePickup], E_STREAMER_X, HouseData[houseid][housePos][0]);
 		Streamer_SetFloatData(STREAMER_TYPE_PICKUP, HouseData[houseid][housePickup], E_STREAMER_Y, HouseData[houseid][housePos][1]);
 		Streamer_SetFloatData(STREAMER_TYPE_PICKUP, HouseData[houseid][housePickup], E_STREAMER_Z, HouseData[houseid][housePos][2]);
+		Streamer_SetPosition(STREAMER_TYPE_CP, HouseData[houseid][houseCP], HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]);
 
 		Streamer_SetPosition(STREAMER_TYPE_MAP_ICON, HouseData[houseid][houseIcon], HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]);
 	}
 	return 1;
 }
 
-stock House_Delete(houseid)
+House_Delete(houseid)
 {
 	if (Iter_Contains(House, houseid))
 	{
 	    new
-	        string[128];
+	        string[158];
 
 
 		mysql_format(sqlcon,string, sizeof(string), "DELETE FROM `houses` WHERE `houseID` = '%d'", HouseData[houseid][houseID]);
@@ -788,6 +802,9 @@ stock House_Delete(houseid)
         if(IsValidDynamicCP(HouseData[houseid][houseParkCP]))
         	DestroyDynamicCP(HouseData[houseid][houseParkCP]);
 
+        if(IsValidDynamicCP(HouseData[houseid][houseCP]))
+        	DestroyDynamicCP(HouseData[houseid][houseCP]);
+
         if(IsValidDynamic3DTextLabel(HouseData[houseid][houseParkLabel]))
         	DestroyDynamic3DTextLabel(HouseData[houseid][houseParkLabel]);
 
@@ -803,18 +820,29 @@ stock House_Delete(houseid)
             if(IsValidDynamicObject(FurnitureData[i][furnitureObject]))
 	        	DestroyDynamicObject(FurnitureData[i][furnitureObject]);
 		}
-		mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `furniture` WHERE `ID` = '%d'", HouseData[houseid][houseID]);
+
+		for (new i = 0; i < MAX_HOUSE_STORAGE; i ++) if (HouseStorage[houseid][i][hItemExists])
+		{
+			HouseStorage[houseid][i][hItemExists] = false;
+			HouseStorage[houseid][i][hItemModel] = 0;
+			HouseStorage[houseid][i][hItemQuantity] = 0;
+
+			mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `housestorage` WHERE `ID` = '%d' AND `itemID` = '%d'", HouseData[houseid][houseID], HouseStorage[houseid][i][hItemID]);
+			mysql_tquery(sqlcon, string);
+		}
+
+		mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `furniture` WHERE `ID` = '%d' AND `furnitureType` = '%d'", HouseData[houseid][houseID], FURNITURE_TYPE_HOUSE);
 		mysql_tquery(sqlcon, string);
 
 	    HouseData[houseid][houseExists] = false;
 	    HouseData[houseid][houseOwner] = 0;
 	    HouseData[houseid][houseID] = 0;
-	    Iter_SafeRemove(House, houseid, houseid);
+	    Iter_Remove(House, houseid);
 	}
 	return 1;
 }
 
-stock House_GetCount(playerid)
+House_GetCount(playerid)
 {
 	new
 		count = 0;
@@ -840,7 +868,7 @@ CMD:house(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
 	    SendSyntaxMessage(playerid, "/house [entity]");
-	    SendClientMessage(playerid, COLOR_SERVER, "ENTITY:{FFFFFF} buy, lock, menu, park, give");
+	    SendClientMessage(playerid, COLOR_SERVER, "(Entity){FFFFFF} buy, lock, menu, park, give");
 	    return 1;
 	}	
 	if(!strcmp(type, "buy", true))
@@ -984,7 +1012,7 @@ CMD:edithouse(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/edithouse [id] [names]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Names:{FFFFFF} location, interior, price, parkslot, parkpos, asell");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} location, interior, price, parkslot, parkpos, asell");
 		return 1;
 	}
 	if (!Iter_Contains(House, id))
@@ -1081,6 +1109,30 @@ CMD:edithouse(playerid, params[])
 	}
 	else if(!strcmp(type, "asell", true))
 	{
+
+		for (new i = 0; i < MAX_HOUSE_STORAGE; i ++) if (HouseStorage[id][i][hItemExists])
+		{
+			HouseStorage[id][i][hItemExists] = false;
+			HouseStorage[id][i][hItemModel] = 0;
+			HouseStorage[id][i][hItemQuantity] = 0;
+
+			mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `housestorage` WHERE `ID` = '%d' AND `itemID` = '%d'", HouseData[id][houseID], HouseStorage[id][i][hItemID]);
+			mysql_tquery(sqlcon, string);
+		}
+
+	    foreach(new i : Furniture) if (FurnitureData[i][furnitureProperty] == id) 
+	    {
+	        FurnitureData[i][furnitureExists] = false;
+	        FurnitureData[i][furnitureModel] = 0;
+            FurnitureData[i][furnitureProperty] = -1;
+
+            if(IsValidDynamicObject(FurnitureData[i][furnitureObject]))
+	        	DestroyDynamicObject(FurnitureData[i][furnitureObject]);
+		}
+
+		mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `furniture` WHERE `ID` = '%d' AND `furnitureType` = '%d'", HouseData[id][houseID], FURNITURE_TYPE_HOUSE);
+		mysql_tquery(sqlcon, string);
+
 		HouseData[id][houseOwner] = 0;
 		format(HouseData[id][houseOwner], 24, "No Owner");
 		House_Refresh(id);
@@ -1199,7 +1251,7 @@ ptask HouseSwitchUpdate[1000](playerid) {
 	return 1;
 }
 
-FUNC::OnHouseQueue(playerid) {
+function OnHouseQueue(playerid) {
 	if(cache_num_rows()) {
 		for(new i = 0; i < cache_num_rows(); i++) {
 			new biz_id, msg[128];
@@ -1207,16 +1259,16 @@ FUNC::OnHouseQueue(playerid) {
 			cache_get_value_name(i, "Message", msg, 128);
 
 			if(!strcmp(msg, "idk", true))
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "HOUSE: "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
 			else
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "HOUSE: "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", biz_id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", biz_id);
 		}
 	}
 	mysql_tquery(sqlcon, sprintf("DELETE FROM `house_queue` WHERE `Username` = '%s'", GetName(playerid)));
 
 	return 1;
 }
-task OnHouseAsellCheck[10000]() {
+task OnHouseAsellCheck[3600000]() {
 	foreach(new i : House) if(HouseData[i][houseLastLogin] != 0) {
 		if(HouseData[i][houseLastLogin] < gettime()) {
 			SendAdminMessage(X11_TOMATO, "HouseWarn: House ID: %d has been automatically aselled by the system.", i);
@@ -1224,8 +1276,31 @@ task OnHouseAsellCheck[10000]() {
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `house_queue` (`Username`, `HouseID`) VALUES('%s','%d')", HouseData[i][houseOwnerName], i));
 			HouseData[i][houseLastLogin] = 0;
 
+			new string[156];
+			for (new j = 0; j < MAX_HOUSE_STORAGE; j ++) if (HouseStorage[i][j][hItemExists])
+			{
+				HouseStorage[i][j][hItemExists] = false;
+				HouseStorage[i][j][hItemModel] = 0;
+				HouseStorage[i][j][hItemQuantity] = 0;
+
+				mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `housestorage` WHERE `ID` = '%d' AND `itemID` = '%d'", HouseData[i][houseID], HouseStorage[i][j][hItemID]);
+				mysql_tquery(sqlcon, string);
+			}
+
+			foreach(new z : Furniture) if (FurnitureData[z][furnitureProperty] == i) 
+			{
+				FurnitureData[z][furnitureExists] = false;
+				FurnitureData[z][furnitureModel] = 0;
+				FurnitureData[z][furnitureProperty] = -1;
+
+				if(IsValidDynamicObject(FurnitureData[z][furnitureObject]))
+					DestroyDynamicObject(FurnitureData[z][furnitureObject]);
+			}
+
+			mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `furniture` WHERE `ID` = '%d' AND `furnitureType` = '%d'", HouseData[i][houseID], FURNITURE_TYPE_HOUSE);
+			mysql_tquery(sqlcon, string);
+
 			HouseData[i][houseOwner] = 0;
-			// format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, "No Owner");
 
 			House_Save(i);
 			House_Refresh(i);

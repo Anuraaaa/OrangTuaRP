@@ -47,7 +47,7 @@ new const famInteriorArray[][famInt] =
 	{"Int Gang 2", 	2, 1408.7548, -1646.7239, 1259.8119, 0.0000}
 };
 
-FUNC::Family_Load()
+function Family_Load()
 {
 	new
 	    rows = cache_num_rows(),
@@ -210,7 +210,7 @@ stock Family_Create(fname[], otherid)
 	return -1;
 }
 
-FUNC::OnFamilyCreated(familyid)
+function OnFamilyCreated(familyid)
 {
 	if (familyid == -1 || !FamilyData[familyid][familyExists])
 	    return 0;
@@ -297,7 +297,7 @@ stock IsNearFamilyLocker(playerid)
 	return 0;
 }
 
-FUNC::OnLoadStorageFamily(familyid)
+function OnLoadStorageFamily(familyid)
 {
 	static
 		str[32];
@@ -467,7 +467,7 @@ stock Family_AddItem(familyid, item[], model, quantity = 1, slotid = -1)
 	return itemid;
 }
 
-FUNC::OnStorageFamilyAdd(familyid, itemid)
+function OnStorageFamilyAdd(familyid, itemid)
 {
 	FamilyStorage[familyid][itemid][fItemID] = cache_insert_id();
 	return 1;
@@ -570,7 +570,7 @@ CMD:fedit(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/fedit [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} name, leader, locker");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} name, leader, locker");
 		return 1;
 	}
 

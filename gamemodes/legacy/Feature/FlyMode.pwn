@@ -44,6 +44,8 @@ CMD:flymode(playerid, params[])
 
 	if(FlyMode[playerid]) CancelFlyMode(playerid);
 	else StartFlyMode(playerid);
+
+
 	return 1;
 }
 
@@ -106,27 +108,6 @@ MoveCamera(playerid)
 	return 1;
 }
 
-SetFlyModePos(playerid, Float:x, Float:y, Float:z)
-{
-	if(FlyMode[playerid])
-	{
-		SetDynamicObjectPos(noclipdata[playerid][flyobject], x, y, z);
-		noclipdata[playerid][lastmove] = GetTickCount();
-		return 1;
-	}
-	return 0;
-}
-
-GetFlyModePos(playerid, &Float:x, &Float:y, &Float:z)
-{
-	if(FlyMode[playerid])
-	{
-		GetDynamicObjectPos(noclipdata[playerid][flyobject], x, y, z);
-		return 1;
-	}
-	return 0;
-}
-
 GetNextCameraPosition(move_mode, Float:CP[3], Float:FV[3], &Float:X, &Float:Y, &Float:Z)
 {
     // Calculate the cameras next position based on their current position and the direction their camera is facing
@@ -187,9 +168,17 @@ GetNextCameraPosition(move_mode, Float:CP[3], Float:FV[3], &Float:X, &Float:Y, &
 }
 
 forward DelaySetPos(playerid, Float:x, Float:y, Float:z);
-public DelaySetPos(playerid, Float:x, Float:y, Float:z) { SetPlayerPos(playerid, x, y, z); }
+public DelaySetPos(playerid, Float:x, Float:y, Float:z) { 
+	SetPlayerPos(playerid, x, y, z); 
 
-FUNC::CancelFlyMode(playerid)
+	SetPlayerInterior(playerid, GetPVarInt(playerid, "LastInt"));
+	SetPlayerVirtualWorld(playerid, GetPVarInt(playerid, "LastWorld"));
+
+	DeletePVar(playerid, "LastInt");
+	DeletePVar(playerid, "LastWorld");
+}
+
+function CancelFlyMode(playerid)
 {
 	new Float:x, Float:y, Float:z;
 	GetPlayerCameraPos(playerid, x, y, z);
@@ -206,9 +195,14 @@ FUNC::CancelFlyMode(playerid)
 	return 1;
 }
 
-FUNC::StartFlyMode(playerid)
+function StartFlyMode(playerid)
 {
 	// Create an invisible object for the players camera to be attached to
+
+
+	SetPVarInt(playerid, "LastInt", GetPlayerInterior(playerid));
+	SetPVarInt(playerid, "LastWorld", GetPlayerVirtualWorld(playerid));
+
 	new Float:X, Float:Y, Float:Z;
 	GetPlayerPos(playerid, X, Y, Z);
 	noclipdata[playerid][flyobject] = CreateDynamicObject(19300, X, Y, Z, 0.0, 0.0, 0.0, .playerid = playerid, .streamdistance = 300.0, .drawdistance = 300.0);

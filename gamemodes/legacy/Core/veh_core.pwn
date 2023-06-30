@@ -71,7 +71,9 @@ enum E_VEHICLE_DATA
 	vEngineUpgrade,
 	vBodyUpgrade,
 	vGarageID,
-	bool:vNeonStatus
+	bool:vNeonStatus,
+	vDeathTime,
+	bool:vELM
 };
 
 enum carStorage {
@@ -83,8 +85,6 @@ enum carStorage {
 };
 
 new VehicleData[MAX_VEHICLES][E_VEHICLE_DATA],
-	vehicleToyText[MAX_VEHICLES][5][24],
-	vehicleToyFont[MAX_VEHICLES][5][16],
 	CarStorage[MAX_VEHICLES][MAX_CAR_STORAGE][carStorage],
 	STREAMER_TAG_OBJECT:NeonObject[MAX_VEHICLES][3][2];
 
@@ -550,8 +550,6 @@ enum E_VEHICLE_OBJECT {
 };
 new VehicleObjects[MAX_VEHICLES][MAX_VEHICLE_OBJECT][E_VEHICLE_OBJECT];
 
-new ListedVehObject[MAX_PLAYERS][MAX_VEHICLE_OBJECT];
-
 stock SwitchVehicleDoors(vehicleid,bool:doors_status){
 	new engine,lights,alarm,doors,bonnet,boot,objective;
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
@@ -571,6 +569,15 @@ stock SwitchVehicleBoot(vehicleid,bool:boot_status){
 }
 
 stock SwitchVehicleLight(vehicleid,bool:light_status){
+
+	if(light_status) {
+        new panels, doors, lights, tires;
+
+        KillTimer(FlashTime[vehicleid]);
+
+        GetVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
+    	UpdateVehicleDamageStatus(vehicleid, panels, doors, 0, tires);
+	}
 	new engine,lights,alarm,doors,bonnet,boot,objective;
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
 	SetVehicleParamsEx(vehicleid,engine,_:light_status,alarm,doors,bonnet,boot,objective);

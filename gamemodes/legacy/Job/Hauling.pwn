@@ -59,7 +59,7 @@ Hauling_Show(playerid) {
 Hauling_Refresh(hauling_id) {
 
     HaulingData[hauling_id][haulingTaken] = false;
-    HaulingData[hauling_id][haulingPrice] = RandomEx(15000, 40000);
+    HaulingData[hauling_id][haulingPrice] = RandomEx(25000, 60000);
 }
 
 Hauling_MissionName(id) {
@@ -79,7 +79,7 @@ Hauling_SetTrailerCP(playerid) {
 
     SetPlayerRaceCheckpoint(playerid, 2, cp_Trailer_arr[idx][0], cp_Trailer_arr[idx][1], cp_Trailer_arr[idx][2], 0.0, 0.0, 0.0, 5.0);
     HaulingIndex[playerid] = 2;
-    SendClientMessageEx(playerid, X11_LIGHTBLUE, "MISSION: "WHITE"Pergi ke Checkpoint untuk mengambil Trailer.", Hauling_MissionName(HaulingSelect[playerid]));
+    SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mission) "WHITE"Pergi ke Checkpoint untuk mengambil Trailer.", Hauling_MissionName(HaulingSelect[playerid]));
     return 1;
 }
 
@@ -134,7 +134,7 @@ Hauling_AttachTrailer(playerid) {
         Vehicle_SetType(HaulingTrailer[playerid], VEHICLE_TYPE_ADMIN);
 
         
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "MISSION: "WHITE"Antarkan trailer %s ke Checkpoint yang ada di radar.", Hauling_MissionName(id));
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mission) "WHITE"Antarkan trailer %s ke Checkpoint yang ada di radar.", Hauling_MissionName(id));
         HaulingIndex[playerid] = 3;
 
         defer AttachTrailer[1000](playerid);
@@ -151,7 +151,7 @@ hook OnGameModeInit() {
 
     for(new i = 0; i < MAX_HAULING_MISSION; i++) {
         HaulingData[i][haulingTaken] = false;
-        HaulingData[i][haulingPrice] = RandomEx(15000, 40000);
+        HaulingData[i][haulingPrice] = RandomEx(25000, 60000);
     }
 }
 
@@ -195,8 +195,8 @@ hook OnPlayerEnterRaceCP(playerid) {
                 AddSalary(playerid, "Hauling Mission", HaulingData[id][haulingPrice]);
                 GiveMoney(playerid, bonus, "Bonus Hauling");
 
-                SendClientMessageEx(playerid, X11_LIGHTBLUE, "MISSION: "WHITE"Kamu berhasil mengantarkan produk %s dan mendapatkan "GREEN"$%s", Hauling_MissionName(id), FormatNumber(HaulingData[id][haulingPrice]));
-                SendClientMessageEx(playerid, X11_LIGHTBLUE, "MISSION: "WHITE"Kamu juga mendapatkan bonus "GREEN"$%s "WHITE"dimasukkan pada dompetmu.", FormatNumber(bonus));
+                SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mission) "WHITE"Kamu berhasil mengantarkan produk %s dan mendapatkan "GREEN"$%s", Hauling_MissionName(id), FormatNumber(HaulingData[id][haulingPrice]));
+                SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mission) "WHITE"Kamu juga mendapatkan bonus "GREEN"$%s "WHITE"dimasukkan pada dompetmu.", FormatNumber(bonus));
 
                 Hauling_Refresh(id);
 

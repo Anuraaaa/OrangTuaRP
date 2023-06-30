@@ -121,7 +121,7 @@ stock HexToInt(string[])
 	return res;
 }
 
-FUNC::OnSprayTagCreated(id)
+function OnSprayTagCreated(id)
 {
 	TagData[id][tagID] = cache_insert_id();
 	Tag_Save(id);
@@ -154,7 +154,7 @@ stock Tag_Save(id)
 }
 
 
-FUNC::Tag_Load()
+function Tag_Load()
 {
 	if(cache_num_rows())
 	{
@@ -192,7 +192,7 @@ CMD:tag(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/tag [names]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Names:{FFFFFF} create, destroy, nearest");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} create, destroy, nearest");
 		return 1;
 	}	
 	if(!strcmp(type, "create", true))

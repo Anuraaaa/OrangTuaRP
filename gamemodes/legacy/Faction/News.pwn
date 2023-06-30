@@ -58,7 +58,7 @@ CMD:broadcast(playerid, params[])
     {
         PlayerData[playerid][pBroadcast] = true;
 
-        SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s has started a news broadcast.", ReturnName(playerid));
+        SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s has started a news broadcast.", ReturnName(playerid));
         SendServerMessage(playerid, "You have started a news broadcast (use \"/bc [broadcast text]\" to broadcast).");
     }
     else
@@ -68,7 +68,7 @@ CMD:broadcast(playerid, params[])
         foreach (new i : Player) if(PlayerData[i][pNewsGuest] == playerid) {
             PlayerData[i][pNewsGuest] = INVALID_PLAYER_ID;
         }
-        SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s has stopped a news broadcast.", ReturnName(playerid));
+        SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s has stopped a news broadcast.", ReturnName(playerid));
         SendServerMessage(playerid, "You have stopped the news broadcast.");
     }
     return 1;
@@ -85,9 +85,10 @@ CMD:live(playerid, params[])
     if(PlayerData[playerid][pNewsGuest] == INVALID_PLAYER_ID)
         return SendErrorMessage(playerid, "You're not invite by SFN member to live!");
 
+/*
     if(!IsNewsVehicle(GetPlayerVehicleID(playerid)) && !IsPlayerInRangeOfPoint(playerid, 25.0, -158.0952,1338.7379,1500.9943))
         return SendErrorMessage(playerid, "You must be inside a news van or chopper or in SFN studio.");
-
+*/
     if(GetFactionType(PlayerData[playerid][pNewsGuest]) == FACTION_NEWS)
     {
         foreach (new i : Player) {

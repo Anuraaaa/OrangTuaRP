@@ -6,6 +6,7 @@ SetupPlayerMask(playerid)
 		if(IsValidDynamic3DTextLabel(PlayerData[playerid][pMaskLabel]))
 			DestroyDynamic3DTextLabel(PlayerData[playerid][pMaskLabel]);
 
+		PlayerData[playerid][pMaskLabel] = Text3D:INVALID_STREAMER_ID;
 		PlayerData[playerid][pMasked] = false;
 		SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s takes their mask off and puts it away.", ReturnName(playerid));
 
@@ -26,8 +27,14 @@ SetupPlayerMask(playerid)
 		if(!IsPlayerInAnyVehicle(playerid))
 			ApplyAnimation(playerid, "shop","ROB_Shifty", 4.1, 0, 0, 0, 0, 0, 1);
 
-		format(str, sizeof(str), "Mask_%d", PlayerData[playerid][pMaskID]);
+		format(str, sizeof(str), "Unknown_#%d", PlayerData[playerid][pMaskID]);
 
+		if(IsValidDynamic3DTextLabel(PlayerData[playerid][pMaskLabel])) {
+			DestroyDynamic3DTextLabel(PlayerData[playerid][pMaskLabel]);
+			
+			PlayerData[playerid][pMaskLabel] = Text3D:INVALID_3DTEXT_ID;
+		}
+		
 		PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(str, COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
 		
 		foreach(new i : Player)
@@ -35,7 +42,6 @@ SetupPlayerMask(playerid)
 			ShowPlayerNameTagForPlayer(i, playerid, 0);
 		}
 
-		PlayerPlaySound(playerid, 20803, 0.0, 0.0, 0.0);
 
 	}
 	return 1;

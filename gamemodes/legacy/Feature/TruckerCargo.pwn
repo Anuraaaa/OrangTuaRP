@@ -65,7 +65,7 @@ stock Crate_Create(playerid, type)
 	return id;
 }
 
-FUNC::OnCrateCreated(cid)
+function OnCrateCreated(cid)
 {
 	CrateData[cid][crateID] = cache_insert_id();
 	Crate_Save(cid);

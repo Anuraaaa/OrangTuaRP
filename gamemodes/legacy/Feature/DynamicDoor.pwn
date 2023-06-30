@@ -112,7 +112,7 @@ Doors_Updatelabel(id)
 	mysql_tquery(D_SQL, "SELECT ID,name,password,icon,locked,admin,vip,faction,family,custom,extvw,extint,extposx,extposy,extposz,extposa,intvw,intint,intposx,intposy,intposz,intposa FROM doors ORDER BY ID", "LoadDoorsData");
 }*/
 
-FUNC::Doors_Created(playerid, id)
+function Doors_Created(playerid, id)
 {
 	Doors_Save(id);
 	Doors_Updatelabel(id);
@@ -120,7 +120,7 @@ FUNC::Doors_Created(playerid, id)
 	return 1;
 }
 
-FUNC::Doors_Load()
+function Doors_Load()
 {
     new rows = cache_num_rows();
  	if(rows)
@@ -239,8 +239,8 @@ CMD:editdoor(playerid, params[])
 
     if(sscanf(params, "ds[24]S()[128]", did, type, string))
     {
-        SendClientMessageEx(playerid, COLOR_WHITE, "[USAGE]: /editdoor [id] [name]");
-        SendClientMessage(playerid, X11_LIGHTBLUE, "[NAMES]:{FFFFFF} location, interior, password, name, locked, admin, vip, faction, family, custom, virtual, iconmap");
+        SendClientMessageEx(playerid, COLOR_WHITE, "(Usage) /editdoor [id] [name]");
+        SendClientMessage(playerid, X11_LIGHTBLUE, "(Names){FFFFFF} location, interior, password, name, locked, admin, vip, faction, family, custom, virtual, iconmap");
         return 1;
     }
     if((did < 0 || did >= MAX_DOOR))

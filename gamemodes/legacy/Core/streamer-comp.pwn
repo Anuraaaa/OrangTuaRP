@@ -2,8 +2,6 @@
 
 #define TP_WAIT_TIME 5000
 
-
-new TP_AwaitingTime[MAX_PLAYERS];
 new Float:TP_AwaitingPos[MAX_PLAYERS][3];
 
 stock Float:TP_GetDistanceFromAwaiting(playerid)

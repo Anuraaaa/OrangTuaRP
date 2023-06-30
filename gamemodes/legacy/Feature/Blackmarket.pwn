@@ -227,7 +227,7 @@ CMD:buyweed(playerid, params[])
 
 	new amount;
 	if(sscanf(params, "d", amount))
-		return SendSyntaxMessage(playerid, "/buyweed [amount]"), SendClientMessage(playerid, COLOR_YELLOW, "INFO: {FFFFFF}The weed price is $5.00 / 1 weed seeds.");
+		return SendSyntaxMessage(playerid, "/buyweed [amount]"), SendClientMessage(playerid, COLOR_YELLOW, "(Info) {FFFFFF}The weed price is $5.00 / 1 weed seeds.");
 
 	if(amount < 1 || amount < -1)
 		return SendErrorMessage(playerid, "Invalid seeds amount!");
@@ -239,7 +239,7 @@ CMD:buyweed(playerid, params[])
 		return SendErrorMessage(playerid, "Invalid seeds amount!");
 				
 	Inventory_Add(playerid, "Weed Seed", 1279, amount);
-	SendClientMessageEx(playerid, COLOR_SERVER, "DRUGS: {FFFFFF}Kamu berhasil membeli {FF0000}%d Weed seeds {FFFFFF}seharga {00FF00}$%s", amount, FormatNumber(amount*500));
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Kamu berhasil membeli {FF0000}%d Weed seeds {FFFFFF}seharga {00FF00}$%s", amount, FormatNumber(amount*500));
 	GiveMoney(playerid, -amount*500);
 	return 1;
 

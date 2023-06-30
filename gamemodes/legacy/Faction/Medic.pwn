@@ -6,12 +6,12 @@ new StretcherHolding[MAX_PLAYERS];
 new StretcherPlayerID[MAX_PLAYERS];
 new StretcherTimer[MAX_PLAYERS];
 
-FUNC::Float:DistanceBetweenPoints(Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2)
+function Float:DistanceBetweenPoints(Float:x1, Float:y1, Float:z1, Float:x2, Float:y2, Float:z2)
 {
 	return floatadd(floatadd(floatsqroot(floatpower(floatsub(x1,x2),2)),floatsqroot(floatpower(floatsub(y1,y2),2))),floatsqroot(floatpower(floatsub(z1,z2),2)));
 }
 
-FUNC::Float:GetXYInFrontOfPlayer(playerid, &Float:X, &Float:Y, Float:distance)
+function Float:GetXYInFrontOfPlayer(playerid, &Float:X, &Float:Y, Float:distance)
 {
 	new Float:A;
 	GetPlayerPos(playerid, X, Y, A);
@@ -41,11 +41,11 @@ stock SpawnStretcher(playerid)
 
 	AttachDynamicObjectToPlayer(StretcherEquipped[playerid], playerid, 0.0, 1.4, -1.0, 0.0, 0.0, 180.0);
 
-	SendClientMessage(playerid, COLOR_SERVER, "INFO: {FFFFFF}You now have a stretcher. Use /stretcher for actions.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Info) {FFFFFF}You now have a stretcher. Use /stretcher for actions.");
 	return true;
 }
 
-FUNC::DestroyStretcher(playerid, objectid)
+function DestroyStretcher(playerid, objectid)
 {
 	if(IsValidDynamicObject(StretcherEquipped[playerid]))
 		DestroyDynamicObject(StretcherEquipped[playerid]);
@@ -68,7 +68,7 @@ CMD:stretcher(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", action, string))
 	{
 	    SendSyntaxMessage(playerid, "/stretcher [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "NAMES:{FFFFFF} equip/drop/pickup/putaway/load/unload/ambulance");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} equip/drop/pickup/putaway/load/unload/ambulance");
 	    return 1;
 	}
 	new Float:pX,Float:pY,Float:pZ, Float:oX,Float:oY,Float:oZ;
@@ -87,7 +87,7 @@ CMD:stretcher(playerid, params[])
 			
 		RemovePlayerFromVehicle(playerid);
 
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s pulls a stretcher out of the Ambulance. *",ReturnName(playerid));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s pulls a stretcher out of the Ambulance. *",ReturnName(playerid));
 
 		if(!IsValidDynamicObject(StretcherEquipped[playerid]))
 			StretcherEquipped[playerid] = CreateDynamicObject(1997, pX, pY + 1.5, pZ - 1.0, 0.0, 0.0, 100.0);
@@ -117,7 +117,7 @@ CMD:stretcher(playerid, params[])
 		StretcherTimer[playerid] = SetTimerEx("DestroyStretcher", 300000, 0, "ii", playerid, StretcherEquipped[playerid]);
 		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s locks the wheels of the stretcher in place. *",ReturnName(playerid));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s locks the wheels of the stretcher in place. *",ReturnName(playerid));
 	}
 	else if(!strcmp(action, "pickup", true))
 	{
@@ -140,7 +140,7 @@ CMD:stretcher(playerid, params[])
 		StretcherTimer[playerid] = -1;
 		StretcherHolding[playerid] = 2;
 
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s unlocks the wheels of the stretcher *",ReturnName(playerid));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s unlocks the wheels of the stretcher *",ReturnName(playerid));
 	}
 	else if(!strcmp(action, "putaway", true))
 	{
@@ -161,7 +161,7 @@ CMD:stretcher(playerid, params[])
 					
 				StretcherHolding[playerid] = 0;
 
-				SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s puts their stretcher into the back of the Ambulance. *",ReturnName(playerid));
+				SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s puts their stretcher into the back of the Ambulance. *",ReturnName(playerid));
 				return 1;
 			}
 		}
@@ -200,7 +200,7 @@ CMD:stretcher(playerid, params[])
 		StretcherPlayerID[playerid] = playa;
 		ApplyAnimation(playa,"BEACH", "bather", 4.0, 1, 0, 0, 1, -1, 1);
 
-		SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s is now pulling the stretcher with %s on it. *", GetName(playerid), GetName(StretcherPlayerID[playerid]));
+		SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s is now pulling the stretcher with %s on it. *", GetName(playerid), GetName(StretcherPlayerID[playerid]));
 
 		SendServerMessage(playerid, "%s in now on your stretcher. You can get them off using '/stretcher unload'",ReturnName(StretcherPlayerID[playerid]));
 
@@ -261,7 +261,7 @@ CMD:stretcher(playerid, params[])
 				PutPlayerInVehicle(StretcherPlayerID[playerid], v, seatid);
 				TogglePlayerControllable(StretcherPlayerID[playerid], 1);
 
-				SendNearbyMessage(playerid, 30.0, X11_PLUM, "* %s pushes the stretcher with %s on it into the back of the Ambulance. *",ReturnName(playerid),ReturnName(StretcherPlayerID[playerid]));
+				SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s pushes the stretcher with %s on it into the back of the Ambulance. *",ReturnName(playerid),ReturnName(StretcherPlayerID[playerid]));
 
 				if(IsValidDynamicObject(StretcherEquipped[playerid]))
 					DestroyDynamicObject(StretcherEquipped[playerid]);
@@ -290,9 +290,6 @@ CMD:healme(playerid, params[]) {
 	PlayerData[playerid][pInjuredTime] = 0;
 	ClearAnimations(playerid, 1);
 	SendServerMessage(playerid, "Kamu berhasil menyembuhkan dirimu sendiri.");
-
-	if(IsValidDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]))
-		DestroyDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]);
 
 	return 1;
 }
@@ -361,7 +358,7 @@ CMD:getmedkit(playerid, params[]) {
 		return 1;
 
 	SendServerMessage(playerid, "Kamu mengambil %d medkit dari Faction Locker.", strval(params));
-	SendNearbyMessage(playerid, 10.0, X11_PLUM, "* %s grabs %d amount of medkits from faction locker.", ReturnName(playerid),  strval(params));
+	SendNearbyMessage(playerid, 10.0, X11_PLUM, "** %s grabs %d amount of medkits from faction locker.", ReturnName(playerid),  strval(params));
 	return 1;
 }
 
@@ -396,7 +393,7 @@ CMD:getpills(playerid, params[]) {
 	GiveMoney(playerid, -1000, "Getpills");
 	Inventory_Set(playerid, pill_name[strval(params)], 2709, 10);
 	SendServerMessage(playerid, "Kamu mengambil %s dari Faction Locker.", pill_name[strval(params)]);
-	SendNearbyMessage(playerid, 10.0, X11_PLUM, "* %s grabs a %s from faction locker.", ReturnName(playerid), pill_name[strval(params)]);
+	SendNearbyMessage(playerid, 10.0, X11_PLUM, "** %s grabs a %s from faction locker.", ReturnName(playerid), pill_name[strval(params)]);
 	return 1;
 }
 

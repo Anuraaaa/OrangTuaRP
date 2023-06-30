@@ -52,7 +52,7 @@ Workshop_Create(Float:x, Float:y, Float:z, price) {
     return INVALID_ITERATOR_SLOT;
 }
 
-FUNC::OnWorkshopCreated(id) {
+function OnWorkshopCreated(id) {
     if(!Iter_Contains(Workshop, id))
         return 0;
 
@@ -96,7 +96,7 @@ Workshop_Save(id) {
     return 1;
 }
 
-FUNC::Workshop_Load() {
+function Workshop_Load() {
     new 
         rows = cache_num_rows();
 
@@ -188,15 +188,6 @@ Workshop_HaveAccess(playerid, id) {
     return 0;
 }
 
-Workshop_Inside(playerid) {
-    new ws_id = PlayerData[playerid][pInWorkshop];
-
-    if(!Iter_Contains(Workshop, ws_id))
-        return -1;
-
-    return ws_id;
-}
-
 Workshop_Nearest(playerid, Float:range = 5.0) {
     new index = -1;
     foreach(new i : Workshop) if(IsPlayerInRangeOfPoint(playerid, range, WorkshopData[i][wsFootPos][0], WorkshopData[i][wsFootPos][1], WorkshopData[i][wsFootPos][2])) {
@@ -229,32 +220,7 @@ Workshop_Delete(id) {
     Iter_Remove(Workshop, id);
     return 1;
 }
-Workshop_VehicleEntrance(playerid) {
-    new index = -1;
-    foreach(new i : Workshop) if(IsPlayerInRangeOfPoint(playerid, 5.0, WorkshopData[i][wsVehPos][0], WorkshopData[i][wsVehPos][1], WorkshopData[i][wsVehPos][2])) {
-        index = i;
-        break;
-    }
-    return index;
-}
 
-Workshop_VehicleExit(playerid) {
-    new index = -1;
-    foreach(new i : Workshop) if(IsPlayerInRangeOfPoint(playerid, 5.0, 1424.1827,1311.7906,10.5928) && GetPlayerVirtualWorld(playerid) == WorkshopData[i][wsWorld]) {
-        index = i;
-        break;
-    }
-    return index;
-}
-
-Workshop_FootExit(playerid) {
-    new index = -1;
-    foreach(new i : Workshop) if(IsPlayerInRangeOfPoint(playerid, 5.0, 1436.6331,1310.0907,10.8806) && GetPlayerVirtualWorld(playerid) == WorkshopData[i][wsWorld]) {
-        index = i;
-        break;
-    }
-    return index;
-}
 /* Commands */
 
 CMD:createworkshop(playerid, params[]) {

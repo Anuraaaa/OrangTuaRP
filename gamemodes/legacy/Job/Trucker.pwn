@@ -99,7 +99,7 @@ CMD:cargo(playerid, params[])
 				return SendErrorMessage(playerid, "Jumlah total stock component tidak bisa lebih dari 10.000!");
 
 			GiveMoney(playerid, 3000, "Sell cargo");
-			SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil menjual {FFFF00}%s Cargo {FFFFFF}dan mendapat {00FF00}$30.00", Crate_Name[CrateData[cid][crateType]]);
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil menjual {FFFF00}%s Cargo {FFFFFF}dan mendapat {00FF00}$30.00", Crate_Name[CrateData[cid][crateType]]);
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);		
 			ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, 0, 0, 0, 0, 0, 1);
 			RemovePlayerAttachedObject(playerid, 9);
@@ -162,7 +162,7 @@ CMD:cargo(playerid, params[])
 		SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);		
 		ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, 0, 0, 0, 0, 0, 1);
 		RemovePlayerAttachedObject(playerid, 9);
-		SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu menyimpan {FFFF00}%s Cargo {FFFFFF}kedalam %s!", Crate_Name[CrateData[PlayerData[playerid][pCrate]][crateType]], GetVehicleName(pvid));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu menyimpan {FFFF00}%s Cargo {FFFFFF}kedalam %s!", Crate_Name[CrateData[PlayerData[playerid][pCrate]][crateType]], GetVehicleName(pvid));
 		CrateData[PlayerData[playerid][pCrate]][crateVehicle] = VehicleData[pvid][vID];
 		Crate_Save(PlayerData[playerid][pCrate]);
 		PlayerData[playerid][pCrate] = -1;
@@ -176,7 +176,7 @@ CMD:cargo(playerid, params[])
 		ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, 0, 0, 0, 0, 0, 1);
 		RemovePlayerAttachedObject(playerid, 9);
 		Crate_Delete(PlayerData[playerid][pCrate]);
-		SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}You've successfully removed the Cargo.");		
+		SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil menghapus cargo.");		
 	}
 	else if(!strcmp(params, "buy", true))
 	{
@@ -196,10 +196,10 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_ELECTRO);
 
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
 			GiveMoney(playerid, -1500);
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil membeli Electronic Cargo seharga {00FF00}$15.0");
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Electronic Cargo seharga {00FF00}$15.0");
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1790.5422, 1429.7609, 7.1841))
 		{
@@ -209,10 +209,10 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_CLOTHES);
 			
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
 			GiveMoney(playerid, -1500);
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil membeli Clothes Cargo seharga {00FF00}$15.0");			
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Clothes Cargo seharga {00FF00}$15.0");			
 		}		
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1835.1539, 1429.7806, 7.1841))
 		{
@@ -222,10 +222,10 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_247);
 			
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
 			GiveMoney(playerid, -2000);
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil membeli 24/7 Cargo seharga {00FF00}$20.0");			
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli 24/7 Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1741.8209, 1429.7811, 7.1875))
 		{
@@ -235,10 +235,10 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_FASTFOOD);
 
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
 			GiveMoney(playerid, -2000);
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil membeli Fast Food Cargo seharga {00FF00}$20.0");			
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Fast Food Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1886.6575,1444.1444,7.1842))
 		{
@@ -248,10 +248,10 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_EQUIPMENT);
 
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
 			GiveMoney(playerid, -2000);
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil membeli Equipment Cargo seharga {00FF00}$20.0");			
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Equipment Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1304.1875,2491.8530,87.1437)) {
 			
@@ -261,9 +261,9 @@ CMD:cargo(playerid, params[])
 			id = Crate_Create(playerid, CARGO_TYPE_COMPONENT);
 
 			if(id == -1)
-				return SendErrorMessage(playerid, "The server cannot create more cargo's!");
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			SendClientMessage(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil mendapatkan Component Cargo!");		
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil mendapatkan Component Cargo!");		
 
 			StockData[stockRock]--;
 			UpdateServerStock(SERVER_STOCK_ROCK);

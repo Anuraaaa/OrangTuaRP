@@ -25,7 +25,7 @@ JailUser(playerid, targetid, minutes, reason[])
 	return 1;
 }
 
-FUNC::OnWarnUser(playerid, targetid, reason[])
+function OnWarnUser(playerid, targetid, reason[])
 {
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been warned by %s", GetName(targetid), PlayerData[playerid][pUCP]);
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
@@ -181,7 +181,7 @@ CMD:jail(playerid, params[])
 	return 1;
 }
 
-FUNC::OnOfflineJailed(playerid, minute, name[], reason[])
+function OnOfflineJailed(playerid, minute, name[], reason[])
 {
 	new rows = cache_num_rows(), sqlid;
 	if(rows)

@@ -59,7 +59,7 @@ stock ReturnFishPlace(playerid)
 	return FISHPLACE_NONE;
 }
 
-FUNC::TimeFishing(playerid)
+function TimeFishing(playerid)
 {
 	if(!PlayerData[playerid][pFishing])
 		return 0;
@@ -123,7 +123,7 @@ FUNC::TimeFishing(playerid)
 
 	        FishWeight[playerid][SlotToUse] = fWeight;
 	        format(FishName[playerid][SlotToUse], 12, FishNames[FishNameId]);
-	        SendClientMessageEx(playerid, COLOR_SERVER, "FISH: {FFFFFF}Kamu mendapat {FF6347}%s {FFFFFF}dengan berat {FFFF00}%.2f lbs{FFFFFF}, /myfish untuk melihat semua ikan.", FishName[playerid][SlotToUse], FishWeight[playerid][SlotToUse]);
+	        SendClientMessageEx(playerid, COLOR_SERVER, "(Fishing) {FFFFFF}Kamu mendapat {FF6347}%s {FFFFFF}dengan berat {FFFF00}%.2f lbs{FFFFFF}, /myfish untuk melihat semua ikan.", FishName[playerid][SlotToUse], FishWeight[playerid][SlotToUse]);
 		}
 		else if(gacha == 2)
 		{
@@ -167,7 +167,7 @@ FUNC::TimeFishing(playerid)
 
 	        FishWeight[playerid][SlotToUse] = fWeight;
 	        format(FishName[playerid][SlotToUse], 12, FishNames[FishNameId]);
-	        SendClientMessageEx(playerid, COLOR_SERVER, "FISH: {FFFFFF}Kamu mendapat {FF6347}%s {FFFFFF}dengan berat {FFFF00}%.2f lbs{FFFFFF}, /myfish untuk melihat semua ikan.", FishName[playerid][SlotToUse], FishWeight[playerid][SlotToUse]);
+	        SendClientMessageEx(playerid, COLOR_SERVER, "(Fishing) {FFFFFF}Kamu mendapat {FF6347}%s {FFFFFF}dengan berat {FFFF00}%.2f lbs{FFFFFF}, /myfish untuk melihat semua ikan.", FishName[playerid][SlotToUse], FishWeight[playerid][SlotToUse]);
 		}
 		else if(gacha == 4)
 		{
@@ -242,6 +242,9 @@ CMD:fish(playerid, params[])
 	if(Inventory_Count(playerid, "Fish Rod") < 1)
 	    return SendErrorMessage(playerid, "Kamu tidak memiliki Fish Rod.");
 	    
+	if(GetEquipedItem(playerid) != EQUIP_ITEM_ROD)
+		return SendErrorMessage(playerid, "Kamu harus menggunakan pancingan mu dahulu.");
+
 	if(PlayerData[playerid][pFishDelay] && PlayerData[playerid][pAdmin] < 7)
 		return SendErrorMessage(playerid, "Tunggu %d menit untuk bekerja kembali.", PlayerData[playerid][pFishDelay]/60);
 
@@ -268,7 +271,7 @@ CMD:fish(playerid, params[])
 
 	PlayerData[playerid][pFishing] = true;
 	SetTimerEx("TimeFishing", 35000, false, "i", playerid);
-	SendClientMessage(playerid, COLOR_SERVER, "FISH: {FFFFFF}Kamu mulai memancing, harap tunggu beberapa saat.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Fishing) {FFFFFF}Kamu mulai memancing, harap tunggu beberapa saat.");
 	Inventory_Remove(playerid, "Bait", 1);
 	PlayerData[playerid][pThirst] -= RandomEx(1, 3);
  	ApplyAnimation(playerid, "SWORD", "SWORD_BLOCK", 4.1, 0, 0, 0, 1, 0);

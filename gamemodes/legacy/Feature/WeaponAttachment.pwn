@@ -7,7 +7,7 @@ enum weaponSettings
 }
 new WeaponSettings[MAX_PLAYERS][17][weaponSettings], WeaponTick[MAX_PLAYERS], EditingWeapon[MAX_PLAYERS];
 
-FUNC::OnWeaponsLoaded(playerid)
+function OnWeaponsLoaded(playerid)
 {
 	new rows, weaponid, index;
 
@@ -36,7 +36,7 @@ FUNC::OnWeaponsLoaded(playerid)
 }
 
 stock IsWeaponWearable(weaponid)
-    return (weaponid >= 22 && weaponid <= 38);
+    return (weaponid >= 22 && weaponid <= 31);
  
 stock IsWeaponHideable(weaponid)
     return (weaponid >= 22 && weaponid <= 24 || weaponid == 28 || weaponid == 32);
@@ -47,11 +47,10 @@ GetWeaponObjectSlot(weaponid)
  
     switch (weaponid)
     {
-        case 22..24: objectslot = 4;
-        case 25..27: objectslot = 5;
-        case 28, 29, 32: objectslot = 6;
-        case 30, 31: objectslot = 7;
-        case 33, 34: objectslot = 8;
+        case 22..24: objectslot = 5;
+        case 25..27: objectslot = 6;
+        case 28, 29, 32: objectslot = 7;
+        case 30, 31: objectslot = 8;
     }
     return objectslot;
 }
@@ -67,7 +66,6 @@ stock GetWeaponModel(weaponid) //Will only return the model of wearable weapons 
         case 30: model = 355;
         case 31: model = 356;
         case 32: model = 372;
-        case 33..38: model = 324 + weaponid;
     }
     return model;
 }

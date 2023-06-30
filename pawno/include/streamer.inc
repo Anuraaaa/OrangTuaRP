@@ -116,7 +116,7 @@
 
 // Include File Version
 
-public Streamer_IncludeFileVersion = 0x295;
+public Streamer_IncludeFileVersion = 0x294;
 
 #pragma unused Streamer_IncludeFileVersion
 
@@ -178,8 +178,6 @@ enum
 	E_STREAMER_Z
 }
 
-#define E_STREAMER_CUSTOM(%0) ((%0) | 0x40000000 & ~0x80000000)
-
 // Natives (Settings)
 
 native Streamer_GetTickRate();
@@ -233,14 +231,11 @@ native Streamer_GetFloatData(type, STREAMER_ALL_TAGS:id, data, &Float:result);
 native Streamer_SetFloatData(type, STREAMER_ALL_TAGS:id, data, Float:value);
 native Streamer_GetIntData(type, STREAMER_ALL_TAGS:id, data);
 native Streamer_SetIntData(type, STREAMER_ALL_TAGS:id, data, value);
-native Streamer_RemoveIntData(type, STREAMER_ALL_TAGS:id, data);
-native Streamer_HasIntData(type, STREAMER_ALL_TAGS:id, data);
 native Streamer_GetArrayData(type, STREAMER_ALL_TAGS:id, data, dest[], maxdest = sizeof dest);
 native Streamer_SetArrayData(type, STREAMER_ALL_TAGS:id, data, const src[], maxsrc = sizeof src);
 native Streamer_IsInArrayData(type, STREAMER_ALL_TAGS:id, data, value);
 native Streamer_AppendArrayData(type, STREAMER_ALL_TAGS:id, data, value);
 native Streamer_RemoveArrayData(type, STREAMER_ALL_TAGS:id, data, value);
-native Streamer_HasArrayData(type, STREAMER_ALL_TAGS:id, data);
 native Streamer_GetArrayDataLength(type, STREAMER_ALL_TAGS:id, data);
 native Streamer_GetUpperBound(type);
 
@@ -284,11 +279,9 @@ native AttachDynamicObjectToPlayer(STREAMER_TAG_OBJECT:objectid, playerid, Float
 native AttachDynamicObjectToVehicle(STREAMER_TAG_OBJECT:objectid, vehicleid, Float:offsetx, Float:offsety, Float:offsetz, Float:rx, Float:ry, Float:rz);
 native EditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid);
 native IsDynamicObjectMaterialUsed(STREAMER_TAG_OBJECT:objectid, materialindex);
-native RemoveDynamicObjectMaterial(STREAMER_TAG_OBJECT:objectid, materialindex);
 native GetDynamicObjectMaterial(STREAMER_TAG_OBJECT:objectid, materialindex, &modelid, txdname[], texturename[], &materialcolor, maxtxdname = sizeof txdname, maxtexturename = sizeof texturename);
 native SetDynamicObjectMaterial(STREAMER_TAG_OBJECT:objectid, materialindex, modelid, const txdname[], const texturename[], materialcolor = 0);
 native IsDynamicObjectMaterialTextUsed(STREAMER_TAG_OBJECT:objectid, materialindex);
-native RemoveDynamicObjectMaterialText(STREAMER_TAG_OBJECT:objectid, materialindex);
 native GetDynamicObjectMaterialText(STREAMER_TAG_OBJECT:objectid, materialindex, text[], &materialsize, fontface[], &fontsize, &bold, &fontcolor, &backcolor, &textalignment, maxtext = sizeof text, maxfontface = sizeof fontface);
 native SetDynamicObjectMaterialText(STREAMER_TAG_OBJECT:objectid, materialindex, const text[], materialsize = OBJECT_MATERIAL_SIZE_256x128, const fontface[] = "Arial", fontsize = 24, bold = 1, fontcolor = 0xFFFFFFFF, backcolor = 0, textalignment = 0);
 native STREAMER_TAG_OBJECT:GetPlayerCameraTargetDynObject(playerid);
@@ -305,7 +298,7 @@ native STREAMER_TAG_CP:CreateDynamicCP(Float:x, Float:y, Float:z, Float:size, wo
 native DestroyDynamicCP(STREAMER_TAG_CP:checkpointid);
 native IsValidDynamicCP(STREAMER_TAG_CP:checkpointid);
 native IsPlayerInDynamicCP(playerid, STREAMER_TAG_CP:checkpointid);
-native STREAMER_TAG_CP:GetPlayerVisibleDynamicCP(playerid);
+native GetPlayerVisibleDynamicCP(playerid);
 
 // Natives (Race Checkpoints)
 
@@ -313,7 +306,7 @@ native STREAMER_TAG_RACE_CP:CreateDynamicRaceCP(type, Float:x, Float:y, Float:z,
 native DestroyDynamicRaceCP(STREAMER_TAG_RACE_CP:checkpointid);
 native IsValidDynamicRaceCP(STREAMER_TAG_RACE_CP:checkpointid);
 native IsPlayerInDynamicRaceCP(playerid, STREAMER_TAG_RACE_CP:checkpointid);
-native STREAMER_TAG_RACE_CP:GetPlayerVisibleDynamicRaceCP(playerid);
+native GetPlayerVisibleDynamicRaceCP(playerid);
 
 // Natives (Map Icons)
 
@@ -451,6 +444,6 @@ forward OnPlayerLeaveDynamicArea(playerid, STREAMER_TAG_AREA:areaid);
 forward OnPlayerGiveDamageDynamicActor(playerid, STREAMER_TAG_ACTOR:actorid, Float:amount, weaponid, bodypart);
 forward OnDynamicActorStreamIn(STREAMER_TAG_ACTOR:actorid, forplayerid);
 forward OnDynamicActorStreamOut(STREAMER_TAG_ACTOR:actorid, forplayerid);
-forward Streamer_OnItemStreamIn(type, STREAMER_ALL_TAGS:id, forplayerid);
-forward Streamer_OnItemStreamOut(type, STREAMER_ALL_TAGS:id, forplayerid);
+forward Streamer_OnItemStreamIn(type, STREAMER_ALL_TAGS:id);
+forward Streamer_OnItemStreamOut(type, STREAMER_ALL_TAGS:id);
 forward Streamer_OnPluginError(const error[]);

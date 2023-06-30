@@ -110,7 +110,7 @@ stock ProcessServiceCall(playerid, text[])
 		}
 		else
 		{
-			SendClientMessage(playerid, COLOR_SERVER, "OPERATOR:{FFFFFF} Sorry I don't quite understand you. Did you say \"sfpd\" or \"sffd\"?");
+			SendClientMessage(playerid, X11_GREY, "(Operator){FFFFFF} Sorry I don't quite understand you. Did you say \"sfpd\" or \"sffd\"?");
 			return 0;
 		}
 	}
@@ -198,7 +198,7 @@ stock Emergency_Add(playerid)
 	return -1;
 }
 
-FUNC::Emergency_Load()
+function Emergency_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -236,7 +236,7 @@ stock Emergency_Save(id)
 	mysql_format(sqlcon, query, sizeof(query), "%sWHERE `ID` = '%d'", query, EmergencyData[id][emgID]);
 	mysql_tquery(sqlcon, query);	
 }
-FUNC::OnEmergencyAdded(id)
+function OnEmergencyAdded(id)
 {
 	EmergencyData[id][emgID] = cache_insert_id();
 	Emergency_Save(id);

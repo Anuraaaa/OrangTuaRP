@@ -66,6 +66,6 @@ CMD:isafk(playerid, params[])
 	if(targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "Invalid player specified!");
 
-	SendClientMessageEx(playerid, COLOR_SERVER, "AFK-INFO: {FFFFFF}Player {00FFFF}%s {FFFFFF}is %s", GetName(targetid), (PlayerData[targetid][pAFK]) ? ("{FFFFFF}AFK") : ("{FF0000}not {FFFFFF}AFK"));
+	SendClientMessageEx(playerid, COLOR_SERVER, "(AFK) {FFFFFF}Player {00FFFF}%s {FFFFFF}is %s", GetName(targetid), (PlayerData[targetid][pAFK]) ? ("{FFFFFF}AFK") : ("{FF0000}not {FFFFFF}AFK"));
 	return 1;
 }

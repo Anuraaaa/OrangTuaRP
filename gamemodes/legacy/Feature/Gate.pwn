@@ -149,7 +149,7 @@ stock Gate_Create(playerid)
 	return -1;
 }
 
-FUNC::OnGateCreated(id)
+function OnGateCreated(id)
 {
 	GateData[id][gateID] = cache_insert_id();
 	Gate_Save(id);
@@ -213,7 +213,7 @@ stock Gate_Save(gateid)
 	return mysql_tquery(sqlcon, query);
 }
 
-FUNC::Gate_Load()
+function Gate_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -335,7 +335,7 @@ CMD:editgate(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editgate [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Names:{FFFFFF} location, speed, radius, time, model, pos, move, pass, linkid, faction");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} location, speed, radius, time, model, pos, move, pass, linkid, faction");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_GATES) || !GateData[id][gateExists])

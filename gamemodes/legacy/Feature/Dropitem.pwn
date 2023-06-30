@@ -70,7 +70,7 @@ stock PickupItem(playerid, itemid)
 	return 0;
 }
 
-FUNC::Dropped_Load()
+function Dropped_Load()
 {
 	new rows = cache_num_rows();
  	if(rows)
@@ -130,7 +130,7 @@ DropItem(item[], player[], model, quantity, Float:x, Float:y, Float:z, interior,
 	return -1;
 }
 
-FUNC::OnDroppedItem(itemid)
+function OnDroppedItem(itemid)
 {
 	if (itemid == -1 || !DroppedItems[itemid][droppedModel])
 	    return 0;

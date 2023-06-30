@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 CMD:ahelp(playerid, params[])
 {
 	if(PlayerData[playerid][pAdmin] < 1)
@@ -34,8 +36,8 @@ CMD:ahelp(playerid, params[])
 		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/motd, /amotd, /editdoor, /editplayer, /nextdoor, /setitem, ");
 		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy)atm, /doorname, /createcar, /destroycar, /givesalary");
 		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy)tree. /destroyusername, /destroychar");
-		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy/edit)gate");
-		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy/edit)actor");
+		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy/edit)gate, /(create/edit)workshop");
+		SendClientMessage(playerid, COLOR_YELLOW, "High Administrator: {FFFFFF}/(create/destroy/edit)actor, /gaterequest");
 	}
 	if(PlayerData[playerid][pAdmin] >= 7)
 	{
@@ -150,7 +152,7 @@ CMD:unbanip(playerid, params[]) {
 	return 1;
 }
 
-FUNC::OnUnbanIP(playerid, ip[]) {
+function OnUnbanIP(playerid, ip[]) {
 
 	if(!cache_num_rows())
 		return SendErrorMessage(playerid, "IP %s tidak sedang diblokir.", ip);
@@ -244,7 +246,7 @@ CMD:ahide(playerid, params[])
 		return SendErrorMessage(playerid, NO_PERMISSION);	
 
 	PlayerData[playerid][pAhide] = (!PlayerData[playerid][pAhide]);
-	SendClientMessageEx(playerid, COLOR_LIGHTRED, "INFO: {FFFFFF}You are now %s {FFFFFF}%s the admin list.", (PlayerData[playerid][pAhide]) ? ("Hidden") : ("Visible"), (PlayerData[playerid][pAhide]) ? ("from") : ("in"));
+	SendClientMessageEx(playerid, COLOR_LIGHTRED, "(Info) {FFFFFF}You are now %s {FFFFFF}%s the admin list.", (PlayerData[playerid][pAhide]) ? ("Hidden") : ("Visible"), (PlayerData[playerid][pAhide]) ? ("from") : ("in"));
 	return 1;
 }
 CMD:findnumber(playerid, params[])
@@ -296,7 +298,7 @@ CMD:findmask(playerid, params[])
 		cache_get_value_name(0, "Name", name);
 		cache_get_value_name(0, "UCP", ucp);
 
-		SendClientMessageEx(playerid, COLOR_LIGHTRED, "MASKINFO: {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
+		SendClientMessageEx(playerid, COLOR_LIGHTRED, "(MaskInfo) {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
 	}
 	else
 	{
@@ -634,13 +636,14 @@ CMD:spec(playerid, params[])
 	else
 		PlayerSpectatePlayer(playerid, userid);
 
-	SendServerMessage(playerid, "You are now spectating %s (ID: %d).", GetName(userid), userid);
+	SendServerMessage(playerid, "You are now spectating "YELLOW"%s (ID: %d).", GetName(userid), userid);
 	PlayerData[playerid][pSpectator] = userid;
 
 	if(PlayerData[playerid][pAdmin] <= PlayerData[userid][pAdmin] && PlayerData[userid][pAdmin] > 6)
 		SendClientMessageEx(userid, X11_GREY, "You are being spectated by "YELLOW"%s"GREY".", GetUsername(playerid));
 	return 1;
 }
+
 
 CMD:gotoco(playerid, params[])
 {
@@ -723,6 +726,24 @@ CMD:unspec(playerid, params[])
     return 1;
 }
 
+CMD:amm(playerid, paramsp[]) {
+
+	if(PlayerData[playerid][pAdmin] < 6)
+		return PermissionError(playerid);
+
+	new vehicleid = INVALID_VEHICLE_ID, string[352];
+
+	if((vehicleid = GetNearestVehicle(playerid, 7.0)) != INVALID_VEHICLE_ID) {
+		format(string, sizeof(string), "Repair Engine\nRepair Body\nRepair Tire\nChange Color\nTune Vehicle\nSet Paintjob\nInstall Nitro\nUninstall Modification\nUpgrade Engine\nUpgrade Body\nInstall Neon");
+		ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
+
+		PlayerData[playerid][pVehicle] = vehicleid;
+	}
+	else SendErrorMessage(playerid, "You are not in range of any vehicle.");
+
+	return 1;
+}
+
 CMD:editplayer(playerid, params[])
 {
 	if (PlayerData[playerid][pAdmin] < 6)
@@ -737,7 +758,7 @@ CMD:editplayer(playerid, params[])
 	if (sscanf(params, "us[16]S()[32]", userid, type, amount))
  	{
 	 	SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [name]");
-	 	SendClientMessage(playerid, COLOR_YELLOW, "[NAMES]:{FFFFFF} gender, bank, origin, level, birthdate, lumberlic, job(1/2)");
+	 	SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} gender, bank, origin, level, birthdate, lumberlic, job(1/2)");
 		return 1;
 	}
 	if (userid == INVALID_PLAYER_ID)
@@ -750,14 +771,14 @@ CMD:editplayer(playerid, params[])
 
 		PlayerData[userid][pGender] = strval(amount);
 
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "GENDER: "WHITE"You have changed "YELLOW"%s's "WHITE"gender to "CYAN"%s", GetName(userid, false), (PlayerData[userid][pGender] == 1) ? ("Male") : ("Female"));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Gender) "WHITE"You have changed "YELLOW"%s's "WHITE"gender to "CYAN"%s", GetName(userid, false), (PlayerData[userid][pGender] == 1) ? ("Male") : ("Female"));
 	}
 	else if(!strcmp(type, "job1", true)) 
 	{
 	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_SMUGGLER)
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [job1]");
 
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "JOB: "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Job 1) "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
 		PlayerData[userid][pJob] = strval(amount);
 	}
 	else if(!strcmp(type, "job2", true)) 
@@ -765,7 +786,7 @@ CMD:editplayer(playerid, params[])
 	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_SMUGGLER)
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [job2]");
 
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "JOB: "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Job 2) "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
 		PlayerData[userid][pJob2] = strval(amount);
 	}
 	else if (!strcmp(type, "birthdate", true))
@@ -774,7 +795,7 @@ CMD:editplayer(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [birthdate] [new birthdate]");
 
 		format(PlayerData[userid][pBirthdate], 24, amount);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "BIRTHDATE: "WHITE"You have changed "YELLOW"%s's "WHITE"birthdate to "CYAN"%s", GetName(userid), amount);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Birthdate) "WHITE"You have changed "YELLOW"%s's "WHITE"birthdate to "CYAN"%s", GetName(userid), amount);
 	}
 	else if (!strcmp(type, "origin", true))
 	{
@@ -782,7 +803,7 @@ CMD:editplayer(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [origin] [new origin]");
 
 		format(PlayerData[userid][pOrigin], 32, amount);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "ORIGIN: "WHITE"You have changed "YELLOW"%s's "WHITE"origin to "CYAN"%s", GetName(userid, false), amount);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Origin) "WHITE"You have changed "YELLOW"%s's "WHITE"origin to "CYAN"%s", GetName(userid, false), amount);
 	}
 	else if (!strcmp(type, "bank", true))
 	{
@@ -793,7 +814,7 @@ CMD:editplayer(playerid, params[])
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [bank] [bank funds]");
 
 		PlayerData[userid][pBank] = strcash(val);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "BANK: "WHITE"You have changed "YELLOW"%s's "WHITE"bank money to "GREEN"$%s", GetName(userid, false), FormatNumber(strcash(val)));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Bank) "WHITE"You have changed "YELLOW"%s's "WHITE"bank money to "GREEN"$%s", GetName(userid, false), FormatNumber(strcash(val)));
 	}
 	else if (!strcmp(type, "level", true))
 	{
@@ -802,7 +823,7 @@ CMD:editplayer(playerid, params[])
 
 		PlayerData[userid][pLevel] = strval(amount);
 		SetPlayerScore(userid, PlayerData[userid][pLevel]);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "LEVEL: "WHITE"You have changed "YELLOW"%s's "WHITE"level to "CYAN"%d", GetName(userid, false), strval(amount));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Level) "WHITE"You have changed "YELLOW"%s's "WHITE"level to "CYAN"%d", GetName(userid, false), strval(amount));
 	}
 	else if(!strcmp(type, "lumberlic", true)) {
 
@@ -943,12 +964,12 @@ CMD:togooc(playerid, paramas[])
 	if(!ToggleData[togOOC])
 	{
 	    ToggleData[togOOC] = true;
-	    SendClientMessageToAllEx(COLOR_SERVER, "TOGGLE: {FFFFFF}%s has disabled global ooc chat.", PlayerData[playerid][pUCP]);
+	    SendClientMessageToAllEx(X11_YELLOW, "[OOC] Global OOC chat has been disabled by %s.", PlayerData[playerid][pUCP]);
 	}
 	else
 	{
 		ToggleData[togOOC] = false;
-		SendClientMessageToAllEx(COLOR_SERVER, "TOGGLE: {FFFFFF}%s has enabled global ooc chat.", PlayerData[playerid][pUCP]);
+		SendClientMessageToAllEx(X11_YELLOW, "[OOC] Global OOC chat has been enabled by %s.", PlayerData[playerid][pUCP]);
 	}
 	return 1;
 }
@@ -1338,7 +1359,7 @@ CMD:mark(playerid, params[])
 
 	if(!strcmp(params, "set", true))
 	{
-		SendClientMessageEx(playerid, COLOR_LIGHTRED, "MARK: {FFFFFF}Mark successfully {FFFF00}Activated{FFFFFF} use {FFFF00}/mark goto {FFFFFF}to teleport");
+		SendClientMessageEx(playerid, COLOR_LIGHTRED, "(Mark) {FFFFFF}Mark successfully {FFFF00}Activated{FFFFFF} use {FFFF00}/mark goto {FFFFFF}to teleport");
 		GetPlayerPos(playerid, PlayerData[playerid][pMark][0], PlayerData[playerid][pMark][1], PlayerData[playerid][pMark][2]);
 		PlayerData[playerid][pMarkWorld] = GetPlayerVirtualWorld(playerid);
 		PlayerData[playerid][pMarkInterior] = GetPlayerInterior(playerid);
@@ -1523,9 +1544,6 @@ CMD:arevive(playerid, params[])
 	ClearAnimations(targetid, 1);
 	SendServerMessage(playerid, "You've healing %s", GetName(targetid));
 	ApplyAnimation(targetid, "PED", "GETUP_FRONT", 4.0, 0, 1, 1, 0, 0);
-
-	if(IsValidDynamic3DTextLabel(PlayerData[targetid][pInjuredLabel]))
-		DestroyDynamic3DTextLabel(PlayerData[targetid][pInjuredLabel]);
 	return 1;
 }
 
@@ -1566,6 +1584,8 @@ CMD:goto(playerid, params[])
 
 timer ShutdownTheServer[1000]() {
 	SendRconCommand("gmx");
+	SendRconCommand("password maintenancedulu");
+	SendRconCommand("hostname Orang Tua Roleplay [ UNDER MAINTENANCE ]");
 	return 1;
 }
 timer KickOnlinePlayer[3000]() {
@@ -1680,6 +1700,7 @@ CMD:ban(playerid, params[])
 
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been banned by %s", PlayerData[targetid][pUCP], PlayerData[playerid][pUCP]);
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
+	SendAdminAction(playerid, "IP Akun yang anda banned adalah %s",  ReturnIP(targetid));
 
 	new temptime = gettime();
 	new date[6];
@@ -1738,9 +1759,10 @@ CMD:ans(playerid, params[])
 	if(!PlayerData[userid][pAsking])
 	    return SendErrorMessage(playerid, "That player is not asking.");
 	    
-	SendClientMessageEx(userid, COLOR_SERVER, "ANSWER: {FFFFFF}%s", text);
+	SendClientMessageEx(userid, COLOR_SERVER, "(Answer) {FFFFFF}%s", text);
 	SendAdminMessage(COLOR_LIGHTRED, "%s Answer To %s: %s", PlayerData[playerid][pUCP], GetName(userid), text);
 	PlayerData[userid][pAsking] = false;
+	PlayerData[playerid][pAdminPoint]++;
 	return 1;
 }
 
@@ -2180,14 +2202,14 @@ CMD:setcash(playerid, params[])
 	return 1;	
 }
 
-CMD:finepoint(playerid, params[]) {
+CMD:finecoin(playerid, params[]) {
 
 	new targetid, amount;
 	if(PlayerData[playerid][pAdmin] < 7)
 		return SendErrorMessage(playerid, "You don't have permission to use this command!");
 
 	if(sscanf(params, "ud", targetid, amount))
-		return SendSyntaxMessage(playerid, "/finepoint [playerid/PartOfName] [amount]");
+		return SendSyntaxMessage(playerid, "/finecoin [playerid/PartOfName] [amount]");
 
 	if(targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "You have specified invalid player!");
@@ -2197,14 +2219,36 @@ CMD:finepoint(playerid, params[]) {
 	return 1;
 }
 
-CMD:givepoint(playerid, params[]) {
+CMD:gaterequest(playerid, params[]) {
+	if(PlayerData[playerid][pAdmin] < 6)
+		return SendErrorMessage(playerid, "You don't have permission to use this command!");
+
+	new string[256], count = 0;
+	inline const ShowGateReq() {
+		if(cache_num_rows()) {
+			for(new i = 0; i < cache_num_rows(); i++) {
+				new id = cache_get_field_int(i, "ID");
+				new name[24], date[26];
+				cache_get_value_name(i, "Name", name);
+				cache_get_value_name(i, "Date", date);
+
+				strcat(string, sprintf("%s\t(%s)\n", name, date));
+				ListedItems[playerid][count++] = id;
+			}
+			ShowPlayerDialog(playerid, DIALOG_GATEREQ, DIALOG_STYLE_TABLIST, "Pending Gate Request", string, "Done", "Close");
+		}
+	}
+	MySQL_TQueryInline(sqlcon, using inline ShowGateReq, "SELECT * FROM `gaterequests`");
+	return 1;
+}
+CMD:givecoin(playerid, params[]) {
 
 	new targetid, amount;
 	if(PlayerData[playerid][pAdmin] < 7)
 		return SendErrorMessage(playerid, "You don't have permission to use this command!");
 
 	if(sscanf(params, "ud", targetid, amount))
-		return SendSyntaxMessage(playerid, "/givepoint [playerid/PartOfName] [amount]");
+		return SendSyntaxMessage(playerid, "/givecoin [playerid/PartOfName] [amount]");
 
 	if(targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "You have specified invalid player!");
@@ -2286,6 +2330,16 @@ CMD:gmx(playerid, params[])
 	if(PlayerData[playerid][pAdmin] < 7)
 		return SendServerMessage(playerid, "Ngapain Om!");
 
+	SaveServerData();
 	SendRconCommand("gmx");
 	return 1;
+}
+
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+	if(dialogid == DIALOG_GATEREQ) {
+		if(response) {
+			mysql_tquery(sqlcon, sprintf("DELETE FROM `gaterequests` WHERE `ID` = '%d'", ListedItems[playerid][listitem]));
+		}
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
 }

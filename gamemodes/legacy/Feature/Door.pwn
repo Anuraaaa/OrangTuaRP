@@ -142,10 +142,13 @@ CMD:doorname(playerid, params[])
 	FormatText(doorname);
 	format(DoorData[doorid][ddDescription], 128, "%s", doorname);
 	SendClientMessageEx(playerid, COLOR_WHITE, "You have changed the name of the door!");
+
 	if(IsValidDynamicPickup(DoorData[doorid][ddPickupID]))
-	DestroyDynamicPickup(DoorData[doorid][ddPickupID]);
+		DestroyDynamicPickup(DoorData[doorid][ddPickupID]);
+
 	if(IsValidDynamic3DTextLabel(DoorData[doorid][ddTextID]))
-	DestroyDynamic3DTextLabel(DoorData[doorid][ddTextID]);
+		DestroyDynamic3DTextLabel(DoorData[doorid][ddTextID]);
+		
 	CreateDynamicDoor(doorid);
 	SaveDynamicDoors();
 	return 1;

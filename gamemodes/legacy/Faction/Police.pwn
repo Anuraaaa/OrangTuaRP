@@ -21,29 +21,6 @@ stock SetPlayerArrest(playerid)
     return 1;
 }
 
-FUNC::OnLightFlash(vehicleid)
-{
-    new panels, doors, lights, tires;
-    GetVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
-
-    switch(Flash[vehicleid])
-    {
-    	case 0: UpdateVehicleDamageStatus(vehicleid, panels, doors, 2, tires);
-
-        case 1: UpdateVehicleDamageStatus(vehicleid, panels, doors, 5, tires);
-
-        case 2: UpdateVehicleDamageStatus(vehicleid, panels, doors, 2, tires);
-
-        case 3: UpdateVehicleDamageStatus(vehicleid, panels, doors, 4, tires);
-
-        case 4: UpdateVehicleDamageStatus(vehicleid, panels, doors, 5, tires);
-
-        case 5: UpdateVehicleDamageStatus(vehicleid, panels, doors, 4, tires);
-    }
-    if(Flash[vehicleid] >=5) Flash[vehicleid] = 0;
-    else Flash[vehicleid] ++;
-    return 1;
-}
 
 CMD:beanbag(playerid, params[])
 {
@@ -54,8 +31,8 @@ CMD:beanbag(playerid, params[])
 
 		HasRubberBullet[playerid] = !(HasRubberBullet[playerid]);
 
-		if(HasRubberBullet[playerid]) SendNearbyMessage(playerid, 15.0 , X11_PLUM, "* %s has equipped beanbag shells into his shotgun", ReturnName(playerid));
-		else SendNearbyMessage(playerid, 15.0 , X11_PLUM, "* %s has unequipped beanbag shells from his shotgun", ReturnName(playerid));
+		if(HasRubberBullet[playerid]) SendNearbyMessage(playerid, 15.0 , X11_PLUM, "** %s has equipped beanbag shells into his shotgun", ReturnName(playerid));
+		else SendNearbyMessage(playerid, 15.0 , X11_PLUM, "** %s has unequipped beanbag shells from his shotgun", ReturnName(playerid));
 	}
 	else return SendErrorMessage(playerid, "You must be police officer to use beanbag.");
 	return true;
@@ -218,8 +195,8 @@ CMD:grant(playerid, params[]) {
             return SendErrorMessage(playerid, "Player tersebut sudah memiliki lisensi Lumberjack!");
 
         PlayerData[targetid][pLicense][2] = true;
-        SendClientMessageEx(targetid, X11_LIGHTBLUE, "LICENSE: "WHITE"%s telah mengizinkan "YELLOW"Lumberjack License "WHITE"kepadamu.", ReturnName(playerid));
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "LICENSE: Kamu telah mengizinkan "YELLOW"Lumberjack License "WHITE"kepada %s.", ReturnName(targetid));
+        SendClientMessageEx(targetid, X11_LIGHTBLUE, "(License) "WHITE"%s telah mengizinkan "YELLOW"Lumberjack License "WHITE"kepadamu.", ReturnName(playerid));
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(License) Kamu telah mengizinkan "YELLOW"Lumberjack License "WHITE"kepada %s.", ReturnName(targetid));
     }
     else if(!strcmp(str, "hauling", true)) {
         if(sscanf(string, "u", targetid))
@@ -235,8 +212,8 @@ CMD:grant(playerid, params[]) {
             return SendErrorMessage(playerid, "Player tersebut sudah memiliki lisensi Lumberjack!");
 
         PlayerData[targetid][pLicense][3] = true;
-        SendClientMessageEx(targetid, X11_LIGHTBLUE, "LICENSE: "WHITE"%s telah mengizinkan "YELLOW"Hauling License "WHITE"kepadamu.", ReturnName(playerid));
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "LICENSE: "WHITE"Kamu telah mengizinkan "YELLOW"Hauling License "WHITE"kepada %s.", ReturnName(targetid));
+        SendClientMessageEx(targetid, X11_LIGHTBLUE, "(License) "WHITE"%s telah mengizinkan "YELLOW"Hauling License "WHITE"kepadamu.", ReturnName(playerid));
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(License) "WHITE"Kamu telah mengizinkan "YELLOW"Hauling License "WHITE"kepada %s.", ReturnName(targetid));
     }
     return 1;
 }
@@ -270,10 +247,10 @@ CMD:tirelock(playerid, params[]) {
         VehicleData[vehicleid][vTireLockTimer] = repeat OnVehicleTireLock[3000](vehicleid);
 
         SwitchVehicleEngine(vehicleid, false);
-        SendNearbyMessage(playerid, 20.0, X11_PLUM, "* %s pairs a tire lock on %s.", ReturnName(playerid), GetVehicleName(vehicleid));
+        SendNearbyMessage(playerid, 20.0, X11_PLUM, "** %s pairs a tire lock on %s.", ReturnName(playerid), GetVehicleName(vehicleid));
 
         foreach(new i : Player) if(Vehicle_IsOwner(i, vehicleid)) {
-            SendClientMessageEx(i, X11_LIGHTBLUE, "TIRELOCK: {FFFFFF}Your vehicle "YELLOW"(%s) "WHITE"is "RED"tirelocked "WHITE"by %s.", GetVehicleName(vehicleid), ReturnName(playerid));
+            SendClientMessageEx(i, X11_LIGHTBLUE, "(Tirelock) {FFFFFF}Your vehicle "YELLOW"(%s) "WHITE"is "RED"tirelocked "WHITE"by %s.", GetVehicleName(vehicleid), ReturnName(playerid));
             break;
         }
     }
@@ -286,7 +263,7 @@ CMD:tirelock(playerid, params[]) {
 
         stop VehicleData[vehicleid][vTireLockTimer];
 
-        SendNearbyMessage(playerid, 20.0, X11_PLUM, "* %s removes a tire lock from %s.", ReturnName(playerid), GetVehicleName(vehicleid));
+        SendNearbyMessage(playerid, 20.0, X11_PLUM, "** %s removes a tire lock from %s.", ReturnName(playerid), GetVehicleName(vehicleid));
     }
     return 1;
 }
@@ -326,7 +303,7 @@ CMD:impound(playerid, params[])
  	
     foreach(new i : Player) if(VehicleData[GetVehicleTrailer(vehicleid)][vExtraID] == PlayerData[i][pID]) {
 
-        SendCustomMessage(i, X11_LIGHTBLUE, "IMPOUND", "Kendaraan "YELLOW"%s "WHITE"mu telah diimpound oleh "RED"%s"WHITE".", GetVehicleName(GetVehicleTrailer(vehicleid)), ReturnName(playerid));
+        SendCustomMessage(i, X11_LIGHTBLUE, "Impound", "Kendaraan "YELLOW"%s "WHITE"mu telah diimpound oleh "RED"%s"WHITE".", GetVehicleName(GetVehicleTrailer(vehicleid)), ReturnName(playerid));
         break;
     }
     Vehicle_Save(GetVehicleTrailer(vehicleid), false);

@@ -28,7 +28,7 @@ Garage_Create(Float:x, Float:y, Float:z) {
     return index;
 }
 
-FUNC::OnGarageCreated(index) {
+function OnGarageCreated(index) {
     GarageData[index][garageID] = cache_insert_id();
     Garage_Save(index);
     return 1;
@@ -74,7 +74,7 @@ Garage_Nearest(playerid, Float:rad = 5.0) {
     return idx;
 }
 
-FUNC::Garage_Load() {
+function Garage_Load() {
 
     new index = ITER_NONE;
 
@@ -96,7 +96,7 @@ FUNC::Garage_Load() {
     return 1;
 }
 
-FUNC::OnTakeVehicleGarage(playerid) {
+function OnTakeVehicleGarage(playerid) {
 
     if(!cache_num_rows())
         return SendErrorMessage(playerid, "Tidak ada kendaraanmu pada garasi ini.");

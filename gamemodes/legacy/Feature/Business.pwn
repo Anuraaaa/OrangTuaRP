@@ -10,7 +10,7 @@ enum
 	TYPE_EQUIPMENT
 };
 
-enum e_biz_data
+enum E_BUSINESS_DATA
 {
 	bizID,
 	bizName[32],
@@ -32,6 +32,7 @@ enum e_biz_data
 	bizCargo,
 	bizDiesel,
 	bizLastLogin,
+	bizSealed,
 	bool:bizReq,
 	Float:bizFuelPos[3],
 	STREAMER_TAG_PICKUP:bizFuelPickup,
@@ -44,7 +45,7 @@ enum e_biz_data
 	STREAMER_TAG_MAP_ICON:bizIcon,
 };
 
-new BizData[MAX_BUSINESS][e_biz_data];
+new BizData[MAX_BUSINESS][E_BUSINESS_DATA];
 new ProductName[MAX_BUSINESS][8][24], ProductDescription[MAX_BUSINESS][8][42];
 
 ShowNumberIndex(playerid)
@@ -195,6 +196,7 @@ Business_Create(playerid, type, price)
     	        BizData[i][bizExt][0] = x;
     	        BizData[i][bizExt][1] = y;
     	        BizData[i][bizExt][2] = z;
+				BizData[i][bizSealed] = 0;
 
 				if (type == 1)
 				{
@@ -281,7 +283,7 @@ Biz_IsOwner(playerid, id)
 	return 0;
 }
 
-FUNC::OnBusinessCreated(bizid)
+function OnBusinessCreated(bizid)
 {
 	if (bizid == -1 || !BizData[bizid][bizExists])
 	    return 0;
@@ -293,7 +295,7 @@ FUNC::OnBusinessCreated(bizid)
 	return 1;
 }
 
-FUNC::Business_Load()
+function Business_Load()
 {
 	new rows = cache_num_rows(), str[128], desc[312];
  	if(rows)
@@ -310,7 +312,7 @@ FUNC::Business_Load()
 		    cache_get_value_name_float(i, "bizIntX", BizData[i][bizInt][0]);
 		    cache_get_value_name_float(i, "bizIntY", BizData[i][bizInt][1]);
 		    cache_get_value_name_float(i, "bizIntZ", BizData[i][bizInt][2]);
-			forex(j, 8)
+			for(new j = 0; j < 8; j++)
 			{
 				format(str, 32, "bizProduct%d", j + 1);
 				cache_get_value_name_int(i, str, BizData[i][bizProduct][j]);
@@ -320,6 +322,7 @@ FUNC::Business_Load()
 				cache_get_value_name(i, desc, ProductDescription[i][j]);
 			}
 
+			cache_get_value_name_int(i, "bizSealed", BizData[i][bizSealed]);
 			cache_get_value_name_int(i, "bizVault", BizData[i][bizVault]);
 			cache_get_value_name_int(i, "bizPrice", BizData[i][bizPrice]);
 			cache_get_value_name_int(i, "bizType", BizData[i][bizType]);
@@ -351,7 +354,8 @@ FUNC::Business_Load()
 Business_Spawn(i)
 {
 	new
-	    string[256], icon;
+	    string[296], icon;
+
 	switch(BizData[i][bizType])
 	{
 		case 1: icon = 50;
@@ -367,13 +371,15 @@ Business_Spawn(i)
 	if (BizData[i][bizOwner] == -1)
 	{
 		format(string, sizeof(string), "[ID: %d]\nType: {C6E2FF}%s\n{FFFFFF}Price: {C6E2FF}$%s\n{FFFFFF}This business for sell\n{FFFF00}/biz buy {FFFFFF}for purchase this business.", i, GetBizType(BizData[i][bizType]), FormatNumber(BizData[i][bizPrice]));
-        BizData[i][bizText] = CreateDynamic3DTextLabel(string, -1, BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1);
 	}
 	else
 	{
-		format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s", i, BizData[i][bizName], (!BizData[i][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[i][bizType]), BizData[i][bizOwnerName]);
-		BizData[i][bizText] = CreateDynamic3DTextLabel(string, -1, BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1);
+		if(!BizData[i][bizSealed])
+			format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s", i, BizData[i][bizName], (!BizData[i][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[i][bizType]), BizData[i][bizOwnerName]);
+		else
+			format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s\n"WHITE"This business is sealed by "RED"authority", i, BizData[i][bizName], (!BizData[i][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[i][bizType]), BizData[i][bizOwnerName]);
 	}
+	BizData[i][bizText] = CreateDynamic3DTextLabel(string, -1, BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, -1);
 	BizData[i][bizCP] = CreateDynamicCP(BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], 1.0, -1, -1, -1, 2.0);
 	BizData[i][bizPickup] = CreateDynamicPickup(19130, 23, BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], -1, -1);
 	BizData[i][bizIcon] = CreateDynamicMapIcon(BizData[i][bizExt][0], BizData[i][bizExt][1], BizData[i][bizExt][2], icon, -1, -1, -1, -1, 70.0);
@@ -382,7 +388,7 @@ Business_Spawn(i)
 Business_Save(bizid)
 {
 	new
-	    query[2048];
+	    query[2098];
 
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `business` SET `bizName` = '%s', `bizOwner` = '%d', `bizExtX` = '%f', `bizExtY` = '%f', `bizExtZ` = '%f', `bizIntX` = '%f', `bizIntY` = '%f', `bizIntZ` = '%f', `bizDeliverX` = '%f', `bizDeliverY` = '%f', `bizDeliverZ` = '%f', `bizCargo` = '%d', `bizDiesel` = '%d', `bizLocked` = '%d'",
 		BizData[bizid][bizName],
@@ -408,7 +414,7 @@ Business_Save(bizid)
 	{
 		mysql_format(sqlcon, query, sizeof(query), "%s, `bizProdName%d` = '%s', `bizDescription%d` = '%s'", query, i + 1, ProductName[bizid][i], i + 1, ProductDescription[bizid][i]);
 	}
-	mysql_format(sqlcon, query, sizeof(query), "%s, `bizWorld` = '%d', `bizInterior` = '%d', `bizVault` = '%d', `bizType` = '%d', `bizStock` = '%d', `bizPrice` = '%d', `bizFuel` = '%d', `bizOwnerName` = '%s', `bizFuelX` = '%f', `bizFuelY` = '%f', `bizFuelZ` = '%f', `bizLastLogin` = '%d' WHERE `bizID` = '%d'",
+	mysql_format(sqlcon, query, sizeof(query), "%s, `bizWorld` = '%d', `bizInterior` = '%d', `bizVault` = '%d', `bizType` = '%d', `bizStock` = '%d', `bizPrice` = '%d', `bizFuel` = '%d', `bizOwnerName` = '%s', `bizFuelX` = '%f', `bizFuelY` = '%f', `bizFuelZ` = '%f', `bizLastLogin` = '%d', `bizSealed` = '%d' WHERE `bizID` = '%d'",
 		query,
 		BizData[bizid][bizWorld],
 		BizData[bizid][bizInterior],
@@ -422,6 +428,7 @@ Business_Save(bizid)
 		BizData[bizid][bizFuelPos][1], 
 		BizData[bizid][bizFuelPos][2], 
 		BizData[bizid][bizLastLogin],
+		BizData[bizid][bizSealed],
 		BizData[bizid][bizID]
 	);
 	return mysql_tquery(sqlcon, query);
@@ -467,7 +474,10 @@ Business_Refresh(bizid)
 		}
 		else
 		{
-  			format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s", bizid, BizData[bizid][bizName], (!BizData[bizid][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[bizid][bizType]), BizData[bizid][bizOwnerName]);
+			if(!BizData[bizid][bizSealed])
+  				format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s", bizid, BizData[bizid][bizName], (!BizData[bizid][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[bizid][bizType]), BizData[bizid][bizOwnerName]);
+			else
+				format(string, sizeof(string), "[ID: %d]\n%s{FFFFFF}\nStatus: {C6E2FF}%s{FFFFFF}\nType: {C6E2FF}%s\n"WHITE"Owned by "YELLOW"%s\n"WHITE"This business is sealed by "RED"authority", bizid, BizData[bizid][bizName], (!BizData[bizid][bizLocked]) ? ("{00FF00}Open{FFFFFF}") : ("{FF0000}Closed{FFFFFF}"), GetBizType(BizData[bizid][bizType]), BizData[bizid][bizOwnerName]);
 		}
 		Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, BizData[bizid][bizText], E_STREAMER_X, BizData[bizid][bizExt][0]);
 		Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, BizData[bizid][bizText], E_STREAMER_Y, BizData[bizid][bizExt][1]);
@@ -504,18 +514,6 @@ Business_NearestDeliver(playerid, Float:range = 4.0)
 	forex(i, MAX_BUSINESS) if(BizData[i][bizExists])
 	{
 		if(IsPlayerInRangeOfPoint(playerid, range, BizData[i][bizDeliver][0], BizData[i][bizDeliver][1], BizData[i][bizDeliver][2]))
-		{
-			return i;
-		}
-	}
-	return -1;
-}
-
-Business_NearestFuel(playerid, Float:range = 4.0)
-{
-	forex(i, MAX_BUSINESS) if(BizData[i][bizExists])
-	{
-		if(IsPlayerInRangeOfPoint(playerid, range, BizData[i][bizFuelPos][0], BizData[i][bizFuelPos][1], BizData[i][bizFuelPos][2]))
 		{
 			return i;
 		}
@@ -731,7 +729,7 @@ CMD:biz(playerid, params[])
 	if (sscanf(params, "s[24]S()[128]", type, string))
 	{
 	    SendSyntaxMessage(playerid, "/biz [name]");
-	    SendClientMessage(playerid, COLOR_SERVER, "Names:{FFFFFF} buy, convertfuel, reqstock, menu, lock");
+	    SendClientMessage(playerid, COLOR_SERVER, "(Names){FFFFFF} buy, convertfuel, reqstock, menu, lock");
 	    return 1;
 	}
 	if(!strcmp(type, "buy", true))
@@ -775,7 +773,7 @@ CMD:biz(playerid, params[])
 		if(BizData[bid][bizStock] < 50)
 			return SendErrorMessage(playerid, "Harus ada 50 product dalam business-mu!");
 
-		SendClientMessage(playerid, COLOR_SERVER, "BUSINESS: {FFFFFF}50 percent product converted successfully to Fuel stock!");
+		SendClientMessage(playerid, COLOR_SERVER, "(Business) {FFFFFF}50 percent product converted successfully to Fuel stock!");
 		BizData[bid][bizStock] -= 50;
 
 		Business_Save(bid);
@@ -793,19 +791,19 @@ CMD:biz(playerid, params[])
 		if(!BizData[bid][bizReq])
 		{
 			BizData[bid][bizReq] = true;
-			SendClientMessage(playerid, COLOR_SERVER, "BUSINESS: {FFFFFF}Bisnismu telah meminta pengisian product pada trucker.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Business) {FFFFFF}Bisnismu telah meminta pengisian product pada trucker.");
 			foreach(new i : Player) if(PlayerData[i][pSpawned] && PlayerData[i][pJob] == JOB_TRUCKER)
 			{
-				SendClientMessageEx(i, COLOR_SERVER, "RESTOCK: {FFFFFF}Bisnis %s {FFFFFF}meminta untuk pengisian stok produk | Tipe: {00FFFF}%s", BizData[bid][bizName], GetBizType(BizData[bid][bizType]));
+				SendClientMessageEx(i, COLOR_SERVER, "(Restock) {FFFFFF}Bisnis %s {FFFFFF}meminta untuk pengisian stok produk | Tipe: {00FFFF}%s", BizData[bid][bizName], GetBizType(BizData[bid][bizType]));
 			}
 		}
 		else
 		{
 			BizData[bid][bizReq] = false;
-			SendClientMessage(playerid, COLOR_SERVER, "BUSINESS: {FFFFFF}Bisnismu tidak lagi meminta pengisian kepada trucker.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Business) {FFFFFF}Bisnismu tidak lagi meminta pengisian kepada trucker.");
 			foreach(new i : Player) if(PlayerData[i][pSpawned] && PlayerData[i][pJob] == JOB_TRUCKER)
 			{
-				SendClientMessageEx(i, COLOR_SERVER, "RESTOCK: {FFFFFF}Bisnis "COOL_GREEN"%s "WHITE"tidak lagi meminta untuk pengisian produk.", BizData[bid][bizName]);
+				SendClientMessageEx(i, COLOR_SERVER, "(Restock) {FFFFFF}Bisnis "COOL_GREEN"%s "WHITE"tidak lagi meminta untuk pengisian produk.", BizData[bid][bizName]);
 			}			
 		}
 	}
@@ -875,7 +873,7 @@ CMD:createbiz(playerid, params[])
 	if (sscanf(params, "ds[32]", type, price))
  	{
 	 	SendSyntaxMessage(playerid, "/createbiz [type] [price]");
-    	SendClientMessage(playerid, COLOR_SERVER, "Type:{FFFFFF} 1: Fast Food | 2: 24/7 | 3: Clothes | 4: Electronic | 5: Equipment");
+    	SendClientMessage(playerid, COLOR_SERVER, "(Type){FFFFFF} 1: Fast Food | 2: 24/7 | 3: Clothes | 4: Electronic | 5: Equipment");
     	return 1;
 	}
 	if (type < 1 || type > 5)
@@ -903,7 +901,7 @@ CMD:editbiz(playerid, params[])
     if(sscanf(params, "ds[24]S()[128]", id, type, string))
     {
         SendSyntaxMessage(playerid, "/editbiz [id] [name]");
-        SendClientMessage(playerid, COLOR_SERVER, "Names:{FFFFFF} location, interior, fuelstock, price, stock, deliver, delete, asell");
+        SendClientMessage(playerid, COLOR_SERVER, "(Names){FFFFFF} location, interior, fuelstock, price, stock, deliver, delete, asell");
         return 1;
     }
     if((id < 0 || id >= MAX_BUSINESS))
@@ -974,6 +972,8 @@ CMD:editbiz(playerid, params[])
     else if(!strcmp(type, "asell", true))
     {
     	BizData[id][bizOwner] = -1;
+		BizData[id][bizSealed] = 0;
+		
     	Business_Refresh(id);
     	Business_Save(id);
     	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: Business %d has aselled by %s", id, PlayerData[playerid][pUCP]);
@@ -981,12 +981,12 @@ CMD:editbiz(playerid, params[])
     return 1;
 }
 
-FUNC::OnBusinessQueue(playerid) {
+function OnBusinessQueue(playerid) {
 	if(cache_num_rows()) {
 		for(new i = 0; i < cache_num_rows(); i++) {
 			new biz_id;
 			cache_get_value_name_int(i, "bizID", biz_id);
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "BUSINESS: "WHITE"Bisnismu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Business) "WHITE"Bisnismu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
 
 		}
 	}
@@ -994,7 +994,7 @@ FUNC::OnBusinessQueue(playerid) {
 
 	return 1;
 }
-task OnBusinessAsellCheck[10000]() {
+task OnBusinessAsellCheck[3600000]() {
 	for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && BizData[i][bizLastLogin] != 0) {
 		if(BizData[i][bizLastLogin] < gettime()) {
 			SendAdminMessage(X11_TOMATO, "BusinessWarn: Business %d (%s) has been automatically aselled by the system.", i, BizData[i][bizName]);
@@ -1002,6 +1002,7 @@ task OnBusinessAsellCheck[10000]() {
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `business_queue` (`Username`, `bizID`, `Date`) VALUES('%s','%d','%d')", BizData[i][bizOwnerName], i, gettime()));
 			BizData[i][bizLastLogin] = 0;
 
+			BizData[i][bizSealed] = 0;
 			BizData[i][bizOwner] = -1;
 			format(BizData[i][bizOwnerName], MAX_PLAYER_NAME, "No Owner");
 

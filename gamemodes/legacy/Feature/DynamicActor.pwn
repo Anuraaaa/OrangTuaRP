@@ -59,7 +59,7 @@ Actor_Create(skin, Float:x, Float:y, Float:z, Float:a, world, interior, anim = 0
 	return INVALID_ITERATOR_SLOT;
 }
 
-FUNC::OnActorCreated(id)
+function OnActorCreated(id)
 {
 	ActorData[id][actorID] = cache_insert_id();
 	Actor_Save(id);
@@ -169,7 +169,7 @@ Actor_Refresh(id)
 	return 1;
 }
 
-FUNC::Actor_Load()
+function Actor_Load()
 {
 	if(cache_num_rows())
 	{
@@ -254,7 +254,7 @@ CMD:editactor(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editactor [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Names:{FFFFFF} pos, model, name, anim, biz");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} pos, model, name, anim, biz");
 		return 1;
 	}
 	if(!Iter_Contains(DynamicActor, id))
@@ -360,9 +360,9 @@ public OnPlayerTargetActor(playerid, actorid, weaponid) {
 				}
 				ApplyDynamicActorAnimation(ActorData[idx][actorModel], "ROB_BANK", "SHP_HandsUp_Scr", 4.1, 0, 0, 0, 1, 0);
 
-				SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Kamu memulai perampokan bisnis!");
-				SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Bidik NPC "YELLOW"selama mungkin "WHITE"untuk mendapatkan uang dari perampokan!");
-				SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Jika berhenti membidik atau menembak NPC maka perampokan akan selesai.");
+				SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Kamu memulai perampokan bisnis!");
+				SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Bidik NPC "YELLOW"selama mungkin "WHITE"untuk mendapatkan uang dari perampokan!");
+				SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Jika berhenti membidik atau menembak NPC maka perampokan akan selesai.");
 
 				ActorData[idx][actorBeingRob] = true;
 				g_PlayerRobbingActor[playerid] = idx;
@@ -411,7 +411,7 @@ public OnPlayerShotActor(playerid, actorid, weaponid, bool:IsDynamicActor)
 			if(ActorData[idx][actorBeingRob]) {
 				Actor_StopRobbery(idx);
 				stop g_PlayerRobbingActorTimer[playerid];
-				SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Perampokan diberhentikan karena NPC terkena tembakan.");
+				SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Perampokan diberhentikan karena NPC terkena tembakan.");
 
 				rob_biz_delay = 3600;
 			}		
@@ -430,7 +430,7 @@ timer Actor_GiveRobberCash[4000](playerid, actorid) {
 
 		Actor_StopRobbery(actorid);
 		stop g_PlayerRobbingActorTimer[playerid];
-		SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Perampokan diberhentikan karena kamu terlalu jauh dari NPC!");
+		SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Perampokan diberhentikan karena kamu terlalu jauh dari NPC!");
 		return 1;
 	}
 	if(GetPlayerTargetDynamicActor(playerid) == ActorData[actorid][actorModel]) {
@@ -443,7 +443,7 @@ timer Actor_GiveRobberCash[4000](playerid, actorid) {
 		if(++ActorData[actorid][actorGettingRob] >= 10) {
 			Actor_StopRobbery(actorid);
 			stop g_PlayerRobbingActorTimer[playerid];
-			SendClientMessage(playerid, X11_RED, "INFO: "WHITE"Perampokan telah selesai! semua uang telah diberikan.");
+			SendClientMessage(playerid, X11_RED, "(Info) "WHITE"Perampokan telah selesai! semua uang telah diberikan.");
 
 			rob_biz_delay = 3600;
 		}

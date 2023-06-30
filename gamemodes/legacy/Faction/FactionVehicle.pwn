@@ -35,7 +35,7 @@ stock FactionVehicle_Create(factionid, model, Float:x, Float:y, Float:z, Float:a
 	return -1;
 }
 
-FUNC::OnFactionVehicleCreated(id)
+function OnFactionVehicleCreated(id)
 {
 	FactionVehicle[id][fvID] = cache_insert_id();
 	FactionVehicle_Save(id);
@@ -61,7 +61,7 @@ stock FactionVehicle_Save(id)
 	return 1;
 }
 
-FUNC::FactionVehicle_Load(id)
+function FactionVehicle_Load(id)
 {
 	if(cache_num_rows())
 	{
@@ -158,7 +158,7 @@ CMD:editfactionveh(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfactionveh [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "Names:{FFFFFF} pos");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} pos");
 		return 1;
 	}
 	if(!strcmp(type, "pos", true))

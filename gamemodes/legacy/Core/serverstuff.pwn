@@ -6,7 +6,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(TrashVehicle))
 	{
 		VehicleData[TrashVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(TrashVehicle[i], "TRASHMASTER-SF");
+		SetVehicleNumberPlate(TrashVehicle[i], "TRASHMASTER-SIDEJOB");
 		Vehicle_SetType(TrashVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	MowerVehicle[0] = Vehicle_Create(572,-2288.9854,174.6294,34.8807,90.9118,1, 1, 0, false);
@@ -16,7 +16,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(MowerVehicle))
 	{
 		VehicleData[MowerVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(MowerVehicle[i], "MOWER-SF");
+		SetVehicleNumberPlate(MowerVehicle[i], "MOWER-SIDEJOB");
 		Vehicle_SetType(MowerVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	RumpoVehicle[0] = Vehicle_Create(440,-1728.6257,81.1566,3.6649,227.6105, 6, 6, 0, false);
@@ -28,7 +28,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(RumpoVehicle))
 	{
 		VehicleData[RumpoVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(RumpoVehicle[i], "RUMPO-SF");
+		SetVehicleNumberPlate(RumpoVehicle[i], "RUMPO-SIDEJOB");
 		Vehicle_SetType(RumpoVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	ForkliftVehicle[0] = Vehicle_Create(530,-1707.3604,29.3464,3.3180,226.0739, 6, 6, 0, false);
@@ -40,7 +40,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(ForkliftVehicle))
 	{
 		VehicleData[ForkliftVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(ForkliftVehicle[i], "FORKLIFT-SF");
+		SetVehicleNumberPlate(ForkliftVehicle[i], "FORKLIFT-SIDEJOB");
 		Vehicle_SetType(ForkliftVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	SweeperVehicle[0] = Vehicle_Create(574,-2093.7937,-83.2754,34.8914,178.7325,1, 1, 0, false);
@@ -49,7 +49,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(SweeperVehicle))
 	{
 		VehicleData[SweeperVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(SweeperVehicle[i], "SWEEPER-SF");
+		SetVehicleNumberPlate(SweeperVehicle[i], "SWEEPER-SIDEJOB");
 		Vehicle_SetType(SweeperVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	Bus2Vehicle[0] = Vehicle_Create(437,-2511.6821,1205.4083,37.5022,270.0276,1, 1, 0, false);
@@ -57,7 +57,7 @@ LoadStaticVehicle()
 	forex(i, sizeof(Bus2Vehicle))
 	{
 		VehicleData[BusVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(BusVehicle[i], "BUS-SF");
+		SetVehicleNumberPlate(BusVehicle[i], "BUS-SIDEJOB");
 		Vehicle_SetType(BusVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
 	BusVehicle[0] = Vehicle_Create(431,-2517.0537,-605.2971,132.6685,179.7611,1, 1, 0, false);
@@ -66,112 +66,20 @@ LoadStaticVehicle()
 	forex(i, sizeof(BusVehicle))
 	{
 		VehicleData[BusVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(BusVehicle[i], "BUS-SF");
+		SetVehicleNumberPlate(BusVehicle[i], "BUS-SIDEJOB");
 		Vehicle_SetType(BusVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
-	/*
-	PizzaVehicle[0] = Vehicle_Create(586, -2315.0833,-121.8533,34.9109,180.8729, 2, 2, 0, false);
-	PizzaVehicle[1] = Vehicle_Create(586, -2318.7058,-121.8589,34.9109,182.1402, 2, 2, 0, false);
-	PizzaVehicle[2] = Vehicle_Create(586, -2322.5537,-121.8266,34.9109,182.1128, 2, 2, 0, false);
-	PizzaVehicle[3] = Vehicle_Create(586, -2326.3721,-121.8904,34.9109,179.1078, 2, 2, 0, false);
-	forex(i, sizeof(PizzaVehicle))
+	CourierVehicle[0] = Vehicle_Create(413,-1950.9191,-1049.4563,32.2526,272.3899,6,6, 0, false);
+	CourierVehicle[1] = Vehicle_Create(413,-1951.1714,-1045.5385,32.2551,275.0669,6,6, 0, false);
+	CourierVehicle[2] = Vehicle_Create(413,-1951.3318,-1041.8508,32.2665,275.0267,6,6, 0, false);
+	CourierVehicle[3] = Vehicle_Create(413,-1951.3264,-1038.1987,32.2469,271.8810,6,6, 0, false);
+	CourierVehicle[4] = Vehicle_Create(413,-1951.2974,-1034.4664,32.2503,270.9728,6,6, 0, false);
+	forex(i, sizeof(CourierVehicle))
 	{
-		VehicleData[PizzaVehicle[i]][vFuel] = 100;
-		SetVehicleNumberPlate(PizzaVehicle[i], "PIZZA-SF");
-		Vehicle_SetType(PizzaVehicle[i], VEHICLE_TYPE_SIDEJOB);
+		VehicleData[CourierVehicle[i]][vFuel] = 100;
+		SetVehicleNumberPlate(CourierVehicle[i], "COURIER-SIDEJOB");
+		Vehicle_SetType(CourierVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
-
-
-	SanNewsVehicles[1] = Vehicle_Create(582, -1874.3662,445.2826,35.2278,0.6498,6,6, 0, false, "SFN");
-	SanNewsVehicles[2] = Vehicle_Create(582, -1877.7924,445.4186,35.2242,0.1064,6,6, 0, false, "SFN");
-	SanNewsVehicles[3] = Vehicle_Create(582, -1881.1426,445.3790,35.2322,357.8842,6,6, 0, false, "SFN");
-	SanNewsVehicles[4] = Vehicle_Create(582, -1884.7002,445.4959,35.2281,359.2859,6,6, 0, false, "SFN");
-	SanNewsVehicles[5] = Vehicle_Create(560, -1862.3236,459.4580,34.8784,90.2969,6,6, 0, false, "SFN");
-	SanNewsVehicles[6] = Vehicle_Create(560, -1862.3727,455.8022,34.8776,90.6098,6,6, 0, false, "SFN");
-	SanNewsVehicles[7] = Vehicle_Create(579, -1862.8317,451.6100,35.1041,89.2307,6,6, 0, false, "SFN");
-	SanNewsVehicles[8] = Vehicle_Create(579, -1862.8342,447.6895,35.1031,91.6275,6,6, 0, false, "SFN");
-	SanNewsVehicles[9] = Vehicle_Create(579, -1862.5958,443.4810,35.1052,93.7536,6,6, 0, false, "SFN");
-	SanNewsVehicles[10] = Vehicle_Create(487,-1878.3439,489.2160,116.1457,76.3573,6,6, 0, false, "SFN"); 
-	forex(i, sizeof(SanNewsVehicles))
-	{
-		VehicleData[SanNewsVehicles[i]][vFuel] = 100;
-		Vehicle_SetType(SanNewsVehicles[i], VEHICLE_TYPE_FACTION);
-		VehicleData[SanNewsVehicles[i]][vFactionType] = FACTION_NEWS;
-	}
-	LSMDVehicles[0] = Vehicle_Create(416, -2589.0063,652.8833,14.6312,269.2020,1,3, 0, false, "SFFD");	
-	LSMDVehicles[1] = Vehicle_Create(416, -2589.0393,658.1194,14.6312,270.4256,1,3, 0, false, "SFFD");
-	LSMDVehicles[2] = Vehicle_Create(490,-2589.3364,622.3182,14.5097,269.6186, 3, 3, 0, false, "SFFD");
-	LSMDVehicles[3] = Vehicle_Create(490,-2589.4587,627.3685,14.5086,272.2860, 3, 3, 0, false, "SFFD");
-	LSMDVehicles[4] = Vehicle_Create(405,-2545.8884,658.0899,14.3341,89.7227, 3, 3, 1, false, "SFFD");
-	LSMDVehicles[5] = Vehicle_Create(442,-2545.9666,652.7462,14.2926,91.8644,3,3, 1, false, "SFFD");
-	LSMDVehicles[6] = Vehicle_Create(579,-2546.3721,647.6375,14.6169,88.8405, 3, 3, 1, false, "SFFD");
-	LSMDVehicles[7] = Vehicle_Create(407,-2589.7126,647.5717,14.6850,270.7710, 3, 3, 0, false, "SFFD");
-	LSMDVehicles[8] = Vehicle_Create(426,-2546.3059,637.7538,14.1966,89.4086, 3, 3, 1, false, "SFFD");
-	LSMDVehicles[9] = Vehicle_Create(445,-2546.2749,632.6559,14.3281,90.8614, 3, 3, 1, false, "SFFD");
-	forex(i, sizeof(LSMDVehicles))
-	{
-		VehicleData[LSMDVehicles[i]][vFuel] = 100;
-		Vehicle_SetType(LSMDVehicles[i], VEHICLE_TYPE_FACTION);
-		VehicleData[LSMDVehicles[i]][vFactionType] = FACTION_MEDIC;
-	}
-	LSPDVehicles[0] = Vehicle_Create(597,-2413.5515,540.0397,29.6938,268.1397,0,1, 0, false, "SFPD"); // Cruiser HC
-	LSPDVehicles[1] = Vehicle_Create(597,-2413.9492,535.8163,29.6766,259.4626,0,1, 0, false, "SFPD"); // Cruiser Command Team
-	LSPDVehicles[2] = Vehicle_Create(597,-2414.9912,532.0808,29.6989,247.6113,0,1, 0, false, "SFPD"); // Cruiser Supervisor 1
-	LSPDVehicles[3] = Vehicle_Create(523,-2415.6252,529.1201,29.4887,240.3476,0,1, 0, false, "SFPD"); // Cruiser Supervisor 2
-	LSPDVehicles[4] = Vehicle_Create(523,-2416.7202,527.0045,29.4949,234.5331,0,1, 0, false, "SFPD"); // Cruiser
-	LSPDVehicles[5] = Vehicle_Create(560,-2419.1665,524.9501,29.6368,230.4010,0,0, 0, false, "SFPD"); // Cruiser
-	LSPDVehicles[6] = Vehicle_Create(451,-2422.2637,521.6082,29.6372,226.3248,3,1, 0, false, "SFPD"); // Cruiser
-	LSPDVehicles[7] = Vehicle_Create(541,-2425.5168,518.0164,29.5548,224.7571,0,1, 0, false, "SFPD"); // Cruiser
-	
-	LSPDVehicles[8] = Vehicle_Create(597,-1579.8534,749.6013,-5.5198,179.0906, 0, 1, 0, false, "SFPD"); // Cruiser HC
-	LSPDVehicles[9] = Vehicle_Create(597,-1572.6299,742.6924,-5.5190,89.0323,0,1, 0, false, "SFPD"); // Cruiser Command Team
-	LSPDVehicles[10] = Vehicle_Create(597,-1572.6825,738.6356,-5.5200,89.8512,0,1, 0, false, "SFPD"); // Cruiser Supervisor 1
-	LSPDVehicles[11] = Vehicle_Create(597,-1572.7855,734.6165,-5.5196,89.0528,0,1, 0, false, "SFPD"); // Cruiser Supervisor 2
-	LSPDVehicles[12] = Vehicle_Create(597,-1572.8948,730.6498,-5.5209,90.5495,0,1, 0, false, "SFPD"); // Cruiser
-	LSPDVehicles[13] = Vehicle_Create(597,-1572.7695,726.5457,-5.5194,89.1891,0,1, 0, false, "SFPD"); // Cruiser
-
-	LSPDVehicles[14] = Vehicle_Create(560,-1600.2104,693.9465,-5.5369,180.0330, 0, 0, 1, false, "SFPD"); // Sultan
-	LSPDVehicles[15] = Vehicle_Create(560,-1604.2634,693.7793,-5.5372,179.4394, 0, 0, 1, false, "SFPD"); // Sultan
-	LSPDVehicles[16] = Vehicle_Create(560,-1608.3971,693.9834,-5.5374,178.8489, 0, 0, 1, false, "SFPD"); // Sultan
-
-	LSPDVehicles[17] = Vehicle_Create(599,-1572.6381,718.2594,-5.1686,89.9223,0,1, 0, false, "SFPD"); // Ranger
-	LSPDVehicles[18] = Vehicle_Create(599,-1572.8369,722.3583,-5.1688,90.6290,0,1, 0, false, "SFPD"); // Ranger
-
-	LSPDVehicles[19] = Vehicle_Create(601,-1623.0701,659.8624,-5.4834,88.2852,1,1, 0, false, "SFPD"); // S.W.AT
-
-	LSPDVehicles[20] = Vehicle_Create(427,-1623.1246,653.8961,-4.9952,90.5156,0,1, 1, false, "SFPD"); // Enforcer
-	LSPDVehicles[21] = Vehicle_Create(427,-1623.0157,649.8275,-4.9950,89.5976,0,1, 1, false, "SFPD"); // Enforcer
-
-	LSPDVehicles[22] = Vehicle_Create(490,-1639.6564,649.7194,-5.1943,269.8666,0,0, 1, false, "SFPD"); // FBI
-	LSPDVehicles[23] = Vehicle_Create(490,-1639.5039,653.6905,-5.1924,268.9561,0,0, 1, false, "SFPD"); // FBI
-
-	LSPDVehicles[24] = Vehicle_Create(411,-1632.8408,693.9875,-5.5151,180.1917,0, 0, 1, false, "SFPD"); // Infernus
-	LSPDVehicles[25] = Vehicle_Create(541,-1628.6444,694.0319,-5.6172,178.7400,0,0, 1, false, "SFPD"); // Bullet
-	LSPDVehicles[26] = Vehicle_Create(451,-1624.6858,693.7829,-5.5355,180.6099,0,0, 1, false, "SFPD"); // Turismo
-
-	LSPDVehicles[27] = Vehicle_Create(523,-1572.8210,714.5817,-5.6778,89.2428, 0, 0, 1, false, "SFPD"); // HPV
-	LSPDVehicles[28] = Vehicle_Create(523,-1573.1056,713.1453,-5.6703,85.7029, 0, 0, 1, false, "SFPD"); // HPV
-
-	LSPDVehicles[29] = Vehicle_Create(468,-1572.9041,711.2983,-5.5733,86.0483, 0, 0, 1, false, "SFPD"); // Sanchez
-	LSPDVehicles[30] = Vehicle_Create(468,-1572.9517,709.9579,-5.5733,91.9232, 0, 0, 1, false, "SFPD"); // Sanchez
-
-	LSPDVehicles[31] = Vehicle_Create(426,-1596.0389,676.1673,-5.4989,0.1873,0,0, 1, false, "SFPD"); // Premier
-	LSPDVehicles[32] = Vehicle_Create(426,-1600.2365,676.0677,-5.4990,359.2720,0,0, 1, false, "SFPD"); // Premier
-
-	LSPDVehicles[33] = Vehicle_Create(525,-1588.0919,749.5121,-5.3604,179.5525,1,1, 1, false, "SFPD"); // Tow truck
-	LSPDVehicles[34] = Vehicle_Create(525,-1592.2413,749.8562,-5.3570,178.3324,0,1, 1, false, "SFPD"); // Tow truck
-
-	LSPDVehicles[35] = Vehicle_Create(472,-1474.1566,696.8568,-0.0161,272.2573,0,1, 1, false, "SFPD"); // Coastguard
-	LSPDVehicles[36] = Vehicle_Create(472,-1472.9733,689.9062,0.1532,271.8740,0,1, 1, false, "SFPD"); // Coastguard
-
-	LSPDVehicles[37] = Vehicle_Create(497,-1681.3596,706.0087,30.7765,90.3618,0,1, 1, false, "SFPD"); // Police Maverick
-	forex(i, sizeof(LSPDVehicles))
-	{
-		VehicleData[LSPDVehicles[i]][vFuel] = 100;
-		Vehicle_SetType(LSPDVehicles[i], VEHICLE_TYPE_FACTION);
-		VehicleData[LSPDVehicles[i]][vFactionType] = FACTION_POLICE;
-		SetVehicleHealth(LSPDVehicles[i], 2000.0);
-	} */
 }
 
 stock LoadActor()
@@ -208,7 +116,7 @@ stock LoadPoint()
 	CreateDynamic3DTextLabel("{FFFF00}[Fishing Factory]\n{FFFFFF}/sellfish", -1, 1333.7576,1582.0439,3001.0859, 10.0);
 
 	CreateDynamicPickup(1239, 23, -1993.0046,-2388.0107,30.6250, -1);
-	CreateDynamic3DTextLabel("{FFFF00}[Timber Storage]\n{FFFFFF}Type {FFFF00}/selltimber {FFFFFF}to sell all Timber\nPrice: {00FF00}$50.00{FFFFFF} per Timber", -1, -1993.0046,-2388.0107,30.6250, 10.0);
+	CreateDynamic3DTextLabel("{FFFF00}[Timber Storage]\n{FFFFFF}Type {FFFF00}/selltimber {FFFFFF}to sell all Timber", -1, -1993.0046,-2388.0107,30.6250, 10.0);
 
 	CreateDynamicPickup(1239, 23, -1436.1725,-1528.6896,3001.5059, -1);
 	CreateDynamic3DTextLabel("{86C6F4}[Medical]\n{FFFFFF}/autotreatment\nPrice: {00FF00}$150.0", -1, -1436.1725,-1528.6896,3001.5059, 10.0);

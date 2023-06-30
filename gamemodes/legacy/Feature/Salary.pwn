@@ -1,4 +1,4 @@
-stock AddSalary(playerid, name[], amount)
+AddSalary(playerid, name[], amount)
 {
 	new query[512];
 	mysql_format(sqlcon, query, sizeof(query), "INSERT INTO playersalary(owner, name, amount, date) VALUES ('%d', '%s', '%d', CURRENT_TIMESTAMP())", PlayerData[playerid][pID], name, amount);
@@ -9,7 +9,7 @@ stock AddSalary(playerid, name[], amount)
 	return 1;
 }
 
-stock ShowPlayerSalary(playerid, targetid)
+ShowPlayerSalary(playerid, targetid)
 {
 	new query[256];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM playersalary WHERE owner = '%d' ORDER BY id ASC", PlayerData[targetid][pID]);
@@ -17,7 +17,7 @@ stock ShowPlayerSalary(playerid, targetid)
 	return 1;
 }
 
-FUNC::OnSalaryChecked(playerid, targetid) {
+function OnSalaryChecked(playerid, targetid) {
 
 	new rows = cache_num_rows(), list[2056], name[32], date[40], amount, total_salary = 0;
 	if(rows)

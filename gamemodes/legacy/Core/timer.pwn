@@ -39,7 +39,7 @@ ptask OnSickCharacterCheck[1000](playerid)
 
 					if(!IsPlayerDrunk(playerid)) {
 						SetPlayerDrunkLevelEx(playerid, 20000*PlayerData[playerid][pFever] + 1, 20000);
-						SendServerMessage(playerid, "Kamu terkena demam tinggi! kamu harus berobat untuk menghilangkan demam.");
+						SendClientMessage(playerid, X11_GREEN, "(Sickness) "WHITE"Kamu terkena demam tinggi! kamu harus berobat untuk menghilangkan demam.");
 						SetTimerEx("HidePlayerBox", 20000, false, "dd", playerid, _:ShowPlayerBox(playerid, 0xFF000066));
 
 						new Float:health;
@@ -123,7 +123,7 @@ task RentalUpdate[1000]()
 				VehicleData[i][vRentTime] = 0;
 				
 				foreach(new playerid : Player) if(VehicleData[i][vExtraID] == PlayerData[playerid][pID]) {
-					SendClientMessageEx(playerid, X11_LIGHTBLUE, "RENTAL: "WHITE"Durasi rental kendaraan "YELLOW"(%s) "WHITE"telah habis, kendaraan dihilangkan.", GetVehicleName(i));
+					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Rental) "WHITE"Durasi rental kendaraan "YELLOW"(%s) "WHITE"telah habis, kendaraan dihilangkan.", GetVehicleName(i));
 					break;
 				}
 				mysql_tquery(sqlcon, sprintf("DELETE FROM `crates` WHERE `Vehicle` = '%d'", VehicleData[i][vID]));
@@ -150,7 +150,7 @@ task vehicle_RentalUpdate[1000]() {
 			if(!VehicleData[i][vRentTime]) {
 
 				foreach(new playerid : Player) if(VehicleData[i][vExtraID] == PlayerData[playerid][pID]) {
-					SendClientMessageEx(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}Durasi waktu Rental {FFFF00}%s {FFFFFF}telah habis, kendaraan otomatis dihilangkan.", GetVehicleName(VehicleData[i][vVehicle]));
+					SendClientMessageEx(playerid, COLOR_SERVER, "(Rental) {FFFFFF}Durasi waktu Rental {FFFF00}%s {FFFFFF}telah habis, kendaraan otomatis dihilangkan.", GetVehicleName(VehicleData[i][vVehicle]));
 				}
 				Vehicle_Delete(i, true);
 			}
@@ -178,17 +178,78 @@ task Timer_OnVehicleUpdate[35000]()
 	return 1;
 }
 
-ptask HeartTenMinute[600000](playerid)
+ptask Player_MinuteUpdate[60000](playerid)
 {
+    if(!IsPlayerSpawned(playerid))
+        return 0;
 
-	if(!IsPlayerSpawned(playerid))
-		return 0;
-		
-	SQL_SaveCharacter(playerid);
-	return 1;
+    static save_counter;
+
+    if(save_counter++ >= 5)
+    {
+        SQL_SaveCharacter(playerid);    
+        save_counter = 0;
+    }
+    return 1;
 }
 
+ptask OnSpeedometerUpdate[200](playerid) {
+	if(PlayerData[playerid][pSpawned]) {
+		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && IsEngineVehicle(GetPlayerVehicleID(playerid)) && !PlayerData[playerid][pTogHud])
+		{
+			new vehicleid = GetPlayerVehicleID(playerid);
+			new Float:fDamage;
+			new Float:fuel;
+			new Float:v_hp;
+			new location[64], Float:x, Float:y, Float:z;
+			new Float:darah;
 
+			GetVehicleHealth(vehicleid, fDamage);
+			GetPlayerPos(playerid, x, y, z);
+			
+			if(PlayerData[playerid][pHudType] == 1) {
+				fuel = VehicleData[vehicleid][vFuel] * 59.5/100;
+				PlayerTextDrawTextSize(playerid,FUELTD[playerid], fuel, 6.5);
+				PlayerTextDrawShow(playerid, FUELTD[playerid]);
+
+				v_hp = VehicleData[vehicleid][vFuel] * 59.5/1000.0;
+				PlayerTextDrawTextSize(playerid,VHPTD[playerid], v_hp, 6.5);
+				PlayerTextDrawShow(playerid, VHPTD[playerid]);
+
+				
+
+				format(location, sizeof(location), "%s", RemoveSpace(GetLocation(x, y, z)));
+				PlayerTextDrawSetString(playerid, VEHNAMETD[playerid], sprintf("%s", RemoveSpace(GetVehicleName(vehicleid))));
+				PlayerTextDrawSetString(playerid, LOCATIONTD[playerid], location);
+				
+				if(fDamage <= 1000.0)
+				{
+					darah = fDamage * 59.5/1000.0;
+					PlayerTextDrawTextSize(playerid,VHPTD[playerid], darah, 6.5);
+					PlayerTextDrawShow(playerid,VHPTD[playerid]);
+				}
+				else
+				{
+					PlayerTextDrawTextSize(playerid,VHPTD[playerid], 59.5, 6.5);
+					PlayerTextDrawShow(playerid,VHPTD[playerid]);
+				}
+				PlayerTextDrawSetString(playerid, KMHTD[playerid], sprintf("%i", GetVehicleSpeedKMH(vehicleid)));
+
+				PlayerTextDrawSetString(playerid, ENGINETD[playerid], sprintf("%s", (GetEngineStatus(vehicleid)) ? ("~g~ON") : ("~r~OFF")));
+			}
+			else {
+				new string[156], fuel_percent;
+
+				fuel_percent = VehicleData[vehicleid][vFuel];
+				
+				format(string, sizeof(string), "%s I %s~n~%iKM/h I Fuel: %d%% I Health: %.2f I Engine: %s",
+					GetVehicleName(vehicleid), GetLocation(x, y, z), GetVehicleSpeedKMH(vehicleid), fuel_percent, fDamage, GetEngineStatus(vehicleid) ? ("ON") : ("OFF"));
+			
+				PlayerTextDrawSetString(playerid, SPEEDO_2[playerid], string);
+			}
+		}
+	}
+}
 ptask PlayerUpdate[1000](playerid)
 {
 	if(PlayerData[playerid][pSpawned])
@@ -211,48 +272,12 @@ ptask PlayerUpdate[1000](playerid)
 		if(PlayerData[playerid][pTazer] && GetWeapon(playerid) > 0)
 		{
 			SetPlayerArmedWeapon(playerid, 0);
-			SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING: {FFFFFF}You can't holding weapon since you holding Tazer");
+			SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning) {FFFFFF}You can't holding weapon since you holding Tazer");
 		}
-		if(PlayerData[playerid][pAxe] && GetWeapon(playerid) > 0)
+		if(GetEquipedItem(playerid) != EQUIP_ITEM_NONE && GetWeapon(playerid) > 0)
 		{
 			SetPlayerArmedWeapon(playerid, 0);
-			SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING: {FFFFFF}You can't holding weapon since you holding Axe!");
-		}
-		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && IsEngineVehicle(GetPlayerVehicleID(playerid)) && !PlayerData[playerid][pTogHud])
-		{
-			new vehicleid = GetPlayerVehicleID(playerid);
-			new Float:fDamage;
-			GetVehicleHealth(vehicleid, fDamage);
-
-			new Float:fuel = VehicleData[vehicleid][vFuel] * 59.5/100;
-		    PlayerTextDrawTextSize(playerid,FUELTD[playerid], fuel, 6.5);
-		    PlayerTextDrawShow(playerid, FUELTD[playerid]);
-
-			new Float:v_hp = VehicleData[vehicleid][vFuel] * 59.5/1000.0;
-		    PlayerTextDrawTextSize(playerid,VHPTD[playerid], v_hp, 6.5);
-		    PlayerTextDrawShow(playerid, VHPTD[playerid]);
-
-			new location[64], Float:x, Float:y, Float:z;
-			GetPlayerPos(playerid, x, y, z);
-
-			format(location, sizeof(location), "%s", RemoveSpace(GetLocation(x, y, z)));
-			PlayerTextDrawSetString(playerid, VEHNAMETD[playerid], sprintf("%s", RemoveSpace(GetVehicleName(vehicleid))));
-			PlayerTextDrawSetString(playerid, LOCATIONTD[playerid], location);
-			
-			if(fDamage <= 1000.0)
-			{
-				new Float:darah = fDamage * 59.5/1000.0;
-			    PlayerTextDrawTextSize(playerid,VHPTD[playerid], darah, 6.5);
-			    PlayerTextDrawShow(playerid,VHPTD[playerid]);
-			}
-			else
-			{
-			    PlayerTextDrawTextSize(playerid,VHPTD[playerid], 59.5, 6.5);
-			    PlayerTextDrawShow(playerid,VHPTD[playerid]);
-			}
-			PlayerTextDrawSetString(playerid, KMHTD[playerid], sprintf("%i", GetVehicleSpeedKMH(vehicleid)));
-
-			PlayerTextDrawSetString(playerid, ENGINETD[playerid], sprintf("%s", (GetEngineStatus(vehicleid)) ? ("~g~ON") : ("~r~OFF")));
+			SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning) {FFFFFF}You can't holding weapon since you holding something!");
 		}
 		if(IsDragging[playerid] != INVALID_PLAYER_ID)
 		{
@@ -329,13 +354,13 @@ ptask PlayerUpdate[1000](playerid)
 					PlayerPlaySound(playerid, 1052, 0.0, 0.0, 0.0);
 
 					if (PlayerData[playerid][pExp] < expamount) {
-						SendClientMessageEx(playerid, X11_LIGHTBLUE, "LEVEL: "WHITE"Kamu membutuhkan %d jam lagi untuk ke level selanjutnya.", expamount - PlayerData[playerid][pExp]);
+						SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Level) "WHITE"Kamu membutuhkan %d jam lagi untuk ke level selanjutnya.", expamount - PlayerData[playerid][pExp]);
 					}
 					else {
 						PlayerData[playerid][pLevel]++;
 						PlayerData[playerid][pExp] = PlayerData[playerid][pExp]-expamount;
 						SetPlayerScore(playerid, PlayerData[playerid][pLevel]);
-						SendClientMessageEx(playerid, X11_LIGHTBLUE, "LEVEL: "WHITE"Level naik! Sekarang kamu level %d.", PlayerData[playerid][pLevel]);
+						SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Level) "WHITE"Level naik! Sekarang kamu level %d.", PlayerData[playerid][pLevel]);
 					}
 				}
 			}
@@ -381,7 +406,7 @@ ptask DelayUpdate[1000](playerid)
 				{
 					AddSalary(playerid, "Faction Duty", FactionData[PlayerData[playerid][pFaction]][factionSalary][PlayerData[playerid][pFactionRank] - 1]);
 					PlayerData[playerid][pDutyTime] = 3600;
-					SendClientMessage(playerid, COLOR_SERVER, "FACTION: {FFFFFF}Faction salary has been issued to your {FFFF00}/salary");
+					SendClientMessage(playerid, COLOR_SERVER, "(Faction) {FFFFFF}Faction salary has been issued to your {FFFF00}/salary");
 				}
 			}
 		}
@@ -409,6 +434,15 @@ ptask DelayUpdate[1000](playerid)
 			{
 				SendServerMessage(playerid, "Kamu bisa bekerja kembali sebagai {FFFF00}Delivery Driver");
 				PlayerData[playerid][pDriverDelay] = 0;
+			}
+		}
+		if(PlayerData[playerid][pCourierDelay] > 0)
+		{
+			PlayerData[playerid][pCourierDelay]--;
+			if(PlayerData[playerid][pCourierDelay] <= 0)
+			{
+				SendServerMessage(playerid, "Kamu bisa bekerja kembali sebagai {FFFF00}Box Courier");
+				PlayerData[playerid][pCourierDelay] = 0;
 			}
 		}
 		if(PlayerData[playerid][pSweeperDelay] > 0)
@@ -607,6 +641,11 @@ ptask TimerPlayerCheck[1000](playerid) {
 			SendServerMessage(playerid, "ID Card milikmu tidak lagi valid, perpanjang ID Card di CityHall.");
 			PlayerData[playerid][pJob] = JOB_NONE;
 		}
+	}
+	if(GetPlayerPing(playerid) > 800) {
+            SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s have been kicked for high ping: (%d/800ms)", ReturnName(playerid), GetPlayerPing(playerid));
+            SendClientMessageEx(playerid, X11_TURQUOISE_1,"Anda telah di kick karena ping melebihi matas maksimal: (%d/800ms)", GetPlayerPing(playerid));
+            KickEx(playerid);
 	}
 	return 1;
 }

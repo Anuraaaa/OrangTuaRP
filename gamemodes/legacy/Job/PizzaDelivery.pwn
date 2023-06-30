@@ -44,13 +44,13 @@ CMD:getpizza(playerid, params[])
 
 	if(PlayerData[playerid][pPizzaDelay] > 0)
 	{
-	    return SendClientMessageEx(playerid, COLOR_WHITE, "PIZZA: {FFFFFF}Kamu perlu menunggu %i detik", PlayerData[playerid][pPizzaDelay]);
+	    return SendClientMessageEx(playerid, COLOR_WHITE, "(Pizza) {FFFFFF}Kamu perlu menunggu %i detik", PlayerData[playerid][pPizzaDelay]);
 	}
 	
 	PlayerData[playerid][pCarryPizza] = 1;
 	PlayerData[playerid][pCarryingPizza] = true;
 	SetPlayerAttachedObject(playerid, 1, 2663, 6, 0.308999, 0.020000, 0.000000, 15.600001, -103.199974, -2.500001, 1.000000, 1.000000, 1.000000);
-	SendClientMessageEx(playerid, COLOR_ORANGE, "PIZZA: {FFFFFF}Kamu telah mengambil Pizza, silahkan taruh di kendaraan {FFFF00}/putpizza");
+	SendClientMessageEx(playerid, COLOR_ORANGE, "(Pizza) {FFFFFF}Kamu telah mengambil Pizza, silahkan taruh di kendaraan {FFFF00}/putpizza");
 	return 1;
 }
 
@@ -93,8 +93,8 @@ CMD:putpizza(playerid, params[])
 	SetWaypoint(playerid, HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2], 2.0);
     PlayerData[playerid][pPizzas] = true;
 
-	SendClientMessageEx(playerid, COLOR_ORANGE, "PIZZA: {FFFFFF}Kamu telah menaruh pesanan dikendaraan. Kirimkan ke %s.", GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]));
-	SendClientMessageEx(playerid, COLOR_ORANGE, "PIZZA: {FFFFFF}Jika sudah sampai ke checkpoint gunakan {FFFF00}/grabpizza");
+	SendClientMessageEx(playerid, COLOR_ORANGE, "(Pizza) {FFFFFF}Kamu telah menaruh pesanan dikendaraan. Kirimkan ke %s.", GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]));
+	SendClientMessageEx(playerid, COLOR_ORANGE, "(Pizza) {FFFFFF}Jika sudah sampai ke checkpoint gunakan {FFFF00}/grabpizza");
 	return 1;
 }
 
@@ -120,6 +120,6 @@ CMD:grabpizza(playerid, params[])
 
 	VehicleData[i][vPizza] = false;
 
-	SendClientMessageEx(playerid, COLOR_ORANGE, "PIZZA: {FFFFFF}Kirim ke checkpoint GPS");
+	SendClientMessageEx(playerid, COLOR_ORANGE, "(Pizza) {FFFFFF}Kirim ke checkpoint GPS");
 	return 1;
 }

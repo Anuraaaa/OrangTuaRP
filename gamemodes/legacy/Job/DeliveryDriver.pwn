@@ -52,7 +52,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
                     PlayerData[playerid][pRumpoVehicle] = GetPlayerVehicleID(playerid);
 
                 if(VehicleData[PlayerData[playerid][pRumpoVehicle]][vLoadedCrate] > 0)
-                   SendClientMessageEx(playerid, X11_LIGHTBLUE, "JOB: "WHITE"Rumpo ini berisi "YELLOW"%d/15 crate"WHITE", antarkan ke Delivery Driver Unloading Point (lokasi di GPS)", VehicleData[PlayerData[playerid][pRumpoVehicle]][vLoadedCrate]);
+                   SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Delivery Driver) "WHITE"Rumpo ini berisi "YELLOW"%d/15 crate"WHITE", antarkan ke Delivery Driver Unloading Point (lokasi di GPS)", VehicleData[PlayerData[playerid][pRumpoVehicle]][vLoadedCrate]);
             }
         }
     }
@@ -235,7 +235,7 @@ CMD:loadcrate(playerid, params[]) {
                 return SendErrorMessage(playerid, "Kamu tidak bisa menampung lebih banyak dari 15 crate.");
             
             VehicleData[veh_rumpo][vLoadedCrate]++;
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "JOB: "WHITE"Kendaraan rumpo-mu sekarang berisi "YELLOW"%d/15 crate", VehicleData[veh_rumpo][vLoadedCrate]);
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Delivery Driver) "WHITE"Kendaraan rumpo-mu sekarang berisi "YELLOW"%d/15 crate", VehicleData[veh_rumpo][vLoadedCrate]);
             ShowMessage(playerid, "Crate_Loaded!", 2, 1);
             VehicleData[vehicleid][vHaveCrate] = false;
             
@@ -249,7 +249,7 @@ CMD:loadcrate(playerid, params[]) {
     else SendErrorMessage(playerid, "Kamu hanya bisa memasukan crate ke rumpo-mu.");
     return 1;
 }
-FUNC::OnLoadingForkliftCrate(playerid) {
+function OnLoadingForkliftCrate(playerid) {
 
     new vehicleid = GetPlayerVehicleID(playerid);
 
@@ -265,7 +265,7 @@ FUNC::OnLoadingForkliftCrate(playerid) {
 
         ShowMessage(playerid, "Crate Pickuped!", 3, 1);
         TogglePlayerControllable(playerid, true);
-        SendClientMessage(playerid, X11_LIGHTBLUE, "JOB: "WHITE"Masukkan box kedalam rumpo dengan "YELLOW"/loadcrate");
+        SendClientMessage(playerid, X11_LIGHTBLUE, "(Delivery Driver) "WHITE"Masukkan box kedalam rumpo dengan "YELLOW"/loadcrate");
         VehicleData[vehicleid][vHaveCrate] = true;
     }
     return 1;

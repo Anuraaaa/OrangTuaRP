@@ -1,25 +1,3 @@
-stock ResetDamages(playerid)
-{
-    for(new i = 0; i < MAX_BODY_PARTS; i++)
-    {
-        for(new z = 0; z < MAX_WEAPONS; z++) Damage[playerid][i][z] = 0, DamageTime[playerid][i][z] = 0;
-    }
-    return 1;
-}
-
-stock CountDamages(playerid)
-{
-    new count = 0;
-    forex(i, MAX_BODY_PARTS)
-    {
-        forex(z, MAX_WEAPONS)
-        {
-            if(Damage[playerid][i][z]) count += Damage[playerid][i][z];
-        }
-    }
-    return count;
-}
-
 stock DisplayTemporaryDamages(targetid, playerid)
 {
     if(!CountDamages(playerid)) 

@@ -15,11 +15,10 @@
 					╚═╝░░╚═╝░╚════╝░╚══════╝╚══════╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░
 
 
-Notes for upcoming:
+Un-noted changelog:
 
-
-Current Changelog:
-
+- Fix /damages tidak clear ketika di operate
+- Menambahkan SA-PD command "/seal" untuk seal property (biz/house/flat)
 
 */
 
@@ -160,6 +159,7 @@ enum E_PLAYER_DATA
 	pCrate,
 	pVehicle,
 	pBusiness,
+	pHudType,
 	pWeaponRound[13],
 	pLastVehicleID,
 	pTrashVehicleID,
@@ -270,7 +270,6 @@ enum E_PLAYER_DATA
 	bool:pLoopAnim,
 	pEditGate,
 	bool:pSeatbelt,
-	Text3D:pInjuredLabel,
 	bool:pInTuning,
 	pTuningCategoryID,
 	pTaxiCalled,
@@ -376,7 +375,8 @@ enum E_PLAYER_DATA
 	pColor2,
 	pLastNumber,
 	bool:pToggleSpeed,
-
+	pCourierDelay,
+	pAdminPoint
 };
 
 new PlayerData[MAX_PLAYERS][E_PLAYER_DATA];
@@ -412,8 +412,6 @@ new NumberIndex[MAX_PLAYERS][5];
 new PlayerPressedJump[MAX_PLAYERS];
 new bool:Falling[MAX_PLAYERS];
 new IsDragging[MAX_PLAYERS];
-new Damage[MAX_PLAYERS][MAX_BODY_PARTS][MAX_WEAPONS];
-new DamageTime[MAX_PLAYERS][MAX_BODY_PARTS][MAX_WEAPONS];
 new tempCode[MAX_PLAYERS];
 new bool:ValidSpawn[MAX_PLAYERS],
 	bool:LewatConnect[MAX_PLAYERS],
@@ -459,6 +457,7 @@ public OnGameModeInit()
 
 		MapAndreas_Init(MAP_ANDREAS_MODE_FULL, "scriptfiles/SAFull.hmap");
 		CreateGlobalTextDraw();
+		CreatePublicHUD();
 		DisableInteriorEnterExits();
 		EnableStuntBonusForAll(0);
 		ManualVehicleEngineAndLights();
@@ -477,7 +476,7 @@ public OnGameModeInit()
 		SetupVendor();
 		SetGameModeText("OTRP "SERVER_VERSION"");
 		SendRconCommand(sprintf("hostname %s", SERVER_NAME));
-		
+
 		Iter_Init(House);
 		//Iter_Init(PlayerVehicle);
 		Iter_Init(Furniture);
@@ -489,7 +488,7 @@ public OnGameModeInit()
 		mysql_tquery(sqlcon, "SELECT * FROM `atm`", "ATM_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `fuelpump`", "Pump_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `business`", "Business_Load");
-		mysql_tquery(sqlcon, "SELECT * FROM `dealer`", "Dealer_Load", "");
+		mysql_tquery(sqlcon, "SELECT * FROM `dealer`", "SQL_LoadDealership", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `dropped`", "Dropped_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `doors`", "Doors_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `factions`", "Faction_Load", "");
@@ -515,7 +514,7 @@ public OnGameModeInit()
 		LoadServerData();
 		LoadEconomyData();
 
-		repeat WeatherRotator[2400000]();
+		repeat WeatherRotator[1800000]();
 
 		for (new i; i < sizeof(ColorList); i++) {
 			format(color_string, sizeof(color_string), "%s{%06x}%03d %s", color_string, ColorList[i] >>> 8, i, ((i+1) % 16 == 0) ? ("\n") : (""));
@@ -1011,8 +1010,8 @@ public OnPlayerDeath(playerid, killerid, reason)
 				
 				GiveMoney(driverid, PlayerData[playerid][pTotalFare], "Dari penumpang taxi.");
 				GiveMoney(playerid, -PlayerData[playerid][pTotalFare], "Membayar taxi.");
-				SendClientMessageEx(playerid, COLOR_SERVER, "TAXI: {FFFFFF}Kamu membayar {00FF00}$%s {FFFFFF}kepada pengemudi taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
-				SendClientMessageEx(driverid, COLOR_SERVER, "TAXI: {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari penumpang taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
+				SendClientMessageEx(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu membayar {00FF00}$%s {FFFFFF}kepada pengemudi taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
+				SendClientMessageEx(driverid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari penumpang taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
 				PlayerData[driverid][pTotalFare] = 0;
 				PlayerTextDrawSetString(driverid, FARETOTALTD[driverid], "Trip_Fare:_~g~$0");
 			}
@@ -1180,7 +1179,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			SetVehicleToRespawn(vehicleid);
 			VehicleData[vehicleid][vFuel] = 100;
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena mencoba keluar dari kendaraan!");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena mencoba keluar dari kendaraan!");
 			OnMower[playerid] = false;
 			MowerIndex[playerid] = 0;
 			DisablePlayerCheckpoint(playerid);
@@ -1190,7 +1189,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			SetVehicleToRespawn(vehicleid);
 			VehicleData[vehicleid][vFuel] = 100;
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena mencoba keluar dari kendaraan!");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena mencoba keluar dari kendaraan!");
 			OnSweeping[playerid] = false;
 			SweeperIndex[playerid] = 0;
 			DisablePlayerCheckpoint(playerid);
@@ -1198,7 +1197,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(IsPlayerWorkInBus(playerid) && (IsBusVehicle(vehicleid) || IsBus2Vehicle(vehicleid)))
 		{
 			RespawnPlayerBusVehicle(playerid);
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena mencoba keluar dari kendaraan!");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena mencoba keluar dari kendaraan!");
 			OnBus[playerid] = false;
 			BusIndex[playerid] = 0;
 			DisablePlayerRaceCheckpoint(playerid);
@@ -1208,7 +1207,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			PlayerData[playerid][pOnDMV] = false;
 			PlayerData[playerid][pIndexDMV] = -1;
 			DestroyVehicleEx(PlayerData[playerid][pVehicleDMV]);
-			SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu gagal dalam tes mengemudi karena mencoba keluar dari kendaraan!");
+			SendClientMessage(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Kamu gagal dalam tes mengemudi karena mencoba keluar dari kendaraan!");
 		}
 	}
 	if(newstate == PLAYER_STATE_DRIVER)
@@ -1218,7 +1217,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		EnterVehicle[playerid]++;
 		PlayerTextDrawSetString(playerid, AMMOTD[playerid], "_");
 
-	    if(IsEngineVehicle(vehicleid) && IsSpeedoVehicle(vehicleid) && !PlayerData[playerid][pTogHud])
+		if(!PlayerData[playerid][pLicense][0])
+			SendClientMessage(playerid, X11_TOMATO, "(Warning) "YELLOW"Kamu tidak memiliki "CYAN"lisensi mengemudi! "YELLOW"kamu bisa saja terkena tilang oleh SA-PD.");
+	    
+		if(IsEngineVehicle(vehicleid) && IsSpeedoVehicle(vehicleid) && !PlayerData[playerid][pTogHud])
 	    {
 			ShowPlayerHUD(playerid);
 		}
@@ -1292,7 +1294,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	    {
 		    if(LoadedTrash[vehicleid] > 9)
 		    {
-				SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu dapat menjual semua kantong sampah pada tanda truk di-peta.");
+				SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat menjual semua kantong sampah pada tanda truk di-peta.");
 				
 				for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
 				{
@@ -1306,8 +1308,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		    }
 		    else
 		    {
-		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu dapat mengumpulkan kantong sampah lalu menjualnya ke pabrik daur ulang.");
-		        SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Cari tempat sampah lalu ambil kantong sampah dengan "YELLOW"/pickup");
+		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat mengumpulkan kantong sampah lalu menjualnya ke pabrik daur ulang.");
+		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Cari tempat sampah lalu ambil kantong sampah dengan "YELLOW"/pickup");
 		    	
 				for(new i = 0; i < MAX_TRASH; i++) if(TrashData[i][TrashExists] && TrashData[i][TrashLevel] > 0)
 				{					
@@ -1325,7 +1327,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			}
 			else {
 				RemovePlayerFromVehicle(playerid);
-				SendErrorMessage(playerid, "You are not allowed to drive this vehicle. (Faction vehicle)!");
+				SendErrorMessage(playerid, "Kamu tidak dapat mengendarai ini (kendaraan faction)");
 			}
 		}
 	    foreach (new i : Player) if (PlayerData[i][pSpectator] == playerid) 
@@ -1346,7 +1348,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			{
 				CreateTaxi(playerid);
 				PlayerData[playerid][pFareTimer] = SetTimerEx("UpdateFare", 7000, true, "ii", playerid, driverid);
-				SendClientMessageEx(driverid, COLOR_SERVER, "TAXI: "YELLOW"%s "WHITE"telah memasuki taksimu.", ReturnName(playerid));
+				SendClientMessageEx(driverid, COLOR_SERVER, "(Taxi) "YELLOW"%s "WHITE"telah memasuki taksimu.", ReturnName(playerid));
 				PlayerData[playerid][pInTaxi] = true;
 				PlayerData[playerid][pTaxiVehicleID] = vehicleid;
 			}
@@ -1395,8 +1397,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				
 				GiveMoney(driverid, PlayerData[playerid][pTotalFare], "Dari penumpang taxi.");
 				GiveMoney(playerid, -PlayerData[playerid][pTotalFare], "Membayar taxi.");
-				SendClientMessageEx(playerid, COLOR_SERVER, "TAXI: {FFFFFF}Kamu membayar {00FF00}$%s {FFFFFF}kepada pengemudi taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
-				SendClientMessageEx(driverid, COLOR_SERVER, "TAXI: {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari penumpang taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
+				SendClientMessageEx(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu membayar {00FF00}$%s {FFFFFF}kepada pengemudi taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
+				SendClientMessageEx(driverid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari penumpang taxi.", FormatNumber(PlayerData[playerid][pTotalFare]));
 				PlayerData[driverid][pTotalFare] = 0;
 				PlayerTextDrawSetString(driverid, FARETOTALTD[driverid], "Trip_Fare:_~g~$0");
 			}
@@ -1414,9 +1416,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			PlayerData[playerid][pDead] = true;
 			PlayerData[playerid][pInjured] = false;
-
-			if(IsValidDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]))
-				DestroyDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]);
 		}
 		else 
 		{
@@ -1440,7 +1439,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		PlayerTextDrawHide(playerid, KMHTD[playerid]);
 		PlayerTextDrawHide(playerid, VEHNAMETD[playerid]);
 		PlayerTextDrawHide(playerid, LOCATIONTD[playerid]);
-
+		PlayerTextDrawHide(playerid, SPEEDO_2[playerid]);
 		if(PlayerData[playerid][pJobduty] && (PlayerData[playerid][pJob] == JOB_TAXI || PlayerData[playerid][pJob2] == JOB_TAXI))
 		{
 			HideTaxi(playerid);
@@ -1507,7 +1506,7 @@ public CustomSelectionResponse(playerid, extraid, modelid, response)
 			return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak furniture! (Laporkan kepada developer untuk meningkatkan limit)");
 
 		GiveMoney(playerid, -price, "Membeli furniture");
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Kamu berhasil membeli "YELLOW"%s "WHITE"dengan harga "GREEN"$%s", GetFurnitureNameByModel(modelid), FormatNumber(price));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Kamu berhasil membeli "YELLOW"%s "WHITE"dengan harga "GREEN"$%s", GetFurnitureNameByModel(modelid), FormatNumber(price));
 		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 	}
 	if ((response) && (extraid == MODEL_SELECTION_MODSHOP))
@@ -1526,54 +1525,20 @@ public CustomSelectionResponse(playerid, extraid, modelid, response)
 			if(GetMoney(playerid) < 8000)
 				return SendErrorMessage(playerid, "Kamu membutuhkan $80,00 untuk membeli vehicle attachments.");
 
-			if(Vehicle_ObjectAdd(playerid, vehicleid, modelid, OBJECT_TYPE_BODY)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Berhasil membeli attachment kendaraan "YELLOW"(%s)", GetVehObjectNameByModel(modelid));
+			if(Vehicle_ObjectAdd(playerid, vehicleid, modelid, OBJECT_TYPE_BODY)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Berhasil membeli attachment kendaraan "YELLOW"(%s)", GetVehObjectNameByModel(modelid));
 			else SendErrorMessage(playerid, "Tidak ada slot attachment untuk kendaraan ini lagi.");
 
 			new str[96];
 			format(str, sizeof(str), "bought vehicle attachment \"%s\"", GetVehObjectNameByModel(modelid));
 
 			GiveMoney(playerid, -price, str);
-			SendClientMessage(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Gunakan "GREEN"/v attachment "WHITE"untuk mengatur!");
+			SendClientMessage(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Gunakan "GREEN"/v attachment "WHITE"untuk mengatur!");
 		}
 	}
 	return 1;
 }
 public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 {
-	/*
-	if ((response) && (extraid == MODEL_SELECTION_FURNITURE))
-	{
-		new furniture;
-
-		new
-		    Float:x,
-		    Float:y,
-		    Float:z,
-		    Float:angle;
-
-        GetPlayerPos(playerid, x, y, z);
-        GetPlayerFacingAngle(playerid, angle);
-
-        x += 3.0 * floatsin(-angle, degrees);
-        y += 3.0 * floatcos(-angle, degrees);
-
-		new price = Furniture_ReturnPrice(PlayerData[playerid][pListitem]);
-
-		if (GetMoney(playerid) < price)
-			return SendErrorMessage(playerid, "You have insufficient funds for the purchase.");
-
-		if(House_Inside(playerid) != -1)
-			furniture = Furniture_Add(HouseData[House_Inside(playerid)][houseID], GetFurnitureNameByModel(modelid), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), modelid, FURNITURE_TYPE_HOUSE, x, y, z, 0.0, 0.0, angle);
-		else
-			furniture = Furniture_Add(FlatData[Flat_Inside(playerid)][flatID], GetFurnitureNameByModel(modelid), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid), modelid, FURNITURE_TYPE_FLAT, x, y, z, 0.0, 0.0, angle);
-		
-		if(furniture == INVALID_ITERATOR_SLOT)
-			return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak furniture! (Laporkan kepada developer untuk meningkatkan limit)");
-
-		GiveMoney(playerid, -price, "Membeli furniture");
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Kamu berhasil membeli "YELLOW"%s "WHITE"dengan harga "GREEN"$%s", GetFurnitureNameByModel(modelid), FormatNumber(price));
-		Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-	}*/
 	if((response) && (extraid == MODEL_SELECTION_ROADBLOCK)) {
 		
 			static
@@ -1592,38 +1557,6 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 				SendErrorMessage(playerid, "Roadblock sudah mencapai batas maksimal ("#MAX_DYNAMIC_ROADBLOCK" roadblock).");
 			}
 	}
-	/*
-	if ((response) && (extraid == MODEL_SELECTION_MODSHOP))
-	{
-	    if(GetMoney(playerid) < 8000)
-	        return SendErrorMessage(playerid, "You need $80.00 to purchase attachment's");
-	        
-	    new Float:pX, Float:pY, Float:pZ, Float:pA;
-
-		new vehicleid = PlayerData[playerid][pVehicle];
-
-		if(IsValidVehicle(vehicleid)) {
-			GetVehiclePos(vehicleid, pX, pY, pZ);
-			GetVehicleZAngle(vehicleid, pA);
-			VehicleData[vehicleid][vToyID][PlayerData[playerid][pListitem]] = modelid;
-			VehicleData[vehicleid][vToyType][PlayerData[playerid][pListitem]] = VEHICLE_TOY_OBJECT;
-
-			VehicleData[vehicleid][vToyPosX][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToyPosY][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToyPosZ][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToyRotX][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToyRotY][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToyRotZ][PlayerData[playerid][pListitem]] = 0.00000;
-			VehicleData[vehicleid][vToy][PlayerData[playerid][pListitem]] = CreateDynamicObject(modelid,pX, pY, pZ,0,0,pA);
-			AttachDynamicObjectToVehicle(VehicleData[vehicleid][vToy][PlayerData[playerid][pListitem]], vehicleid, 0, 0, 0, 0, 0, 0);
-
-			Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
-			GiveMoney(playerid, -8000, "Membeli att kendaraan");
-			SendServerMessage(playerid, "You have successfully purchased vehicle attachment for slot %d! (model: %d)", PlayerData[playerid][pListitem] + 1, modelid);
-			SendServerMessage(playerid, "Use {FFFF00}/v attachment {FFFFFF}to manage vehicle attachment!");
-		}
-	}
-	*/
 	if ((response) && (extraid == MODEL_SELECTION_FACTION_SKINS))
 	{
 	    ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_SKIN, DIALOG_STYLE_LIST, "Edit Skin", "Add by Model ID\nAdd by Thumbnail\nClear Slot", "Select", "Cancel");
@@ -1663,7 +1596,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 		    return SendErrorMessage(playerid, "There is no model in the selected slot.");
 
   		SetFactionSkin(playerid, modelid);
-		SendNearbyMessage(playerid, 10.0,X11_PLUM, "* %s has changed their uniform.", ReturnName(playerid));
+		SendNearbyMessage(playerid, 10.0,X11_PLUM, "** %s has changed their uniform.", ReturnName(playerid));
 	}
 
 	if ((response) && (extraid == MODEL_SELECTION_COLOR_1))
@@ -1679,7 +1612,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 		}
 		ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR_2, colors);
 
-		SendClientMessage(playerid, X11_LIGHTBLUE, "MECH-HINT: "WHITE"Silahkan pilih warna kedua untuk dicat ke kendaraan.");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Silahkan pilih warna kedua untuk dicat ke kendaraan.");
 	}
 	if((response) && (extraid == MODEL_SELECTION_COLOR_2)) {
 
@@ -1718,7 +1651,7 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 			if(--PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] == 0) {
 				PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] = 0;
 				SetPlayerArmedWeapon(playerid, 0);
-				SendServerMessage(playerid, "This weapon "RED"(%s) "WHITE"is out of ammo.", ReturnWeaponName(weaponid));
+				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));
 
 				return 1;		
 			}
@@ -1727,7 +1660,7 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 			if(--PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] == 0) {
 				PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] = 0;
 				ResetWeapon(playerid, weaponid);
-				SendServerMessage(playerid, "This weapon "RED"(%s) "WHITE"is now broken.", ReturnWeaponName(weaponid));
+				SendServerMessage(playerid, "Kondisi pada senjata "RED"(%s) "WHITE"telah rusak.", ReturnWeaponName(weaponid));
 			}
 		}
 	}
@@ -1742,7 +1675,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			if(--PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] == 0) {
 				PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] = 0;
 				SetPlayerArmedWeapon(playerid, 0);
-				SendServerMessage(playerid, "This weapon "RED"(%s) "WHITE"is out of ammo.", ReturnWeaponName(weaponid));
+				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));
 
 				return 1;		
 			}
@@ -1751,7 +1684,7 @@ public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY
 			if(--PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] == 0) {
 				PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] = 0;
 				ResetWeapon(playerid, weaponid);
-				SendServerMessage(playerid, "This weapon "RED"(%s) "WHITE"is now broken.", ReturnWeaponName(weaponid));
+				SendServerMessage(playerid, "Kondisi pada senjata "RED"(%s) "WHITE"telah rusak.", ReturnWeaponName(weaponid));
 			}
 		}
 	}
@@ -1776,7 +1709,7 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 	if(StretcherHolding[playerid] == 1)
 	{
 		SetPlayerCurrentPos(playerid);
-		SendErrorMessage(playerid, "You may not enter a vehicle with a stretcher equipped.");
+		SendErrorMessage(playerid, "Kamu tidak dapat memasuki kendaraan ketika membawa stretcher.");
 		return true;
 	}
 	if(OnTrash[playerid] > 0 && !IsTrashmasterVehicle(vehicleid)) {
@@ -1796,7 +1729,7 @@ public OnPlayerExitVehicle(playerid, vehicleid)
     if(Helmet[playerid] == 1)
     {
         Helmet[playerid] = 0;
-        SendClientMessage(playerid, COLOR_GREEN, "You have taken off your helmet");
+        SendClientMessage(playerid, COLOR_GREEN, "Helm-mu berhasil dilepas.");
         if(IsPlayerAttachedObjectSlotUsed(playerid, 9)) RemovePlayerAttachedObject(playerid, 9);
     }
 	return 1;
@@ -1820,7 +1753,7 @@ public OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
 {
 	for(new i = 0; i < MAX_VENDOR; i++) if(checkpointid == VendorData[i][vendorCP])
 	{
-		ShowMessage(playerid, "~g~INFO: ~w~Tekan ~y~H ~w~untuk bekerja food vendor.", 2);
+		ShowMessage(playerid, "~g~(Info) ~w~Tekan ~y~H ~w~untuk bekerja food vendor.", 2);
 	}
 	if(checkpointid == TrashCP[playerid])
 	{
@@ -1834,12 +1767,12 @@ public OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
 
 	    LoadedTrash[vehicleid]++;
 		ApplyAnimation(playerid, "GRENADE", "WEAPON_throwu", 4.1, 0, 0, 0, 0, 0);
-		SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Kamu berhasil memasukkan "RED"kantong sampah "WHITE"pada trashmaster.");
+		SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu berhasil memasukkan "RED"kantong sampah "WHITE"pada trashmaster.");
 
 		if(TRASH_LIMIT - LoadedTrash[vehicleid] > 0)
 		{
 			new string[96];
-			format(string, sizeof(string), "TRASHMASTER: {FFFFFF}Kamu dapat memasukkan {F39C12}%d {FFFFFF}kantong sampah lagi pada trashmaster.", TRASH_LIMIT - LoadedTrash[vehicleid]);
+			format(string, sizeof(string), "(Trashmaster) {FFFFFF}Kamu dapat memasukkan {F39C12}%d {FFFFFF}kantong sampah lagi pada trashmaster.", TRASH_LIMIT - LoadedTrash[vehicleid]);
 			SendClientMessage(playerid, COLOR_JOB, string);
 		}
 
@@ -1877,7 +1810,7 @@ public OnPlayerEnterCheckpoint(playerid)
 
 			PlayerData[playerid][pLicense][0] = true;
 			
-			SendClientMessage(playerid, COLOR_SERVER, "DMV: {FFFFFF}Kamu berhasil menyelesaikan Driving Test! selamat kamu mendapatkan lisensi mengemudimu.");
+			SendClientMessage(playerid, COLOR_SERVER, "(DMV) {FFFFFF}Kamu berhasil menyelesaikan Driving Test! selamat kamu mendapatkan lisensi mengemudimu.");
 			DisablePlayerCheckpoint(playerid);
 
 			PlayerData[playerid][pOnTest] = false;
@@ -1912,7 +1845,7 @@ public OnPlayerEnterCheckpoint(playerid)
 			return SendErrorMessage(playerid, "Kamu ambil makanan dari Wayfarer menggunakan {ffffff}/graborder'{ffff00} sebelum memasuki checkpoint ini.");
 
 		new payment = 1500 + random(600);
-		SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}di {FFFF00}/salary", FormatNumber(payment));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}di {FFFF00}/salary", FormatNumber(payment));
 		AddSalary(playerid, "Pizza Delivery", payment);
 			
 		PlayerData[playerid][pPizzas] = false;
@@ -1949,7 +1882,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 
 				Tree_Save(id);
 				Tree_Refresh(id);
-				SendServerMessage(playerid, "You have successfully editing Tree ID: %d", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit Tree ID: %d", id);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_FURNITURE)
 			{
@@ -1964,7 +1897,9 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				Furniture_Save(id);
 				Furniture_Refresh(id);
 
-				SendServerMessage(playerid, "You have successfully editing furniture ID: %d", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit furniture ID: %d", id);
+
+				ShowFurnitureEditMenu(playerid);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_PUMP) 
 			{
@@ -1976,7 +1911,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				Pump_Sync(id);
 				Pump_Save(id);
 
-				SendServerMessage(playerid, "You have edited Fuel Pump ID %d.", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit Fuel Pump ID %d.", id);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_ROCK) {
 				RockData[id][rockX] = x;
@@ -1986,7 +1921,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				Rock_Sync(id);
 				Rock_Save(id);
 
-				SendServerMessage(playerid, "You have edited Rock ID: %d.", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit Rock ID: %d.", id);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_ROADBLOCK) {
 				
@@ -2051,8 +1986,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				TagData[id][tagPos][4] = ry;
 				TagData[id][tagPos][5] = rz;
 
-				SendServerMessage(playerid, "The position of SprayTag saved successfully");
-				SendServerMessage(playerid, "SprayTag has been successfully created!");
+				SendServerMessage(playerid, "Posisi "GREY"SprayTag "WHITE"berhasil diedit!");
 
 				Tag_Save(id);
 			}
@@ -2077,7 +2011,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 
 
 						Gate_Save(id);
-	                    SendServerMessage(playerid, "You have edited the position of gate ID: %d.", id);
+	                    SendServerMessage(playerid, "Kamu berhasil mengedit posisi gate ID: %d.", id);
 					}
 					case 2:
 		            {
@@ -2095,7 +2029,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 		                Streamer_SetIntData(STREAMER_TYPE_OBJECT, GateData[id][gateObject], E_STREAMER_WORLD_ID, GateData[id][gateWorld]);
 
 						Gate_Save(id);
-	                    SendServerMessage(playerid, "You have edited the moving position of gate ID: %d.", id);
+	                    SendServerMessage(playerid, "Kamu berhasil mengedit posisi bergerak gate ID: %d.", id);
 					}
 				}
 			}
@@ -2111,7 +2045,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				Object_Refresh(id);
 				Object_Save(id);
 
-				SendServerMessage(playerid, "You have successfully editing Object ID: %d", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit Object ID: %d", id);
 			}
 			else if(PlayerData[playerid][pEditType] == EDIT_TRASH)
 			{
@@ -2125,7 +2059,7 @@ public OnPlayerEditDynamicObject(playerid, STREAMER_TAG_OBJECT:objectid, respons
 				Trash_Refresh(id);
 				Trash_Save(id);
 
-				SendServerMessage(playerid, "You have successfully editing Trash ID: %d", id);
+				SendServerMessage(playerid, "Kamu berhasil mengedit Trash ID: %d", id);
 			}
 		}
 
@@ -2182,7 +2116,7 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
             RemovePlayerAttachedObject(playerid, GetWeaponObjectSlot(weaponid));
             SetPlayerAttachedObject(playerid, GetWeaponObjectSlot(weaponid), GetWeaponModel(weaponid), WeaponSettings[playerid][enum_index][Bone], fOffsetX, fOffsetY, fOffsetZ, fRotX, fRotY, fRotZ, 1.0, 1.0, 1.0);
 
-            SendServerMessage(playerid, "Attachment for weapon {FF0000}%s {FFFFFF}edited successfully.", weaponname);
+            SendServerMessage(playerid, "Attachment weapon {FF0000}%s {FFFFFF}berhasil diupdate.", weaponname);
 
             mysql_format(sqlcon, string, sizeof(string), "INSERT INTO weaponsettings (Owner, WeaponID, PosX, PosY, PosZ, RotX, RotY, RotZ) VALUES ('%d', %d, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f) ON DUPLICATE KEY UPDATE PosX = VALUES(PosX), PosY = VALUES(PosY), PosZ = VALUES(PosZ), RotX = VALUES(RotX), RotY = VALUES(RotY), RotZ = VALUES(RotZ)", PlayerData[playerid][pID], weaponid, fOffsetX, fOffsetY, fOffsetZ, fRotX, fRotY, fRotZ);
             mysql_tquery(sqlcon, string);
@@ -2201,7 +2135,7 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
             AccData[playerid][id][accScale][2] = (fScaleZ > 3.0) ? (3.0) : (fScaleZ);
             Aksesoris_Attach(playerid, id);
             PlayerData[playerid][pAksesoris] = -1;
-            SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESORY","Aksesoris pada slot "YELLOW"%d "WHITE"berhasil disimpan.", id);
+            SendCustomMessage(playerid, X11_LIGHTBLUE, "Acessory","Aksesoris pada slot "YELLOW"%d "WHITE"berhasil disimpan.", id);
         }
 		EditingWeapon[playerid] = 0;
     }
@@ -2354,12 +2288,12 @@ public OnPlayerUpdate(playerid)
 					}
 				}
 			}
-			for (new i= 4; i < 8; i++)
+			for (new i= 5; i < 8; i++)
 			{ 
 				if(IsPlayerAttachedObjectSlotUsed(playerid, i))
 				{
 					count = 0;    
-					for (new j = 22; j <= 34; j++) 
+					for (new j = 22; j <= 32; j++) 
 					{
 						if(PlayerHasWeaponAttachment(playerid, j) && GetWeaponObjectSlot(j) == i)
 						{
@@ -2379,7 +2313,7 @@ public OnPlayerUpdate(playerid)
 		if(weaponid >= 22 && weaponid <= 38) {
 			if(PlayerData[playerid][pGuns][g_aWeaponSlots[weaponid]] > 0) {
 				if(PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]) {
-					PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d~n~High_Velocity", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
+					PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d~n~high_velocity", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
 				}
 				else {
 					PlayerTextDrawSetString(playerid, AMMOTD[playerid], sprintf("%d", PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]));
@@ -2393,12 +2327,22 @@ public OnPlayerUpdate(playerid)
 }
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(dialogid == DIALOG_HUD_TYPE) {
+		if(response) {
+
+			HidePlayerHUD(playerid);
+
+			PlayerData[playerid][pHudType] = listitem + 1;
+
+			ShowPlayerHUD(playerid);
+		}
+	}
 	if(dialogid == DIALOG_CRIMERECORD) {
 		if(!response) {
 			ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
 		}
 		else {
-			new sql_id = ListedUniversal[playerid][listitem], Cache:result;
+			new sql_id = ListedItems[playerid][listitem], Cache:result;
 
 			result = mysql_query(sqlcon, sprintf("SELECT * FROM `crime_record` WHERE `ID` = '%d' LIMIT 1;", sql_id));
 
@@ -2427,12 +2371,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			Advert_Create(PlayerData[targetid][pPhoneNumber], AdvertText[targetid], PlayerData[targetid][pID], GetName(targetid, false), time);
 
-			SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "GREEN"approved "WHITE"and will be posted in %d minute.", time);
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "GREEN"approved "WHITE"the advertisement.");
+			SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"Your advertisement has been "GREEN"approved "WHITE"and will be posted in %d minute.", time);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"You have "GREEN"approved "WHITE"the advertisement.");
 		}
 		else {
-			SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"Your advertisement has been "RED"denied");
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD "WHITE"You have "RED"denied "WHITE"the advertisement.");
+			SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"Your advertisement has been "RED"denied");
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"You have "RED"denied "WHITE"the advertisement.");
 		}
 	}
 	if(dialogid == DIALOG_ADS_TEXT) {
@@ -2453,7 +2397,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			PlayerData[targetid][pTarget] = playerid;
 
-			SendClientMessage(playerid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have written the advertisement, waiting for approval.");
+			SendClientMessage(playerid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"You have written the advertisement, waiting for approval.");
 		}
 	}
 	if(dialogid == DIALOG_VEHMENU) {
@@ -2526,11 +2470,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(FurnitureData[id][furnitureTextureName], 24, txtname);
 			format(FurnitureData[id][furnitureTextureTXDName], 24, txdname);
 
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Used "YELLOW"10 "WHITE"Component for re-texturing the %s.", FurnitureData[id][furnitureName], id);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Used "YELLOW"10 "WHITE"Component for re-texturing the %s.", FurnitureData[id][furnitureName], id);
 
 			Furniture_Sync(id);
 
 			Furniture_Save(id);
+
+			ShowFurnitureEditMenu(playerid);
 		}
 	}
 	if(dialogid == DIALOG_CHANGEPASS)
@@ -2564,7 +2510,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			
 				Workshop_AddEmployee(targetid, id);
 				SendServerMessage(targetid, "Kamu telah menjadi pekerja dari workshop milik %s.", ReturnName(playerid));
-				SendServerMessage(playerid, "Kamu telah menjadikanm %s pekerja dari workshop milikmu.", ReturnName(targetid));
+				SendServerMessage(playerid, "Kamu telah menjadikan %s pekerja dari workshop milikmu.", ReturnName(targetid));
 				cmd_workshop(playerid, "employee");
 			}
 		}
@@ -2690,7 +2636,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				VehicleData[carid][vHighVelocity][listitem] = PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]];
 
           		ResetWeapon(playerid, VehicleData[carid][vWeapon][listitem]);
-	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s stored a %s into the trunk.", ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]));
+	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s stored a %s into the trunk.", ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]));
 
 	            Vehicle_Save(carid);
 				Vehicle_WeaponStorage(playerid, carid);
@@ -2711,7 +2657,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "You already have weapon on the same slot.");
 
 			    GiveWeaponToPlayer(playerid, VehicleData[carid][vWeapon][listitem], VehicleData[carid][vAmmo][listitem], VehicleData[carid][vDurability][listitem], VehicleData[carid][vHighVelocity][listitem]);
-	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s takes a %s from the trunk.", ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]));
+	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s takes a %s from the trunk.", ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]));
 				Log_Write("Logs/veh_storage_log.txt", "[%s] %s has taken a \"%s\" from Vehicle ID: %d.", ReturnDate(), ReturnName(playerid), ReturnWeaponName(VehicleData[carid][vWeapon][listitem]), VehicleData[carid][vID]);
 
 	            VehicleData[carid][vWeapon][listitem] = 0;
@@ -2754,6 +2700,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								Car_RemoveItem(carid, string);
 
 								SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s has taken a \"%s\" from the trunk.", ReturnName(playerid), string);
+								SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Trunk) "WHITE"Kamu mengambil "YELLOW"%s "WHITE"dari bagasi "CYAN"%s", string, GetVehicleName(carid));
 								Vehicle_ShowTrunk(playerid, carid);
 							}
 							else
@@ -2778,6 +2725,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								Inventory_Remove(playerid, string);
 
 								SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s has stored a \"%s\" into the trunk.", ReturnName(playerid), string);
+								SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Trunk) "WHITE"Kamu menyimpan "YELLOW"%s "WHITE"kedalam bagasi "CYAN"%s", string, GetVehicleName(carid));
+								
 								Vehicle_ShowTrunk(playerid, carid);
 							}
 							else if (InventoryData[playerid][id][invQuantity] > 1) {
@@ -2823,13 +2772,35 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_VEHSPAWN) {
 		if(response) {
-			new sql_id = g_Selected_Vehicle_ID[playerid][listitem];
+			new sql_id = g_Selected_Vehicle_ID[playerid][listitem], Cache:result, bool:thereis = false;
 
-			mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = %d WHERE `vehID` = %d", VEHICLE_STATE_SPAWNED, sql_id));
+			result = mysql_query(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id));
+			
 
-			mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id), "OnVehicleLoaded", "");
+			if(cache_num_rows()) {
 
-			SendServerMessage(playerid, "You have spawned your vehicle back :)");
+				new Float:x, Float:y, Float:z;
+				cache_get_value_name_float(0, "vehX", x);
+				cache_get_value_name_float(0, "vehY", y);
+				cache_get_value_name_float(0, "vehZ", z);
+
+				foreach(new i : Vehicle) if(IsVehicleInRangeOfPoint3D(i, 10.0,  x, y, z)) {
+					thereis  = true;
+					break;
+				}
+
+				if(thereis) {
+					SendErrorMessage(playerid, "Sedang ada kendaraan lain ditempat terakhir kendaraan yang akan kamu spawn.");
+				}
+				else {
+					mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = %d WHERE `vehID` = %d", VEHICLE_STATE_SPAWNED, sql_id));
+
+					mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id), "OnVehicleLoaded", "");
+
+					SendServerMessage(playerid, "You have spawned your vehicle back :)");
+				}
+				cache_delete(result);
+			}
 		}
 	}
 	if(dialogid == DIALOG_UNIMPOUND) {
@@ -3014,12 +2985,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						SendServerMessage(playerid, "Use "YELLOW"~k~~PED_SPRINT~"WHITE" to look around.");
 						EditAttachedObject(playerid, id);
 					}
-					else return SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"You must attach this accessory first!");
+					else return SendCustomMessage(playerid, X11_LIGHTBLUE, "Acessory",""WHITE"You must attach this accessory first!");
 				}
 				case 3:
 				{
 					if(!AccData[playerid][id][accShow])
-						return SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"You must attach this accessory  first!");
+						return SendCustomMessage(playerid, X11_LIGHTBLUE, "Acessory",""WHITE"You must attach this accessory  first!");
 
 					new stringg[512];
 					format(stringg, sizeof(stringg), "Offset X (%.2f)\nOffset Y (%.2f)\nOffset Z (%.2f)\nRotation X (%.2f)\nRotation Y (%.2f)\nRotation Z (%.2f)\nScale X (%.2f)\nScale Y (%.2f)\nScale Z (%.2f)",
@@ -3049,7 +3020,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					mysql_format(sqlcon, string,sizeof(string),"DELETE FROM `aksesoris` WHERE `ID`='%d'", AccData[playerid][id][accID]);
 					mysql_tquery(sqlcon, string);
 
-					SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"You have removed accessory index #%d.", id);
+					SendCustomMessage(playerid, X11_LIGHTBLUE, "Acessory",""WHITE"You have removed accessory index #%d.", id);
 				}
 				case 5: {
 					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", id), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
@@ -3133,7 +3104,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				RemovePlayerAttachedObject(playerid, id);
 				Aksesoris_Attach(playerid, id);
 
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
 			}
 			cache_delete(result);
 		}
@@ -3219,7 +3190,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				RemovePlayerAttachedObject(playerid, id);
 				Aksesoris_Attach(playerid, id);
 
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
 			}
 			cache_delete(result);
 		}
@@ -3243,7 +3214,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					PlayerData[playerid][pID], inputtext,  AccData[playerid][id][accModel], AccData[playerid][id][accBone], AccData[playerid][id][accOffset][0], AccData[playerid][id][accOffset][1],AccData[playerid][id][accOffset][2], AccData[playerid][id][accRot][0], AccData[playerid][id][accRot][1], AccData[playerid][id][accRot][2], AccData[playerid][id][accScale][0], AccData[playerid][id][accScale][1], AccData[playerid][id][accScale][2]);
 				mysql_tquery(sqlcon, query);
 
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "ACC-PRESET: "WHITE"Preset aksesoris dengan nama "YELLOW"\"%s\" "WHITE"berhasil dibuat!", inputtext);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset aksesoris dengan nama "YELLOW"\"%s\" "WHITE"berhasil dibuat!", inputtext);
 			}
 			else {
 				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "(error) nama preset tersebut telah digunakan!\n\nSilahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
@@ -3285,7 +3256,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!IsPlayerUsingAndroid(playerid))
 					EditAttachedObject(playerid, id);
 			}
-			SendCustomMessage(playerid, X11_LIGHTBLUE, "ACCESSORY",""WHITE"You have been changed accessory bone index #%d to %s", id, accBones[listitem]);
+			SendCustomMessage(playerid, X11_LIGHTBLUE, "Acessory",""WHITE"You have been changed accessory bone index #%d to %s", id, accBones[listitem]);
 		}
 	}
 	if(dialogid == DIALOG_GIVETICKET) {
@@ -3307,7 +3278,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendServerMessage(playerid, "You have written %s a ticket for $%s, reason: %s", ReturnName(userid), FormatNumber(price), reason);
 				SendServerMessage(userid, "%s has written you a ticket for $%s, reason: %s", ReturnName(playerid), FormatNumber(price), reason);
 
-				SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has written up a ticket for %s.", ReturnName(playerid), ReturnName(userid));
+				SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has written up a ticket for %s.", ReturnName(playerid), ReturnName(userid));
 				Log_Write("Logs/ticket_log.txt", "[%s] %s has written a %s ticket to %s, reason: %s", ReturnDate(), ReturnName(playerid), FormatNumber(price), ReturnName(userid), reason);
 			}
 			else {
@@ -3350,8 +3321,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			format(PlayerData[userid][pJailBy], MAX_PLAYER_NAME, GetName(playerid));
 			format(PlayerData[userid][pJailReason], 128, inputtext);
 
-			SendClientMessageEx(userid, COLOR_SERVER, "ARREST: {FFFFFF}You've been arrested by {FFFF00}%s {FFFFFF}For {FF0000}%d Minutes.", GetName(playerid), time);
-			SendClientMessageEx(userid, COLOR_SERVER, "FINE: {FFFFFF}$%s", FormatNumber(price));
+			SendClientMessageEx(userid, X11_RED, "(Arrest) {FFFFFF}You've been arrested by {FFFF00}%s {FFFFFF}For {FF0000}%d Minutes.", GetName(playerid), time);
+			SendClientMessageEx(userid, X11_RED, "(Fine) {FFFFFF}$%s", FormatNumber(price));
 			SendFactionMessage(PlayerData[playerid][pFaction], COLOR_RADIO, "ARREST: %s was arrested by %s %s", GetName(userid), Faction_GetRank(playerid), GetName(playerid));
 			SendFactionMessage(PlayerData[playerid][pFaction], COLOR_RADIO, "REASON: %s", inputtext);
 			
@@ -3394,14 +3365,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!strcmp(inputtext, "Take Weapons")) {
 				ResetWeapons(userid);
 
-				SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s has confiscated %s's weapons.", ReturnName(playerid), ReturnName(userid));
+				SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s has confiscated %s's weapons.", ReturnName(playerid), ReturnName(userid));
 			}
 			else if(!strcmp(inputtext, "Take Drugs")) {
 				Inventory_Remove(userid, "Rolled Weed", -1);
 				Inventory_Remove(userid, "Weed", -1);
 				Inventory_Remove(userid, "Weed Seed", -1);
 
-				SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s has confiscated %s's drugs.", ReturnName(playerid), ReturnName(userid));
+				SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s has confiscated %s's drugs.", ReturnName(playerid), ReturnName(userid));
 			}
 			else if(!strcmp(inputtext, "Take weapon parts")) {
 				Inventory_Remove(userid, "9mm Luger", -1);
@@ -3419,7 +3390,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				Inventory_Remove(userid, "7.62mm Caliber", -1);
 				Inventory_Remove(userid, ".44 Magnum", -1);
 
-				SendNearbyMessage(playerid, 15.0, X11_PLUM, "* %s has confiscated %s's weapon parts.", ReturnName(playerid), ReturnName(userid));
+				SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s has confiscated %s's weapon parts.", ReturnName(playerid), ReturnName(userid));
 			}
 		}
 	}
@@ -3483,42 +3454,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_LIST, "Business Info", str, "Close", "");
 		}
 	}
-	if(dialogid == DIALOG_DEALER_BUY)
-	{
-		if(response)
-		{
-			new id = PlayerData[playerid][pSelecting],
-				slot = CountPlayerVehicleSlot(playerid),
-				index = ListedDealer[playerid][listitem];
-
-			if(DealerData[id][dealerVehicle][index] == 19300)
-				return SendErrorMessage(playerid, "There is no vehicle on selected slot!");
-
-			if(Vehicle_Count(playerid) >= slot)
-				return SendErrorMessage(playerid, "You only can have %d vehicle at the time.", slot);
-
-			if(DealerData[id][dealerSpawn][0] == 0)
-				return SendErrorMessage(playerid, "This dealership still doesn't have their Spawn Position!");
-
-			if(DealerData[id][dealerStock][index] < 1)
-				return SendErrorMessage(playerid, "The vehicle is out of stock!");
-
-			if(GetMoney(playerid) < DealerData[id][dealerCost][index])
-				return SendErrorMessage(playerid, "You don't have enough money!");
-
-			new vehicleid = Vehicle_Create(DealerData[id][dealerVehicle][index], DealerData[id][dealerSpawn][0], DealerData[id][dealerSpawn][1], DealerData[id][dealerSpawn][2], DealerData[id][dealerSpawn][3], random(126), random(126));
-			Vehicle_SetOwner(vehicleid, playerid, true);
-			Vehicle_SetType(vehicleid, VEHICLE_TYPE_PLAYER);
-			VehicleData[vehicleid][vPrice] = DealerData[id][dealerCost][index];
-
-			SendServerMessage(playerid, "Kamu berhasil membeli {FFFF00}%s {FFFFFF}dengan harga {00FF00}$%s", ReturnVehicleModelName(DealerData[id][dealerVehicle][index]), FormatNumber(DealerData[id][dealerCost][index]));
-			GiveMoney(playerid, -DealerData[id][dealerCost][index], "Membeli kendaraan");
-			DealerData[id][dealerVault] += DealerData[id][dealerCost][index];
-			DealerData[id][dealerStock][index]--;
-
-			Dealer_Save(id);
-		}	
-	}
 	if(dialogid == DIALOG_VIP_NUMBER) {
 		if(response) {
 
@@ -3573,8 +3508,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(PlayerData[playerid][pCoin] < 250)
 						return SendErrorMessage(playerid, "Kamu tidak memiliki cukup Donater Point.");
 
-					SendAdminMessage(X11_TOMATO, "DonaterInfo: %s(%s) has requested \"Custom Gate\" (costs 250 point)", GetName(playerid, false), GetUsername(playerid));
-					SendServerMessage(playerid, "You have requested a custom gate, please wait for high admin to respond.");
+					SendAdminMessage(X11_TOMATO, "DonaterInfo: %s(%s) has requested \"Custom Gate\" (costs 250 point) please check /gaterequests", GetName(playerid, false), GetUsername(playerid));
+					SendServerMessage(playerid, "Kamu telah memasuki pending request "CYAN"Custom Gate, "WHITE"silahkan tunggu admin level 6+ untuk merespon.");
+					SendServerMessage(playerid, "Orang Tua Coins mu telah dikurangi sebesar "YELLOW"250 coin");
+					PlayerData[playerid][pCoin] -= 250;
+					mysql_tquery(sqlcon, sprintf("INSERT INTO `gaterequests` (`Name`, `Date`) VALUES('%s', '%s')", GetName(playerid), ReturnDate(true)));
 				}
 			}
 		}
@@ -3876,6 +3814,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(listitem == 0) {
 			SendAdminMessage(COLOR_CLIENT, "[REPORT] {FFFFFF}%s telah {00FF00}menerima {FFFFFF}report dari {FFFF00}%s(%d)", GetUsername(playerid), GetName(ReportData[index][reportOwner]), ReportData[index][reportOwner]);
 			SendServerMessage(ReportData[index][reportOwner], "Laporanmu telah {00FF00}diterima {FFFFFF}oleh %s.", GetUsername(playerid));
+			PlayerData[playerid][pAdminPoint]++;
 		}
 		if(listitem == 1) {
 			SendAdminMessage(COLOR_CLIENT, "[REPORT] {FFFFFF}%s telah {FF0000}menolak {FFFFFF}report dari {FFFF00}%s(%d)", GetUsername(playerid), GetName(ReportData[index][reportOwner]), ReportData[index][reportOwner]);
@@ -3982,14 +3921,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		if(listitem == 2)
 		{
-			if(TagBold[playerid] == 0)
-			{
-				TagBold[playerid] = 1;
-			}
-			else
-			{
-				TagBold[playerid] = 0;
-			}
+			TagBold[playerid] = !(TagBold[playerid]);
 			ShowTagSetup(playerid);
 		}
 		if(listitem == 3)
@@ -4009,7 +3941,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			PlayerData[playerid][pFishDelay] = 600;
 			AddSalary(playerid, "Sell Fish", total);
-			SendClientMessageEx(playerid, COLOR_SERVER, "FISH: {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}on your {FFFF00}/salary", FormatNumber(total));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Fish) {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}on your {FFFF00}/salary", FormatNumber(total));
 			DeletePVar(playerid, "FishPrice");
 
 	        for(new i = 0; i < MAX_FISH; i++)
@@ -4067,7 +3999,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				           
 						GiveWeaponToPlayer(playerid, FlatData[flatid][flatWeapons][listitem], FlatData[flatid][flatAmmo][listitem],FlatData[flatid][flatDurability][listitem], FlatData[flatid][flatHighVelocity][listitem]);
 
-						SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(FlatData[flatid][flatWeapons][listitem]));
+						SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(FlatData[flatid][flatWeapons][listitem]));
 		                Log_Write("Logs/storage_log.txt", "[%s] %s has taken a \"%s\" from Flat ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(FlatData[flatid][flatWeapons][listitem]), FlatData[flatid][flatID], (Flat_IsOwner(playerid, flatid)) ? ("Yes") : ("No"));
 
 						FlatData[flatid][flatWeapons][listitem] = 0;
@@ -4099,7 +4031,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						Flat_WeaponStorage(playerid, flatid);
 
 		                ResetWeapon(playerid, weaponid);
-						SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
+						SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
 
 						Log_Write("Logs/storage_log.txt", "[%s] %s has stored a \"%s\" to Flat ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(FlatData[flatid][flatWeapons][listitem]), FlatData[flatid][flatID], (Flat_IsOwner(playerid, flatid)) ? ("Yes") : ("No"));
 					}
@@ -4128,7 +4060,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				           
 						GiveWeaponToPlayer(playerid, HouseData[houseid][houseWeapons][listitem], HouseData[houseid][houseAmmo][listitem],HouseData[houseid][houseDurability][listitem], HouseData[houseid][houseHighVelocity][listitem]);
 
-						SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(HouseData[houseid][houseWeapons][listitem]));
+						SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(HouseData[houseid][houseWeapons][listitem]));
 		                Log_Write("Logs/storage_log.txt", "[%s] %s has taken a \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(HouseData[houseid][houseWeapons][listitem]), HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
 
 						HouseData[houseid][houseWeapons][listitem] = 0;
@@ -4160,7 +4092,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						House_WeaponStorage(playerid, houseid);
 
 		                ResetWeapon(playerid, weaponid);
-						SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
+						SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
 
 						Log_Write("Logs/storage_log.txt", "[%s] %s has stored a \"%s\" to house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(HouseData[houseid][houseWeapons][listitem]), HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
 					}
@@ -4194,7 +4126,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        					return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
 				            Flat_RemoveItem(flatid, string);
-				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
+				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
 
 							Flat_ShowItems(playerid, flatid);
 							Log_Write("Logs/storage_log.txt", "[%s] %s has taken \"%s\" from Flat ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), string, FlatData[flatid][flatID], (Flat_IsOwner(playerid, flatid)) ? ("Yes") : ("No"));
@@ -4233,7 +4165,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						    Flat_AddItem(flatid, string, InventoryData[playerid][id][invModel]);
 							Inventory_Remove(playerid, string);
 
-							SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
+							SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
 							Flat_ShowItems(playerid, flatid);
 						}
 						else if (InventoryData[playerid][id][invQuantity] > 1)
@@ -4290,7 +4222,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        					return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
 				            House_RemoveItem(houseid, string);
-				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
+				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
 
 							House_ShowItems(playerid, houseid);
 							Log_Write("Logs/storage_log.txt", "[%s] %s has taken \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), string, HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
@@ -4330,7 +4262,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						    House_AddItem(houseid, string, InventoryData[playerid][id][invModel]);
 							Inventory_Remove(playerid, string);
 
-							SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
+							SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
 							House_ShowItems(playerid, houseid);
 						}
 						else if (InventoryData[playerid][id][invQuantity] > 1)
@@ -4456,7 +4388,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        string[32];
 
         strunpack(string, InventoryData[playerid][PlayerData[playerid][pListitem]][invItem]);
-        
+
 		if (response)
 		{
 			new amount = strval(inputtext);
@@ -4471,7 +4403,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Flat_AddItem(flatid, string, InventoryData[playerid][PlayerData[playerid][pListitem]][invModel], amount);
 			Inventory_Remove(playerid, string, amount);
 
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their flat storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their flat storage.", ReturnName(playerid), string);
 			Flat_ShowItems(playerid, flatid);
 		}
 		else Flat_OpenStorage(playerid, flatid);
@@ -4503,8 +4435,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if (id == -1)
 				return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
+
 			Flat_RemoveItem(flatid, string, amount);
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their flat storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their flat storage.", ReturnName(playerid), string);
 
 			Flat_ShowItems(playerid, flatid);
 		}
@@ -4532,7 +4465,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			House_AddItem(houseid, string, InventoryData[playerid][PlayerData[playerid][pListitem]][invModel], amount);
 			Inventory_Remove(playerid, string, amount);
 
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their house storage.", ReturnName(playerid), string);
 			House_ShowItems(playerid, houseid);
 		}
 		else House_OpenStorage(playerid, houseid);
@@ -4565,7 +4498,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
 			House_RemoveItem(houseid, string, amount);
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their house storage.", ReturnName(playerid), string);
 
 			House_ShowItems(playerid, houseid);
 		//	Log_Write("logs/storage_log.txt", "[%s] %s has taken %d \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), amount, string, HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
@@ -4588,7 +4521,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!GetPlayerVIPLevel(playerid))
 					return SendErrorMessage(playerid, "Hanya donatur yang dapat mengakses attachment sticker.");
 
-				if(Vehicle_ObjectAdd(playerid, PlayerData[playerid][pVehicle], 18661, OBJECT_TYPE_TEXT)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Attachment "YELLOW"sticker "WHITE"ditambahkan! gunakan "GREEN"/v attachment "WHITE"untuk mengatur.");
+				if(Vehicle_ObjectAdd(playerid, PlayerData[playerid][pVehicle], 18661, OBJECT_TYPE_TEXT)) SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Attachment "YELLOW"sticker "WHITE"ditambahkan! gunakan "GREEN"/v attachment "WHITE"untuk mengatur.");
 				else SendErrorMessage(playerid, "Tidak ada slot attachment untuk kendaraan ini lagi!");
 			}
 			if(listitem == 1) {
@@ -4635,7 +4568,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectText], 32, "%s", inputtext);
 		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Text diubah menjadi: \"%s"WHITE"\"", inputtext);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Text diubah menjadi: \"%s"WHITE"\"", inputtext);
 	}	
 	if(dialogid == DIALOG_MODSHOP_SET_FONT) {
 
@@ -4647,7 +4580,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		format(VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFont], 32, "%s", inputtext);
 		Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Font diubah menjadi: \"%s\"", inputtext);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Font diubah menjadi: \"%s\"", inputtext);
 	}
 	if(dialogid == DIALOG_MODSHOP_SET_COLOR) {
 		if(response) {
@@ -4657,7 +4590,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			
 			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontColor] = strval(inputtext);
 			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Warna diubah menjadi: \"%d\"", strval(inputtext));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Warna diubah menjadi: \"%d\"", strval(inputtext));
 
 		}
 	}
@@ -4669,7 +4602,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			VehicleObjects[PlayerData[playerid][pVehicle]][PlayerData[playerid][pListitem]][vehObjectFontSize] = strval(inputtext);
 			Vehicle_ObjectTextSync(PlayerData[playerid][pVehicle], PlayerData[playerid][pListitem]);
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Size diubah  menjadi: \"%d\"", strval(inputtext));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Size diubah  menjadi: \"%d\"", strval(inputtext));
 		}
 	}
 	if(dialogid == DIALOG_MODEDIT)
@@ -4735,7 +4668,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "Kendaraan tidak lagi valid.");
 
 					Vehicle_ObjectDelete(veh, PlayerData[playerid][pListitem]);
-					SendClientMessageEx(playerid, X11_LIGHTBLUE, "V-ATTACHMENT: "WHITE"Attachment pada slot %d berhasil dihapus.", PlayerData[playerid][pListitem]);
+					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(V-Attachment) "WHITE"Attachment pada slot %d berhasil dihapus.", PlayerData[playerid][pListitem]);
 				}
 			}
 		}
@@ -4800,7 +4733,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			PlayerData[playerid][pEditing] = ListedFurniture[playerid][listitem];
 
-			ShowPlayerDialog(playerid, DIALOG_FURNITURE_MENU, DIALOG_STYLE_LIST, sprintf("Furniture Option(s) - %s", FurnitureData[PlayerData[playerid][pEditing]][furnitureName]), "Edit position (click n drag)\nEdit position (click textdraw)\n"RED"(beta) "WHITE"Change Texture\nRemove furniture", "Select", "Close");
+			ShowFurnitureEditMenu(playerid);
 		}
 	}
 	if(dialogid == DIALOG_FLAT_FURNITURE)
@@ -4809,7 +4742,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-			    new count = 0, string[2012], flatid = Flat_Inside(playerid), real_count;
+			    new count = 0, string[4512], flatid = Flat_Inside(playerid), real_count;
 				foreach(new i : Furniture) if (FurnitureData[i][furnitureProperty] == FlatData[flatid][flatID] && FurnitureData[i][furniturePropertyType] == FURNITURE_TYPE_FLAT)
 				{
 					if(real_count >= Flat_LimitFurniture(flatid))
@@ -4885,7 +4818,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				GiveMoney(playerid, -price);
 				FlatData[flat_id][flatFurnitureLevel] ++;
 
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", FlatData[flat_id][flatFurnitureLevel], FormatNumber(price));
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", FlatData[flat_id][flatFurnitureLevel], FormatNumber(price));
 				Flat_Save(flat_id);
 			}
 		}
@@ -4896,7 +4829,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-			    new count = 0, string[2012], houseid = House_Inside(playerid), real_count = 0;
+			    new count = 0, string[4512], houseid = House_Inside(playerid), real_count = 0;
 				foreach(new i : Furniture) if (FurnitureData[i][furnitureProperty] == HouseData[houseid][houseID] && FurnitureData[i][furniturePropertyType] == FURNITURE_TYPE_HOUSE)
 				{
 
@@ -4971,7 +4904,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				GiveMoney(playerid, -price);
 				HouseData[id][houseFurnitureLevel] ++;
 
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FURNITURE: "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", HouseData[id][houseFurnitureLevel], FormatNumber(price));
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", HouseData[id][houseFurnitureLevel], FormatNumber(price));
 				House_Save(id);
 			}
 		}
@@ -5204,7 +5137,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, GarageData[listitem][garageX], GarageData[listitem][garageY], GarageData[listitem][garageZ], 3.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Garage at {FFA900}%s {FFFFFF}located at your radar.", GetLocation(GarageData[listitem][garageX], GarageData[listitem][garageY], GarageData[listitem][garageZ]));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Garage at "RED"%s {FFFFFF}located at your radar.", GetLocation(GarageData[listitem][garageX], GarageData[listitem][garageY], GarageData[listitem][garageZ]));
 		}
 	}
 	if(dialogid == DIALOG_GPS_WORKSHOP)
@@ -5212,7 +5145,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, WorkshopData[listitem][wsFootPos][0],WorkshopData[listitem][wsFootPos][1], WorkshopData[listitem][wsFootPos][2] , 3.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Workshop at {FFA900}%s {FFFFFF}located at your radar.", GetLocation(WorkshopData[listitem][wsFootPos][0],WorkshopData[listitem][wsFootPos][1], WorkshopData[listitem][wsFootPos][2]));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Workshop at "RED"%s {FFFFFF}located at your radar.", GetLocation(WorkshopData[listitem][wsFootPos][0],WorkshopData[listitem][wsFootPos][1], WorkshopData[listitem][wsFootPos][2]));
 		}
 	}
 	if(dialogid == DIALOG_GPS_TREE)
@@ -5220,7 +5153,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, TreeData[listitem][treePos][0], TreeData[listitem][treePos][1], TreeData[listitem][treePos][2], 3.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Tree at {FFA900}%s {FFFFFF}located at your radar.", GetLocation(TreeData[listitem][treePos][0], TreeData[listitem][treePos][1], TreeData[listitem][treePos][2]));
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Tree at "RED"%s {FFFFFF}located at your radar.", GetLocation(TreeData[listitem][treePos][0], TreeData[listitem][treePos][1], TreeData[listitem][treePos][2]));
 		}
 	}
 	if(dialogid == DIALOG_EDITBONE)
@@ -5281,7 +5214,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			   
 				if (WeaponSettings[playerid][index][Hidden])
 				{
-					format(string, sizeof(string), "{FFFF00}INFO: {FFFFFF}You have {00FF00}unhide {FFFFFF}attachment for weapon {FFFF00}%s", weaponname);
+					format(string, sizeof(string), "{FFFF00}(Info) {FFFFFF}You have {00FF00}unhide {FFFFFF}attachment for weapon {FFFF00}%s", weaponname);
 					WeaponSettings[playerid][index][Hidden] = false;
 				}
 				else
@@ -5289,7 +5222,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if (IsPlayerAttachedObjectSlotUsed(playerid, GetWeaponObjectSlot(weaponid)))
 						RemovePlayerAttachedObject(playerid, GetWeaponObjectSlot(weaponid));
 
-					format(string, sizeof(string), "{FFFF00}INFO: {FFFFFF}You have {FF0000}hide {FFFFFF}attachment for weapon {FFFF00}%s", weaponname);
+					format(string, sizeof(string), "{FFFF00}(Info) {FFFFFF}You have {FF0000}hide {FFFFFF}attachment for weapon {FFFF00}%s", weaponname);
 					WeaponSettings[playerid][index][Hidden] = true;
 				}
 				SendClientMessage(playerid, -1, string);
@@ -5770,7 +5703,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, PublicPoint[listitem][0], PublicPoint[listitem][1], PublicPoint[listitem][2], 4.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Lokasi {FFA900}%s {FFFFFF}berhasil ditandai pada radarmu!", PublicName[listitem]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Lokasi "RED"%s {FFFFFF}berhasil ditandai pada radarmu!", PublicName[listitem]);
 		}
 	}
 	if(dialogid == DIALOG_GPS_JOB)
@@ -5778,7 +5711,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, JobPoint[listitem][0], JobPoint[listitem][1], JobPoint[listitem][2], 4.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Lokasi {FFA900}%s {FFFFFF}berhasil ditandai pada radarmu!", JobLocName[listitem]);			
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Lokasi "RED"%s {FFFFFF}berhasil ditandai pada radarmu!", JobLocName[listitem]);			
 		}
 	}
 	if(dialogid == DIALOG_GPS_DEALER)
@@ -5786,7 +5719,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			SetWaypoint(playerid, DealerData[listitem][dealerPos][0], DealerData[listitem][dealerPos][1], DealerData[listitem][dealerPos][2], 4.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Dealership {FFA900}%s {FFFFFF}berhasil ditandai pada radarmu!", DealerData[listitem][dealerName]);				
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Dealership "RED"%s {FFFFFF}berhasil ditandai pada radarmu!", DealerData[listitem][dealerName]);				
 		}
 	}
 	if(dialogid == DIALOG_GPS_BUSINESS)
@@ -5807,7 +5740,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new idx = ListedBusiness[playerid][listitem];
 
 			SetWaypoint(playerid, BizData[idx][bizExt][0], BizData[idx][bizExt][1], BizData[idx][bizExt][2], 4.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Business {FFA900}%s {FFFFFF}berhasil ditandai pada radarmu!", BizData[idx][bizName]);	
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Business "RED"%s {FFFFFF}berhasil ditandai pada radarmu!", BizData[idx][bizName]);	
 		}
 	}
 	if(dialogid == DIALOG_ATM_WITHDRAW)
@@ -5831,7 +5764,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				
 			GiveMoney(playerid, totalcash, "Withdraw ATM");
 			PlayerData[playerid][pBank] -= totalcash;
-			SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully withdrawn {00FF00}$%s {FFFFFF}from ATM!", FormatNumber(totalcash));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(ATM) {FFFFFF}You have successfully withdrawn {00FF00}$%s {FFFFFF}from ATM!", FormatNumber(totalcash));
 		}
 	}
 	if(dialogid == DIALOG_ATM_TRANSFER_AMOUNT)
@@ -5858,8 +5791,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				PlayerData[targetid][pBank] += strval(totalcash);
 				PlayerData[playerid][pBank] -= strval(totalcash);
-				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
-				SendClientMessageEx(targetid, COLOR_SERVER, "ATM: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+				SendClientMessageEx(playerid, COLOR_SERVER, "(ATM) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
+				SendClientMessageEx(targetid, COLOR_SERVER, "(ATM) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 			}
 			else
 			{
@@ -5874,8 +5807,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				PlayerData[targetid][pBank] += strval(totalcash);
 				PlayerData[playerid][pBank] -= strval(totalcash);
-				SendClientMessageEx(playerid, COLOR_SERVER, "ATM: {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
-				SendClientMessageEx(targetid, COLOR_SERVER, "ATM: {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+				SendClientMessageEx(playerid, COLOR_SERVER, "(ATM) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
+				SendClientMessageEx(targetid, COLOR_SERVER, "(ATM) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
 			}			
 		}
 		else
@@ -5934,30 +5867,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowPlayerDialog(playerid, DIALOG_PAYCHECK, DIALOG_STYLE_MSGBOX, "Paycheck", str, "Get", "Close");
 			}
 		}
-	}
-	if(dialogid == DIALOG_DEALER_SETNAME)
-	{
-		if(isnull(inputtext))
-			return ShowPlayerDialog(playerid, DIALOG_DEALER_SETNAME, DIALOG_STYLE_INPUT, "Dealer Name", "Silahkan masukan nama baru untuk dealership:", "Set", "Close");
-
-		if(strlen(inputtext) > 24)
-			return ShowPlayerDialog(playerid, DIALOG_DEALER_SETNAME, DIALOG_STYLE_INPUT, "Dealer Name", "ERROR: Nama dealer tidak bisa lebih dari 24 huruf!\nSilahkan masukan nama baru untuk dealership:", "Set", "Close");
-		
-		format(DealerData[PlayerData[playerid][pSelecting]][dealerName], 24, inputtext);
-		SendServerMessage(playerid, "Kamu berhasil mengubah nama dealership menjadi {FFFF00}%s", DealerData[PlayerData[playerid][pSelecting]][dealerName]);
-		Dealer_Save(PlayerData[playerid][pSelecting]);
-		Dealer_Refresh(PlayerData[playerid][pSelecting]);
-	}
+	}/*
 	if(dialogid == DIALOG_DEALER_RESTOCK_AMOUNT)
 	{
 		if(response)
 		{
 			new amount = strval(inputtext), id = PlayerData[playerid][pSelecting], list = PlayerData[playerid][pListitem];
 			if(amount < 1)
-				return ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][list])), "ERROR: Invalid amount!\nPlease input amount for rethe selected vehicle:\nNote: Min 1.", "Restock", "Close");
+				return ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][list])), "ERROR: Invalid amount!\nPlease input amount for rethe selected (Vehicle)\nNote: Min 1.", "Restock", "Close");
 
 			DealerData[id][dealerStock][list] += amount;
-			Dealer_Save(id);
+			SQL_SaveDealership(id);
 			SendServerMessage(playerid, "Kamu telah merestock {FFFF00}%d {FFFFFF}kendaraan dealer.", amount);
 		}
 	}
@@ -5969,7 +5889,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(DealerData[id][dealerVehicle][listitem] == 19300)
 				return SendErrorMessage(playerid, "There is no vehicle on selected list!");
 
-			ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][listitem])), "Please input amount for rethe selected vehicle:\nNote: Min 1.", "Restock", "Close");
+			ShowPlayerDialog(playerid, DIALOG_DEALER_RESTOCK_AMOUNT, DIALOG_STYLE_INPUT, sprintf("%s", ReturnDealerVehicle(DealerData[id][dealerVehicle][listitem])), "Please input amount for rethe selected (Vehicle)\nNote: Min 1.", "Restock", "Close");
 			PlayerData[playerid][pListitem] = listitem;
 		}
 	}
@@ -6007,13 +5927,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			DealerData[id][dealerCost][list] = strcash(inputtext);
 			SendClientMessageEx(playerid, COLOR_SERVER, "AdmCmd: {FFFFFF}Kamu telah mengubah kendaraan menjadi {FFFF00}%s {FFFFFF}dengan harga {00FF00}$%s", ReturnVehicleModelName(DealerData[id][dealerVehicle][list]), FormatNumber(DealerData[id][dealerCost][list]));
-			Dealer_Save(id);
+			SQL_SaveDealership(id);
 		}
 		else
 		{
 			DealerData[id][dealerVehicle] = 19300;
 			DealerData[id][dealerCost] = 0;
-			Dealer_Save(id);
+			SQL_SaveDealership(id);
 		}
 	}
 	if(dialogid == DIALOG_EDITDEALER_SELECT)
@@ -6023,7 +5943,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayerData[playerid][pListitem] = listitem;
 			ShowPlayerDialog(playerid, DIALOG_EDITDEALER_MODEL, DIALOG_STYLE_INPUT, "Vehicle Model", "Silahkan masukan model id atau nama kendaraan:", "Next", "Close");
 		}
-	}
+	}*/
 	if(dialogid == DIALOG_CONTACTNUM)
 	{
 		if (response)
@@ -6039,7 +5959,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(contactid == -1)
 				return SendErrorMessage(playerid, "There is no room left for anymore contacts.");
 
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "CONTACT INFO: "WHITE"Kamu telah menambahkan "YELLOW"\"%s\" "WHITE"ke kontakmu.", PlayerData[playerid][pTempContact]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "CONTACT (Info) "WHITE"Kamu telah menambahkan "YELLOW"\"%s\" "WHITE"ke kontakmu.", PlayerData[playerid][pTempContact]);
 		}
 		else
 		{
@@ -6325,6 +6245,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 7)
 			{
+				if(g_LiveStatus == LIVE_STATUS_OFF_AIR && g_ReporterPlayerID == INVALID_PLAYER_ID) {
+					return SendErrorMessage(playerid, "Tidak ada siaran yang sedang berlangsung.");
+
+				}
+
+				if(IsPlayerRecording(playerid)) {
+					return SendErrorMessage(playerid, "Tidak dapat melakukan ini jika sedang merekam.");
+				}
+				if(IsPlayerWatchingCamera(playerid))
+					return SendErrorMessage(playerid, "Kamu sedang menonton siaran langsung saat ini.");
+					
+				SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Kamu sekarang menonton televisi.");
+				SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Gunakan "YELLOW"/stopwatchlive "WHITE"untuk berhenti.");
+
+				StartPlayerWatchingCamera(playerid, g_ReporterPlayerID);
+				SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s starts watching live broadcast from their phone", ReturnName(playerid));
+
+				ShowLiveTD(playerid);
+			}
+			if(listitem == 8) {
 			    if (!PlayerData[playerid][pPhoneOff])
 			    {
            			if (PlayerData[playerid][pCallLine] != INVALID_PLAYER_ID)
@@ -6332,12 +6272,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        	CancelCall(playerid);
 					}
 					PlayerData[playerid][pPhoneOff] = true;
-			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s has powered off their cellphone.", ReturnName(playerid));
+			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "** %s has powered off their cellphone.", ReturnName(playerid));
 				}
 				else
 				{
 				    PlayerData[playerid][pPhoneOff] = false;
-			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s has powered on their cellphone.", ReturnName(playerid));
+			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "** %s has powered on their cellphone.", ReturnName(playerid));
 				}
 			}
 		}
@@ -6386,7 +6326,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			#define randex(%0,%1) (random(%1 - %0 + 1) + %0)
 			format(VehicleData[i][vPlate], 16, "%c%c%c%c%c%c%c", randex('1', '9'), randex('A', 'Z'), randex('A', 'Z'), randex('A', 'Z'), randex('1', '9'), randex('1', '9'), randex('1', '9'));
-			SendClientMessageEx(playerid, COLOR_SERVER, "VEHICLE: {FFFFFF}You have successfully purchasing plate for your {FFFF00}%s", ReturnVehicleModelName(VehicleData[i][vModel]));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Vehicle) {FFFFFF}You have successfully purchasing plate for your {FFFF00}%s", ReturnVehicleModelName(VehicleData[i][vModel]));
 			GiveMoney(playerid, -15000, "Beli plate");
 
 			if(IsValidVehicle(i))
@@ -6432,9 +6372,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendServerMessage(playerid, "You have been reviving {FFFF00}%s", ReturnName(targetid));
 				SendServerMessage(targetid, "You have been revived by {FFFF00}%s", ReturnName(playerid));
 
-				if(IsValidDynamic3DTextLabel(PlayerData[targetid][pInjuredLabel]))
-					DestroyDynamic3DTextLabel(PlayerData[targetid][pInjuredLabel]);
-
 				ApplyAnimation(targetid, "PED", "GETUP_FRONT", 4.0, 0, 1, 1, 0, 0);
 			}
 			if(listitem == 1)
@@ -6454,11 +6391,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 3)
 			{
-				for(new i = 0; i < 7; i++)
-				{
-					PlayerData[targetid][pDamages][i] = 100.0;
-					PlayerData[targetid][pBullets][i] = 0;
-				}
+				ResetPlayerDamages(playerid);
 				SendServerMessage(playerid, "You have operating {FFFF00}%s", ReturnName(targetid));
 				SendServerMessage(targetid, "You have been operated by {FFFF00}%s", ReturnName(playerid));
 			}
@@ -6643,7 +6576,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 	     	OnMower[playerid] = true;
 	     	MowerIndex[playerid] = 0;
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Ikuti semua checkpoint yang ada di radar.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Ikuti semua checkpoint yang ada di radar.");
 			SetPlayerCheckpoint(playerid, arr_MowerCP[MowerIndex[playerid]][mowerX], arr_MowerCP[MowerIndex[playerid]][mowerY], arr_MowerCP[MowerIndex[playerid]][mowerZ], 4.0);
 			SwitchVehicleEngine(GetPlayerVehicleID(playerid), true);
 		}
@@ -6662,7 +6595,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 	     	OnSweeping[playerid] = true;
 	     	SweeperIndex[playerid] = 0;
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Ikuti semua checkpoint yang ada di radar.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Ikuti semua checkpoint yang ada di radar.");
 			SetPlayerCheckpoint(playerid, SweeperPoint[SweeperIndex[playerid]][0], SweeperPoint[SweeperIndex[playerid]][1], SweeperPoint[SweeperIndex[playerid]][2], 4.0);
 			SwitchVehicleEngine(GetPlayerVehicleID(playerid), true);
 		}
@@ -6748,6 +6681,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				strcat(string, "/takepacket - untuk mengambil paket.\n");
 				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Miner", string, "Back", "");
 			}
+			if(listitem == 11) {
+				strcat(string, "/deliverbox - untuk mengantarkan paket kedepan pintu rumah.\n");
+				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Box Courier", string, "Back", "");
+			}
 		}
 	}
 	if(dialogid == DIALOG_HELP)
@@ -6762,7 +6699,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				strcat(string, "/health [opt:playerid/name] | /mask | /atm | /stats | /drag | /undrag | /frisk | /factions\n");
 				strcat(string, "/damages [opt:playerid/PartOfName] | /setfreq | /pr | /disablecp | /licenses [opt:playerid/PartOfName]\n");
 				strcat(string, "/v(ehicle) | /seatbelt | /isafk | /cc | /fish | /sellfish | /myfish | /buybait | /toggle\n");
-				strcat(string, "/tag | /cursor | /tog(gle) | /warnings | /changepassword | /showidcard | /acc\n");
+				strcat(string, "/tag | /cursor | /tog(gle) | /warnings | /changepassword | /showidcard | /acc | /watchlive | /stopwatchlive\n");
 				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "General Commands", string, "Back", "");
 			}
 			if(listitem == 1)
@@ -6772,7 +6709,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 2)
 			{
-				ShowPlayerDialog(playerid, DIALOG_HELP_JOB, DIALOG_STYLE_LIST, "Job Commands", "Bus (Sidejob)\nSweeper (Sidejob)\nTrashmaster (Sidejob)\nTrucker\nMechanic\nTaxi\nLumberjack\nMower (Sidejob)\nDelivery Driver (Sidejob)\nMiner\nSmuggler", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_HELP_JOB, DIALOG_STYLE_LIST, "Job Commands", "Bus (Sidejob)\nSweeper (Sidejob)\nTrashmaster (Sidejob)\nTrucker\nMechanic\nTaxi\nLumberjack\nMower (Sidejob)\nDelivery Driver (Sidejob)\nMiner\nSmuggler\nBox Courier(Sidejob)", "Select", "Close");
 			}
 			if(listitem == 3)
 			{
@@ -6789,7 +6726,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				else if(GetFactionType(playerid) == FACTION_NEWS)
 				{
-					strcat(string, "/live | /inviteguest | /removeguest | /bc | /broadcast | /(give/remove)mic | /postad");
+					strcat(string, "/live | /inviteguest | /removeguest | /bc | /broadcast | /(give/remove)mic | /postad | /camera");
 				}
 				else if(GetFactionType(playerid) == FACTION_GOV)
 				{
@@ -7026,6 +6963,29 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 		}
 	}
+	if(dialogid == DIALOG_EDITLOCKER_WEAPONRANK)
+	{
+		if (response)
+		{
+		    new rank = strval(inputtext);
+
+		    if (isnull(inputtext))
+		        return ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPONRANK, DIALOG_STYLE_INPUT, "Set Minimum Rank", sprintf("Current Rank: %d\n\nPlease enter the new minimum rank for the weapon in slot %d:", FactionData[PlayerData[playerid][pFactionEdit]][factionWeaponMinRank][PlayerData[playerid][pSelectedSlot]], PlayerData[playerid][pSelectedSlot]), "Submit", "Cancel");
+
+			if (rank < 1 || rank > FactionData[PlayerData[playerid][pFaction]][factionRanks])
+			    return ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPONRANK, DIALOG_STYLE_INPUT, "Set Minimum Rank", sprintf("Current Rank: %d\n\nPlease enter the new minimum rank for the weapon in slot %d:", FactionData[PlayerData[playerid][pFactionEdit]][factionWeaponMinRank][PlayerData[playerid][pSelectedSlot]], PlayerData[playerid][pSelectedSlot]), "Submit", "Cancel");
+
+	        FactionData[PlayerData[playerid][pFactionEdit]][factionWeaponMinRank][PlayerData[playerid][pSelectedSlot]] = rank;
+	        Faction_Save(PlayerData[playerid][pFactionEdit]);
+
+		    if (rank) {
+			    SendServerMessage(playerid, "You have set the minimum rank in slot %d to %s.", PlayerData[playerid][pSelectedSlot] + 1, FactionRanks[PlayerData[playerid][pFactionEdit]][PlayerData[playerid][pSelectedSlot]]);
+			}
+			else {
+			    SendServerMessage(playerid, "You have removed the minimum rank in slot %d.", PlayerData[playerid][pSelectedSlot] + 1);
+			}
+		}
+	}
 	if(dialogid == DIALOG_EDITLOCKER_WEAPON_AMMO)
 	{
 		if (response)
@@ -7057,6 +7017,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		            ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPON_AMMO, DIALOG_STYLE_INPUT, "Set Ammunition", sprintf("Current Ammo: %d\n\nPlease enter the new ammunition for the weapon in slot %d:", FactionData[PlayerData[playerid][pFactionEdit]][factionAmmo][PlayerData[playerid][pSelectedSlot]], PlayerData[playerid][pSelectedSlot]), "Submit", "Cancel");
 
 				case 2:
+					ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPONRANK, DIALOG_STYLE_INPUT, "Set Minimum Rank", sprintf("Current Rank: %d\n\nPlease enter the new minimum rank for the weapon in slot %d:", FactionData[PlayerData[playerid][pFactionEdit]][factionWeaponMinRank][PlayerData[playerid][pSelectedSlot]], PlayerData[playerid][pSelectedSlot]), "Submit", "Cancel");
+				case 3:
 				{
 				    FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]] = 0;
 					FactionData[PlayerData[playerid][pFactionEdit]][factionAmmo][PlayerData[playerid][pSelectedSlot]] = 0;
@@ -7073,7 +7035,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if (response)
 		{
 		    PlayerData[playerid][pSelectedSlot] = listitem;
-		    ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPON_SET, DIALOG_STYLE_LIST, "Edit Weapon", sprintf("Set Weapon (%d)\nSet Ammunition (%d)\nClear Slot", FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]], FactionData[PlayerData[playerid][pFactionEdit]][factionAmmo][PlayerData[playerid][pSelectedSlot]]), "Select", "Cancel");
+		    ShowPlayerDialog(playerid, DIALOG_EDITLOCKER_WEAPON_SET, DIALOG_STYLE_LIST, "Edit Weapon", sprintf("Set Weapon (%d)\nSet Ammunition (%d)\nSet Minimum Rank (%d)\nClear", FactionData[PlayerData[playerid][pFactionEdit]][factionWeapons][PlayerData[playerid][pSelectedSlot]], FactionData[PlayerData[playerid][pFactionEdit]][factionAmmo][PlayerData[playerid][pSelectedSlot]], FactionData[PlayerData[playerid][pFactionEdit]][factionWeaponMinRank][PlayerData[playerid][pSelectedSlot]]), "Select", "Cancel");
 		}
 	}
 	if(dialogid == DIALOG_LOCKER_WEAPON)
@@ -7094,7 +7056,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			            return SendErrorMessage(playerid, "You have this weapon equipped already.");
 
 			        GiveWeaponToPlayer(playerid, weaponid, ammo, dura, FactionData[factionid][factionHighVelocity][listitem]);
-			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s reaches inside the locker and equips a %s.", ReturnName(playerid), ReturnWeaponName(weaponid));
+			        SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s reaches inside the locker and equips a %s.", ReturnName(playerid), ReturnWeaponName(weaponid));
 
 			        FactionData[factionid][factionWeapons][listitem] = 0;
 			        FactionData[factionid][factionAmmo][listitem] = 0;
@@ -7107,11 +7069,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(!PlayerData[playerid][pOnDuty])
 						return SendErrorMessage(playerid, "You must faction duty!");
 
+					if(PlayerData[playerid][pFactionRank] < FactionData[factionid][factionWeaponMinRank][listitem])
+						return SendErrorMessage(playerid, "Kamu harus rank %d+ untuk menggunakan senjata ini.", FactionData[factionid][factionWeaponMinRank][listitem]);
 			        if (PlayerHasWeapon(playerid, weaponid))
 			            return SendErrorMessage(playerid, "You have this weapon equipped already.");
 
 			        GiveWeaponToPlayer(playerid, weaponid, ammo, 500, 0);
-			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s reaches inside the locker and equips a %s.", ReturnName(playerid), ReturnWeaponName(weaponid));
+			        SendNearbyMessage(playerid, 15.0,X11_PLUM, "** %s reaches inside the locker and equips a %s.", ReturnName(playerid), ReturnWeaponName(weaponid));
 				}
 			}
 			else
@@ -7128,7 +7092,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        Faction_Save(factionid);
 
 	                ResetWeapon(playerid, weaponid);
-			        SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s takes out a %s and stores it in the locker.", ReturnName(playerid), ReturnWeaponName(weaponid));
+			        SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s takes out a %s and stores it in the locker.", ReturnName(playerid), ReturnWeaponName(weaponid));
 				}
 				else
 				{
@@ -7164,7 +7128,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		                    SetFactionColor(playerid);
 		                    SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
-		                    SendNearbyMessage(playerid, 20.0,X11_PLUM, "* %s has clocked in and is now on duty.", ReturnName(playerid));
+		                    SendNearbyMessage(playerid, 20.0,X11_PLUM, "** %s has clocked in and is now on duty.", ReturnName(playerid));
 							SetPlayerHealth(playerid, 100.0);
 
 		                    PlayerData[playerid][pDutyTime] = 3600;
@@ -7178,7 +7142,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		                    SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 		                    ResetWeapons(playerid);
 
-		                    SendNearbyMessage(playerid, 20.0,X11_PLUM, "* %s has clocked out and is now off duty.", ReturnName(playerid));
+		                    SendNearbyMessage(playerid, 20.0,X11_PLUM, "** %s has clocked out and is now off duty.", ReturnName(playerid));
 
 							PlayerData[playerid][pDutySecond] = 0;
 							PlayerData[playerid][pDutyMinute] = 0;
@@ -7188,7 +7152,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 1:
 					{
 					    SetPlayerArmour(playerid, 100.0);
-					    SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s reaches into the locker and takes out a vest.", ReturnName(playerid));
+					    SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s reaches into the locker and takes out a vest.", ReturnName(playerid));
 					}
 					case 2:
 					{
@@ -7241,7 +7205,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							count = true;
 						}
 						if(count)
-							SendFactionMessage(PlayerData[playerid][pFaction], COLOR_SERVER, "FACTION VEHICLE: {FFFFFF}%s faction vehicle has been respawned by {FFFF00}%s", FactionData[factionid][factionName], ReturnName(playerid));
+							SendFactionMessage(PlayerData[playerid][pFaction], COLOR_SERVER, "FACTION (Vehicle) {FFFFFF}%s faction vehicle has been respawned by {FFFF00}%s", FactionData[factionid][factionName], ReturnName(playerid));
 						else
 							SendErrorMessage(playerid, "Your faction doesn't have faction vehicle!");*/
 					}
@@ -7366,7 +7330,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SaveVehicleComponent(vehicleid, componentid);
 		PlayerPlaySound(playerid,1133,0.0,0.0,0.0);
 
-		Inventory_Remove(playerid, "Component", 50);
+		if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+			Inventory_Remove(playerid, "Component", 50);
+
+		ShowMechanicMenuInfo(playerid);
 	}
 	if(dialogid == DIALOG_PAINTJOB) {
 		if (response)
@@ -7384,8 +7351,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ChangeVehiclePaintjob(vehicleid, 3);
 				VehicleData[vehicleid][vPaintjob] = -1;
 			}
-			Inventory_Remove(playerid, "Component", 30);
+
+			if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+				Inventory_Remove(playerid, "Component", 30);
+
 			PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
+			ShowMechanicMenuInfo(playerid);
 		}
 	}
 	if(dialogid == DIALOG_MM)
@@ -7406,10 +7377,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(PlayerData[playerid][pMechPrice][0] < 1)
 				    return SendErrorMessage(playerid, "This Vehicle doesn't need to repaired!");
 				    
-				Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][0]);
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][0]);
+
 		        SetTimerEx("TimeRepairEngine", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Engine", 1000);
-				SendClientMessage(playerid, COLOR_SERVER, "INFO: {FFFFFF}Processing Repairing the Engine of Vehicle, please wait!");
+				SendClientMessage(playerid, COLOR_SERVER, "(Info) {FFFFFF}Kamu sedang memperbaiki mesin kendaraan, harap tunggu.");
 				VehicleData[vehicleid][vRepair] = true;
 			}
  		    if(listitem == 1)
@@ -7420,11 +7393,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(VehicleData[vehicleid][vRepair])
 		            return SendErrorMessage(playerid, "This vehicle is being repaired!");
 		            
-				Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][1]);
-		        SetTimerEx("TimeRepairBody", 10000, false, "dd", playerid, vehicleid);
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][1]);
+		        
+				SetTimerEx("TimeRepairBody", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Body", 1000);
-		  //      ApplyAnimation(playerid, "BD_FIRE", "wash_up", 4.1, 1, 0, 0, 0, 0, 1);
-				SendClientMessage(playerid, COLOR_SERVER, "INFO: {FFFFFF}Processing Repairing the Body of Vehicle, please wait!");
+				SendClientMessage(playerid, COLOR_SERVER, "(Info) {FFFFFF}Kamu sedang memperbaiki body kendaraan, harap tunggu.");
 				VehicleData[vehicleid][vRepair] = true;
 			}
  		    if(listitem == 2)
@@ -7435,11 +7409,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(VehicleData[vehicleid][vRepair])
 		            return SendErrorMessage(playerid, "This vehicle is being repaired!");
 		            
-				Inventory_Remove(playerid, "Component", 15);
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 15);
+
 		        SetTimerEx("TimeRepairTire", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Tires", 1000);
-		  //      ApplyAnimation(playerid, "BD_FIRE", "wash_up", 4.1, 1, 0, 0, 0, 0, 1);
-				SendClientMessage(playerid, COLOR_SERVER, "INFO: {FFFFFF}Processing Repairing the Tires of Vehicle, please wait!");
+				SendClientMessage(playerid, COLOR_SERVER, "(Info) {FFFFFF}Kamu sedang memperbaiki ban kendaraan, harap tunggu.");
 				VehicleData[vehicleid][vRepair] = true;
 			}
 			if(listitem == 3)
@@ -7460,7 +7435,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			   	}
 			   	ShowColorSelectionMenu(playerid, MODEL_SELECTION_COLOR_1, colors);
 
-				SendClientMessage(playerid, X11_LIGHTBLUE, "MECH-HINT: "WHITE"Silahkan pilih warna pertama terlebih dahulu.");
+				SendClientMessage(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Silahkan pilih warna pertama terlebih dahulu.");
 			}
 			if(listitem == 4) {
 			    if(GetComponent(playerid) < 50)
@@ -7542,7 +7517,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SaveVehicleComponent(vehicleid, 1010);
 				PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
 				SendServerMessage(playerid, "Kamu berhasil menginstall nitro pada kendaraan %s.", GetVehicleName(vehicleid));
-				Inventory_Remove(playerid, "Component", 150);
+				
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 150);
+
+				ShowMechanicMenuInfo(playerid);
 			}
 			if(listitem == 7) {
 
@@ -7590,9 +7569,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
-				Inventory_Remove(playerid, "Component", 350);
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 350);
+
 				Vehicle_SetEngineLevel(vehicleid, 1);
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Mesin kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));	
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Mesin kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));	
+				ShowMechanicMenuInfo(playerid);
 			}
 			if(listitem == 9) {
 			    if(GetComponent(playerid) < 350)
@@ -7607,10 +7589,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 350);
 
-				Inventory_Remove(playerid, "Component", 350);
 				Vehicle_SetBodyLevel(vehicleid, 1);
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "MECHANIC: "WHITE"Body kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Body kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
+				ShowMechanicMenuInfo(playerid);
 			}
 			if(listitem == 10) {
 				
@@ -7648,6 +7632,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				VehicleData[vehicleid][vMod][i] = 0;
 				break;
 			}
+
+			ShowMechanicMenuInfo(playerid);
 		}
 	}
 	if(dialogid == DIALOG_SELECT_NEON) {
@@ -7673,7 +7659,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 2);
 				SendServerMessage(playerid, "Neon berhasil dipasang pada kendaraan %s.", GetVehicleName(vehicleid));
 
-				Inventory_Remove(playerid, "Component", 200);
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 200);
 
 				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 
@@ -7692,6 +7679,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 
 			Vehicle_Save(vehicleid);
+			ShowMechanicMenuInfo(playerid);
 		}
 	}
 	if(dialogid == DIALOG_TUNE_RIMS) {
@@ -7708,11 +7696,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return SendErrorMessage(playerid, "Kamu tidak lagi dekat dengan kendaraan tersebut.");
 
 		SendServerMessage(playerid, "Berhasil mengubah rims kendaraan %s menjadi "YELLOW"%s", GetVehicleName(vehicleid), g_WheelData[listitem][wheelName]);
-		Inventory_Remove(playerid, "Component", 100);
-	    ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
+		
+		if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+			Inventory_Remove(playerid, "Component", 100);
+	    
+		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
 	    PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
 		AddVehicleComponent(vehicleid, model);
 		SaveVehicleComponent(vehicleid, model);
+		ShowMechanicMenuInfo(playerid);
 	}
 	if(dialogid == DIALOG_BUYINSU)
 	{
@@ -7729,7 +7721,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			VehicleData[i][vInsurance]++;
 			GiveMoney(playerid, -price, "Beli insurance");
-			SendClientMessageEx(playerid, COLOR_SERVER, "INSURANCE: {FFFFFF}You've successfully purchase insurance for {FFFF00}%s", ReturnVehicleModelName(VehicleData[i][vModel]));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Insurance) {FFFFFF}You've successfully purchase insurance for {FFFF00}%s", ReturnVehicleModelName(VehicleData[i][vModel]));
 		}
 	}
 	if(dialogid == DIALOG_CLAIMINSU)
@@ -7796,7 +7788,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					format(string, sizeof(string), "~g~%s~w~ added to inventory!", DroppedItems[id][droppedItem]);
 	 				ShowMessage(playerid, string, 2);
-					SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has picked up a \"%s\".", ReturnName(playerid), DroppedItems[id][droppedItem]);
+					SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has picked up a \"%s\".", ReturnName(playerid), DroppedItems[id][droppedItem]);
 				}
 				else
 					SendErrorMessage(playerid, "You don't have any slot in your inventory.");
@@ -7814,21 +7806,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayerData[playerid][pTracking] = true;
 			GetVehiclePos(i, pos[0], pos[1], pos[2]);
 			SetWaypoint(playerid, pos[0], pos[1], pos[2], 4.0);
-			SendClientMessageEx(playerid, COLOR_SERVER, "GPS: {FFFFFF}Your {FFFF00}%s {FFFFFF}has been marked on radar (%s)", GetVehicleName(i), GetLocation(pos[0], pos[1], pos[2]));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(GPS) {FFFFFF}Your {FFFF00}%s {FFFFFF}has been marked on radar (%s)", GetVehicleName(i), GetLocation(pos[0], pos[1], pos[2]));
 		}
 	}
 	if(dialogid == DIALOG_GPS_CARGO) {
 		if(response) {
 
 			SetWaypoint(playerid, CargoLoc[listitem][cargoX], CargoLoc[listitem][cargoY], CargoLoc[listitem][cargoZ], 3.0);
-			SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Cargo {FFA900}%s {FFFFFF}located at your radar.", CargoLoc[listitem][cargoType]);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Cargo "RED"%s {FFFFFF}located at your radar.", CargoLoc[listitem][cargoType]);
 		}
 	}
 	if(dialogid == DIALOG_GPS)
 	{
 		if(response)
 		{
-			if(listitem == 0) SendClientMessageEx(playerid, COLOR_YELLOW, "GPS: {FFFFFF}Your current location is now on {00FFFF}%s", GetSpecificLocation(playerid));
+			if(listitem == 0) SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}Your current location is now on {00FFFF}%s", GetSpecificLocation(playerid));
 			if(listitem == 1) ShowPublicLocation(playerid);
 			if(listitem == 2) ShowJobLocation(playerid);
 			if(listitem == 3) ShowVehicleLocation(playerid);
@@ -7942,7 +7934,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Pump_Sync(pump_index);
 			Business_Save(bizid);
 
-			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"%s.", total_fuel, FormatNumber(payment));
+			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"$%s.", total_fuel, FormatNumber(payment));
         }
         else 
         {
@@ -7968,7 +7960,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Pump_Save(pump_index);
 			Pump_Sync(pump_index);
 			Business_Save(bizid);
-			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"%s.", strval(inputtext), FormatNumber(payment));
+			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"$%s.", strval(inputtext), FormatNumber(payment));
         }     
 	}
 	if(dialogid == DIALOG_SELLCARGO)
@@ -7984,7 +7976,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GiveMoney(playerid, BizData[id][bizCargo], "Sell cargo");
 			BizData[id][bizStock] += 20;
 			BizData[id][bizVault] -= BizData[id][bizCargo];
-			SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil menjual {FFFF00}%s Cargo {FFFFFF}dan mendapat {00FF00}$%s", Crate_Name[CrateData[cid][crateType]], FormatNumber(BizData[id][bizCargo]));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil menjual {FFFF00}%s Cargo {FFFFFF}dan mendapat {00FF00}$%s", Crate_Name[CrateData[cid][crateType]], FormatNumber(BizData[id][bizCargo]));
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);		
 			ApplyAnimation(playerid, "CARRY", "putdwn", 4.1, 0, 0, 0, 0, 0, 1);
 			RemovePlayerAttachedObject(playerid, 9);
@@ -8003,7 +7995,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			new id = ListedCrate[playerid][listitem];
 
-			SendClientMessageEx(playerid, COLOR_SERVER, "CARGO: {FFFFFF}Kamu berhasil mengambil Cargo {FFFF00}%s {FFFFFF}dari Truck!", Crate_Name[CrateData[id][crateType]]);
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil mengambil Cargo {FFFF00}%s {FFFFFF}dari Truck!", Crate_Name[CrateData[id][crateType]]);
 			ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
 			SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
 			SetPlayerAttachedObject(playerid,  9, 1271, 5, 0.044377, 0.029049, 0.161334, 265.922912, 9.904896, 21.765972, 0.500000, 0.500000, 0.500000);
@@ -8102,7 +8094,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			new id = PlayerData[playerid][pInBiz];
 			new slot = PlayerData[playerid][pListitem];
-			SendClientMessageEx(playerid, COLOR_SERVER, "BIZ: {FFFFFF}Kamu telah mengubah nama product dari {00FFFF}%s {FFFFFF}menjadi {00FFFF}%s", ProductName[id][slot], inputtext);
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Business) {FFFFFF}Kamu telah mengubah nama product dari {00FFFF}%s {FFFFFF}menjadi {00FFFF}%s", ProductName[id][slot], inputtext);
 			format(ProductName[id][slot], 24, inputtext);
 			cmd_biz(playerid, "menu");
 			Business_Save(id);
@@ -8117,7 +8109,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            
 			new id = PlayerData[playerid][pInBiz];
 			new slot = PlayerData[playerid][pListitem];
-			SendClientMessageEx(playerid, COLOR_SERVER, "BIZ: {FFFFFF}Kamu telah mengubah harga product dari {009000}$%s {FFFFFF}menjadi {009000}$%s", FormatNumber(BizData[id][bizProduct][slot]), FormatNumber(strcash(inputtext)));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Business) {FFFFFF}Kamu telah mengubah harga product dari {009000}$%s {FFFFFF}menjadi {009000}$%s", FormatNumber(BizData[id][bizProduct][slot]), FormatNumber(strcash(inputtext)));
 			BizData[id][bizProduct][slot] = strcash(inputtext);
 			cmd_biz(playerid, "menu");
 			Business_Save(id);
@@ -8282,7 +8274,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return SendErrorMessage(playerid, "Cannot under $50.00 or above $150!"), cmd_biz(playerid, "menu");
 
 			BizData[id][bizCargo] = price;
-			SendClientMessageEx(playerid, COLOR_SERVER, "BUSINESS: {FFFFFF}Kamu telah mengubah Cargo price menjadi {00FF00}$%s", FormatNumber(price));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Business) {FFFFFF}Kamu telah mengubah Cargo price menjadi {00FF00}$%s", FormatNumber(price));
 			cmd_biz(playerid, "menu");
 		}
 	}
@@ -8295,7 +8287,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        if(GetMoney(playerid) < RentData[id][rentPrice][listitem])
 	            return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang!");
 	            
-            new vehicleid = Vehicle_Create(RentData[id][rentModel][slot], RentData[id][rentSpawn][0], RentData[id][rentSpawn][1], RentData[id][rentSpawn][2], RentData[id][rentSpawn][3], random(255), random(255), 0, true, "RENTAL");
+            new vehicleid = Vehicle_Create(RentData[id][rentModel][slot], RentData[id][rentSpawn][0], RentData[id][rentSpawn][1], RentData[id][rentSpawn][2], RentData[id][rentSpawn][3], random(255), random(255), 0, true, "RENTAL"); 
 			
 			Vehicle_SetType(vehicleid, VEHICLE_TYPE_RENTAL);
 			Vehicle_SetOwner(vehicleid, playerid, true);
@@ -8304,8 +8296,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			VehicleData[vehicleid][vRentTime] = 3600;
 
 			GiveMoney(playerid, -RentData[id][rentPrice][slot], "Rental kendaraan");
-			SendClientMessageEx(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}Kamu telah menyewa {00FFFF}%s {FFFFFF}untuk 1 Jam seharga {009000}$%s", ReturnVehicleModelName(RentData[id][rentModel][slot]), FormatNumber(RentData[id][rentPrice][slot]));
-			SendClientMessageEx(playerid, COLOR_SERVER, "RENTAL: "WHITE"Gunakan "YELLOW"/rentinfo "WHITE"untuk info kendaraan rental.");
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Rental) {FFFFFF}Kamu telah menyewa {00FFFF}%s {FFFFFF}untuk 1 Jam seharga {009000}$%s", ReturnVehicleModelName(RentData[id][rentModel][slot]), FormatNumber(RentData[id][rentPrice][slot]));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Rental) "WHITE"Gunakan "YELLOW"/rentinfo "WHITE"untuk info kendaraan rental.");
 		}
 	}
 	if(dialogid == DIALOG_RENTTIME)
@@ -8323,13 +8315,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return 1;
 			}
 			GiveMoney(playerid, -RentData[id][rentPrice][slot] * time, "Rental kendaraan");
-			SendClientMessageEx(playerid, COLOR_SERVER, "RENTAL: {FFFFFF}Kamu telah menyewa {00FFFF}%s {FFFFFF}untuk %d Jam seharga {009000}$%s", ReturnVehicleModelName(RentData[id][rentModel][slot]), time, FormatNumber(RentData[id][rentPrice][slot] * time));
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Rental) {FFFFFF}Kamu telah menyewa {00FFFF}%s {FFFFFF}untuk %d Jam seharga {009000}$%s", ReturnVehicleModelName(RentData[id][rentModel][slot]), time, FormatNumber(RentData[id][rentPrice][slot] * time));
             vehicleid = Vehicle_Create(RentData[id][rentModel][slot], RentData[id][rentSpawn][0], RentData[id][rentSpawn][1], RentData[id][rentSpawn][2], RentData[id][rentSpawn][3], random(255), random(255), 0, true, "RENTAL");
 			Vehicle_SetOwner(vehicleid, playerid, true);
 			Vehicle_SetType(vehicleid, VEHICLE_TYPE_RENTAL);
 		
 			VehicleData[vehicleid][vRental] = PlayerData[playerid][pRenting];
 			VehicleData[vehicleid][vRentTime] = 3600;
+
+			Vehicle_Save(vehicleid);
 		}
 	}
 	if(dialogid == DIALOG_BUYSKINS)
@@ -8373,7 +8367,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					{
 						new amount = strval(inputtext);
 						GiveMoney(playerid, amount*1500, "Jual rolled weed");
-						SendClientMessageEx(playerid, COLOR_SERVER, "DRUGS: {FFFFFF}Kamu telah menjual {FFFF00}%d Rolled Weed {FFFFFF}dan mendapatkan {00FF00}$%s", amount, FormatNumber(amount*1500));
+						SendClientMessageEx(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Kamu telah menjual {FFFF00}%d Rolled Weed {FFFFFF}dan mendapatkan {00FF00}$%s", amount, FormatNumber(amount*1500));
 						Inventory_Remove(playerid, "Rolled Weed", strval(inputtext));
 					}
 					else
@@ -8423,7 +8417,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    if (id == -1)
 					return SendErrorMessage(playerid, "That player doesn't have anymore inventory slots.");
 
-			    SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s takes out a \"%s\" and gives it to %s.", ReturnName(playerid), string, ReturnName(userid));
+			    SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s takes out a \"%s\" and gives it to %s.", ReturnName(playerid), string, ReturnName(userid));
 			    SendServerMessage(userid, "%s has given you \"%s\" (added to inventory).", ReturnName(playerid), string);
 
 				Inventory_Remove(playerid, string);
@@ -8463,7 +8457,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    if (id == -1)
 				return SendErrorMessage(playerid, "That player doesn't have anymore inventory slots.");
 
-		    SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s takes out a \"%s\" and gives it to %s.", ReturnName(playerid), string, ReturnName(userid));
+		    SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s takes out a \"%s\" and gives it to %s.", ReturnName(playerid), string, ReturnName(userid));
 		    SendServerMessage(userid, "%s has given you \"%s\" (added to inventory).", ReturnName(playerid), string);
 
 			Inventory_Remove(playerid, string, strval(inputtext));
@@ -8505,6 +8499,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    if(!strcmp(string, "Mask"))
 				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
 
+				    if(!strcmp(string, "Fish Rod") && GetEquipedItem(playerid) == EQUIP_ITEM_ROD) {
+						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
+					}
+
+				    if(!strcmp(string, "Axe") && GetEquipedItem(playerid) == EQUIP_ITEM_AXE) {
+						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
+					}
+
 					PlayerData[playerid][pListitem] = itemid;
 					ShowPlayerDialog(playerid, DIALOG_GIVEITEM, DIALOG_STYLE_INPUT, "Give Item", "Please enter the name or the ID of the player:", "Submit", "Cancel");
 		        }
@@ -8529,6 +8531,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "Lepas mask terlebih dahulu.");
 					}
 
+				    if(!strcmp(string, "Fish Rod") && GetEquipedItem(playerid) == EQUIP_ITEM_ROD) {
+						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
+					}
+
+				    if(!strcmp(string, "Axe") && GetEquipedItem(playerid) == EQUIP_ITEM_AXE) {
+						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
+					}
+
 					else if (InventoryData[playerid][itemid][invQuantity] == 1)
 					{
 						if(!strcmp(string, "Rolled Weed"))
@@ -8537,7 +8547,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							{
 								new amount = InventoryData[playerid][itemid][invQuantity];
 								GiveMoney(playerid, amount*1500, "Jual rolled weed");
-								SendClientMessageEx(playerid, COLOR_SERVER, "DRUGS: {FFFFFF}Kamu telah menjual {FFFF00}%d Rolled Weed {FFFFFF}dan mendapatkan {00FF00}$%s", amount, FormatNumber(amount*1500));
+								SendClientMessageEx(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Kamu telah menjual {FFFF00}%d Rolled Weed {FFFFFF}dan mendapatkan {00FF00}$%s", amount, FormatNumber(amount*1500));
 								Inventory_Remove(playerid, "Rolled Weed");
 							}
 							else
@@ -8561,6 +8571,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
         if(response)
         {
+	
 		    new
 		        name[48], id, str[156], index = g_ListedInventory[playerid][listitem];
 
@@ -8598,7 +8609,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        		House_AddItem(id, name, InventoryData[playerid][index][invModel], 1);
 			        		Inventory_Remove(playerid, name);
 			        		
-			        		SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their house storage.", ReturnName(playerid), name);
+			        		SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their house storage.", ReturnName(playerid), name);
 					 		House_ShowItems(playerid, id);
 						}
 						else
@@ -8629,7 +8640,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        		Flat_AddItem(id, name, InventoryData[playerid][index][invModel], 1);
 			        		Inventory_Remove(playerid, name);
 			        		
-			        		SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their flat storage.", ReturnName(playerid), name);
+			        		SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their flat storage.", ReturnName(playerid), name);
 					 		Flat_ShowItems(playerid, id);
 						}
 						else
@@ -8644,6 +8655,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if((id = Vehicle_Nearest(playerid, 5.0)) != -1) {
 
 						if (InventoryData[playerid][index][invQuantity] == 1) {
+							
 							if(!strcmp(name, "Cellphone"))
 								return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
 
@@ -8660,6 +8672,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							Inventory_Remove(playerid, name);
 
 							SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s has stored a \"%s\" into the trunk.", ReturnName(playerid), name);
+							SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Trunk) "WHITE"Kamu telah menyimpan "YELLOW"%s "WHITE"kedalam bagasi "CYAN"%s", name, GetVehicleName(id));
 							Vehicle_ShowTrunk(playerid, id);
 						}
 						else {
@@ -8674,6 +8687,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_TRUNK_DEPOSIT) {
 		if(response) {
+			
 			static
 				carid = -1,
 				string[32];
@@ -8696,6 +8710,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					Inventory_Remove(playerid, string, amount);
 
 					SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s has stored a \"%s\" into the trunk.", ReturnName(playerid), string);
+					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Trunk) "WHITE"Kamu telah menyimpan "YELLOW"%d %s "WHITE"kedalam bagasi "CYAN"%s", amount, string, GetVehicleName(carid));
 					Vehicle_ShowTrunk(playerid, carid);
 				}
 				else Vehicle_ShowTrunk(playerid, carid);
@@ -8733,6 +8748,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					Car_RemoveItem(carid, string, amount);
 
 					SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s has taken a \"%s\" from the trunk.", ReturnName(playerid), string);
+					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Trunk) "WHITE"Kamu mengambil "YELLOW"%d %s "WHITE"dari bagasi "CYAN"%s", amount, string, GetVehicleName(carid));
 					Vehicle_ShowTrunk(playerid, carid);
 				}
 				else Vehicle_ShowTrunk(playerid, carid);
@@ -9090,7 +9106,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				new cQuery[256];
 				mysql_format(sqlcon, cQuery, sizeof(cQuery), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", PlayerChar[playerid][PlayerData[playerid][pChar]]);
 				mysql_tquery(sqlcon, cQuery, "LoadCharacterData", "d", playerid);
-
 				//SetPlayerName(playerid, PlayerChar[playerid][listitem]);
 			}
 			case 1: {
@@ -9239,14 +9254,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				case MUSIC_BOOMBOX:
 				{
 				    SetMusicStream(MUSIC_BOOMBOX, playerid, inputtext);
-					SendNearbyMessage(playerid, 10.0,X11_PLUM, "* %s change songs on Boombox", ReturnName(playerid));
+					SendNearbyMessage(playerid, 10.0,X11_PLUM, "** %s change songs on Boombox", ReturnName(playerid));
 				}
 				case MUSIC_VEHICLE:
 				{
 				    if(IsPlayerInAnyVehicle(playerid))
 				    {
 					    SetMusicStream(MUSIC_VEHICLE, GetPlayerVehicleID(playerid), inputtext);
-						SendNearbyMessage(playerid, 10.0,X11_PLUM, "* %s change songs on Vehicle Radio", ReturnName(playerid));
+						SendNearbyMessage(playerid, 10.0,X11_PLUM, "** %s change songs on Vehicle Radio", ReturnName(playerid));
 					}
 				}
 			}
@@ -9268,7 +9283,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    if(IsPlayerInAnyVehicle(playerid))
 				    {
 					    SetMusicStream(MUSIC_VEHICLE, GetPlayerVehicleID(playerid), ListURLMusic[listitem][LinkURL]);
-						SendNearbyMessage(playerid, 10.0,X11_PLUM, "* %s change songs on Vehicle Radio", ReturnName(playerid));
+						SendNearbyMessage(playerid, 10.0,X11_PLUM, "** %s change songs on Vehicle Radio", ReturnName(playerid));
 					}
 				}
 			}
@@ -9332,7 +9347,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			           
 					GiveWeaponToPlayer(playerid, FamilyData[familyid][familyWeapons][listitem], FamilyData[familyid][familyAmmo][listitem],FamilyData[familyid][familyDurability][listitem]);
 
-					SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(FamilyData[familyid][familyWeapons][listitem]));
+					SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their weapon storage.", ReturnName(playerid), ReturnWeaponName(FamilyData[familyid][familyWeapons][listitem]));
 	          //      Log_Write("logs/storage_log.txt", "[%s] %s has taken a \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), ReturnWeaponName(HouseData[houseid][houseWeapons][listitem]), HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
 
 					FamilyData[familyid][familyWeapons][listitem] = 0;
@@ -9355,7 +9370,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						return SendErrorMessage(playerid, "You can't store a weapon since faction duty.");
 
 	                ResetWeapon(playerid, weaponid);
-					SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
+					SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their weapon storage.", ReturnName(playerid), ReturnWeaponName(weaponid));
 
 					FamilyData[familyid][familyWeapons][listitem] = weaponid;
 					FamilyData[familyid][familyAmmo][listitem] = ammo;
@@ -9417,7 +9432,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        					return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
 				            Family_RemoveItem(familyid, string);
-				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their family storage.", ReturnName(playerid), string);
+				            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their family storage.", ReturnName(playerid), string);
 
 							Family_ShowItems(playerid, familyid);
 						//	Log_Write("logs/storage_log.txt", "[%s] %s has taken \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), string, HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
@@ -9457,7 +9472,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						    Family_AddItem(familyid, string, InventoryData[playerid][id][invModel]);
 							Inventory_Remove(playerid, string);
 
-							SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their family storage.", ReturnName(playerid), string);
+							SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their family storage.", ReturnName(playerid), string);
 							Family_ShowItems(playerid, familyid);
 						}
 						else if (InventoryData[playerid][id][invQuantity] > 1)
@@ -9516,7 +9531,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return SendErrorMessage(playerid, "You don't have any inventory slots left.");
 
 			Family_RemoveItem(familyid, string, amount);
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has taken a \"%s\" from their family storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has taken a \"%s\" from their family storage.", ReturnName(playerid), string);
 
 			Family_ShowItems(playerid, familyid);
 		//	Log_Write("logs/storage_log.txt", "[%s] %s has taken %d \"%s\" from house ID: %d (owner: %s).", ReturnDate(), ReturnName(playerid), amount, string, HouseData[houseid][houseID], (House_IsOwner(playerid, houseid)) ? ("Yes") : ("No"));
@@ -9545,7 +9560,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Family_AddItem(familyid, string, InventoryData[playerid][PlayerData[playerid][pListitem]][invModel], amount);
 			Inventory_Remove(playerid, string, amount);
 
-			SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has stored a \"%s\" into their family storage.", ReturnName(playerid), string);
+			SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has stored a \"%s\" into their family storage.", ReturnName(playerid), string);
 			Family_ShowItems(playerid, familyid);
 		}
 		else Family_OpenStorage(playerid, familyid);
@@ -9723,7 +9738,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			PlayerData[playerid][pTrashVehicleID] = GetPlayerVehicleID(playerid);
 			OnTrash[playerid] = 1;
-			SendClientMessage(playerid,COLOR_WHITE, "TRASHMASTER: {ffffff}Cari tong sampah dan letakan di kendaraan truck mu, dan hati hati dijalan!.");
+			SendClientMessage(playerid,COLOR_WHITE, "(Trashmaster) {ffffff}Cari tong sampah dan letakan di kendaraan truck mu, dan hati hati dijalan!.");
 		
 			for(new i = 0; i < MAX_TRASH; i++) if(TrashData[i][TrashExists] && TrashData[i][TrashLevel] > 0)
 			{					
@@ -9744,26 +9759,6 @@ public OnQueryError(errorid, const error[], const callback[], const query[], MyS
 
 public OnVehicleSirenStateChange(playerid, vehicleid, newstate)
 {
-    if(newstate)
-    {
-		if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_FACTION) {
-			if(IsPoliceVehicle(vehicleid) || IsMedicVehicle(vehicleid))
-			{
-				SwitchVehicleLight(vehicleid, true);
-				FlashTime[vehicleid] = SetTimerEx("OnLightFlash", 115, true, "d", vehicleid);
-			}
-		}
-    }
-
-    if(!newstate)
-    {
-        new panels, doors, lights, tires;
-
-        KillTimer(FlashTime[vehicleid]);
-
-        GetVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
-    	UpdateVehicleDamageStatus(vehicleid, panels, doors, 0, tires);
-    }
     return 1;
 }
 
@@ -9814,11 +9809,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			ShowMessage(playerid, "~y~~h~ERROR: ~w~Tidak ada peluru pada senjata ini!", 3, 1);
 		}
 	}
-	if((newkeys & KEY_NO) && HasTrash[playerid])
-	{
-		Trash_ResetPlayer(playerid);
-		SendClientMessage(playerid, COLOR_JOB, "TRASHMASTER: {FFFFFF}Trash bag removed.");
-	}
 	new animlib[32], animname[32];
  	if (newkeys & KEY_CROUCH && IsPlayerInAnyVehicle(playerid))
 	{
@@ -9850,13 +9840,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				return SendErrorMessage(playerid, "You must be on-foot!");
 
 			if(WeedData[wid][weedGrow] < MAX_GROW)
-				return SendErrorMessage(playerid, "Please wait %d minute for harvest.", MAX_GROW-WeedData[wid][weedGrow]);
+				return SendErrorMessage(playerid, "Tanaman ini belum bisa dipanen (%d menit tersisa)", MAX_GROW-WeedData[wid][weedGrow]);
 
 			if(WeedData[wid][weedHarvested])
-				return SendErrorMessage(playerid, "Weed ini sedang di harvest.");
+				return SendErrorMessage(playerid, "Tanaman ini sedang dipanen.");
 
 			if(IsValidLoadingBar(playerid))
-				return SendErrorMessage(playerid, "You can't do this at the moment!");
+				return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang");
 
 			SetPlayerFace(playerid, WeedData[wid][weedPos][0], WeedData[wid][weedPos][1]);
 
@@ -9864,7 +9854,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			WeedData[wid][weedHarvested] = true;
 			StartPlayerLoadingBar(playerid, 10, "Harvesting_weed", 1000);
 			SetTimerEx("HarvestWeed", 10000, false, "dd", playerid, wid);
-			SendNearbyMessage(playerid, 15.0,X11_PLUM, "* %s begins to harvest the weed.", ReturnName(playerid));
+			SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s begins to harvest the weed.", ReturnName(playerid));
 		}
 		if(Tree_Nearest(playerid) != -1)
 		{
@@ -9876,7 +9866,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(TreeData[id][treeTime] > 0)
 				return SendErrorMessage(playerid, "This tree still unavailable!");
 
-			if(!PlayerData[playerid][pAxe])
+			if(GetEquipedItem(playerid) != EQUIP_ITEM_AXE)
 				return SendErrorMessage(playerid, "You must holding Axe!");
 
 			if(TreeData[id][treeCut])
@@ -9932,7 +9922,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 
 			PlayerData[playerid][pVendor] = i;
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu mulai bekerja sebagai {FFFF00}Food Vendor");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu mulai bekerja sebagai {FFFF00}Food Vendor");
 			SetupPlayerVendor(playerid);
 		}
 	}
@@ -9946,7 +9936,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 	    if(PlayerData[playerid][pSpraying] && GetPlayerWeapon(playerid) == 41 && CheckPlayerJob(playerid, JOB_MECHANIC))
 	    {     
-	        ShowMessage(playerid, sprintf("~g~Spray the Vehicle: ~y~%d/15", PlayerData[playerid][pColoring]), 1);
+	        ShowMessage(playerid, sprintf("~g~Spray the (Vehicle) ~y~%d/15", PlayerData[playerid][pColoring]), 1);
 	        PlayerData[playerid][pSprayTime] = SetTimerEx("SprayTimer", 1000, true, "dd", playerid,PlayerData[playerid][pVehicle]);
 	        PlayerData[playerid][pSpraying] = true;
 		}
@@ -10012,7 +10002,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					{
 			    		format(string, sizeof(string), "~g~%s~w~ added to inventory!", DroppedItems[id][droppedItem]);
 			    		ShowMessage(playerid, string, 2);
-						SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s has picked up a \"%s\".", ReturnName(playerid), DroppedItems[id][droppedItem]);
+						SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s has picked up a \"%s\".", ReturnName(playerid), DroppedItems[id][droppedItem]);
 					}
 					else
 						SendErrorMessage(playerid, "You don't have any slot left in your inventory.");
@@ -10129,8 +10119,6 @@ public OnPlayerSpawn(playerid)
 	{	
 		if(IsPlayerUsingAndroid(playerid)) 
 			defer OnAutoAimCheck[2000](playerid);
-
-		new curtime = gettime(), date[6], time[3];
 	
 	    PlayerData[playerid][pSpawned] = true;
 	    PlayerData[playerid][pAdmin] = UcpData[playerid][ucpAdmin];
@@ -10142,7 +10130,6 @@ public OnPlayerSpawn(playerid)
 	    SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
 		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
 
-		ShowPlayerHUD(playerid);
 		PlayerTextDrawSetString(playerid, MONEYTD[playerid], sprintf("$%s", FormatNumber(PlayerData[playerid][pMoney])));
 		Streamer_ToggleIdleUpdate(playerid, true);
 		Streamer_ToggleItemUpdate(playerid, STREAMER_TYPE_OBJECT, true);
@@ -10154,8 +10141,6 @@ public OnPlayerSpawn(playerid)
 		TextDrawShowForPlayer(playerid,sen);
 		TextDrawShowForPlayer(playerid,koma2);
 
-		TimestampToDate(curtime, date[2], date[1], date[0], date[3], date[4], date[5]);
-		gettime(time[0], time[1], time[2]);
 		
 		SetValidColor(playerid);
 
@@ -10164,12 +10149,14 @@ public OnPlayerSpawn(playerid)
 			SendClientMessage(playerid, -1, "");
 		}
 		SendServerMessage(playerid, "Selamat datang {00FF00}%s.", ReturnName(playerid));
-		SendClientMessageEx(playerid, -1, "{00FFFF}MOTD: {FFFF00}%s", MotdData[motdPlayer]);
+		SendClientMessageEx(playerid, -1, "{00FFFF}(MOTD) {FFFF00}%s", MotdData[motdPlayer]);
 		if(PlayerData[playerid][pAdmin] > 0)
-			SendClientMessageEx(playerid, -1, "{FF0000}AMOTD: {FFFF00}%s", MotdData[motdAdmin]);
+			SendClientMessageEx(playerid, -1, "{FF0000}(Admin MOTD) {FFFF00}%s", MotdData[motdAdmin]);
 
 		SendServerMessage(playerid, "Today is {FFFF00}%s", ConvertTimestamp(Timestamp:Now()));		
 		CallLocalFunction("OnPlayerFirstSpawn", "d", playerid);
+
+		ShowPlayerHUD(playerid);
 
 		foreach(new i : Player) if(!PlayerData[i][pTogLogin])
 		{
@@ -10193,6 +10180,7 @@ public OnPlayerSpawn(playerid)
 			SetPlayerPos(playerid, -1415.9169,-300.1727,14.1484);
 			SetPlayerFacingAngle(playerid, 134.7111);
 			SendServerMessage(playerid, "Spawn-mu dipindahkan karena ada error saat meload posisi terakhir.");
+			SetPlayerHealth(playerid, 100);
 		}
 	}
 	if(PlayerData[playerid][pJailTime] > 0)
@@ -10234,7 +10222,6 @@ public OnPlayerSpawn(playerid)
 
 			SendServerMessage(playerid, "You have been respawned at {FFFF00}San Fierro Hospital {FFFFFF}and fined {FF0000}$50.00");
 			GiveMoney(playerid, -5000, "Bayar hospital");
-			Damage_Reset(playerid);
 			ResetPlayerDamages(playerid);
 
 			Aksesoris_Sync(playerid);
@@ -10249,9 +10236,6 @@ public OnPlayerSpawn(playerid)
 			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
 			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
 			SetWeapons(playerid);
-
-			if(IsValidDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]))
-				DestroyDynamic3DTextLabel(PlayerData[playerid][pInjuredLabel]);
 		
 			SetPlayerArmedWeapon(playerid, 0);
 
@@ -10262,7 +10246,7 @@ public OnPlayerSpawn(playerid)
 				PlayerData[playerid][pInjured] = true;
 				SetPlayerHealth(playerid, 100);
 				PlayerData[playerid][pInjuredTime] = 300;
-				SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING: {FFFFFF}You have been {E20000}downed.{FFFFFF} You may choose to {44C300}/accept death");
+				SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning) {FFFFFF}You have been {E20000}downed.{FFFFFF} You may choose to {44C300}/accept death");
 				SendClientMessage(playerid, COLOR_WHITE, "...after your death timer expires or wait until you are revived.");
 				CallLocalFunction("OnPlayerInjured", "d", playerid);
 
@@ -10431,7 +10415,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 
 				PlayerRubbed[damagedid] = true;
 
-				SendNearbyMessage(playerid, 25.0, X11_PLUM, "* %s has been hit with a rubber bullet by %s and has been forced to the ground.", ReturnName(damagedid), ReturnName(playerid));
+				SendNearbyMessage(playerid, 25.0, X11_PLUM, "** %s has been hit with a rubber bullet by %s and has been forced to the ground.", ReturnName(damagedid), ReturnName(playerid));
 				return 1;
 			}
 		}
@@ -10443,14 +10427,14 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
 	if (PlayerData[playerid][pBandage])
 	{
-	    SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING:{FFFFFF} Your bandage is no longer in effect as you took damage.");
+	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your bandage is no longer in effect as you took damage.");
 
         PlayerData[playerid][pBandage] = false;
 		KillTimer(PlayerData[playerid][pAidTimer]);
 	}
 	if (PlayerData[playerid][pFirstAid])
 	{
-	    SendClientMessage(playerid, COLOR_LIGHTRED, "WARNING:{FFFFFF} Your medkit is no longer in effect as you took damage.");
+	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your medkit is no longer in effect as you took damage.");
 
         PlayerData[playerid][pFirstAid] = false;
 		KillTimer(PlayerData[playerid][pAidTimer]);
@@ -10581,7 +10565,6 @@ public OnPlayerText(playerid, text[])
 		ShowMessage(playerid, "~r~ERROR: ~w~Dilarang spam text chat!", 3, 1);
 		return 0;
 	}
-
 	chat_floodProtect[playerid] = gettime() + 2;
 
 	if(PlayerData[playerid][pAduty] && PlayerData[playerid][pAdmin] > 0)
@@ -10595,7 +10578,7 @@ public OnPlayerText(playerid, text[])
 		SendFactionMessageEx(FACTION_NEWS, X11_LIGHTBLUE, "193 CALL: "WHITE"%s (%s) "YELLOW"(ph: %d)", GetName(playerid, false), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
 		SendFactionMessageEx(FACTION_NEWS, X11_LIGHTBLUE, "DESCRIPTION: "WHITE"%s", text);
 
-		SendClientMessage(playerid, X11_LIGHTBLUE, "NEWS OPERATOR:"WHITE" Your phone call has been forwarded to 123 - San Fierro News");
+		SendClientMessage(playerid, X11_LIGHTBLUE, "(News Operator)"WHITE" Your phone call has been forwarded to 123 - San Fierro News");
 	    SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
 	    RemovePlayerAttachedObject(playerid, 3);
 		PlayerData[playerid][pCallNews] = false;
@@ -10613,11 +10596,11 @@ public OnPlayerText(playerid, text[])
 			new
 				len = strlen(text);
 
+    		static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 			for(new i = 0; i < len / 2; i++) {
 
-
-				text[i] = (random('Z' - 'A' + 1) + 'A');
+				text[i] = (charset[random(sizeof charset)]);
 
 			}
 		}
@@ -10641,12 +10624,11 @@ public OnPlayerText(playerid, text[])
 					new
 						len = strlen(text);
 
+					static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 					for(new i = 0; i < len / 2; i++) {
 
-
-						text[i] = (random('Z' - 'A' + 1) + 'A');
-
+						text[i] = (charset[random(sizeof charset)]);
 					}
 				}
 				format(lstr, sizeof(lstr), "%s says: %s", ReturnName(playerid), text);
@@ -10665,12 +10647,11 @@ public OnPlayerText(playerid, text[])
 					new
 						len = strlen(text);
 
+					static const charset[] = "qwertyuiopasdfghjklzxcvbnm";
 
 					for(new i = 0; i < len / 2; i++) {
 
-
-						text[i] = (random('Z' - 'A' + 1) + 'A');
-
+						text[i] = (charset[random(sizeof charset)]);
 					}
 				}
 				format(lstr, sizeof(lstr), "%s (%s) says: %s", ReturnName(playerid), PlayerData[playerid][pAccent], text);
@@ -10730,6 +10711,8 @@ public OnVehicleDeath(vehicleid, killerid) {
 
 	VehicleData[vehicleid][vState] = VEHICLE_STATE_DEATH;
 	VehicleData[vehicleid][vKillerID] = killerid;
+	VehicleData[vehicleid][vDeathTime] = gettime() + 15;
+
 	return 1;
 }
 
@@ -10741,35 +10724,68 @@ public OnVehicleSpawn(vehicleid)
 	if(VehicleData[vehicleid][vState] == VEHICLE_STATE_DEATH) {
 		if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER)
 		{
-			new
-				killerid = VehicleData[vehicleid][vKillerID];
+			if(IsValidVehicle(vehicleid)) {
+				new
+					killerid = VehicleData[vehicleid][vKillerID];
 
-			if(killerid != INVALID_PLAYER_ID && IsPlayerConnected(killerid))
-				SendAdminMessage(X11_TOMATO, "VehicleAction: %s kemungkinan menghancurkan kendaraan %s(ID:%d) milik %s.", GetName(killerid, false), GetVehicleName(vehicleid), vehicleid, Vehicle_GetOwnerName(vehicleid));
+				if(killerid != INVALID_PLAYER_ID && IsPlayerConnected(killerid))
+					SendAdminMessage(X11_TOMATO, "VehicleAction: %s kemungkinan menghancurkan kendaraan %s(ID:%d) milik %s.", GetName(killerid, false), GetVehicleName(vehicleid), vehicleid, Vehicle_GetOwnerName(vehicleid));
 
-			if(VehicleData[vehicleid][vInsurance] > 0)
-			{
-				VehicleData[vehicleid][vInsurance] --;
-				VehicleData[vehicleid][vInsuTime] = gettime() + (1 * 10800);
-				Vehicle_SetState(vehicleid, VEHICLE_STATE_INSURANCE);
-
-				Vehicle_Save(vehicleid);
-
-				foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
+				if(VehicleData[vehicleid][vInsurance] > 0)
 				{
-					SendServerMessage(pid, "Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance.", GetVehicleName(vehicleid));
-					break;
+					VehicleData[vehicleid][vInsurance] --;
+					VehicleData[vehicleid][vInsuTime] = gettime() + (1 * 10800);
+					Vehicle_SetState(vehicleid, VEHICLE_STATE_INSURANCE);
+
+					Vehicle_Save(vehicleid);
+
+					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
+					{
+						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance.", GetVehicleName(vehicleid));
+						break;
+					}
+					Vehicle_Delete(vehicleid, false);
 				}
-				Vehicle_Delete(vehicleid, false);
+				else
+				{
+					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
+					{
+						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur dan tidak akan dan tidak memiliki Insurance lagi.", GetVehicleName(vehicleid));
+						break;
+					}
+					Vehicle_Delete(vehicleid, true);
+				}
+				VehicleData[vehicleid][vDeathTime] = 0;
 			}
-			else
-			{
+			else {
 				foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 				{
-					SendServerMessage(pid, "Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur dan tidak akan dan tidak memiliki Insurance lagi.", GetVehicleName(vehicleid));
+					SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur karena hal yang invalid.", GetVehicleName(vehicleid));
+					SendClientMessageEx(pid,  X11_WHITE, "...Maka dari itu kendaraan akan ter-spawn ditempat yang terakhir.");
 					break;
+				}		
+				for(new slot = 0; slot < MAX_VEHICLE_OBJECT; slot++) if(VehicleObjects[vehicleid][slot][vehObjectExists])
+				{
+					if(IsValidDynamicObject(VehicleObjects[vehicleid][slot][vehObject]))
+						DestroyDynamicObject(VehicleObjects[vehicleid][slot][vehObject]);
+
+					VehicleObjects[vehicleid][slot][vehObject] = INVALID_OBJECT_ID;
+
 				}
-				Vehicle_Delete(vehicleid, true);
+				for(new idx = 0; idx < 3; idx++) {
+
+					for(new i = 0; i < 2; i++) {
+						if(IsValidDynamicObject(NeonObject[vehicleid][idx][i])) {
+							DestroyDynamicObject(NeonObject[vehicleid][idx][i]);
+							NeonObject[vehicleid][idx][i] = STREAMER_TAG_OBJECT:INVALID_STREAMER_ID;
+						}
+					}
+				}
+
+				if(IsValidVehicle(vehicleid))
+					Vehicle_GetStatus(vehicleid);
+
+				defer SpawnBackPlayerVehicle[1000](vehicleid);	
 			}
 		}
 		else if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)
@@ -10777,7 +10793,7 @@ public OnVehicleSpawn(vehicleid)
 			foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 			{
 				GiveMoney(pid, -250, "Denda rental");
-				SendServerMessage(pid, "Kendaraan Rental milikmu (%s) telah hancur, kamu dikenai denda sebesar {009000}$250.0!", GetVehicleName(vehicleid));
+				SendServerMessage(pid, "Kendaraan Rental milikmu (%s) telah hancur, kamu dikenai denda sebesar {009000}$250,0!", GetVehicleName(vehicleid));
 				break;
 			}
 			Vehicle_Delete(vehicleid, true);
@@ -10793,18 +10809,37 @@ public OnVehicleSpawn(vehicleid)
 			mysql_format(sqlcon, query, sizeof(query), "UPDATE `factiongaragevehs` SET `Health` = '%.2f', `Spawned` = '0' WHERE `ID` = '%d'", 300.0, VehicleData[vehicleid][vExtraID]);
 			mysql_tquery(sqlcon, query);
 
-
 			Vehicle_Delete(vehicleid, false);
 		}
 	}
 	return 1;
 }
 
-/* Misc CMD */
 
 
 /* Main Functions */
 
+GetVehicleCategoryName(modelid) {
+	new string[56];
+	switch(Model_GetCategory(modelid)) 
+	{
+		case CATEGORY_AIRPLANE: string = "Airplane";
+		case CATEGORY_BIKE: string = "Bike/Motorcycle";
+		case CATEGORY_BOAT: string = "Boat";
+		case CATEGORY_CONVERTIBLE: string = "Convertible";
+		case CATEGORY_HELICOPTER: string = "Helicopter";
+		case CATEGORY_INDUSTRIAL: string = "Industrial";
+		case CATEGORY_LOWRIDER: string = "Lowrider";
+		case CATEGORY_OFFROAD: string = "Offroad";
+		case CATEGORY_PUBLIC: string = "Public";
+		case CATEGORY_SALOONS: string = "Saloons";
+		case CATEGORY_SPORT: string = "Sport";
+		case CATEGORY_STATION_WAGON: string = "Station Wagon";
+		case CATEGORY_UNIQUE: string = "Unique";
+		default: string = "Unknown";
+	}
+	return string;
+}
 IsPlayerInsideProperty(playerid) {
 	if(House_Inside(playerid) != -1) {
 		return 1;
@@ -10983,7 +11018,7 @@ ReturnWeaponCount(playerid)
 }
 
 
-FUNC::OnQueryExecute(playerid, query[])
+function OnQueryExecute(playerid, query[])
 {
 	new str[221];
 
@@ -11025,6 +11060,10 @@ ResetPlayerDamages(playerid) {
 		PlayerData[playerid][pDamages][i] = 100.0;
 		PlayerData[playerid][pBullets][i] = 0;
 	}
+
+	Damage_Reset(playerid);
+
+	return 1;
 }
 SaveServerStatistics() {
 
@@ -11066,7 +11105,7 @@ SaveServerStatistics() {
 	printf("** Saved speedcam data in %dms", GetTickCount() - time);
 
 	for(new i = 0; i < MAX_DEALER; i++) if(DealerData[i][dealerExists]) {
-		Dealer_Save(i);
+		SQL_SaveDealership(i);
 	}
 	printf("** Saved dealer data in %dms", GetTickCount() - time);
 
@@ -11097,7 +11136,7 @@ SaveServerStatistics() {
 
 	return printf("There is %d player when the server shutdown.", Iter_Count(Player));
 }
-FUNC::OnAdminSetName(playerid, userid, newname[]) {
+function OnAdminSetName(playerid, userid, newname[]) {
 
 	new query[256];
 
@@ -11133,8 +11172,11 @@ FUNC::OnAdminSetName(playerid, userid, newname[]) {
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `housekeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
 	mysql_tquery(sqlcon, query);
 
-	SendServerMessage(userid, "Your name has been changed to %s", newname);
-	SendServerMessage(playerid, "You've been changed %s name to %s", GetName(userid), newname);
+	mysql_format(sqlcon, query, sizeof(query), "UPDATE `flatkeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
+	mysql_tquery(sqlcon, query);
+
+	SendServerMessage(userid, "Your name has been changed to "YELLOW"%s", newname);
+	SendServerMessage(playerid, "You've been changed %s name to "YELLOW"%s", GetName(userid), newname);
 
 	Log_Write("Logs/changename.txt", "[%s] %s has changed %s name to %s.", ReturnDate(), GetUsername(playerid), GetName(userid, false), newname);
 	
@@ -11160,7 +11202,7 @@ PayCheck(playerid) {
 	return 1;
 }
 
-FUNC::OnSalaryReceived(playerid) {
+function OnSalaryReceived(playerid) {
 
 	new total_salary = 0;
 
@@ -11198,7 +11240,7 @@ FUNC::OnSalaryReceived(playerid) {
 	return 1;
 
 }
-FUNC::LoadPlayerPassword(playerid, inputtext[]) {
+function LoadPlayerPassword(playerid, inputtext[]) {
 
 	new hash[BCRYPT_HASH_LENGTH];
 
@@ -11207,7 +11249,7 @@ FUNC::LoadPlayerPassword(playerid, inputtext[]) {
 	bcrypt_verify(playerid, "OnPlayerPasswordChecked", inputtext, hash);
 	return 1;
 }
-FUNC::FactionMemberCheck(playerid) {
+function FactionMemberCheck(playerid) {
 
 	new str[1012];
 	if(cache_num_rows())
@@ -11228,7 +11270,7 @@ FUNC::FactionMemberCheck(playerid) {
 	}
 	return 1;
 }
-FUNC::OnPlayerCharacterCreated(playerid) {
+function OnPlayerCharacterCreated(playerid) {
 
 	if(!IsPlayerConnected(playerid))
 		return 0;
@@ -11298,13 +11340,10 @@ CountPlayerVehicleSlot(playerid) {
 
 ShowPlayerStats(playerid, targetid)
 {
-	new str[2060], header[232], curtime = gettime(), date[6], reg[6], Float:hp, Float:ar, cat[2060], time[3];
-	TimestampToDate(UcpData[playerid][ucpTime], reg[2], reg[1], reg[0], reg[3], reg[4], reg[5]);
-	TimestampToDate(curtime, date[2], date[1], date[0], date[3], date[4], date[5]);
+	new str[2060], header[232], Float:hp, Float:ar, cat[2060];
 	GetPlayerHealth(playerid, hp);
 	GetPlayerArmour(playerid, ar);
-	gettime(time[0], time[1], time[2]);
-	format(header, sizeof(header), "{AFAFAF}%s %s %s %i | %02d:%02d:%02d", GetWeekDay(date[0], date[1], date[2]), GetDay(date[0]), GetMonthName(date[1]), date[2], time[0], time[1], time[2]);
+	format(header, sizeof(header), "{AFAFAF}%s", ReturnDate(true));
 	format(str, sizeof(str), "{F7FF00}In Character\n");
 	strcat(cat, str);
 	format(str, sizeof(str), "{FFFFFF}Name: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Gender: [{C6E2FF}%s{FFFFFF}] | Birthdate: [{C6E2FF}%s{FFFFFF}] | Money: [{009000}$%s{FFFFFF}] | Bank: [{009000}$%s{FFFFFF}]\n",
@@ -11319,7 +11358,7 @@ ShowPlayerStats(playerid, targetid)
 	format(str, sizeof(str), "\n{F7FF00}Out of Character\n");
 	strcat(cat, str);
 	format(str, sizeof(str), "{FFFFFF}Username: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Registration Date: [{C6E2FF}%s %s %s %i, %02d:%02d:%02d{FFFFFF}]\n",
-	PlayerData[playerid][pUCP], UcpData[playerid][ucpID], GetWeekDay(reg[0], reg[1], reg[2]), GetDay(reg[0]), GetMonthName(reg[1]), reg[2], reg[3], reg[4], reg[5]);
+	PlayerData[playerid][pUCP], UcpData[playerid][ucpID], ConvertTimestamp(Timestamp:UcpData[playerid][ucpTime]));
 	strcat(cat, str);
 	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Mask ID: [{C6E2FF}Mask_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",
 	PlayerData[playerid][pHour], PlayerData[playerid][pMinute], PlayerData[playerid][pSecond], PlayerData[playerid][pMaskID], PlayerData[playerid][pLastVehicleID]);
@@ -11379,7 +11418,6 @@ Furniture_Sync(furnitureid) {
 	}
 	return 1;
 }
-
 /* Main Timer */
 
 timer UnfreezeRubber[10000](playerid) {
@@ -11420,6 +11458,32 @@ timer StopDrunkEffect[5000](playerid) {
 
 	SetPlayerDrunkLevel(playerid, 0);
 	PlayerData[playerid][pIsDrunk] = false;
+	return 1;
+}
+
+timer SpawnBackPlayerVehicle[1000](vehicleid) {
+
+	if(IsValidVehicle(vehicleid)) {
+		SetVehicleToRespawn(vehicleid);
+	}
+	else {
+		vehicleid = Vehicle_Create(VehicleData[vehicleid][vModel], VehicleData[vehicleid][vPos][0], VehicleData[vehicleid][vPos][1], VehicleData[vehicleid][vPos][2], VehicleData[vehicleid][vPos][3], VehicleData[vehicleid][vColor][0], VehicleData[vehicleid][vColor][1], 0, false, VehicleData[vehicleid][vPlate]);
+	}
+
+	UpdateVehicleDamageStatus(vehicleid, VehicleData[vehicleid][vDamage][0], VehicleData[vehicleid][vDamage][1], VehicleData[vehicleid][vDamage][2], VehicleData[vehicleid][vDamage][3]);
+	SetVehicleHealth(vehicleid, VehicleData[vehicleid][vHealth]);
+	for(new m = 0; m < 17; m++)
+	{
+		if(VehicleData[vehicleid][vMod][m]) AddVehicleComponent(vehicleid, VehicleData[vehicleid][vMod][m]);
+	}
+	SetVehiclePos(vehicleid, VehicleData[vehicleid][vPos][0], VehicleData[vehicleid][vPos][1], VehicleData[vehicleid][vPos][2]);
+	SetVehicleZAngle(vehicleid, VehicleData[vehicleid][vPos][3]);
+
+	ChangeVehicleColor(vehicleid,  VehicleData[vehicleid][vColor][0], VehicleData[vehicleid][vColor][1]);
+	for(new i = 0; i < MAX_VEHICLE_OBJECT; i++) if(VehicleObjects[vehicleid][i][vehObjectExists]) {
+		Vehicle_AttachObject(vehicleid, i);
+	}
+
 	return 1;
 }
 timer UnstuckPlayerVehicle[1000](playerid, vehicleid) {

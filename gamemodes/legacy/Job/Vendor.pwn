@@ -50,19 +50,19 @@ stock SetupVendor()
 	}
 }
 
-FUNC::MakeDrink(playerid, drink, id)
+function MakeDrink(playerid, drink, id)
 {
 	VendorData[id][vendorDrink] = drink;
-	SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu berhasil membuat {FFFF00}%s", DrinkName[VendorData[id][vendorDrink]]);
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil membuat {FFFF00}%s", DrinkName[VendorData[id][vendorDrink]]);
 	PlayerTextDrawSetString(playerid, DONEDRINK[playerid], sprintf("-_%s", DrinkName[VendorData[id][vendorDrink]]));
 	return 1;
 }
 
 
-FUNC::CookFood(playerid, food, id)
+function CookFood(playerid, food, id)
 {
 	VendorData[id][vendorFood] = food;
-	SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu berhasil memasak {FFFF00}%s", FoodName[VendorData[id][vendorFood]]);
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil memasak {FFFF00}%s", FoodName[VendorData[id][vendorFood]]);
 	PlayerTextDrawSetString(playerid, DONEFOOD[playerid], sprintf("-_%s", FoodName[VendorData[id][vendorFood]]));
 	return 1;
 }
@@ -120,7 +120,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 	if(playertextid == DONEJOB[playerid])
 	{
 		if(IsValidLoadingBar(playerid))
-			return SendErrorMessage(playerid, "You can't do this at the moment!");
+			return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 		if(VendorData[vendorid][vendorFood] != VendorData[vendorid][vendorReqFood])
 			return SendErrorMessage(playerid, "Makanan tidak sesuai dengan yang dipesan!");
@@ -130,7 +130,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
 		new cash = RandomEx(300, 600);
 		GiveMoney(playerid, cash);
-		SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari menjual {FFFF00}%s {FFFFFF}dan {FFFF00}%s", FormatNumber(cash), FoodName[VendorData[vendorid][vendorFood]], DrinkName[VendorData[vendorid][vendorDrink]]);
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari menjual {FFFF00}%s {FFFFFF}dan {FFFF00}%s", FormatNumber(cash), FoodName[VendorData[vendorid][vendorFood]], DrinkName[VendorData[vendorid][vendorDrink]]);
 		
 		Streamer_SetIntData(STREAMER_TYPE_ACTOR, VendorData[vendorid][vendorActor], E_STREAMER_MODEL_ID, g_aMaleSkins[random(sizeof(g_aMaleSkins))]);
 		VendorData[vendorid][vendorReqFood] = random(2)+1;
@@ -182,7 +182,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 	if(playertextid == RESETJOB[playerid])
 	{
 		if(IsValidLoadingBar(playerid))
-			return SendErrorMessage(playerid, "You can't do this at the moment!");
+			return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 		PlayerTextDrawSetString(playerid, DONEFOOD[playerid], "");
 		PlayerTextDrawSetString(playerid, DONEDRINK[playerid], "");
@@ -198,7 +198,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 				return SendErrorMessage(playerid, "Kamu sudah membuat Drink! (%s)", DrinkName[VendorData[vendorid][vendorDrink]]);
 
 			if(IsValidLoadingBar(playerid))
-				return SendErrorMessage(playerid, "You can't do this at the moment!");
+				return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 			StartPlayerLoadingBar(playerid, 10, "Filling_Cola", 1000);
 			SetTimerEx("MakeDrink", 10000, false, "ddd", playerid, DRINK_COLA, vendorid);
@@ -214,7 +214,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 				return SendErrorMessage(playerid, "Kamu sudah membuat Drink! (%s)", DrinkName[VendorData[vendorid][vendorDrink]]);
 
 			if(IsValidLoadingBar(playerid))
-				return SendErrorMessage(playerid, "Can't do this at the moment!");
+				return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 			StartPlayerLoadingBar(playerid, 10, "Filling_Sprunk", 1000);
 			SetTimerEx("MakeDrink", 10000, false, "ddd", playerid, DRINK_SPRUNK, vendorid);
@@ -230,7 +230,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 				return SendErrorMessage(playerid, "Kamu sudah membuat Food! (%s)", FoodName[VendorData[vendorid][vendorFood]]);
 
 			if(IsValidLoadingBar(playerid))
-				return SendErrorMessage(playerid, "Can't do this at the moment!");
+				return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 			StartPlayerLoadingBar(playerid, 10, "Cooking_Pizza", 1000);
 			SetTimerEx("CookFood", 10000, false, "ddd", playerid, FOOD_PIZZA, vendorid);
@@ -246,7 +246,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 				return SendErrorMessage(playerid, "Kamu sudah membuat Food! (%s)", FoodName[VendorData[vendorid][vendorFood]]);
 
 			if(IsValidLoadingBar(playerid))
-				return SendErrorMessage(playerid, "Can't do this at the moment!");
+				return SendErrorMessage(playerid, "Kamu tidak dapat melakukan ini sekarang.");
 
 			StartPlayerLoadingBar(playerid, 10, "Cooking_Burger", 1000);
 			SetTimerEx("CookFood", 10000, false, "ddd", playerid, FOOD_BURGER, vendorid);

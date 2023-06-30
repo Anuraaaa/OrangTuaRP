@@ -58,7 +58,7 @@ stock Tree_Create(playerid)
 	return -1;
 }
 
-FUNC::Tree_Load()
+function Tree_Load()
 {
 	new rows = cache_num_rows();
 	if(rows)
@@ -109,7 +109,7 @@ stock Tree_Refresh(id)
 }
 
 
-FUNC::OnTreeCreated(id)
+function OnTreeCreated(id)
 {
 	TreeData[id][treeID] = cache_insert_id();
 	Tree_Save(id);

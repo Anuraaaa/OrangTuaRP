@@ -91,7 +91,7 @@ CMD:ad(playerid, params[])
 		return SendErrorMessage(playerid, "You don't have Phone Number!");
 
 	if(isnull(params))
-	    return SendSyntaxMessage(playerid, "/ad [advertisement]"), SendClientMessage(playerid, COLOR_YELLOW, "INFO: {FFFFFF}Advertisement is charged {009000}$0,50 {FFFFFF}per character.");
+	    return SendSyntaxMessage(playerid, "/ad [advertisement]"), SendClientMessage(playerid, COLOR_YELLOW, "(Info) {FFFFFF}Advertisement is charged {009000}$0,50 {FFFFFF}per character.");
 
 	if(strlen(params) > 128)
 	    return SendErrorMessage(playerid, "Text cannot more than 128 characters.");
@@ -102,7 +102,7 @@ CMD:ad(playerid, params[])
 	GiveMoney(playerid, -strlen(params)*50);
 	new time = 1;
 	Advert_Create(PlayerData[playerid][pPhoneNumber], params, PlayerData[playerid][pID], GetName(playerid, false), time);
-	SendClientMessageEx(playerid, COLOR_SERVER, "ADS: {FFFFFF}Your advertisement will be appear %d minutes from now.", time);
+	SendClientMessageEx(playerid, COLOR_SERVER, "(Advertisement) {FFFFFF}Your advertisement will be appear %d minutes from now.", time);
 	return 1;
 }
 
@@ -127,8 +127,8 @@ CMD:postad(playerid, params[]) {
 	if(PlayerData[targetid][pPhoneNumber] == 0)
 		return SendErrorMessage(playerid, "That player doesn't have a phone number.");
 
-	SendClientMessageEx(playerid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have given "CYAN"advertisement letter "WHITE"to "YELLOW"%s", ReturnName(targetid));
-	SendClientMessageEx(targetid, X11_LIGHTBLUE, "POST-AD: "WHITE"You have been given an "CYAN"advertisement letter "WHITE"from "YELLOW"%s", ReturnName(playerid));
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"You have given "CYAN"advertisement letter "WHITE"to "YELLOW"%s", ReturnName(targetid));
+	SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Post-Ad) "WHITE"You have been given an "CYAN"advertisement letter "WHITE"from "YELLOW"%s", ReturnName(playerid));
 
 	ShowPlayerDialog(targetid, DIALOG_ADS_TEXT, DIALOG_STYLE_INPUT, "Advertisement", "Silahkan masukkan apa yang akan kamu iklankan:\n(maksimal 128 karakter)", ">>>", "Close");
 	PlayerData[targetid][pTarget] = playerid;

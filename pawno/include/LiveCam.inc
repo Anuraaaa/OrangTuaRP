@@ -42,8 +42,8 @@ stock RemovePlayerCamera(playerid)
     __pc[playerRecording] = false;
 	ClearAnimations(playerid);
 	SetPlayerSpecialAction(playerid , SPECIAL_ACTION_NONE);
-	RemovePlayerAttachedObject(playerid , 0 );
-	RemovePlayerAttachedObject(playerid , 1 );
+	RemovePlayerAttachedObject(playerid , 8 );
+	RemovePlayerAttachedObject(playerid , 9 );
 	return 1;
 }
 

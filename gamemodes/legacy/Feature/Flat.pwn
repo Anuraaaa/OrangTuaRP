@@ -28,7 +28,8 @@ enum flatData
 	flatTaxDate,
 	flatTaxPaid,
 	flatTaxState,
-	flatFurnitureLevel
+	flatFurnitureLevel,
+	flatSealed
 };
 
 new FlatData[MAX_FLAT][flatData], 
@@ -51,7 +52,7 @@ enum {
 	FLAT_TYPE_HIGH
 };
 
-stock Flat_WeaponStorage(playerid, flatid)
+Flat_WeaponStorage(playerid, flatid)
 {
 	static
 	    string[712];
@@ -70,7 +71,7 @@ stock Flat_WeaponStorage(playerid, flatid)
 	return 1;
 }
 
-stock Flat_OpenStorage(playerid, flatid)
+Flat_OpenStorage(playerid, flatid)
 {
 	new
 		items[2],
@@ -90,7 +91,7 @@ stock Flat_OpenStorage(playerid, flatid)
 }
 
 
-stock Flat_ShowItems(playerid, flatid)
+Flat_ShowItems(playerid, flatid)
 {
 	static
 	    string[MAX_FLAT_STORAGE * 32],
@@ -118,7 +119,7 @@ stock Flat_ShowItems(playerid, flatid)
 	return 1;
 }
 
-stock Flat_GetItemID(flatid, item[])
+Flat_GetItemID(flatid, item[])
 {
 	for (new i = 0; i < MAX_FLAT_STORAGE; i ++)
 	{
@@ -130,7 +131,7 @@ stock Flat_GetItemID(flatid, item[])
 	return -1;
 }
 
-stock Flat_GetFreeID(flatid)
+Flat_GetFreeID(flatid)
 {
 	for (new i = 0; i < MAX_FLAT_STORAGE; i ++)
 	{
@@ -140,7 +141,7 @@ stock Flat_GetFreeID(flatid)
 	return -1;
 }
 
-stock IsPlayerFlatGuest(playerid) {
+IsPlayerFlatGuest(playerid) {
 	new is_guest = 0,
 		Cache:execute;
 
@@ -154,11 +155,11 @@ stock IsPlayerFlatGuest(playerid) {
 	return is_guest;
 }
 
-stock Flat_AddItem(flatid, item[], model, quantity = 1, slotid = -1)
+Flat_AddItem(flatid, item[], model, quantity = 1, slotid = -1)
 {
 	new
 		itemid = Flat_GetItemID(flatid, item),
-		string[128];
+		string[256];
 
 	if (itemid == -1)
 	{
@@ -192,13 +193,13 @@ stock Flat_AddItem(flatid, item[], model, quantity = 1, slotid = -1)
 	return itemid;
 }
 
-FUNC::OnFlatStorageAdd(flatid, itemid)
+function OnFlatStorageAdd(flatid, itemid)
 {
 	FlatStorage[flatid][itemid][fItemID] = cache_insert_id();
 	return 1;
 }
 
-stock Flat_RemoveItem(flatid, item[], quantity = 1)
+Flat_RemoveItem(flatid, item[], quantity = 1)
 {
 	new
 		itemid = Flat_GetItemID(flatid, item),
@@ -230,7 +231,7 @@ stock Flat_RemoveItem(flatid, item[], quantity = 1)
 }
 
 
-stock Flat_Create(Float:x, Float:y, Float:z, vw = 0, interior = 0, price = 0, type = FLAT_TYPE_LOW) {
+Flat_Create(Float:x, Float:y, Float:z, vw = 0, interior = 0, price = 0, type = FLAT_TYPE_LOW) {
 
 	new index = INVALID_ITERATOR_SLOT;
 	if((index = Iter_Alloc(Flat)) != INVALID_ITERATOR_SLOT) {
@@ -246,6 +247,7 @@ stock Flat_Create(Float:x, Float:y, Float:z, vw = 0, interior = 0, price = 0, ty
 		FlatData[index][flatMoney] = 0;
 		FlatData[index][flatOwner] = -1;
 		FlatData[index][flatFurnitureLevel] = 1;
+		FlatData[index][flatSealed] = 0;
 
 		format(FlatData[index][flatOwnerName], MAX_PLAYER_NAME, "_");
 
@@ -267,15 +269,15 @@ stock Flat_Create(Float:x, Float:y, Float:z, vw = 0, interior = 0, price = 0, ty
 	return index;
 }
 
-stock Flat_GetCount(playerid) {
+Flat_GetCount(playerid) {
 
 	new total = 0;
-	foreach(new i : Flat) if(Flat_IsOwner(playerid, i))
+	foreach(new i : Flat) if(Flat_IsOwner(playerid, i)) {
 		total++;
-
+	}
 	return total;
 }
-stock Flat_Save(index) {
+Flat_Save(index) {
 	new query[2512];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `flat` SET `Owner` = '%d', `OwnerName` = '%e', `Price` = '%d', `Money` = '%d', `Locked` = '%d', `Type` = '%d'",
 		FlatData[index][flatOwner],
@@ -298,7 +300,7 @@ stock Flat_Save(index) {
 	{
 		mysql_format(sqlcon,query, sizeof(query), "%s, `Weapon%d` = '%d', `Ammo%d` = '%d', `Durability%d` = '%d', `HighVelocity%d` = '%d'", query, i + 1, FlatData[index][flatWeapons][i], i + 1, FlatData[index][flatAmmo][i], i + 1, FlatData[index][flatDurability][i], i + 1, FlatData[index][flatHighVelocity][i]);
 	}
-	mysql_format(sqlcon, query, sizeof(query), "%s, `IntWorld` = '%d', `IntInterior` = '%d', `ExtWorld` = '%d', `ExtInterior` = '%d', `LastLogin` = '%d', `TaxState` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `FurnitureLevel` = '%d'",
+	mysql_format(sqlcon, query, sizeof(query), "%s, `IntWorld` = '%d', `IntInterior` = '%d', `ExtWorld` = '%d', `ExtInterior` = '%d', `LastLogin` = '%d', `TaxState` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `FurnitureLevel` = '%d', `Sealed` = '%d'",
 		query, 
 		FlatData[index][flatIntWorld],
 		FlatData[index][flatIntInterior],
@@ -308,23 +310,28 @@ stock Flat_Save(index) {
 		FlatData[index][flatTaxState],
 		FlatData[index][flatTaxPaid],
 		FlatData[index][flatTaxDate],
-		FlatData[index][flatFurnitureLevel]
+		FlatData[index][flatFurnitureLevel],
+		FlatData[index][flatSealed]
 	);
 	mysql_format(sqlcon, query, sizeof(query), "%s WHERE `ID` = '%d' LIMIT 1;", query, FlatData[index][flatID]);
 	return mysql_tquery(sqlcon, query);
 }
-stock Flat_Sync(index) {
+Flat_Sync(index) {
 
 	if(!Iter_Contains(Flat, index))
 		return 0;
 
-	new str[144];
+	new str[194];
 
 	if(FlatData[index][flatOwner] == -1)
 		format(str, sizeof(str), ""LIGHTBLUE"[Flat: %d]\n"WHITE"Flat type %s\nPrice: $%s\nType "GOLD"/flat buy "WHITE"to purchase.", index, Flat_ReturnType(FlatData[index][flatType]), FormatNumber(FlatData[index][flatPrice]));
-	else
-		format(str, sizeof(str), ""LIGHTBLUE"[Flat: %d]\n"WHITE"Flat type %s\nOwned by %s", index, Flat_ReturnType(FlatData[index][flatType]), FlatData[index][flatOwnerName]);
+	else {
 
+		if(!FlatData[index][flatSealed])
+			format(str, sizeof(str), ""LIGHTBLUE"[Flat: %d]\n"WHITE"Flat type %s\nOwned by %s", index, Flat_ReturnType(FlatData[index][flatType]), FlatData[index][flatOwnerName]);
+		else
+			format(str, sizeof(str), ""LIGHTBLUE"[Flat: %d]\n"WHITE"Flat type %s\nOwned by %s\n"WHITE"This flat is sealed by "RED"authority", index, Flat_ReturnType(FlatData[index][flatType]), FlatData[index][flatOwnerName]);
+	}
 	if(IsValidDynamic3DTextLabel(FlatData[index][flatLabel])) {
 		Streamer_SetItemPos(STREAMER_TYPE_3D_TEXT_LABEL, FlatData[index][flatLabel], FlatData[index][flatPos][0], FlatData[index][flatPos][1], FlatData[index][flatPos][2]);
 		Streamer_SetIntData(STREAMER_TYPE_3D_TEXT_LABEL, FlatData[index][flatLabel], E_STREAMER_INTERIOR_ID, FlatData[index][flatExtInterior]);
@@ -344,7 +351,7 @@ stock Flat_Sync(index) {
 	return 1;
 }
 
-stock Flat_ReturnType(type) {
+Flat_ReturnType(type) {
 
 	new const flat_type[][] = {
 		"Low",
@@ -355,7 +362,7 @@ stock Flat_ReturnType(type) {
 	format(str, sizeof(str), "%s", flat_type[type]);
 	return str;
 }
-stock Flat_SetupInterior(index, type) {
+Flat_SetupInterior(index, type) {
 	if(!Iter_Contains(Flat, index))	
 		return 0;
 
@@ -381,7 +388,7 @@ stock Flat_SetupInterior(index, type) {
 	}
 	return 1;
 }
-stock Flat_IsOwner(playerid, flat_id) {
+Flat_IsOwner(playerid, flat_id) {
 	if(!Iter_Contains(Flat, flat_id))
 		return 0;
 
@@ -391,7 +398,7 @@ stock Flat_IsOwner(playerid, flat_id) {
 	return 0;
 }
 
-FUNC::OnFlatCreated(flat_id) {
+function OnFlatCreated(flat_id) {
 	if(!Iter_Contains(Flat, flat_id))
 		return 0;
 
@@ -403,7 +410,7 @@ FUNC::OnFlatCreated(flat_id) {
 	return 1;
 }
 
-stock Flat_Interior(playerid, Float:range = 3.0) {
+Flat_Interior(playerid, Float:range = 3.0) {
 
 	new
 		i = PlayerData[playerid][pInFlat];
@@ -417,7 +424,7 @@ stock Flat_Interior(playerid, Float:range = 3.0) {
 	return -1;
 }
 
-stock Flat_Exterior(playerid, Float:range = 3.0) {
+Flat_Exterior(playerid, Float:range = 3.0) {
 
 	new index = -1;
 	foreach(new i : Flat) if(IsPlayerInRangeOfPoint(playerid, range, FlatData[i][flatPos][0],  FlatData[i][flatPos][1],  FlatData[i][flatPos][2]) && GetPlayerVirtualWorld(playerid) == FlatData[i][flatExtWorld] && GetPlayerInterior(playerid) == FlatData[i][flatExtInterior]) {
@@ -427,7 +434,7 @@ stock Flat_Exterior(playerid, Float:range = 3.0) {
 	return index;
 }
 
-stock Flat_ShowKeyMenu(playerid, flatid) {
+Flat_ShowKeyMenu(playerid, flatid) {
 
 	if(!Iter_Contains(Flat, flatid))
 		return 0;
@@ -440,7 +447,7 @@ stock Flat_ShowKeyMenu(playerid, flatid) {
 }
 
 
-FUNC::Flat_CheckSharedKey(playerid, flatid) {
+function Flat_CheckSharedKey(playerid, flatid) {
 	if(!cache_num_rows())
 		return ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Flat Shared Key", "Tidak ada player yang memiliki kunci flat ini.", "Close", "");
 
@@ -449,7 +456,7 @@ FUNC::Flat_CheckSharedKey(playerid, flatid) {
 	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Flat Shared Key", sprintf("Player yang memiliki kunci flat ini adalah %s.", name), "Close", "");
 	return 1;
 }
-FUNC::Flat_Load() {
+function Flat_Load() {
 
 	new str[128];
 
@@ -481,7 +488,8 @@ FUNC::Flat_Load() {
 			cache_get_value_name_int(i, "TaxPaid", FlatData[i][flatTaxPaid]);
 			cache_get_value_name_int(i, "TaxDate", FlatData[i][flatTaxDate]);
 			cache_get_value_name_int(i, "FurnitureLevel", FlatData[i][flatFurnitureLevel]);
-			
+			cache_get_value_name_int(i, "Sealed", FlatData[i][flatSealed]);
+
 	        for (new j = 0; j < 5; j ++)
 			{
 	            format(str, 24, "Weapon%d", j + 1);
@@ -513,7 +521,7 @@ FUNC::Flat_Load() {
 	return 1;
 }
 
-FUNC::OnFlatLoadStorage(flatid)
+function OnFlatLoadStorage(flatid)
 {
 	static
 		str[32];
@@ -535,7 +543,7 @@ FUNC::OnFlatLoadStorage(flatid)
 	return 1;
 }
 
-stock Flat_Inside(playerid) {
+Flat_Inside(playerid) {
 	new flatid = PlayerData[playerid][pInFlat];
 
 	if(!Iter_Contains(Flat, flatid))
@@ -544,7 +552,7 @@ stock Flat_Inside(playerid) {
 	return flatid;
 }
 
-stock Flat_IsHaveAccess(playerid, flat_id) {
+Flat_IsHaveAccess(playerid, flat_id) {
 
 	new bool:access = false;
 
@@ -570,13 +578,41 @@ stock Flat_IsHaveAccess(playerid, flat_id) {
 	}
 	return access;
 }
-stock Flat_Delete(index, bool:safe_remove = false) {
+Flat_Delete(index, bool:safe_remove = false) {
 
 	if(!Iter_Contains(Flat, index))
 		return 0;
 
 	mysql_tquery(sqlcon, sprintf("DELETE FROM `flat` WHERE `ID` = %d", FlatData[index][flatID]));
 	mysql_tquery(sqlcon, sprintf("DELETE FROM `flatkeys` WHERE `FlatID` = %d", FlatData[index][flatID]));
+	
+	new string[156];
+	foreach(new i : Furniture) if(FurnitureData[i][furnitureProperty] == FlatData[index][flatID] && FurnitureData[i][furniturePropertyType] == FURNITURE_TYPE_FLAT)
+	{
+		mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `furniture` WHERE `furnitureID` = '%d'", FurnitureData[i][furnitureID]);
+		mysql_tquery(sqlcon, string);
+
+		FurnitureData[i][furnitureExists] = false;
+		FurnitureData[i][furnitureModel] = 0;
+		FurnitureData[i][furniturePropertyType] = -1;
+		FurnitureData[i][furnitureProperty] = -1;
+		
+		if(IsValidDynamicObject(FurnitureData[i][furnitureObject]))
+			DestroyDynamicObject(FurnitureData[i][furnitureObject]);
+
+		new next = i;
+		Iter_SafeRemove(Furniture, next, i);
+	}
+
+
+	for(new i = 0; i < MAX_FLAT_STORAGE; i++) if(FlatStorage[index][i][fItemExists]) {
+		FlatStorage[index][i][fItemExists] = false;
+		FlatStorage[index][i][fItemModel] = 0;
+		FlatStorage[index][i][fItemQuantity] = 0;
+
+		mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `flatstorage` WHERE `ID` = '%d' AND `itemID` = '%d'", FlatData[index][flatID], FlatStorage[index][i][fItemID]);
+		mysql_tquery(sqlcon, string);
+	}
 
 	if(IsValidDynamic3DTextLabel(FlatData[index][flatLabel]))
 		DestroyDynamic3DTextLabel(FlatData[index][flatLabel]);
@@ -641,7 +677,7 @@ CMD:editflat(playerid, params[]) {
 	if(PlayerData[playerid][pAdmin] < 6)
 		return PermissionError(playerid);
 
-	new string[128], type[24], flatid = -1, Float:x, Float:y, Float:z;
+	new string[156], type[24], flatid = -1, Float:x, Float:y, Float:z;
 	if(sscanf(params, "ds[24]S()[128]", flatid, type, string))
 		return SendSyntaxMessage(playerid, "/editflat [flatid]  [delete/location/interior/asell/price/type]");
 
@@ -698,6 +734,15 @@ CMD:editflat(playerid, params[]) {
 			FlatData[flatid][flatAmmo][i] = 0;
 			FlatData[flatid][flatDurability][i] = 0;
 			FlatData[flatid][flatSerial][i] = 0;
+		}
+
+		for(new i = 0; i < MAX_FLAT_STORAGE; i++) if(FlatStorage[flatid][i][fItemExists]) {
+			FlatStorage[flatid][i][fItemExists] = false;
+			FlatStorage[flatid][i][fItemModel] = 0;
+			FlatStorage[flatid][i][fItemQuantity] = 0;
+
+			mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `flatstorage` WHERE `ID` = '%d' AND `itemID` = '%d'", FlatData[flatid][flatID], FlatStorage[flatid][i][fItemID]);
+			mysql_tquery(sqlcon, string);
 		}
 		SendServerMessage(playerid, "You have aselled Flat ID %d.", flatid);
 
@@ -821,7 +866,7 @@ CMD:flat(playerid, params[]) {
 
 }
 
-FUNC::OnFlatQueue(playerid) {
+function OnFlatQueue(playerid) {
 	if(cache_num_rows()) {
 		for(new i = 0; i < cache_num_rows(); i++) {
 			new id, msg[128];
@@ -829,11 +874,11 @@ FUNC::OnFlatQueue(playerid) {
 			cache_get_value_name(i, "Message", msg, 128);
 
 			if(!strcmp(msg, "idk", true)) {
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FLAT: "WHITE"Flatmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Flat) "WHITE"Flatmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", id);
 			}
 			
 			else {
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "FLAT: "WHITE"Flatmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Flat) "WHITE"Flatmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", id);
 			}
 		}
 	}
@@ -841,13 +886,23 @@ FUNC::OnFlatQueue(playerid) {
 
 	return 1;
 }
-task OnFlatAsellCheck[10000]() {
+task OnFlatAsellCheck[3600000]() {
 	foreach(new i : Flat) if(FlatData[i][flatLastLogin] != 0) {
 		if(FlatData[i][flatLastLogin] < gettime()) {
 			SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d has been automatically aselled by the system.", i);
 
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `flat_queue` (`Username`, `FlatID`) VALUES('%s','%d')", FlatData[i][flatOwnerName], i));
 			FlatData[i][flatLastLogin] = 0;
+
+			for(new j = 0; j < MAX_FLAT_STORAGE; i++) if(FlatStorage[i][j][fItemExists]) {
+				FlatStorage[i][j][fItemExists] = false;
+				FlatStorage[i][j][fItemModel] = 0;
+				FlatStorage[i][j][fItemQuantity] = 0;
+
+				new string[156];
+				mysql_format(sqlcon, string, sizeof(string), "DELETE FROM `flatstorage` WHERE `ID` = '%d' AND `itemID` = '%d'", FlatData[i][flatID], FlatStorage[i][j][fItemID]);
+				mysql_tquery(sqlcon, string);
+			}
 
 			FlatData[i][flatOwner] = -1;
 			format(FlatData[i][flatOwnerName], MAX_PLAYER_NAME, "No Owner");

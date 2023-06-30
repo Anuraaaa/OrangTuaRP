@@ -23,11 +23,11 @@ PreloadAnimations(playerid)
 
 CMD:animlist(playerid, params[])
 {
-	SendClientMessage(playerid, COLOR_SERVER, "ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
-	SendClientMessage(playerid, COLOR_SERVER, "ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
-	SendClientMessage(playerid, COLOR_SERVER, "ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
-	SendClientMessage(playerid, COLOR_SERVER, "ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
-	SendClientMessage(playerid, COLOR_SERVER, "ANIMATION:{FFFFFF} /cry, /tired, /sit, /crossarms, /fucku, /walk, /piss, /sa, /anim");
+	SendClientMessage(playerid, COLOR_SERVER, "(Animation){FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Animation){FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Animation){FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Animation){FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
+	SendClientMessage(playerid, COLOR_SERVER, "(Animation){FFFFFF} /cry, /tired, /sit, /crossarms, /fucku, /walk, /piss, /sa, /anim");
 	return 1;
 }
 
@@ -156,12 +156,12 @@ stock LoopingAnimEx(playerid,animlib[],animname[], Float:Speed, looping, lockx, 
 	ApplyAnimation(playerid, animlib, animname, Speed, looping, lockx, locky, freeze, lp, 1);
 }
 
-FUNC::CarAnim1(playerid)
+function CarAnim1(playerid)
 {
 	LoopingAnimEx(playerid, "CAR", "Fixn_Car_Out", 4.1, 0, 1, 1, 1, 1);
 	return true;
 }
-FUNC::CarAnim2(playerid)
+function CarAnim2(playerid)
 {
 	LoopingAnimEx(playerid,"CAR", "Fixn_Car_Loop", 4.0, 1, 0, 0, 0, 0);
 	return true;

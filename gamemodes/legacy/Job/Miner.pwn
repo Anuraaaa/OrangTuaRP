@@ -56,7 +56,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         SetPVarInt(playerid, "HasilTambang", hasil_tambang);
 
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "MINER: "WHITE"Kamu berhasil mendapatkan %s "WHITE"! antarkan ke Checkpoint untuk mendapatkan upah.", rock_names[hasil_tambang]);
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Kamu berhasil mendapatkan %s "WHITE"! antarkan ke Checkpoint untuk mendapatkan upah.", rock_names[hasil_tambang]);
         SetPlayerCheckpoint(playerid, -1304.1875,2491.8530,87.1437, 3.0);
 
 
@@ -100,12 +100,12 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
             GiveMoney(playerid, gaji, "Miner");
 
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "MINER: "WHITE"Kamu berhasil mengantarkan batu dengan tipe %s "WHITE"dan mendapatkan "GREEN"$%s"WHITE"!", rock_names[rock_type], FormatNumber(gaji));
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Kamu berhasil mengantarkan batu dengan tipe %s "WHITE"dan mendapatkan "GREEN"$%s"WHITE"!", rock_names[rock_type], FormatNumber(gaji));
 
             UpdateServerStock(SERVER_STOCK_ROCK);
         }
         else {
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "MINER: "WHITE"Stock batu sedang penuh! kamu tidak mendapatkan apa-apa.");
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Stock batu sedang penuh! kamu tidak mendapatkan apa-apa.");
         }
         DeletePVar(playerid, "HasilTambang");
 
@@ -167,7 +167,7 @@ CMD:mine(playerid, params[]) {
     return 1;
 }
 
-FUNC::OnRockMined(playerid) {
+function OnRockMined(playerid) {
 
 
     new id = MinedRock[playerid];
@@ -189,7 +189,7 @@ FUNC::OnRockMined(playerid) {
 
     ClearAnimations(playerid, 1);
     SetPlayerArmedWeapon(playerid, 0);
-    SendClientMessageEx(playerid, X11_LIGHTBLUE, "MINER: "WHITE"Kamu berhasil menambang batu! antarkan batu ke checkpoint.");
+    SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Kamu berhasil menambang batu! antarkan batu ke checkpoint.");
 
     ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
@@ -204,7 +204,7 @@ FUNC::OnRockMined(playerid) {
     return 1;
 }
 
-FUNC::OnRockProgress(playerid) {
+function OnRockProgress(playerid) {
 
     if(MinerIndex[playerid] != 2)
         return 0;
@@ -213,7 +213,7 @@ FUNC::OnRockProgress(playerid) {
     TogglePlayerControllable(playerid, 1);
     ClearAnimations(playerid, 1);
 
-    SendClientMessageEx(playerid, X11_LIGHTBLUE, "MINER: "WHITE"Batu selesai diproses! pergi ke Checkpoint untuk mengambil batu.");
+    SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Batu selesai diproses! pergi ke Checkpoint untuk mengambil batu.");
     SetPlayerCheckpoint(playerid, -1299.5569,2549.2720,87.5599, 2.0);
     return 1;
 }

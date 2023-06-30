@@ -35,7 +35,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				gr_HighVelocity[vehicleid][listitem] = PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]];
 
           		ResetWeapon(playerid, gr_Weapon[vehicleid][listitem]);
-	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s stored a %s into the gunrack.", ReturnName(playerid), ReturnWeaponName(gr_Weapon[vehicleid][listitem]));
+	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s stored a %s into the gunrack.", ReturnName(playerid), ReturnWeaponName(gr_Weapon[vehicleid][listitem]));
 
 	            Gunrack_Show(playerid, vehicleid);
 
@@ -50,7 +50,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 					return SendErrorMessage(playerid, "You already have weapon on the same slot.");
 
 			    GiveWeaponToPlayer(playerid, gr_Weapon[vehicleid][listitem], gr_Ammo[vehicleid][listitem],gr_Durability[vehicleid][listitem], gr_HighVelocity[vehicleid][listitem]);
-	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "* %s takes a %s from the gunrack.", ReturnName(playerid), ReturnWeaponName(gr_Weapon[vehicleid][listitem]));
+	            SendNearbyMessage(playerid, 30.0,X11_PLUM, "** %s takes a %s from the gunrack.", ReturnName(playerid), ReturnWeaponName(gr_Weapon[vehicleid][listitem]));
 
 	            gr_Weapon[vehicleid][listitem] = 0;
                 gr_Ammo[vehicleid][listitem] = 0;

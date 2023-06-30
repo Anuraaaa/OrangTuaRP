@@ -189,7 +189,7 @@ hook OnPlayerLogin(playerid)
 	mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehiclekeys` WHERE `playerID` = '%d' ORDER BY `playerID` DESC LIMIT %d", PlayerData[playerid][pID], PLAYER_MAX_VEHICLE_SHARE_KEYS), "LoadVehicleKey", "d", playerid);
 }
 
-FUNC::LoadVehicleKey(playerid) {
+function LoadVehicleKey(playerid) {
 	static
 		rows;
 

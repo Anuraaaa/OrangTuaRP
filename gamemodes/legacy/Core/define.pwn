@@ -1,6 +1,6 @@
 #define forex(%0,%1) for(new %0 = 0; %0 < %1; %0++)
 
-#define FUNC::%0(%1) forward %0(%1); public %0(%1)
+#define function%0(%1) forward %0(%1); public %0(%1)
 
 #define IsNull(%1) \
 ((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
@@ -27,7 +27,7 @@
 #define DATABASE_PASSWORD 			"BG6tW@VPc7xYy2Z"
 
 #define SERVER_NAME 			"Orang Tua Roleplay"
-#define SERVER_VERSION 			"v11.13.9"
+#define SERVER_VERSION 			"v12.13.9"
 
 #if !defined BCRYPT_HASH_LENGTH
 	#define BCRYPT_HASH_LENGTH 250
@@ -60,19 +60,19 @@
 #define GetUsername(%0) PlayerData[%0][pUCP]
 
 #define SendCustomMessage(%0,%1,%2,%3) \
-    SendClientMessageEx(%0, %1, %2": ""{FFFFFF}"%3)
+    SendClientMessageEx(%0, %1, "("%2") ""{FFFFFF}"%3)
 
 #define SendAdminAction(%0,%1) \
-	SendClientMessageEx(%0, X11_TOMATO, "ADMIN:{FFFFFF} "%1)
+	SendClientMessageEx(%0, X11_TOMATO, "(Admin){FFFFFF} "%1)
 
 #define SendServerMessage(%0,%1) \
-	SendClientMessageEx(%0, X11_LIGHTGREEN, "SERVER:{FFFFFF} "%1)
+	SendClientMessageEx(%0, X11_LIGHTGREEN, "(Server){FFFFFF} "%1)
 
 #define SendSyntaxMessage(%0,%1) \
-	SendClientMessageEx(%0, COLOR_GREY, "USAGE:{FFFFFF} "%1)
+	SendClientMessageEx(%0, COLOR_GREY, "(Usage){FFFFFF} "%1)
 	
 #define SendErrorMessage(%0,%1) \
-	SendClientMessageEx(%0, COLOR_GREY, "ERROR: "%1)
+	SendClientMessageEx(%0, COLOR_GREY, "(Error) "%1)
 
 #define GetVehicleName(%0) ReturnVehicleModelName(GetVehicleModel(%0))
 #define SetPlayerLogged(%0) PlayerData[%0][pLogged]=true

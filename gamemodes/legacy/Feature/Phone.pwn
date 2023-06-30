@@ -48,7 +48,7 @@ stock IsPlayerOnPhone(playerid)
 	return 0;
 }
 
-FUNC::LoadPlayerContact(playerid)
+function LoadPlayerContact(playerid)
 {
 	new count = cache_num_rows();
 	if(count > 0)
@@ -140,11 +140,11 @@ CMD:phone(playerid, params[])
 
 	if (PlayerData[playerid][pPhoneOff])
 	{
-		format(str, sizeof(str), "Number: %d\nCredits: %d\nDial Number\nMy Contacts\nSend Text Message\nAdvertisement List\nShare Location\nTurn On Phone", PlayerData[playerid][pPhoneNumber], PlayerData[playerid][pCredit]);
+		format(str, sizeof(str), "Number: %d\nCredits: %d\nDial Number\nMy Contacts\nSend Text Message\nAdvertisement List\nShare Location\nWatch live broadcast\nTurn On Phone", PlayerData[playerid][pPhoneNumber], PlayerData[playerid][pCredit]);
 	}
 	else
 	{
-	    format(str, sizeof(str), "Number: %d\nCredits: %d\nDial Number\nMy Contacts\nSend Text Message\nAdvertisement List\nShare Location\nTurn Off Phone", PlayerData[playerid][pPhoneNumber], PlayerData[playerid][pCredit]);
+	    format(str, sizeof(str), "Number: %d\nCredits: %d\nDial Number\nMy Contacts\nSend Text Message\nAdvertisement List\nShare Location\nWatch live broadcast\nTurn Off Phone", PlayerData[playerid][pPhoneNumber], PlayerData[playerid][pCredit]);
 	}
 	ShowPlayerDialog(playerid, DIALOG_PHONE, DIALOG_STYLE_LIST, "Home Screen", str, "Select", "Close");
 	new string[128];
@@ -173,10 +173,10 @@ CMD:sms(playerid, params[])
     new targetid = GetNumberOwner(number);
 
     if(targetid == INVALID_PLAYER_ID)
-        return SendErrorMessage(playerid, "The specified phone number is not in service.");
+        return SendErrorMessage(playerid, "Nomor ini sedang tidak aktif.");
 
     if(PlayerData[targetid][pPhoneOff])
-        return SendErrorMessage(playerid, "The recipient has their cellphone powered off.");
+        return SendErrorMessage(playerid, "Nomor yang dituju sedang tidak aktif.");
 
 	if(!PlayerData[playerid][pCredit])
 		return SendErrorMessage(playerid, "Kamu tidak memiliki phone credit!");
@@ -208,7 +208,7 @@ CMD:reply(playerid, params[]) {
 	if(GetNumberOwner(PlayerData[playerid][pLastNumber]) != INVALID_PLAYER_ID) {
 
 		new str[156];
-		format(str, sizeof(str), ""WHITE"Reply to: "YELLOW"%d\n"WHITE"Message: "GREEN"(input below)");
+		format(str, sizeof(str), ""WHITE"Reply to: "YELLOW"%d\n"WHITE"Message: "GREEN"(input below)", PlayerData[playerid][pLastNumber]);
 		ShowPlayerDialog(playerid, DIALOG_REPLY, DIALOG_STYLE_INPUT, "Reply Message", str, "Send", "Close");
 	}
 	else SendErrorMessage(playerid, "Pengirim pesan terakhir tidak dapat dijangkau.");
@@ -243,7 +243,7 @@ CMD:call(playerid, params[])
  	   return SendSyntaxMessage(playerid, "/call [phone number] (1222 - Taxi | 911 - Emergency | 143 - Mechanic | 193 - News)");
 
 	if (!number)
-	    return SendErrorMessage(playerid, "The specified phone number is not in service.");
+	    return SendErrorMessage(playerid, "Nomor ini sedang tidak aktif.");
 	    
 	if (number == 911)
 	{
@@ -256,14 +256,14 @@ CMD:call(playerid, params[])
 		ServiceIndex[playerid] = 1;
 		PlayerPlaySound(playerid, 3600, 0.0, 0.0, 0.0);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
-		SendClientMessage(playerid, COLOR_SERVER, "OPERATOR:{FFFFFF} Which service do you require: \"sfpd\" or \"sffd\"?");
+		SendClientMessage(playerid, COLOR_SERVER, "(Operator){FFFFFF} Which service do you require: \"sfpd\" or \"sffd\"?");
 	}
 	else if (number == 1222)
 	{
 		PlayerData[playerid][pTaxiCalled] = true;
 		PlayerPlayNearbySound(playerid, 3600);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
-		SendClientMessage(playerid, COLOR_YELLOW, "OPERATOR:{FFFFFF} The taxi department has been notified of your call.");
+		SendClientMessage(playerid, COLOR_YELLOW, "(Operator){FFFFFF} The taxi department has been notified of your call.");
 		
 		foreach(new i : Player) if(CheckPlayerJob(i, JOB_TAXI) && PlayerData[i][pJobduty]) {
 			SendClientMessageEx(i, X11_YELLOW, "[1222]: "WHITE"%s[%d] membutuhkan Taxi pada lokasi %s (/taxi calls untuk menerima)", GetName(playerid, false), PlayerData[playerid][pPhoneNumber], GetSpecificLocation(playerid));
@@ -273,7 +273,7 @@ CMD:call(playerid, params[])
 	{
 	    PlayerPlayNearbySound(playerid, 3600);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
-		SendClientMessage(playerid, COLOR_LIGHTGREEN, "OPERATOR:{FFFFFF} The mechanic has been notified of your call.");
+		SendClientMessage(playerid, COLOR_LIGHTGREEN, "(Operator){FFFFFF} The mechanic has been notified of your call.");
 		foreach(new i : Player) if(CheckPlayerJob(i, JOB_MECHANIC) && PlayerData[i][pJobduty])  {
 			SendClientMessageEx(i, COLOR_LIGHTGREEN, "[143]: {FFFFFF}%s is requesting a mechanic at %s (%d)", GetName(playerid, false), GetSpecificLocation(playerid), PlayerData[playerid][pPhoneNumber]);
 		}
@@ -289,25 +289,25 @@ CMD:call(playerid, params[])
 
 	    PlayerPlayNearbySound(playerid, 3600);
 		SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s takes out their cellphone and places a call.", ReturnName(playerid));
-		SendClientMessage(playerid, X11_TURQUOISE_1, "NEWS OPERATOR:"WHITE" What can we help you? don't send junk message for this service.");	
+		SendClientMessage(playerid, X11_TURQUOISE_1, "(News Operator)"WHITE" What can we help you? don't send junk message for this service.");	
 		PlayerData[playerid][pCallNews] = true;	
 	}
 	else if ((targetid = GetNumberOwner(number)) != INVALID_PLAYER_ID)
 	{
 	    if (targetid == playerid)
-	        return SendErrorMessage(playerid, "You can't call yourself!");
+	        return SendErrorMessage(playerid, "Kamu tidak dapat menelfon diri sendiri.");
 
 		if (PlayerData[targetid][pPhoneOff])
-		    return SendErrorMessage(playerid, "The recipient has their cellphone powered off.");
+		    return SendErrorMessage(playerid, "Nomor yang dituju sedang tidak aktif.");
 		    
 		if(PlayerData[playerid][pCredit] < 5)
-		    return SendErrorMessage(playerid, "You don't have enough phone credits!");
+		    return SendErrorMessage(playerid, "Kamu tidak memiliki pulsa yang cukup.");
 
 		if(PlayerData[targetid][pIncomingCall])
-		    return SendErrorMessage(playerid, "There are already recipient on this number.");
+		    return SendErrorMessage(playerid, "Nomor ini sedang sibuk.");
 
         if (IsPlayerOnPhone(targetid))
-		    return SendErrorMessage(playerid, "There are already recipient on this number.");
+		    return SendErrorMessage(playerid, "Nomor ini sedang sibuk.");
 		    
 		PlayerData[targetid][pIncomingCall] = 1;
 		PlayerData[playerid][pIncomingCall] = 1;
@@ -331,7 +331,7 @@ CMD:call(playerid, params[])
 	}
 	else
 	{
-	    SendErrorMessage(playerid, "The specified phone number is not in service.");
+	    SendErrorMessage(playerid, "Nomor ini sedang tidak aktif.");
 	}
 	return 1;
 }

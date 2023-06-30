@@ -100,7 +100,7 @@ stock ATM_Nearest(playerid)
 	return -1;
 }
 
-FUNC::ATM_Load()
+function ATM_Load()
 {
 	new rows = cache_num_rows();
  	if(rows)
@@ -123,7 +123,7 @@ FUNC::ATM_Load()
 	return 1;
 }
 
-FUNC::OnATMCreated(atmid)
+function OnATMCreated(atmid)
 {
     if (atmid == -1 || !AtmData[atmid][atmExists])
 		return 0;

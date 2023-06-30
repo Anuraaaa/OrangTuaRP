@@ -46,7 +46,7 @@ Rock_Save(id) {
     return mysql_tquery(sqlcon, query);
 }
 
-FUNC::Rock_Load(id) {
+function Rock_Load(id) {
 
     if(cache_num_rows()) {
         for(new i = 0; i < cache_num_rows(); i++) {
@@ -66,7 +66,7 @@ FUNC::Rock_Load(id) {
     printf("[ROCK] Loaded %d rock from database.", cache_num_rows());
     return 1;
 }
-FUNC::OnRockCreated(id) {
+function OnRockCreated(id) {
     RockData[id][rockID] = cache_insert_id();
     Rock_Save(id);
     

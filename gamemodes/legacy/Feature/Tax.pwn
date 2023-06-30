@@ -81,11 +81,13 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             HouseData[id][houseTaxState] = TAX_STATE_COOLDOWN;
             HouseData[id][houseTaxPaid] = true;
 
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "TAX: "WHITE"Kamu berhasil membayar pajak untuk rumah-mu dengan harga "GREEN"$%s", FormatNumber(price));
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "TAX: "WHITE"Terimakasih telah membayar pajak! bayar lagi dalam 14 hari.");
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Kamu berhasil membayar pajak untuk rumah-mu dengan harga "GREEN"$%s", FormatNumber(price));
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Terimakasih telah membayar pajak! bayar lagi dalam 14 hari.");
 
             serverVault += price;
             SaveEconomyData();
+
+            House_Save(id);
         }
     }
     if(dialogid == DIALOG_PAYTAX_FLAT) {
@@ -108,10 +110,12 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             FlatData[id][flatTaxState] = TAX_STATE_COOLDOWN;
             FlatData[id][flatTaxPaid] = true;
 
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "TAX: "WHITE"Kamu berhasil membayar pajak untuk flat-mu dengan harga "GREEN"$%s", FormatNumber(price));
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "TAX: "WHITE"Terimakasih telah membayar pajak! bayar lagi dalam 14 hari.");
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Kamu berhasil membayar pajak untuk flat-mu dengan harga "GREEN"$%s", FormatNumber(price));
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Terimakasih telah membayar pajak! bayar lagi dalam 14 hari.");
             serverVault += price;
             SaveEconomyData();
+
+            Flat_Save(id);
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -134,7 +138,7 @@ task house_OnTaxUpdate[60000]() {
                 mysql_tquery(sqlcon,string);
 
                 foreach(new id : Player) if(HouseData[i][houseOwner] == PlayerData[id][pID] && IsPlayerSpawned(id)) {
-                    SendClientMessageEx(id, X11_LIGHTBLUE, "TAX: "WHITE"Rumahmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
+                    SendClientMessageEx(id, X11_LIGHTBLUE, "(Tax) "WHITE"Rumahmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
                     break;
                 }
                 HouseData[i][houseLastLogin] = 0;
@@ -162,7 +166,7 @@ task flat_OnTaxUpdate[10000]() {
                 // SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d telah di asell karena tidak membayar pajak.", i);
 
                 foreach(new id : Player) if(FlatData[i][flatOwner] == PlayerData[id][pID] && IsPlayerSpawned(id)) {
-                    SendClientMessageEx(id, X11_LIGHTBLUE, "TAX: "WHITE"Flatmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
+                    SendClientMessageEx(id, X11_LIGHTBLUE, "(Tax) "WHITE"Flatmu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
                     break;
                 }
 

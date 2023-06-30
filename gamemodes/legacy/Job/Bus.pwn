@@ -10,7 +10,6 @@ new
 	busRoute[MAX_PLAYERS] = {0, ...},
 	busCounter[MAX_PLAYERS] = {0, ...},
 	currentBRoute[MAX_PLAYERS] = {0, ...},
-    usingBus[MAX_PLAYERS] = {INVALID_VEHICLE_ID, ...},
 	busSelect[MAX_PLAYERS] = {0, ...};
 
 enum array_busRoute
@@ -230,7 +229,7 @@ ptask Player_BusUpdate[1000](playerid)
 		if(--PlayerData[playerid][pBusDelay] == 0) {
 			PlayerData[playerid][pBusDelay] = 0;
 
-			SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu bisa bekerja sebagai Bus Driver kembali.");
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu bisa bekerja sebagai Bus Driver kembali.");
 		}
 	}
 	return 1;
@@ -299,7 +298,7 @@ SetBusCheckpointRoute(playerid)
 			
 		PlayerData[playerid][pBusDelay] = 900;
 		AddSalary(playerid, "Bus SideJob", salaryBus);
-		SendClientMessageEx(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}pada pending salary.", FormatNumber(salaryBus));
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}pada pending salary.", FormatNumber(salaryBus));
 		
 		VehicleData[vehicleid][vFuel] = 100;
 		SetVehicleToRespawn(vehicleid);
@@ -340,7 +339,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		busCounter[playerid] = 0;
 		currentBRoute[playerid] = 0;
 
-		SendClientMessage(playerid, COLOR_SERVER, "SIDEJOB: {FFFFFF}Kamu mulai bekerja sebagai Bus Driver, silahkan ikuti semua Checkpoint pada radar.");
+		SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu mulai bekerja sebagai Bus Driver, silahkan ikuti semua Checkpoint pada radar.");
 		SetPlayerWorkInBus(playerid);
 
 		SetBusCheckpoint(playerid, 0);
