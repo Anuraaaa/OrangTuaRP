@@ -108,9 +108,9 @@ enum E_LOGLEVEL
 	native IsValidVehicle(vehicleid);
 #endif
 
-#include "legacy\Core\define.pwn"
-#include "legacy\Core\textdraw.pwn"
-#include "legacy\Core\generalvar.pwn"
+#include ".\legacy\Core\define"
+#include ".\legacy\Core\textdraw"
+#include ".\legacy\Core\generalvar"
 
 enum(<<= 1)
 {
@@ -433,7 +433,7 @@ enum E_UCP_DATA
 new UcpData[MAX_PLAYERS][E_UCP_DATA];
 
 /* Load Modules */
-#include "legacy\modules.pwn"
+#include ".\legacy\modules"
 
 forward OnPlayerDisconnectEx(playerid);
 forward OnPlayerLogin(playerid);
@@ -11537,4 +11537,4 @@ timer Vehicle_UpdatePosition[2000](vehicleid)
 	SetVehicleZAngle(vehicleid, a);
 }
 
-#include "legacy\Core\timer.pwn"
+#include ".\legacy\Core\timer"

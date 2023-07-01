@@ -1,0 +1,156 @@
+{
+	"user": "Anuraaaa",
+	"repo": "OrangTuaRP-main",
+	"contributors": [
+		"LuminouZ307",
+		"Anuraaaa"
+	],
+	"entry": "gamemodes/OTRP.pwn",
+	"output": "gamemodes/OTRP.amx",
+	"local": true,
+	"runtime": {
+		"version": "0.3.7",
+		"mode": "server",
+		"rcon_password": "password",
+		"port": 7777,
+		"hostname": "SA-MP Server",
+		"maxplayers": 15,
+		"language": "",
+		"mapname": "San Andreas",
+		"weburl": "www.sa-mp.com",
+		"gamemodetext": "Unknown",
+		"announce": true,
+		"lanmode": false,
+		"query": true,
+		"rcon": false,
+		"logqueries": false,
+		"sleep": 5,
+		"maxnpc": 100,
+		"stream_rate": 750,
+		"stream_distance": 400.0,
+		"onfoot_rate": 40,
+		"incar_rate": 40,
+		"weapon_rate": 40,
+		"chatlogging": true,
+		"timestamp": true,
+		"messageholelimit": 3000,
+		"messageslimit": 500,
+		"ackslimit": 3000,
+		"playertimeout": 10000,
+		"minconnectiontime": 2000,
+		"lagcompmode": 1,
+		"connseedtime": 300000,
+		"db_logging": false,
+		"db_log_queries": false,
+		"conncookies": true,
+		"cookielogging": false,
+		"output": true
+	},
+	"runtimes": [
+		{
+			"name": "dev",
+			"version": "0.3.DL",
+			"mode": "server",
+			"echo": "Loading server configuration...",
+			"gamemodes": [
+				"OTRP"
+			],
+			"plugins": [
+				"crashdetect", "pawnraknet", "streamer", "sscanf", "mysql", "samp_bcrypt", "samp-compat", "chrono", "mapandreas"
+			],
+			"rcon_password": "orturp",
+			"port": 7777,
+			"hostname": "Orang Tua Roleplay | Development",
+			"maxplayers": 15,
+			"language": "Bahasa Indonesia",
+			"mapname": "San Andreas",
+			"weburl": "",
+			"gamemodetext": "OTRP v12.13.9",
+			"announce": true,
+			"lanmode": false,
+			"query": true,
+			"rcon": true,
+			"logqueries": false,
+			"sleep": 5,
+			"maxnpc": 100,
+			"stream_rate": 2000,
+			"stream_distance": 2000.0,
+			"onfoot_rate": 40,
+			"incar_rate": 40,
+			"weapon_rate": 40,
+			"chatlogging": true,
+			"timestamp": true,
+			"logtimeformat": "[%d/%m/%Y %H:%M:%S]",
+			"messageholelimit": 3000,
+			"messageslimit": 500,
+			"playertimeout": 10000,
+			"minconnectiontime": 0,
+			"lagcompmode": 1,
+			"connseedtime": 300000,
+			"db_logging": false,
+			"db_log_queries": false,
+			"conncookies": true,
+			"cookielogging": false,
+			"output": true,
+			"extra": {
+				"long_call_time": "0",
+				"useartwork": "1",
+				"profiler_gamemodes": "OTRP",
+				"profiler_outputformat": "html"
+			}
+		}
+	],
+	"builds": [
+		{
+			"name": "dev",
+			"version": "3.10.8",
+			"args": [
+				"-;+",
+				"-(+",
+				"-d3",
+				"-Z+"
+			],
+			"includes": [
+				"pawno/include"
+			],
+			"constants": {
+				"max_players": "15"
+			},
+			"compiler": {}
+		},
+		{
+			"name": "live:debug",
+			"version": "3.10.8",
+			"args": [
+				"-;+",
+				"-(+",
+				"-d3",
+				"-Z+"
+			],
+			"includes": [
+				"pawno/include"
+			],
+			"constants": {
+				"max_players": "15"
+			},
+			"compiler": {}
+		},
+		{
+			"name": "live",
+			"version": "3.10.8",
+			"args": [
+				"-;+",
+				"-(+",
+				"-O2",
+				"-Z+"
+			],
+			"includes": [
+				"pawno/include"
+			],
+			"constants": {
+				"max_players": "15"
+			},
+			"compiler": {}
+		}
+	]
+}
