@@ -131,3 +131,5 @@
 
 #define SOUND_FIREALARM_START   (3401)
 #define SOUND_FIREALARM_END     (3402)
+
+#define GetVehicleModelTopSpeed(%0)				Vehicle_TopSpeed[((%0)-400)]

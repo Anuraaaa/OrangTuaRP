@@ -1,6 +1,6 @@
 function UpdateFare(playerid, driverid)
 {
-	if(IsPlayerSpawned(playerid) && IsPlayerSpawned(driverid) && GetVehicleSpeedKMH(GetPlayerVehicleID(driverid)) > 1) {
+	if(IsPlayerSpawned(playerid) && IsPlayerSpawned(driverid) && GetVehicleSpeed(GetPlayerVehicleID(driverid)) > 1) {
 
 		if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER && GetMoney(playerid) < PlayerData[playerid][pTotalFare] + PlayerData[driverid][pTotalFare]) {
 

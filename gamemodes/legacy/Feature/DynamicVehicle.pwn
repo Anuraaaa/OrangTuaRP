@@ -1375,7 +1375,6 @@ function Vehicle_TurnOnEngine(playerid) {
 
 		SwitchVehicleEngine(vehicleid, true);
 		ShowMessage(playerid, "Engine turned ~g~ON", 3);
-		SwitchVehicleLight(vehicleid, true);
 	}
 	return 1;
 }

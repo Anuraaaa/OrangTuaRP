@@ -161,7 +161,7 @@ task vehicle_RentalUpdate[1000]() {
 
 task Timer_OnVehicleUpdate[35000]()
 {
-	foreach(new i : Vehicle) if (IsValidVehicle(i) && IsEngineVehicle(i) && GetEngineStatus(i) && GetVehicleSpeedKMH(i) > 1)
+	foreach(new i : Vehicle) if (IsValidVehicle(i) && IsEngineVehicle(i) && GetEngineStatus(i) && GetVehicleSpeed(i) > 1)
 	{
 	    if (Vehicle_GetFuel(i) > 0)
 	    {
@@ -233,7 +233,7 @@ ptask OnSpeedometerUpdate[200](playerid) {
 					PlayerTextDrawTextSize(playerid,VHPTD[playerid], 59.5, 6.5);
 					PlayerTextDrawShow(playerid,VHPTD[playerid]);
 				}
-				PlayerTextDrawSetString(playerid, KMHTD[playerid], sprintf("%i", GetVehicleSpeedKMH(vehicleid)));
+				PlayerTextDrawSetString(playerid, KMHTD[playerid], sprintf("%i", floatround(GetVehicleSpeed(vehicleid))));
 
 				PlayerTextDrawSetString(playerid, ENGINETD[playerid], sprintf("%s", (GetEngineStatus(vehicleid)) ? ("~g~ON") : ("~r~OFF")));
 			}
@@ -242,8 +242,8 @@ ptask OnSpeedometerUpdate[200](playerid) {
 
 				fuel_percent = VehicleData[vehicleid][vFuel];
 				
-				format(string, sizeof(string), "%s I %s~n~%iKM/h I Fuel: %d%% I Health: %.2f I Engine: %s",
-					GetVehicleName(vehicleid), GetLocation(x, y, z), GetVehicleSpeedKMH(vehicleid), fuel_percent, fDamage, GetEngineStatus(vehicleid) ? ("ON") : ("OFF"));
+				format(string, sizeof(string), "%s I %s~n~%dKM/h I Fuel: %d%% I Health: %.2f I Engine: %s",
+					GetVehicleName(vehicleid), GetLocation(x, y, z), floatround(GetVehicleSpeed(vehicleid)), fuel_percent, fDamage, GetEngineStatus(vehicleid) ? ("ON") : ("OFF"));
 			
 				PlayerTextDrawSetString(playerid, SPEEDO_2[playerid], string);
 			}

@@ -9779,7 +9779,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	{
 		if(!GetEngineStatus(GetPlayerVehicleID(playerid)))
 		{
-			if(GetVehicleSpeedKMH(GetPlayerVehicleID(playerid)) >= 5 && GetVehicleSpeedKMH(GetPlayerVehicleID(playerid)) <= 40)
+			if(GetVehicleSpeed(GetPlayerVehicleID(playerid)) >= 5 && GetVehicleSpeed(GetPlayerVehicleID(playerid)) <= 40)
 			{
 				if(++g_EngineHack[playerid] >= 2) {
 					SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Vehicle engine hack).");

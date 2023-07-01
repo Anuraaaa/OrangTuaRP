@@ -2234,6 +2234,7 @@ CMD:v(playerid, params[])
 
 				SendNearbyMessage(playerid, 30.0, X11_PLUM, "** %s inserts the key into the ignition and starts the engine.", ReturnName(playerid));
 				StartPlayerLoadingBar(playerid, 50, "Turning_on_engine...", 40, "Vehicle_TurnOnEngine");
+				SwitchVehicleLight(vehicleid, true);
 			}
 		}
 	}

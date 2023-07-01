@@ -76566,3 +76566,1001 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [19:55:45] 
 [19:55:45] plugin.mysql: Unloading plugin...
 [19:55:45] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[23:58:02] password = ""  (string)
+[23:58:02] filterscripts = ""  (string)
+[23:58:02] weburl = "www.sa-mp.com"  (string)
+[23:58:02] 
+[23:58:02] Server Plugins
+[23:58:02] --------------
+[23:58:02]  Loading plugin: crashdetect
+[23:58:03]   CrashDetect plugin 4.20
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: pawnraknet
+[23:58:03] [Pawn.RakNet] plugin v1.5.1 loading...
+[23:58:03] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: streamer
+[23:58:03] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: sscanf
+[23:58:03] 
+[23:58:03]  ===============================
+[23:58:03] 
+[23:58:03]       sscanf plugin loaded.     
+[23:58:03] 
+[23:58:03]          Version: 2.13.1
+[23:58:03] 
+[23:58:03]    (c) 2022 Alex "Y_Less" Cole  
+[23:58:03] 
+[23:58:03]  ===============================
+[23:58:03] 
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: mysql
+[23:58:03]  >> plugin.mysql: R41-4 successfully loaded.
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: samp_bcrypt
+[23:58:03] [SampBcrypt] [info]: Version: 0.3.4
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: samp-compat
+[23:58:03]   -- samp-compat for 0.3.7-R2 initialized
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: chrono
+[23:58:03]   Loaded.
+[23:58:03]  Loading plugin: mapandreas
+[23:58:03]   Loaded.
+[23:58:03]  Loaded 9 plugins.
+
+[23:58:03] 
+[23:58:03] Filterscripts
+[23:58:03] ---------------
+[23:58:03]   Loaded 0 filterscripts.
+
+[23:58:05]  
+[23:58:05]  
+[23:58:05]  
+[23:58:05]  ========================================== 
+[23:58:05]  |                                        | 
+[23:58:05]  |         YSI version 5.05.0005          | 
+[23:58:05]  |         By Alex "Y_Less" Cole          | 
+[23:58:05]  |                                        | 
+[23:58:05]  | Unable to check the latest YSI version | 
+[23:58:05]  | - please watch the forums and github:  | 
+[23:58:05]  |                                        | 
+[23:58:05]  |   https://git.io/5.x                   | 
+[23:58:05]  |                                        | 
+[23:58:05]  ========================================== 
+[23:58:05]  
+[23:58:05]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[23:58:05]  
+[23:58:05] --------------------------------------
+[23:58:05]  Anticheat Nex-AC loaded!
+[23:58:05]  Anticheat version: 1.9.59
+[23:58:05]  Author: Nexius
+[23:58:05] --------------------------------------
+
+[23:58:05] [Database] Connected!
+[23:58:06] [MAPPING] Loaded mappings in 20ms
+[23:58:06] Economy Data Loaded.
+[23:58:06] Number of vehicle models: 8
+[23:58:07] [ACTOR] Loaded 100 Dynamic Actor from database
+[23:58:07] [ATM] Loaded 42 ATM from the database
+[23:58:07] [PUMP] Loaded 0 Fuel Pump from database
+[23:58:07] [DEALER] Loaded 1 dealership from database
+[23:58:07] [DOOR] Loaded 37 door from database
+[23:58:07] [FACTION] Loaded 6 faction from database
+[23:58:07] [FLAT] Loaded 0 Flat from database.
+[23:58:07] [GARAGE] Loaded 0 public garage from database.
+[23:58:07] [OBJECT] Loaded 3 Object from database
+[23:58:07] [SPEEDCAM] Loaded 6 Speed Camera from database
+[23:58:07] [TRASH] Loaded 46 Trash from database
+[23:58:07] [TREE] Loaded 71 tree from database
+[23:58:07] [WORKSHOP] Loaded 1 workshop from database.
+[23:58:07] [ROCK] Loaded 32 rock from database.
+[23:58:07] [FURNITURE] Loaded 0 furniture from database.
+[23:58:45] [connection] incoming connection: 127.0.0.1:60797 id: 0
+[23:58:46] [join] vyn has joined the server (0:127.0.0.1)
+[23:58:57] [nick] vyn nick changed to Havoc_Redmond
+[23:59:01] [CMD] Havoc Redmond: /changepassword
+[23:59:06] vehicleid: 33
+[23:59:06] [part] Havoc_Redmond has left the server (0:1)
+[23:59:09] [PLAYER_VEH] Unloading player vehicleid 33.
+[00:06:45] [connection] incoming connection: 127.0.0.1:57995 id: 0
+[00:06:45] [join] vyn has joined the server (0:127.0.0.1)
+[00:07:00] [nick] vyn nick changed to Havoc_Redmond
+[00:07:08] [CMD] Havoc Redmond: /veh euros
+[00:07:12] [CMD] Havoc Redmond: /v light
+[00:07:43] [CMD] Havoc Redmond: /veh club
+[00:07:47] [CMD] Havoc Redmond: /v light
+[00:07:56] [CMD] Havoc Redmond: /setweather 0
+[00:08:13] [CMD] Havoc Redmond: /veh landstal
+[00:08:21] [CMD] Havoc Redmond: /veh landstal 1 1
+[00:08:27] [CMD] Havoc Redmond: /veh club 1 1
+[00:08:34] [CMD] Havoc Redmond: /v light
+[00:08:51] [CMD] Havoc Redmond: /goto workshop 0
+[00:08:54] [CMD] Havoc Redmond: /gotows
+[00:08:55] [CMD] Havoc Redmond: /gotoloc
+[00:08:58] [CMD] Havoc Redmond: /gotoloc workshop 0
+[00:09:05] [CMD] Havoc Redmond: /createcar 0 club 1 1
+[00:09:10] [CMD] Havoc Redmond: /v hood
+[00:09:16] [CMD] Havoc Redmond: /mech menu
+[00:09:48] [CMD] Havoc Redmond: /mech menu
+[00:10:16] [CMD] Havoc Redmond: /mech menu
+[00:10:54] [CMD] Havoc Redmond: /mech menu
+[00:11:11] [CMD] Havoc Redmond: /v hood
+[00:12:07] [nick] Havoc_Redmond nick changed to vyn
+[00:12:07] [CMD] vyn: /aduty
+[00:13:27] [CMD] vyn: /veh euros
+[00:14:42] [CMD] vyn: /veh zr 1 1
+[00:15:10] [CMD] vyn: /veh nrg
+[00:54:13] vehicleid: 33
+[00:54:13] vehicleid: 39
+[00:54:13] [part] vyn has left the server (0:0)
+[00:54:16] [PLAYER_VEH] Unloading player vehicleid 39.
+[00:54:16] [PLAYER_VEH] Unloading player vehicleid 33.
+[04:08:16] [connection] incoming connection: 127.0.0.1:54626 id: 0
+[04:08:16] [join] vyn has joined the server (0:127.0.0.1)
+[04:08:38] [nick] vyn nick changed to Havoc_Redmond
+[04:08:47] [CMD] Havoc Redmond: /veh solair
+[04:09:31] [CMD] Havoc Redmond: /veh elegant
+[04:10:02] [CMD] Havoc Redmond: /veh premier
+[04:10:28] [CMD] Havoc Redmond: /veh euros
+[04:11:44] [chat] [Havoc_Redmond]:  /veh elegy
+[04:11:46] [CMD] Havoc Redmond: /veh elegy
+[04:12:22] [CMD] Havoc Redmond: /veh elegant
+[04:13:25] vehicleid: 33
+[04:13:25] vehicleid: 39
+[04:13:25] [part] Havoc_Redmond has left the server (0:0)
+[04:13:28] [PLAYER_VEH] Unloading player vehicleid 39.
+[04:13:28] [PLAYER_VEH] Unloading player vehicleid 33.
+[04:14:04] [connection] incoming connection: 127.0.0.1:57368 id: 0
+[04:14:04] [join] vyn has joined the server (0:127.0.0.1)
+[04:14:21] [nick] vyn nick changed to Havoc_Redmond
+[04:14:50] [CMD] Havoc Redmond: /veh premier 1 1
+[04:14:54] [CMD] Havoc Redmond: /v light
+[04:17:48] [CMD] Havoc Redmond: /veh fortune 1 1
+[04:19:00] [CMD] Havoc Redmond: /veh solair 1 1
+[04:20:03] [CMD] Havoc Redmond: /setfuel 100
+[04:21:09] [CMD] Havoc Redmond: /veh landstal
+[04:21:36] [CMD] Havoc Redmond: /limitspeed 150
+[04:21:55] [chat] [Havoc_Redmond]: a\
+[04:21:59] [CMD] Havoc Redmond: /limitspeed 100
+[04:22:06] [nick] Havoc_Redmond nick changed to vyn
+[04:22:06] [CMD] vyn: /aduty
+[04:28:10] [CMD] vyn: /createcar 0 premier 4 4
+[04:28:14] [CMD] vyn: /aslap 0
+[04:29:36] [CMD] vyn: /entercar 53
+[04:29:40] [CMD] vyn: /v engine
+[04:29:46] [CMD] vyn: /v hood
+[04:30:57] [CMD] vyn: /v hood
+[04:30:59] [CMD] vyn: /v hood
+[04:31:06] [CMD] vyn: /mech menu
+[04:33:50] [CMD] vyn: /mech menu
+[04:35:05] [CMD] vyn: /v attachment
+[04:35:12] [CASH UPDATE] vyn(vyn) | Before: $9979,906.56 | After: $9979,826.56 | Reason: bought vehicle attachment "Generic Spoiler"
+[04:36:34] [CMD] vyn: /setweather 8
+[04:37:02] [CMD] vyn: /setweather 1
+[04:38:23] [CMD] vyn: /entercar 53
+[04:38:26] [CMD] vyn: /d
+[04:39:48] [CMD] vyn: /createcar 0 elegant 6 6
+[04:40:49] [CMD] vyn: /limitspeed
+[04:41:21] [CMD] vyn: /fixveh
+[04:41:38] [CMD] vyn: /v hood
+[04:41:41] [CMD] vyn: /mech menu
+[04:42:00] [CMD] vyn: /mech menu
+[04:42:57] [CMD] vyn: /v attachment
+[04:43:03] [CASH UPDATE] vyn(vyn) | Before: $9979,826.56 | After: $9979,746.56 | Reason: bought vehicle attachment "Generic Spoiler"
+[04:43:33] [CMD] vyn: /v attachment
+[04:43:40] [CMD] vyn: /v attachment
+[04:43:41] *** Streamer Plugin: Streamer_SetFloatData: Invalid ID specified.
+[04:43:45] [CMD] vyn: /v attachment
+[04:43:50] [CMD] vyn: /v attachment
+[04:44:08] [CASH UPDATE] vyn(vyn) | Before: $9979,746.56 | After: $9979,666.56 | Reason: bought vehicle attachment "Generic Spoiler"
+[04:44:32] [CMD] vyn: /v attachment
+[04:44:39] [CASH UPDATE] vyn(vyn) | Before: $9979,666.56 | After: $9979,586.56 | Reason: bought vehicle attachment "Round Fog Lamps"
+[04:45:23] [CMD] vyn: /v attachment
+[04:45:28] [CMD] vyn: /v attachment
+[04:45:34] [CMD] vyn: /v attachment
+[04:45:38] [CMD] vyn: /v attachment
+[04:45:54] [CMD] vyn: /v attachment
+[04:46:10] [CASH UPDATE] vyn(vyn) | Before: $9979,586.56 | After: $9979,506.56 | Reason: bought vehicle attachment "Elegy Exhaust Type 2"
+[04:46:24] [CMD] vyn: /v attachment
+[04:46:56] vehicleid: 33
+[04:46:56] vehicleid: 39
+[04:46:56] vehicleid: 53
+[04:46:56] vehicleid: 54
+[04:46:56] [part] vyn has left the server (0:1)
+[04:46:59] [PLAYER_VEH] Unloading player vehicleid 39.
+[04:46:59] [PLAYER_VEH] Unloading player vehicleid 54.
+[04:46:59] [PLAYER_VEH] Unloading player vehicleid 53.
+[04:46:59] [PLAYER_VEH] Unloading player vehicleid 33.
+[14:30:56] [debug] Server received interrupt signal
+[14:30:56] [debug] Native backtrace:
+[14:30:56] [debug] #0 77032dcc in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[14:30:56] [debug] #1 75ca6f4f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[14:30:56] [debug] #2 0048d53c in ?? () in samp-server.exe
+[14:30:56] [debug] #3 0049b531 in ?? () in samp-server.exe
+[14:30:56] [debug] #4 0049b541 in ?? () in samp-server.exe
+[14:30:56] --- Server Shutting Down.
+[14:30:56] ** Saved server data in 0ms
+[14:30:56] ** Saved server economy in 0ms
+[14:30:56] ** Saved vehicle data in 0ms
+[14:30:56] ** Saved player data in 1ms
+[14:30:56] ** Saved tree data in 20ms.
+[14:30:56] ** Saved  weed data  in 20ms.
+[14:30:56] ** Saved speedcam data in 22ms
+[14:30:56] ** Saved dealer data in 22ms
+[14:30:56] ** Saved house data  in 22ms
+[14:30:56] ** Saved business data in 23ms
+[14:30:56] ** Saved tree data in 39ms
+[14:30:56] ** Saved flat data in 39ms
+[14:30:56] ** Saved pump data in 39ms
+[14:30:56] There is 0 player when the server shutdown.
+[14:30:56]  
+[14:30:56] --------------------------------------
+[14:30:56]  Statistics anticheat Nex-AC
+[14:30:56]  Detected and prevented:
+[14:30:56]   0 cheating attempts
+[14:30:56]   0 hacking attempts
+[14:30:56]   0 crashing attempts
+[14:30:56]   0 flooding attempts
+[14:30:56]   0 attacks
+[14:30:56]  Total detected and punished 0 cheaters
+[14:30:56] --------------------------------------
+
+[14:30:56] [Pawn.RakNet] plugin unloaded
+[14:30:56] 
+
+*** Streamer Plugin v2.9.4 by Incognito unloaded ***
+
+[14:30:56] 
+[14:30:56]  ===============================
+[14:30:56] 
+[14:30:56]      sscanf plugin unloaded.    
+[14:30:56] 
+[14:30:56]  ===============================
+[14:30:56] 
+[14:30:56] plugin.mysql: Unloading plugin...
+[14:30:56] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:31:01] password = ""  (string)
+[14:31:01] filterscripts = ""  (string)
+[14:31:01] weburl = "www.sa-mp.com"  (string)
+[14:31:01] 
+[14:31:01] Server Plugins
+[14:31:01] --------------
+[14:31:01]  Loading plugin: crashdetect
+[14:31:01]   CrashDetect plugin 4.20
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: pawnraknet
+[14:31:01] [Pawn.RakNet] plugin v1.5.1 loading...
+[14:31:01] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: streamer
+[14:31:01] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: sscanf
+[14:31:01] 
+[14:31:01]  ===============================
+[14:31:01] 
+[14:31:01]       sscanf plugin loaded.     
+[14:31:01] 
+[14:31:01]          Version: 2.13.1
+[14:31:01] 
+[14:31:01]    (c) 2022 Alex "Y_Less" Cole  
+[14:31:01] 
+[14:31:01]  ===============================
+[14:31:01] 
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: mysql
+[14:31:01]  >> plugin.mysql: R41-4 successfully loaded.
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: samp_bcrypt
+[14:31:01] [SampBcrypt] [info]: Version: 0.3.4
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: samp-compat
+[14:31:01]   -- samp-compat for 0.3.7-R2 initialized
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: chrono
+[14:31:01]   Loaded.
+[14:31:01]  Loading plugin: mapandreas
+[14:31:01]   Loaded.
+[14:31:01]  Loaded 9 plugins.
+
+[14:31:01] 
+[14:31:01] Filterscripts
+[14:31:01] ---------------
+[14:31:01]   Loaded 0 filterscripts.
+
+[14:31:03]  
+[14:31:03]  
+[14:31:03]  
+[14:31:03]  ========================================== 
+[14:31:03]  |                                        | 
+[14:31:03]  |         YSI version 5.05.0005          | 
+[14:31:03]  |         By Alex "Y_Less" Cole          | 
+[14:31:03]  |                                        | 
+[14:31:03]  | Unable to check the latest YSI version | 
+[14:31:03]  | - please watch the forums and github:  | 
+[14:31:03]  |                                        | 
+[14:31:03]  |   https://git.io/5.x                   | 
+[14:31:03]  |                                        | 
+[14:31:03]  ========================================== 
+[14:31:03]  
+[14:31:03]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[14:31:03]  
+[14:31:03] --------------------------------------
+[14:31:03]  Anticheat Nex-AC loaded!
+[14:31:03]  Anticheat version: 1.9.59
+[14:31:03]  Author: Nexius
+[14:31:03] --------------------------------------
+
+[14:31:03] [Database] Connected!
+[14:31:03] [MAPPING] Loaded mappings in 19ms
+[14:31:03] Economy Data Loaded.
+[14:31:03] Number of vehicle models: 8
+[14:31:03] [ACTOR] Loaded 100 Dynamic Actor from database
+[14:31:03] [ATM] Loaded 42 ATM from the database
+[14:31:03] [PUMP] Loaded 0 Fuel Pump from database
+[14:31:03] [DEALER] Loaded 1 dealership from database
+[14:31:03] [DOOR] Loaded 37 door from database
+[14:31:03] [FACTION] Loaded 6 faction from database
+[14:31:03] [FLAT] Loaded 0 Flat from database.
+[14:31:03] [GARAGE] Loaded 0 public garage from database.
+[14:31:03] [OBJECT] Loaded 3 Object from database
+[14:31:03] [SPEEDCAM] Loaded 6 Speed Camera from database
+[14:31:03] [TRASH] Loaded 46 Trash from database
+[14:31:03] [TREE] Loaded 71 tree from database
+[14:31:03] [WORKSHOP] Loaded 1 workshop from database.
+[14:31:03] [ROCK] Loaded 32 rock from database.
+[14:31:03] [FURNITURE] Loaded 0 furniture from database.
+[14:31:42] [connection] incoming connection: 127.0.0.1:49262 id: 0
+[14:31:42] [join] vyn has joined the server (0:127.0.0.1)
+[14:31:55] [nick] vyn nick changed to Havoc_Redmond
+[14:32:22] [nick] Havoc_Redmond nick changed to vyn
+[14:32:22] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:33:21] password = ""  (string)
+[14:33:21] filterscripts = ""  (string)
+[14:33:21] weburl = "www.sa-mp.com"  (string)
+[14:33:21] 
+[14:33:21] Server Plugins
+[14:33:21] --------------
+[14:33:21]  Loading plugin: crashdetect
+[14:33:21]   CrashDetect plugin 4.20
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: pawnraknet
+[14:33:21] [Pawn.RakNet] plugin v1.5.1 loading...
+[14:33:21] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: streamer
+[14:33:21] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: sscanf
+[14:33:21] 
+[14:33:21]  ===============================
+[14:33:21] 
+[14:33:21]       sscanf plugin loaded.     
+[14:33:21] 
+[14:33:21]          Version: 2.13.1
+[14:33:21] 
+[14:33:21]    (c) 2022 Alex "Y_Less" Cole  
+[14:33:21] 
+[14:33:21]  ===============================
+[14:33:21] 
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: mysql
+[14:33:21]  >> plugin.mysql: R41-4 successfully loaded.
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: samp_bcrypt
+[14:33:21] [SampBcrypt] [info]: Version: 0.3.4
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: samp-compat
+[14:33:21]   -- samp-compat for 0.3.7-R2 initialized
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: chrono
+[14:33:21]   Loaded.
+[14:33:21]  Loading plugin: mapandreas
+[14:33:21]   Loaded.
+[14:33:21]  Loaded 9 plugins.
+
+[14:33:21] 
+[14:33:21] Filterscripts
+[14:33:21] ---------------
+[14:33:21]   Loaded 0 filterscripts.
+
+[14:33:23]  
+[14:33:23]  
+[14:33:23]  
+[14:33:23]  ========================================== 
+[14:33:23]  |                                        | 
+[14:33:23]  |         YSI version 5.05.0005          | 
+[14:33:23]  |         By Alex "Y_Less" Cole          | 
+[14:33:23]  |                                        | 
+[14:33:23]  | Unable to check the latest YSI version | 
+[14:33:23]  | - please watch the forums and github:  | 
+[14:33:23]  |                                        | 
+[14:33:23]  |   https://git.io/5.x                   | 
+[14:33:23]  |                                        | 
+[14:33:23]  ========================================== 
+[14:33:23]  
+[14:33:23]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[14:33:23]  
+[14:33:23] --------------------------------------
+[14:33:23]  Anticheat Nex-AC loaded!
+[14:33:23]  Anticheat version: 1.9.59
+[14:33:23]  Author: Nexius
+[14:33:23] --------------------------------------
+
+[14:33:23] [Database] Connected!
+[14:33:23] [MAPPING] Loaded mappings in 21ms
+[14:33:23] Economy Data Loaded.
+[14:33:23] Number of vehicle models: 8
+[14:33:23] [ACTOR] Loaded 100 Dynamic Actor from database
+[14:33:23] [ATM] Loaded 42 ATM from the database
+[14:33:23] [PUMP] Loaded 0 Fuel Pump from database
+[14:33:23] [DEALER] Loaded 1 dealership from database
+[14:33:23] [DOOR] Loaded 37 door from database
+[14:33:23] [FACTION] Loaded 6 faction from database
+[14:33:23] [FLAT] Loaded 0 Flat from database.
+[14:33:23] [GARAGE] Loaded 0 public garage from database.
+[14:33:23] [OBJECT] Loaded 3 Object from database
+[14:33:23] [SPEEDCAM] Loaded 6 Speed Camera from database
+[14:33:23] [TRASH] Loaded 46 Trash from database
+[14:33:23] [TREE] Loaded 71 tree from database
+[14:33:23] [WORKSHOP] Loaded 1 workshop from database.
+[14:33:23] [ROCK] Loaded 32 rock from database.
+[14:33:23] [FURNITURE] Loaded 0 furniture from database.
+[14:33:38] [connection] incoming connection: 127.0.0.1:52892 id: 0
+[14:33:39] [join] vyn has joined the server (0:127.0.0.1)
+[14:33:47] [nick] vyn nick changed to Havoc_Redmond
+[14:33:55] [CMD] Havoc Redmond: /veh landstal
+[14:34:35] [CMD] Havoc Redmond: /veh elegy
+[14:36:25] [CMD] Havoc Redmond: /limitspeed 20
+[14:38:36] [nick] Havoc_Redmond nick changed to vyn
+[14:38:36] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:38:41] password = ""  (string)
+[14:38:41] filterscripts = ""  (string)
+[14:38:41] weburl = "www.sa-mp.com"  (string)
+[14:38:41] 
+[14:38:41] Server Plugins
+[14:38:41] --------------
+[14:38:41]  Loading plugin: crashdetect
+[14:38:41]   CrashDetect plugin 4.20
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: pawnraknet
+[14:38:41] [Pawn.RakNet] plugin v1.5.1 loading...
+[14:38:41] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: streamer
+[14:38:41] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: sscanf
+[14:38:41] 
+[14:38:41]  ===============================
+[14:38:41] 
+[14:38:41]       sscanf plugin loaded.     
+[14:38:41] 
+[14:38:41]          Version: 2.13.1
+[14:38:41] 
+[14:38:41]    (c) 2022 Alex "Y_Less" Cole  
+[14:38:41] 
+[14:38:41]  ===============================
+[14:38:41] 
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: mysql
+[14:38:41]  >> plugin.mysql: R41-4 successfully loaded.
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: samp_bcrypt
+[14:38:41] [SampBcrypt] [info]: Version: 0.3.4
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: samp-compat
+[14:38:41]   -- samp-compat for 0.3.7-R2 initialized
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: chrono
+[14:38:41]   Loaded.
+[14:38:41]  Loading plugin: mapandreas
+[14:38:41]   Loaded.
+[14:38:41]  Loaded 9 plugins.
+
+[14:38:41] 
+[14:38:41] Filterscripts
+[14:38:41] ---------------
+[14:38:41]   Loaded 0 filterscripts.
+
+[14:38:43]  
+[14:38:43]  
+[14:38:43]  
+[14:38:43]  ========================================== 
+[14:38:43]  |                                        | 
+[14:38:43]  |         YSI version 5.05.0005          | 
+[14:38:43]  |         By Alex "Y_Less" Cole          | 
+[14:38:43]  |                                        | 
+[14:38:43]  | Unable to check the latest YSI version | 
+[14:38:43]  | - please watch the forums and github:  | 
+[14:38:43]  |                                        | 
+[14:38:43]  |   https://git.io/5.x                   | 
+[14:38:43]  |                                        | 
+[14:38:43]  ========================================== 
+[14:38:43]  
+[14:38:43]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[14:38:43]  
+[14:38:43] --------------------------------------
+[14:38:43]  Anticheat Nex-AC loaded!
+[14:38:43]  Anticheat version: 1.9.59
+[14:38:43]  Author: Nexius
+[14:38:43] --------------------------------------
+
+[14:38:43] [Database] Connected!
+[14:38:43] [MAPPING] Loaded mappings in 27ms
+[14:38:43] Economy Data Loaded.
+[14:38:43] Number of vehicle models: 8
+[14:38:43] [ACTOR] Loaded 100 Dynamic Actor from database
+[14:38:43] [ATM] Loaded 42 ATM from the database
+[14:38:43] [PUMP] Loaded 0 Fuel Pump from database
+[14:38:43] [DEALER] Loaded 1 dealership from database
+[14:38:43] [DOOR] Loaded 37 door from database
+[14:38:43] [FACTION] Loaded 6 faction from database
+[14:38:43] [FLAT] Loaded 0 Flat from database.
+[14:38:43] [GARAGE] Loaded 0 public garage from database.
+[14:38:43] [OBJECT] Loaded 3 Object from database
+[14:38:43] [SPEEDCAM] Loaded 6 Speed Camera from database
+[14:38:43] [TRASH] Loaded 46 Trash from database
+[14:38:43] [TREE] Loaded 71 tree from database
+[14:38:43] [WORKSHOP] Loaded 1 workshop from database.
+[14:38:43] [ROCK] Loaded 32 rock from database.
+[14:38:43] [FURNITURE] Loaded 0 furniture from database.
+[14:39:45] [connection] incoming connection: 127.0.0.1:63998 id: 0
+[14:39:45] [join] vyn has joined the server (0:127.0.0.1)
+[14:40:03] [debug] Server received interrupt signal
+[14:40:03] [debug] Native backtrace:
+[14:40:03] [debug] #0 77032dcc in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[14:40:03] [debug] #1 75ca6f4f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[14:40:03] [debug] #2 0048d53c in ?? () in samp-server.exe
+[14:40:03] [debug] #3 0049b531 in ?? () in samp-server.exe
+[14:40:03] [debug] #4 0049b541 in ?? () in samp-server.exe
+[14:40:03] --- Server Shutting Down.
+[14:40:03] ** Saved server data in 1ms
+[14:40:03] ** Saved server economy in 1ms
+[14:40:03] ** Saved vehicle data in 1ms
+[14:40:03] ** Saved player data in 2ms
+[14:40:03] ** Saved tree data in 19ms.
+[14:40:03] ** Saved  weed data  in 19ms.
+[14:40:03] ** Saved speedcam data in 19ms
+[14:40:03] ** Saved dealer data in 20ms
+[14:40:03] ** Saved house data  in 20ms
+[14:40:03] ** Saved business data in 20ms
+[14:40:03] ** Saved tree data in 36ms
+[14:40:03] ** Saved flat data in 36ms
+[14:40:03] ** Saved pump data in 36ms
+[14:40:03] There is 1 player when the server shutdown.
+[14:40:03]  
+[14:40:03] --------------------------------------
+[14:40:03]  Statistics anticheat Nex-AC
+[14:40:03]  Detected and prevented:
+[14:40:03]   0 cheating attempts
+[14:40:03]   0 hacking attempts
+[14:40:03]   0 crashing attempts
+[14:40:03]   0 flooding attempts
+[14:40:03]   0 attacks
+[14:40:03]  Total detected and punished 0 cheaters
+[14:40:03] --------------------------------------
+
+[14:40:03] [part] vyn has left the server (0:0)
+[14:40:03] [Pawn.RakNet] plugin unloaded
+[14:40:03] 
+
+*** Streamer Plugin v2.9.4 by Incognito unloaded ***
+
+[14:40:03] 
+[14:40:03]  ===============================
+[14:40:03] 
+[14:40:03]      sscanf plugin unloaded.    
+[14:40:03] 
+[14:40:03]  ===============================
+[14:40:03] 
+[14:40:03] plugin.mysql: Unloading plugin...
+[14:40:03] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:40:11] password = ""  (string)
+[14:40:11] filterscripts = ""  (string)
+[14:40:11] weburl = "www.sa-mp.com"  (string)
+[14:40:11] 
+[14:40:11] Server Plugins
+[14:40:11] --------------
+[14:40:11]  Loading plugin: crashdetect
+[14:40:11]   CrashDetect plugin 4.20
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: pawnraknet
+[14:40:11] [Pawn.RakNet] plugin v1.5.1 loading...
+[14:40:11] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: streamer
+[14:40:11] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: sscanf
+[14:40:11] 
+[14:40:11]  ===============================
+[14:40:11] 
+[14:40:11]       sscanf plugin loaded.     
+[14:40:11] 
+[14:40:11]          Version: 2.13.1
+[14:40:11] 
+[14:40:11]    (c) 2022 Alex "Y_Less" Cole  
+[14:40:11] 
+[14:40:11]  ===============================
+[14:40:11] 
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: mysql
+[14:40:11]  >> plugin.mysql: R41-4 successfully loaded.
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: samp_bcrypt
+[14:40:11] [SampBcrypt] [info]: Version: 0.3.4
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: samp-compat
+[14:40:11]   -- samp-compat for 0.3.7-R2 initialized
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: chrono
+[14:40:11]   Loaded.
+[14:40:11]  Loading plugin: mapandreas
+[14:40:11]   Loaded.
+[14:40:11]  Loaded 9 plugins.
+
+[14:40:11] 
+[14:40:11] Filterscripts
+[14:40:11] ---------------
+[14:40:11]   Loaded 0 filterscripts.
+
+[14:40:13]  
+[14:40:13]  
+[14:40:13]  
+[14:40:13]  ========================================== 
+[14:40:13]  |                                        | 
+[14:40:13]  |         YSI version 5.05.0005          | 
+[14:40:13]  |         By Alex "Y_Less" Cole          | 
+[14:40:13]  |                                        | 
+[14:40:13]  | Unable to check the latest YSI version | 
+[14:40:13]  | - please watch the forums and github:  | 
+[14:40:13]  |                                        | 
+[14:40:13]  |   https://git.io/5.x                   | 
+[14:40:13]  |                                        | 
+[14:40:13]  ========================================== 
+[14:40:13]  
+[14:40:13]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[14:40:13]  
+[14:40:13] --------------------------------------
+[14:40:13]  Anticheat Nex-AC loaded!
+[14:40:13]  Anticheat version: 1.9.59
+[14:40:13]  Author: Nexius
+[14:40:13] --------------------------------------
+
+[14:40:13] [Database] Connected!
+[14:40:13] [MAPPING] Loaded mappings in 26ms
+[14:40:13] Economy Data Loaded.
+[14:40:13] Number of vehicle models: 8
+[14:40:13] [ACTOR] Loaded 100 Dynamic Actor from database
+[14:40:13] [ATM] Loaded 42 ATM from the database
+[14:40:13] [PUMP] Loaded 0 Fuel Pump from database
+[14:40:13] [DEALER] Loaded 1 dealership from database
+[14:40:13] [DOOR] Loaded 37 door from database
+[14:40:13] [FACTION] Loaded 6 faction from database
+[14:40:13] [FLAT] Loaded 0 Flat from database.
+[14:40:13] [GARAGE] Loaded 0 public garage from database.
+[14:40:13] [OBJECT] Loaded 3 Object from database
+[14:40:13] [SPEEDCAM] Loaded 6 Speed Camera from database
+[14:40:13] [TRASH] Loaded 46 Trash from database
+[14:40:13] [TREE] Loaded 71 tree from database
+[14:40:13] [WORKSHOP] Loaded 1 workshop from database.
+[14:40:13] [ROCK] Loaded 32 rock from database.
+[14:40:13] [FURNITURE] Loaded 0 furniture from database.
+[14:40:49] [connection] incoming connection: 127.0.0.1:54473 id: 0
+[14:40:49] [join] vyn has joined the server (0:127.0.0.1)
+[14:40:58] [nick] vyn nick changed to Havoc_Redmond
+[14:41:03] [CMD] Havoc Redmond: /veh sult
+[14:41:29] [CMD] Havoc Redmond: /veh infer
+[14:41:51] [CMD] Havoc Redmond: /limitspeed 50
+[14:42:02] [CMD] Havoc Redmond: /limitspeed 150
+[14:42:47] vehicleid: 33
+[14:42:47] vehicleid: 34
+[14:42:47] vehicleid: 35
+[14:42:47] vehicleid: 36
+[14:42:47] [part] Havoc_Redmond has left the server (0:1)
+[14:42:50] [PLAYER_VEH] Unloading player vehicleid 34.
+[14:42:50] [PLAYER_VEH] Unloading player vehicleid 36.
+[14:42:50] [PLAYER_VEH] Unloading player vehicleid 35.
+[14:42:50] [PLAYER_VEH] Unloading player vehicleid 33.
+[15:36:18] [debug] Server received interrupt signal
+[15:36:18] [debug] Native backtrace:
+[15:36:18] [debug] #0 77032dcc in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[15:36:18] [debug] #1 75ca6f4f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[15:36:18] [debug] #2 0048d53c in ?? () in samp-server.exe
+[15:36:18] [debug] #3 0049b531 in ?? () in samp-server.exe
+[15:36:18] [debug] #4 0049b541 in ?? () in samp-server.exe
+[15:36:18] --- Server Shutting Down.
+[15:36:18] ** Saved server data in 1ms
+[15:36:18] ** Saved server economy in 2ms
+[15:36:18] ** Saved vehicle data in 2ms
+[15:36:18] ** Saved player data in 2ms
+[15:36:18] ** Saved tree data in 21ms.
+[15:36:18] ** Saved  weed data  in 21ms.
+[15:36:18] ** Saved speedcam data in 22ms
+[15:36:18] ** Saved dealer data in 23ms
+[15:36:18] ** Saved house data  in 23ms
+[15:36:18] ** Saved business data in 24ms
+[15:36:18] ** Saved tree data in 41ms
+[15:36:18] ** Saved flat data in 41ms
+[15:36:18] ** Saved pump data in 42ms
+[15:36:18] There is 0 player when the server shutdown.
+[15:36:18]  
+[15:36:18] --------------------------------------
+[15:36:18]  Statistics anticheat Nex-AC
+[15:36:18]  Detected and prevented:
+[15:36:18]   0 cheating attempts
+[15:36:18]   0 hacking attempts
+[15:36:18]   0 crashing attempts
+[15:36:18]   0 flooding attempts
+[15:36:18]   0 attacks
+[15:36:18]  Total detected and punished 0 cheaters
+[15:36:18] --------------------------------------
+
+[15:36:19] [Pawn.RakNet] plugin unloaded
+[15:36:19] 
+
+*** Streamer Plugin v2.9.4 by Incognito unloaded ***
+
+[15:36:19] 
+[15:36:19]  ===============================
+[15:36:19] 
+[15:36:19]      sscanf plugin unloaded.    
+[15:36:19] 
+[15:36:19]  ===============================
+[15:36:19] 
+[15:36:19] plugin.mysql: Unloading plugin...
+[15:36:19] plugin.mysql: Plugin unloaded.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[15:36:57] password = ""  (string)
+[15:36:57] filterscripts = ""  (string)
+[15:36:57] weburl = "www.sa-mp.com"  (string)
+[15:36:57] 
+[15:36:57] Server Plugins
+[15:36:57] --------------
+[15:36:57]  Loading plugin: crashdetect
+[15:36:57]   CrashDetect plugin 4.20
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: pawnraknet
+[15:36:57] [Pawn.RakNet] plugin v1.5.1 loading...
+[15:36:57] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: streamer
+[15:36:57] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: sscanf
+[15:36:57] 
+[15:36:57]  ===============================
+[15:36:57] 
+[15:36:57]       sscanf plugin loaded.     
+[15:36:57] 
+[15:36:57]          Version: 2.13.1
+[15:36:57] 
+[15:36:57]    (c) 2022 Alex "Y_Less" Cole  
+[15:36:57] 
+[15:36:57]  ===============================
+[15:36:57] 
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: mysql
+[15:36:57]  >> plugin.mysql: R41-4 successfully loaded.
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: samp_bcrypt
+[15:36:57] [SampBcrypt] [info]: Version: 0.3.4
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: samp-compat
+[15:36:57]   -- samp-compat for 0.3.7-R2 initialized
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: chrono
+[15:36:57]   Loaded.
+[15:36:57]  Loading plugin: mapandreas
+[15:36:57]   Loaded.
+[15:36:57]  Loaded 9 plugins.
+
+[15:36:57] 
+[15:36:57] Filterscripts
+[15:36:57] ---------------
+[15:36:57]   Loaded 0 filterscripts.
+
+[15:37:00]  
+[15:37:00]  
+[15:37:00]  
+[15:37:00]  ========================================== 
+[15:37:00]  |                                        | 
+[15:37:00]  |         YSI version 5.05.0005          | 
+[15:37:00]  |         By Alex "Y_Less" Cole          | 
+[15:37:00]  |                                        | 
+[15:37:00]  | Unable to check the latest YSI version | 
+[15:37:00]  | - please watch the forums and github:  | 
+[15:37:00]  |                                        | 
+[15:37:00]  |   https://git.io/5.x                   | 
+[15:37:00]  |                                        | 
+[15:37:00]  ========================================== 
+[15:37:00]  
+[15:37:00]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[15:37:00]  
+[15:37:00] --------------------------------------
+[15:37:00]  Anticheat Nex-AC loaded!
+[15:37:00]  Anticheat version: 1.9.59
+[15:37:00]  Author: Nexius
+[15:37:00] --------------------------------------
+
+[15:37:00] [Database] Connected!
+[15:37:00] [MAPPING] Loaded mappings in 20ms
+[15:37:00] Economy Data Loaded.
+[15:37:00] Number of vehicle models: 8
+[15:37:00] [ACTOR] Loaded 100 Dynamic Actor from database
+[15:37:00] [ATM] Loaded 42 ATM from the database
+[15:37:00] [PUMP] Loaded 0 Fuel Pump from database
+[15:37:00] [DEALER] Loaded 1 dealership from database
+[15:37:00] [DOOR] Loaded 37 door from database
+[15:37:00] [FACTION] Loaded 6 faction from database
+[15:37:00] [FLAT] Loaded 0 Flat from database.
+[15:37:00] [GARAGE] Loaded 0 public garage from database.
+[15:37:00] [OBJECT] Loaded 3 Object from database
+[15:37:00] [SPEEDCAM] Loaded 6 Speed Camera from database
+[15:37:00] [TRASH] Loaded 46 Trash from database
+[15:37:00] [TREE] Loaded 71 tree from database
+[15:37:00] [WORKSHOP] Loaded 1 workshop from database.
+[15:37:00] [ROCK] Loaded 32 rock from database.
+[15:37:00] [FURNITURE] Loaded 0 furniture from database.
+[15:39:04] [connection] incoming connection: 127.0.0.1:58981 id: 0
+[15:39:04] [join] vyn has joined the server (0:127.0.0.1)
+[15:39:18] [nick] vyn nick changed to Havoc_Redmond
+[15:39:34] [CMD] Havoc Redmond: /veh buffal
+[15:39:41] [CMD] Havoc Redmond: /destroyveh
+[15:39:45] [CMD] Havoc Redmond: /v list
+[15:39:50] [CMD] Havoc Redmond: /getcar 34
+[15:40:21] vehicleid: 33
+[15:40:21] vehicleid: 34
+[15:40:21] vehicleid: 35
+[15:40:21] vehicleid: 36
+[15:40:21] [part] Havoc_Redmond has left the server (0:1)
+[15:40:24] [PLAYER_VEH] Unloading player vehicleid 34.
+[15:40:24] [PLAYER_VEH] Unloading player vehicleid 36.
+[15:40:24] [PLAYER_VEH] Unloading player vehicleid 33.
+[15:40:24] [PLAYER_VEH] Unloading player vehicleid 35.

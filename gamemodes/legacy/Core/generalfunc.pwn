@@ -34,7 +34,7 @@ SetVehicleSpeed(vehicleid, Float:speed)
     
     GetVehicleVelocity(vehicleid,vPos[0],vPos[1],vPos[2]);
     GetVehicleZAngle(vehicleid, vPos[3]);
-    speed = (speed / 136.666667);
+    speed = floatdiv(speed, 195.12);
     return SetVehicleVelocity(vehicleid, speed * floatsin(-vPos[3], degrees), speed * floatcos(-vPos[3], degrees), (vPos[2]-0.005));
 }
 
@@ -63,12 +63,18 @@ IsVehicleDrivingBackwards(vehicleid) // By Joker
     return false;
 }
 
-Float:GetVehicleSpeed(vehicleid, bool:kmh = true, Float:velx = 0.0, Float:vely = 0.0, Float:velz = 0.0)
+Float:GetVehicleSpeed(vehicleid)
 {
-    if( velx == 0.0 && vely == 0.0 && velz == 0.0)
-        GetVehicleVelocity(vehicleid, velx, vely, velz);
-
-    return float(floatround((floatsqroot(((velx * velx) + (vely * vely)) + (velz * velz)) * (kmh ? (136.666667) : (85.4166672))), floatround_round));
+    new
+        Float:x,
+        Float:y,
+        Float:z,
+        Float:speed;
+        
+    GetVehicleVelocity(vehicleid, x, y, z);
+    speed = VectorSize(x, y, z);
+    
+    return floatmul(speed, 195.12); 
 }
 stock IsABike(vehicleid)
 {
@@ -464,20 +470,6 @@ ReturnVehicleModelName(model)
 
 	format(name, sizeof(name), g_arrVehicleNames[model - 400]);
 	return name;
-}
-
-stock GetVehicleSpeedKMH(vehicleid)
-{
-    new
-        Float:x,
-        Float:y,
-        Float:z,
-        Float:speed;
-        
-    GetVehicleVelocity(vehicleid, x, y, z);
-    speed = VectorSize(x, y, z);
-    
-    return floatround(speed * 195.12); 
 }
 
 GetEngineStatus(vehicleid)

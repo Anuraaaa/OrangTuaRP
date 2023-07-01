@@ -152,7 +152,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 		    SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Speedhack).");
             KickEx(playerid);
 		}
-        if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !GetEngineStatus(GetPlayerVehicleID(playerid)) && GetVehicleSpeedKMH(GetPlayerVehicleID(playerid)) > 15.0) {
+        if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !GetEngineStatus(GetPlayerVehicleID(playerid)) && GetVehicleSpeed(GetPlayerVehicleID(playerid)) > 15.0) {
             if(++engine_hack_warn[playerid] >= 5) {
                 SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Engine Hack).");
                 KickEx(playerid);

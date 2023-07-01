@@ -109,16 +109,9 @@ public OnFilterScriptExit()
 
 stock Float:GetVehicleSpeed(vehicleid) //credits to whoever made this.
 {
-    new
-        Float:x,
-        Float:y,
-        Float:z,
-        Float:speed;
-        
-    GetVehicleVelocity(vehicleid, x, y, z);
-    speed = VectorSize(x, y, z);
-    
-    return floatround(speed * 195.12); 
+	new Float:x,Float:y,Float:z;
+	GetVehicleVelocity(vehicleid,x,y,z);
+	return floatmul(VectorSize(x,y,z),170.0);
 }
  
 
