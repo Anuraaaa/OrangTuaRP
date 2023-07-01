@@ -77564,3 +77564,261 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [15:40:24] [PLAYER_VEH] Unloading player vehicleid 36.
 [15:40:24] [PLAYER_VEH] Unloading player vehicleid 33.
 [15:40:24] [PLAYER_VEH] Unloading player vehicleid 35.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.DL-R1, (C)2005-2018 SA-MP Team
+
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05] Server Plugins
+[02/07/2023 00:09:05] --------------
+[02/07/2023 00:09:05]  Loading plugin: crashdetect
+[02/07/2023 00:09:05]   CrashDetect plugin 4.20
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: pawnraknet
+[02/07/2023 00:09:05] [Pawn.RakNet] plugin v1.5.1 loading...
+[02/07/2023 00:09:05] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: streamer
+[02/07/2023 00:09:05] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: sscanf
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]  ===============================
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]       sscanf plugin loaded.     
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]          Version: 2.13.1
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]    (c) 2022 Alex "Y_Less" Cole  
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]  ===============================
+[02/07/2023 00:09:05] 
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: mysql
+[02/07/2023 00:09:05]  >> plugin.mysql: R41-4 successfully loaded.
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: samp_bcrypt
+[02/07/2023 00:09:05] [SampBcrypt] [info]: Version: 0.3.4
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: samp-compat
+[02/07/2023 00:09:05]   -- samp-compat for 0.3.DL-R1 initialized
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: chrono
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loading plugin: mapandreas
+[02/07/2023 00:09:05]   Loaded.
+[02/07/2023 00:09:05]  Loaded 9 plugins.
+
+[02/07/2023 00:09:06] 
+[02/07/2023 00:09:06] Filterscripts
+[02/07/2023 00:09:06] ---------------
+[02/07/2023 00:09:06]   Loaded 0 filterscripts.
+
+[02/07/2023 00:09:06] Script[gamemodes/OTRP.amx]: Run time error 17: "Invalid/unsupported P-code file format"
+[02/07/2023 00:09:06] Failed to load 'gamemodes/OTRP.amx' script.
+[02/07/2023 00:09:06] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.DL-R1, (C)2005-2018 SA-MP Team
+
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12] Server Plugins
+[02/07/2023 00:09:12] --------------
+[02/07/2023 00:09:12]  Loading plugin: crashdetect
+[02/07/2023 00:09:12]   CrashDetect plugin 4.20
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: pawnraknet
+[02/07/2023 00:09:12] [Pawn.RakNet] plugin v1.5.1 loading...
+[02/07/2023 00:09:12] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: streamer
+[02/07/2023 00:09:12] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: sscanf
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]  ===============================
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]       sscanf plugin loaded.     
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]          Version: 2.13.1
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]    (c) 2022 Alex "Y_Less" Cole  
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]  ===============================
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: mysql
+[02/07/2023 00:09:12]  >> plugin.mysql: R41-4 successfully loaded.
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: samp_bcrypt
+[02/07/2023 00:09:12] [SampBcrypt] [info]: Version: 0.3.4
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: samp-compat
+[02/07/2023 00:09:12]   -- samp-compat for 0.3.DL-R1 initialized
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: chrono
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loading plugin: mapandreas
+[02/07/2023 00:09:12]   Loaded.
+[02/07/2023 00:09:12]  Loaded 9 plugins.
+
+[02/07/2023 00:09:12] 
+[02/07/2023 00:09:12] Filterscripts
+[02/07/2023 00:09:12] ---------------
+[02/07/2023 00:09:12]   Loaded 0 filterscripts.
+
+[02/07/2023 00:09:12] Script[gamemodes/OTRP.amx]: Run time error 17: "Invalid/unsupported P-code file format"
+[02/07/2023 00:09:12] Failed to load 'gamemodes/OTRP.amx' script.
+[02/07/2023 00:09:12] Number of vehicle models: 0
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.DL-R1, (C)2005-2018 SA-MP Team
+
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39] Server Plugins
+[02/07/2023 00:09:39] --------------
+[02/07/2023 00:09:39]  Loading plugin: crashdetect
+[02/07/2023 00:09:39]   CrashDetect plugin 4.20
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: pawnraknet
+[02/07/2023 00:09:39] [Pawn.RakNet] plugin v1.5.1 loading...
+[02/07/2023 00:09:39] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: streamer
+[02/07/2023 00:09:39] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: sscanf
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]  ===============================
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]       sscanf plugin loaded.     
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]          Version: 2.13.1
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]    (c) 2022 Alex "Y_Less" Cole  
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]  ===============================
+[02/07/2023 00:09:39] 
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: mysql
+[02/07/2023 00:09:39]  >> plugin.mysql: R41-4 successfully loaded.
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: samp_bcrypt
+[02/07/2023 00:09:39] [SampBcrypt] [info]: Version: 0.3.4
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: samp-compat
+[02/07/2023 00:09:39]   -- samp-compat for 0.3.DL-R1 initialized
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: chrono
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loading plugin: mapandreas
+[02/07/2023 00:09:39]   Loaded.
+[02/07/2023 00:09:39]  Loaded 9 plugins.
+
+[02/07/2023 00:09:40] 
+[02/07/2023 00:09:40] Filterscripts
+[02/07/2023 00:09:40] ---------------
+[02/07/2023 00:09:40]   Loaded 0 filterscripts.
+
+[02/07/2023 00:09:47]  
+[02/07/2023 00:09:47]  
+[02/07/2023 00:09:47]  
+[02/07/2023 00:09:47]  ========================================== 
+[02/07/2023 00:09:47]  |                                        | 
+[02/07/2023 00:09:47]  |         YSI version 5.05.0005          | 
+[02/07/2023 00:09:47]  |         By Alex "Y_Less" Cole          | 
+[02/07/2023 00:09:47]  |                                        | 
+[02/07/2023 00:09:47]  | Unable to check the latest YSI version | 
+[02/07/2023 00:09:47]  | - please watch the forums and github:  | 
+[02/07/2023 00:09:47]  |                                        | 
+[02/07/2023 00:09:47]  |   https://git.io/5.x                   | 
+[02/07/2023 00:09:47]  |                                        | 
+[02/07/2023 00:09:47]  ========================================== 
+[02/07/2023 00:09:47]  
+[02/07/2023 00:09:47]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[02/07/2023 00:09:47]  
+[02/07/2023 00:09:47] --------------------------------------
+[02/07/2023 00:09:47]  Anticheat Nex-AC loaded!
+[02/07/2023 00:09:47]  Anticheat version: 1.9.59
+[02/07/2023 00:09:47]  Author: Nexius
+[02/07/2023 00:09:47] --------------------------------------
+
+[02/07/2023 00:09:47] [Database] Connected!
+[02/07/2023 00:09:48] [MAPPING] Loaded mappings in 51ms
+[02/07/2023 00:09:48] Economy Data Loaded.
+[02/07/2023 00:09:48] Number of vehicle models: 8
+[02/07/2023 00:09:48] [ACTOR] Loaded 100 Dynamic Actor from database
+[02/07/2023 00:09:48] [ATM] Loaded 42 ATM from the database
+[02/07/2023 00:09:48] [PUMP] Loaded 0 Fuel Pump from database
+[02/07/2023 00:09:48] [DEALER] Loaded 1 dealership from database
+[02/07/2023 00:09:48] [DOOR] Loaded 37 door from database
+[02/07/2023 00:09:48] [FACTION] Loaded 6 faction from database
+[02/07/2023 00:09:48] [FLAT] Loaded 0 Flat from database.
+[02/07/2023 00:09:48] [GARAGE] Loaded 0 public garage from database.
+[02/07/2023 00:09:48] [OBJECT] Loaded 3 Object from database
+[02/07/2023 00:09:48] [SPEEDCAM] Loaded 6 Speed Camera from database
+[02/07/2023 00:09:48] [TRASH] Loaded 46 Trash from database
+[02/07/2023 00:09:48] [TREE] Loaded 71 tree from database
+[02/07/2023 00:09:48] [WORKSHOP] Loaded 1 workshop from database.
+[02/07/2023 00:09:48] [ROCK] Loaded 32 rock from database.
+[02/07/2023 00:09:48] [FURNITURE] Loaded 0 furniture from database.
