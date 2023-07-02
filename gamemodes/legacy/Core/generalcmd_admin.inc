@@ -1741,30 +1741,6 @@ CMD:asay(playerid, params[])
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "%s %s: %s", GetAdminRank(playerid), PlayerData[playerid][pUCP], params);
 	return 1;
 }
-CMD:ans(playerid, params[])
-{
-	new
-	    userid,
-	    text[128];
-
-    if (PlayerData[playerid][pAdmin] < 1)
-	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
-
-	if (sscanf(params, "us[128]", userid, text))
-		return SendSyntaxMessage(playerid, "/ans [playerid/PartOfName] [answer]");
-
-	if (userid == INVALID_PLAYER_ID)
-	    return SendErrorMessage(playerid, "You have specified an invalid player.");
-
-	if(!PlayerData[userid][pAsking])
-	    return SendErrorMessage(playerid, "That player is not asking.");
-	    
-	SendClientMessageEx(userid, COLOR_SERVER, "(Answer) {FFFFFF}%s", text);
-	SendAdminMessage(COLOR_LIGHTRED, "%s Answer To %s: %s", PlayerData[playerid][pUCP], GetName(userid), text);
-	PlayerData[userid][pAsking] = false;
-	PlayerData[playerid][pAdminPoint]++;
-	return 1;
-}
 
 CMD:apm(playerid, params[])
 {

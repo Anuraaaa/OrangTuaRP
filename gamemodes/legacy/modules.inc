@@ -26,6 +26,7 @@
 #include ".\legacy\Feature\TruckerCargo"
 #include ".\legacy\Feature\SprayTag"
 #include ".\legacy\Feature\Report"
+#include ".\legacy\Feature\Ask"
 #include ".\legacy\Feature\Business"
 #include ".\legacy\Feature\FuelPump"
 #include ".\legacy\Feature\DynamicActor"

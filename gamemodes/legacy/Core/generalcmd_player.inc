@@ -1120,39 +1120,6 @@ CMD:disablecp(playerid, params[])
 	return 1;
 }
 
-CMD:ask(playerid, params[])
-{
-
-	if(askDelay[playerid])
-		return SendErrorMessage(playerid, "Tunggu %d detik untuk kembali bertanya.", askDelay[playerid]);
-
-	if(PlayerData[playerid][pJailTime])
-		return SendErrorMessage(playerid, "Tidak bisa menggunakan command ini sekarang.");
-
-	if(PlayerData[playerid][pAsking])
-		return SendErrorMessage(playerid, "Kamu sudah memiliki pertanyaan pending.");
-
-	if(isnull(params))
-		return SendSyntaxMessage(playerid, "/ask [question]");
-
-	if(strlen(params) >= 128)
-		return SendErrorMessage(playerid, "Panjang teks tidak bisa lebih dari 128 huruf!");
-
-	format(PlayerData[playerid][pAsk], 128, params);
-	PlayerData[playerid][pAsking] = true;
-	SendServerMessage(playerid, "Berhasil mengirim pertanyaan ke Administrator!");
-	askDelay[playerid] = 180;
-
-	if(strlen(params) > 64) {
-		SendAdminDutyMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%.64s", GetName(playerid), playerid, params);
-		SendAdminDutyMessage(-1, "...%s", params[64]);
-	}
-	else {
-		SendAdminDutyMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%s", GetName(playerid), playerid, params);
-	}
-	return 1;
-}
-
 CMD:o(playerid, params[])
 {
     if(ToggleData[togOOC] && PlayerData[playerid][pAdmin] < 1)
