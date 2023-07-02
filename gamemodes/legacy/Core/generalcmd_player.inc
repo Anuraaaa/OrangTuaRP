@@ -1144,11 +1144,11 @@ CMD:ask(playerid, params[])
 	askDelay[playerid] = 180;
 
 	if(strlen(params) > 64) {
-		SendAdminMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%.64s", GetName(playerid), playerid, params);
-		SendAdminMessage(-1, "...%s", params[64]);
+		SendAdminDutyMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%.64s", GetName(playerid), playerid, params);
+		SendAdminDutyMessage(-1, "...%s", params[64]);
 	}
 	else {
-		SendAdminMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%s", GetName(playerid), playerid, params);
+		SendAdminDutyMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%s", GetName(playerid), playerid, params);
 	}
 	return 1;
 }
