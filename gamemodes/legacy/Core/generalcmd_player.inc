@@ -1507,7 +1507,7 @@ CMD:buycomponent(playerid, params[])
 		return 1;
 
 	GiveMoney(playerid, -amount*50, "Beli Component");
-	SendClientMessageEx(playerid, X11_LIGHTBLUE, "COMPONENT: "WHITE"Berhasil membeli {FFFF00}%d component(s) "WHITE"dengan harga {00FF00}$%s", amount, FormatNumber(amount*50));
+	SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Component) "WHITE"Berhasil membeli {FFFF00}%d component(s) "WHITE"dengan harga {00FF00}$%s", amount, FormatNumber(amount*50));
 	StockData[stockComponent] -= amount;
 
 	UpdateServerStock(SERVER_STOCK_COMPONENT);
