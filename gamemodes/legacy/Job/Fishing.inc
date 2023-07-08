@@ -66,7 +66,6 @@ function TimeFishing(playerid)
 
 	PlayerData[playerid][pFishing] = false;
 	ClearAnimations(playerid, 1);
-	RemovePlayerAttachedObject(playerid, 9);
 
 	if(!ReturnFishPlace(playerid))
 		return 0;
