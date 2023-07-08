@@ -3722,14 +3722,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				Flat_ShowKeyMenu(playerid, Flat_Inside(playerid));
 			}
-			case 1: {
+			case 1: 
+			{
 
 				if(!Flat_IsOwner(playerid, Flat_Inside(playerid)))
 					return SendErrorMessage(playerid, "Only owner can access this option.");
 
 				Flat_OpenStorage(playerid, Flat_Inside(playerid));
 			}
-			case 2: ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture\n"YELLOW"Upgrade furniture slot ", "Select", "Close");
+			case 2: {
+				ShowPlayerDialog(playerid, DIALOG_FLAT_FURNITURE, DIALOG_STYLE_LIST, "House Furniture", "Listed Furniture\nAdd Furniture\n"RED"Reset all furniture\n"YELLOW"Upgrade furniture slot ", "Select", "Close");
+			}
+			case 3: {
+				new string[256], price = 0,
+					id = Flat_Inside(playerid);
+
+				price = FlatData[id][flatPrice] * 5/100;
+				strcat(string, sprintf("Harga Pajak: $%s\n", FormatNumber(price)));
+				strcat(string, sprintf("Status: %s\n", (FlatData[id][flatTaxState] == TAX_STATE_COOLDOWN) ? ("belum bisa dibayar") : ("sudah bisa dibayar")));
+				strcat(string, sprintf("%s: %s\n", (FlatData[id][flatTaxState] == TAX_STATE_COOLDOWN) ? ("Bayar dalam") : ("Jatuh tempo"), ConvertTimestamp(Timestamp:FlatData[id][flatTaxDate])));
+				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Tax Detail", string, "Close", "");
+			}
 		}
 	}
 	if(dialogid == DIALOG_ECONOMY_MOWER) {
@@ -4931,6 +4944,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Only owner can access this option.");
 
 				House_ShowKeyMenu(playerid, House_Inside(playerid));
+			}
+			if(listitem == 3) {
+				new string[256], price = 0,
+					id = House_Inside(playerid);
+
+				price = HouseData[id][housePrice] * 5/100;
+				strcat(string, sprintf("Harga Pajak: $%s\n", FormatNumber(price)));
+				strcat(string, sprintf("Status: %s\n", (HouseData[id][houseTaxState] == TAX_STATE_COOLDOWN) ? ("belum bisa dibayar") : ("sudah bisa dibayar")));
+				strcat(string, sprintf("%s: %s\n", (HouseData[id][houseTaxState] == TAX_STATE_COOLDOWN) ? ("Bayar dalam") : ("Jatuh tempo"), ConvertTimestamp(Timestamp:HouseData[id][houseTaxDate])));
+				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Tax Detail", string, "Close", "");
 			}
 		}
 	}

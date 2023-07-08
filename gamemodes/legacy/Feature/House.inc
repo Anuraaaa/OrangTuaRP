@@ -438,7 +438,7 @@ House_CountVehicle(id)
 }
 
 ShowHouseMenu(playerid) {
-	return ShowPlayerDialog(playerid, DIALOG_HOUSE_MENU, DIALOG_STYLE_LIST, "House Menu", "Manage Furniture\nAccess Storage\nKey Management", "Select", "Close");
+	return ShowPlayerDialog(playerid, DIALOG_HOUSE_MENU, DIALOG_STYLE_LIST, "House Menu", "Manage Furniture\nAccess Storage\nKey Management\nTax Detail", "Select", "Close");
 }
 function OnHouseCreated(houseid)
 {
