@@ -1259,9 +1259,9 @@ function OnHouseQueue(playerid) {
 			cache_get_value_name(i, "Message", msg, 128);
 
 			if(!strcmp(msg, "idk", true))
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Rumahmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
 			else
-				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Housemu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", biz_id);
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(House) "WHITE"Rumahmu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak membayar pajak.", biz_id);
 		}
 	}
 	mysql_tquery(sqlcon, sprintf("DELETE FROM `house_queue` WHERE `Username` = '%s'", GetName(playerid)));

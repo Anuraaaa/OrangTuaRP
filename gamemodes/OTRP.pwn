@@ -1441,6 +1441,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		PlayerTextDrawHide(playerid, VEHNAMETD[playerid]);
 		PlayerTextDrawHide(playerid, LOCATIONTD[playerid]);
 		PlayerTextDrawHide(playerid, SPEEDO_2[playerid]);
+
+		for(new i = 0; i < 6; i++) {
+			PlayerTextDrawHide(playerid, HBE3_SPEEDO[playerid][i]);
+		}
+
+		if(IsValidPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]))
+			DestroyPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]);
+			
 		if(PlayerData[playerid][pJobduty] && (PlayerData[playerid][pJob] == JOB_TAXI || PlayerData[playerid][pJob2] == JOB_TAXI))
 		{
 			HideTaxi(playerid);
