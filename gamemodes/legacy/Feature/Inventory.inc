@@ -18,53 +18,56 @@ enum e_InventoryItems
 	e_InventoryItem[32],
 	e_InventoryModel,
 	e_InventoryMax,
+	bool:e_InventoryGive,
+	bool:e_InventoryDrop,
+	bool:e_InventoryStore
 };
 
 
 new const g_aInventoryItems[][e_InventoryItems] =
 {
-	{"Nitrous Oxide", 1010, 10},
-	{"Spraycan", 365, 10},
-	{"GPS", 18875, 1},
-	{"Cellphone", 18867, 1},
-	{"Medkit", 1580, 15},
-	{"Bandage", 1580, 5},
-	{"Portable Radio", 19942, 1},
-	{"Boombox", 2103, 1},
-	{"Mask", 19036, 1},
-	{"Snack", 2768, 5},
-	{"Water", 2958, 5},
-	{"Rolling Paper", 19873, 100},
-	{"Rolled Weed", 3027, 100},
-	{"Weed", 1578, 100},
-	{"Component", 19627, 5000},
-	{"Weed Seed", 1279, 100},
-	{"9mm Luger", 19995, 20},
-	{"12 Gauge", 19995, 20},
-	{".44 Magnum", 19995, 20},
-	{"7.62mm Caliber", 19995, 20},
-	{"9mm Silenced HV Schematic", 3111, 1},
-	{"Shotgun HV Schematic", 3111, 1},
-	{"Desert Eagle HV Schematic", 3111, 1},
-	{"Rifle HV Schematic", 3111, 1},
-	{"AK-47 HV Schematic", 3111, 1},
-	{"9mm Silenced Schematic", 3111, 1},
-	{"Shotgun Schematic", 3111, 1},
-	{"Desert Eagle Schematic", 3111, 1},
-	{"Rifle Schematic", 3111, 1},
-	{"AK-47 Schematic", 3111, 1},
-	{"Desert Eagle Material", 3052, 20},
-	{"9mm Silenced Material", 3052, 20},
-	{"Shotgun Material", 3052, 20},
-	{"Rifle Material", 3052, 20},
-	{"AK-47 Material", 3052, 20},
-	{"Axe", 19631, 1},
-	{"Fish Rod", 18632, 1},
-	{"Bait", 19566, 25},
-	{"Fuel Can", 1650, 3},
-	{"Acetaminophen", 2709, 10},
-	{"Promethazine", 2709, 10},
-	{"Cigarettes", 19896, 20}
+	{"Nitrous Oxide", 1010, 10, true, true, true},
+	{"Spraycan", 365, 10, true, true, true},
+	{"GPS", 18875, 1, true, false, false},
+	{"Cellphone", 18867, 1, false, false, false},
+	{"Medkit", 1580, 15, true, true, true},
+	{"Bandage", 1580, 5, true, true, true},
+	{"Portable Radio", 19942, 1, false, false, false},
+	{"Boombox", 2103, 1, true, true, true},
+	{"Mask", 19036, 1, false, false, false},
+	{"Snack", 2768, 5, true, true, true},
+	{"Water", 2958, 5, true, true, true},
+	{"Rolling Paper", 19873, 100, true, true, true},
+	{"Rolled Weed", 3027, 100, true, true, true},
+	{"Weed", 1578, 100, true, true, true},
+	{"Component", 19627, 5000, true, true, true},
+	{"Weed Seed", 1279, 100, true, true, true},
+	{"9mm Luger", 19995, 20, true, true, true},
+	{"12 Gauge", 19995, 20, true, true, true},
+	{".44 Magnum", 19995, 20, true, true, true},
+	{"7.62mm Caliber", 19995, 20, true, true, true},
+	{"9mm Silenced HV Schematic", 3111, 1, true, true, true},
+	{"Shotgun HV Schematic", 3111, 1, true, true, true},
+	{"Desert Eagle HV Schematic", 3111, 1, true, true, true},
+	{"Rifle HV Schematic", 3111, 1, true, true, true},
+	{"AK-47 HV Schematic", 3111, 1, true, true, true},
+	{"9mm Silenced Schematic", 3111, 1}, true, true, true,
+	{"Shotgun Schematic", 3111, 1, true, true, true},
+	{"Desert Eagle Schematic", 3111, 1, true, true, true},
+	{"Rifle Schematic", 3111, 1, true, true, true},
+	{"AK-47 Schematic", 3111, 1, true, true, true},
+	{"Desert Eagle Material", 3052, 20, true, true, true},
+	{"9mm Silenced Material", 3052, 20, true, true, true},
+	{"Shotgun Material", 3052, 20, true, true, true},
+	{"Rifle Material", 3052, 20, true, true, true},
+	{"AK-47 Material", 3052, 20, true, true, true},
+	{"Axe", 19631, 1, true, true, true},
+	{"Fish Rod", 18632, 1, true, true, true},
+	{"Bait", 19566, 25, true, true, true},
+	{"Fuel Can", 1650, 3, true, true, true},
+	{"Acetaminophen", 2709, 10, true, false, false},
+	{"Promethazine", 2709, 10, true, false, false},
+	{"Cigarettes", 19896, 20, true, true, true}
 };
 
 hook OnPlayerRedeemVIP(playerid) {
@@ -223,7 +226,7 @@ stock Inventory_Remove(playerid, item[], quantity = 1)
 	return 0;
 }
 
-stock Inventory_Add(playerid, item[], model, quantity = 1)
+Inventory_Add(playerid, item[], model, quantity = 1)
 {
 	new
 		itemid = Inventory_GetItemID(playerid, item),
@@ -266,6 +269,44 @@ stock Inventory_Add(playerid, item[], model, quantity = 1)
 	return itemid;
 }
 
+IsInventoryCanDrop(item[]) {
+	new can_drop = true;
+    for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if(!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))
+    {
+        if(!g_aInventoryItems[i][e_InventoryDrop])
+        {
+            can_drop = false;
+			break;
+        }
+    }
+	return can_drop;
+}
+
+IsInventoryCanGive(item[]) {
+	new can_Give = true;
+    for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if(!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))
+    {
+        if(!g_aInventoryItems[i][e_InventoryGive])
+        {
+            can_Give = false;
+			break;
+        }
+    }
+	return can_Give;
+}
+
+IsInventoryCanStored(item[]) {
+	new can_stored = true;
+    for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if(!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))
+    {
+        if(!g_aInventoryItems[i][e_InventoryStore])
+        {
+            can_stored = false;
+			break;
+        }
+    }
+	return can_stored;
+}
 function OnInventoryAdd(playerid, itemid)
 {
 	InventoryData[playerid][itemid][invID] = cache_insert_id();
@@ -949,12 +990,13 @@ CMD:setitem(playerid, params[])
 CMD:itemlist(playerid, params[])
 {
 	new
-	    string[1024];
+	    string[2024];
 
 	if (!strlen(string)) {
+		format(string, sizeof(string), "Itemname\tDrop\tGive\tStore\n");
 		for (new i = 0; i < sizeof(g_aInventoryItems); i ++) {
-			format(string, sizeof(string), "%s%s\n", string, g_aInventoryItems[i][e_InventoryItem]);
+			format(string, sizeof(string), "%s%s(limit: %d)\t%s\t%s\t%s\n", string, g_aInventoryItems[i][e_InventoryItem], g_aInventoryItems[i][e_InventoryMax], (g_aInventoryItems[i][e_InventoryDrop]) ? ("Yes") : ("No"), (g_aInventoryItems[i][e_InventoryGive]) ? ("Yes") : ("No"), (g_aInventoryItems[i][e_InventoryStore]) ? ("Yes") : ("No"));
 		}
 	}
-	return ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_LIST, "List of Items", string, "Select", "Cancel");
+	return ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "List of Items", string, "Select", "Cancel");
 }

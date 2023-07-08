@@ -8488,17 +8488,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					if(PlayerData[playerid][pInjured])
 						return SendErrorMessage(playerid, "Tidak bisa memberikan item ketika injured.");
 
-				    if(!strcmp(string, "Cellphone"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "GPS"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "Portable Radio"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "Mask"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
 
 				    if(!strcmp(string, "Fish Rod") && GetEquipedItem(playerid) == EQUIP_ITEM_ROD) {
 						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
@@ -8507,6 +8496,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				    if(!strcmp(string, "Axe") && GetEquipedItem(playerid) == EQUIP_ITEM_AXE) {
 						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
 					}
+
+					if(!IsInventoryCanGive(string))
+						return SendErrorMessage(playerid, "Kamu tidak dapat memberikan item ini!");
 
 					PlayerData[playerid][pListitem] = itemid;
 					ShowPlayerDialog(playerid, DIALOG_GIVEITEM, DIALOG_STYLE_INPUT, "Give Item", "Please enter the name or the ID of the player:", "Submit", "Cancel");
@@ -8518,19 +8510,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					if(PlayerData[playerid][pInjured])
 						return SendErrorMessage(playerid, "Tidak bisa menjatuhkan item ketika injured.");
-
-				    if(!strcmp(string, "Cellphone"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "GPS"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "Portable Radio"))
-				        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", string);
-
-				    if(!strcmp(string, "Mask") && PlayerData[playerid][pMasked]) {
-						return SendErrorMessage(playerid, "Lepas mask terlebih dahulu.");
-					}
 
 				    if(!strcmp(string, "Fish Rod") && GetEquipedItem(playerid) == EQUIP_ITEM_ROD) {
 						return SendErrorMessage(playerid, "Kamu masih menggunakan item ini.");
@@ -8553,11 +8532,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							}
 							else
 							{
+								if(!IsInventoryCanDrop(string))
+									return SendErrorMessage(playerid, "Kamu tidak dapat menjatuhkan item ini!");
+
 								DropPlayerItem(playerid, itemid);
 							}
 						}
 						else
 						{
+							if(!IsInventoryCanDrop(string))
+								return SendErrorMessage(playerid, "Kamu tidak dapat menjatuhkan item ini!");
+
 							DropPlayerItem(playerid, itemid);
 						}
 					}
@@ -8586,24 +8571,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 			    case 0:
 			    {
-		            format(name, sizeof(name), "%s (%d)", name, InventoryData[playerid][index][invQuantity]);
-		            ShowPlayerDialog(playerid, DIALOG_INVACTION, DIALOG_STYLE_LIST, name, "Use Item\nGive Item\nDrop Item", "Select", "Cancel");
+					new options[128];
+
+					strcat(options, "Use Item\n");
+
+					strcat(options, sprintf(""WHITE"Give Item%s\n", !IsInventoryCanGive(name) ? (""RED" X") : ("")));
+
+					strcat(options, sprintf(""WHITE"Drop Item%s\n", !IsInventoryCanDrop(name) ? (""RED" X") : ("")));
+
+		            ShowPlayerDialog(playerid, DIALOG_INVACTION, DIALOG_STYLE_LIST, sprintf("%s (%d)", name, InventoryData[playerid][index][invQuantity]), options, "Select", "Cancel");
 				}
 				case 1:
 				{
+					if(!IsInventoryCanStored(name))
+						return SendErrorMessage(playerid, "Item ini tidak bisa disimpan dirumah!");
+
 			    	if ((id = House_Inside(playerid)) != -1 && House_HaveAccess(playerid, id))
 					{
-					    if(!strcmp(name, "Cellphone"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "GPS"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "Portable Radio"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "Mask"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
 					        
 						if (InventoryData[playerid][index][invQuantity] == 1)
 						{
@@ -8622,19 +8606,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 2: {
 
+					if(!IsInventoryCanStored(name))
+						return SendErrorMessage(playerid, "Item ini tidak bisa disimpan diflat!");
+
 			    	if ((id = Flat_Inside(playerid)) != -1 && Flat_IsHaveAccess(playerid, id))
 					{
-					    if(!strcmp(name, "Cellphone"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "GPS"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "Portable Radio"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-					    if(!strcmp(name, "Mask"))
-					        return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
 					        
 						if (InventoryData[playerid][index][invQuantity] == 1)
 						{
@@ -8655,19 +8631,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					if((id = Vehicle_Nearest(playerid, 5.0)) != -1) {
 
+					    if(!IsInventoryCanStored(name))
+							return SendErrorMessage(playerid, "Item ini tidak bisa disimpan dibagasi!");
+
 						if (InventoryData[playerid][index][invQuantity] == 1) {
-							
-							if(!strcmp(name, "Cellphone"))
-								return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-							if(!strcmp(name, "GPS"))
-								return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-							if(!strcmp(name, "Portable Radio"))
-								return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
-
-							if(!strcmp(name, "Mask"))
-								return SendErrorMessage(playerid, "You can't do that on this item! (%s)", name);
 
 							Car_AddItem(id, name, InventoryData[playerid][index][invModel], 1);
 							Inventory_Remove(playerid, name);
