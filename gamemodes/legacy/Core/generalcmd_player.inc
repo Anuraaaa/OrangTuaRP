@@ -137,7 +137,7 @@ CMD:hudtype(playerid, params[]) {
 	if(PlayerData[playerid][pTogHud])
 		return SendErrorMessage(playerid, "Kamu masih mematikan HUD display.");
 
-	ShowPlayerDialog(playerid, DIALOG_HUD_TYPE, DIALOG_STYLE_LIST, "Change HUD", "HUD Type #1\nHUD Type #2", "Select", "Close");
+	ShowPlayerDialog(playerid, DIALOG_HUD_TYPE, DIALOG_STYLE_LIST, "Change HUD", "Original\nSimple\nProper", "Select", "Close");
 	return 1;
 }
 CMD:changepassword(playerid, params[])

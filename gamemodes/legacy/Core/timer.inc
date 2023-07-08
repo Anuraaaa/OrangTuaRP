@@ -237,7 +237,7 @@ ptask OnSpeedometerUpdate[200](playerid) {
 
 				PlayerTextDrawSetString(playerid, ENGINETD[playerid], sprintf("%s", (GetEngineStatus(vehicleid)) ? ("~g~ON") : ("~r~OFF")));
 			}
-			else {
+			else if(PlayerData[playerid][pHudType] == 2) {
 				new string[156], fuel_percent;
 
 				fuel_percent = VehicleData[vehicleid][vFuel];
@@ -246,6 +246,19 @@ ptask OnSpeedometerUpdate[200](playerid) {
 					GetVehicleName(vehicleid), GetLocation(x, y, z), floatround(GetVehicleSpeed(vehicleid)), fuel_percent, fDamage, GetEngineStatus(vehicleid) ? ("ON") : ("OFF"));
 			
 				PlayerTextDrawSetString(playerid, SPEEDO_2[playerid], string);
+			}
+			else {
+
+				new fuel_percent;
+
+				fuel_percent = VehicleData[vehicleid][vFuel];
+
+				if(IsValidPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]))
+					SetPlayerProgressBarValue(playerid, PROGRESS_FUEL[playerid], fuel_percent);
+
+				PlayerTextDrawSetString(playerid, HBE3_SPEEDO[playerid][5], sprintf("%s", GetVehicleName(vehicleid)));
+				PlayerTextDrawSetString(playerid, HBE3_SPEEDO[playerid][2], sprintf("HEALTH_____:_%.2f", fDamage));
+				PlayerTextDrawSetString(playerid, HBE3_SPEEDO[playerid][3], sprintf("SPEED______:_%dKM/h", floatround(GetVehicleSpeed(vehicleid))));
 			}
 		}
 	}

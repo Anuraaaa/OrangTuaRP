@@ -13,6 +13,14 @@ new PlayerText:DONEFOOD[MAX_PLAYERS];
 new PlayerText:DONEDRINK[MAX_PLAYERS];
 new PlayerText:AMMOTD[MAX_PLAYERS];
 
+new PlayerText:HBE3_SPEEDO[MAX_PLAYERS][6];
+new PlayerText:HBE3_BOX[MAX_PLAYERS];
+new PlayerText:HBE3_FOODICO[MAX_PLAYERS];
+new PlayerText:HBE3_DRINKICO[MAX_PLAYERS];
+new PlayerBar:PROGRESS_HUNGER[MAX_PLAYERS];
+new PlayerBar:PROGRESS_FUEL[MAX_PLAYERS];
+new PlayerBar:PROGRESS_THIRST[MAX_PLAYERS];
+
 new Text:HUD2_TD[14];
 new PlayerText:HUNGERBAR_2[MAX_PLAYERS];
 new PlayerText:THIRSTBAR_2[MAX_PLAYERS];
@@ -261,6 +269,137 @@ CreatePublicHUD() {
 }
 CreatePlayerHUD(playerid)
 {
+	HBE3_BOX[playerid] = CreatePlayerTextDraw(playerid, 467.000000, 387.000000, "I");
+	PlayerTextDrawFont(playerid, HBE3_BOX[playerid], 1);
+	PlayerTextDrawLetterSize(playerid, HBE3_BOX[playerid], 17.812520, 7.999977);
+	PlayerTextDrawTextSize(playerid, HBE3_BOX[playerid], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_BOX[playerid], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_BOX[playerid], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_BOX[playerid], 1);
+	PlayerTextDrawColor(playerid, HBE3_BOX[playerid], 205);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_BOX[playerid], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_BOX[playerid], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_BOX[playerid], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_BOX[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_BOX[playerid], 0);
+
+	HBE3_SPEEDO[playerid][0] = CreatePlayerTextDraw(playerid, 532.000000, 382.000000, "FUEL");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][0], 2);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][0], 0.191666, 0.800000);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][0], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][0], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][0], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][0], 1);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][0], -1);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][0], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][0], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][0], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][0], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][0], 0);
+
+	HBE3_SPEEDO[playerid][1] = CreatePlayerTextDraw(playerid, 467.000000, 328.000000, "I");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][1], 1);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][1], 17.812520, 9.999984);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][1], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][1], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][1], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][1], 1);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][1], 205);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][1], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][1], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][1], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][1], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][1], 0);
+
+	HBE3_FOODICO[playerid] = CreatePlayerTextDraw(playerid, 621.000000, 408.000000, "Preview_Model");
+	PlayerTextDrawFont(playerid, HBE3_FOODICO[playerid], 5);
+	PlayerTextDrawLetterSize(playerid, HBE3_FOODICO[playerid], 0.600000, 2.000000);
+	PlayerTextDrawTextSize(playerid, HBE3_FOODICO[playerid], 13.500000, 21.500000);
+	PlayerTextDrawSetOutline(playerid, HBE3_FOODICO[playerid], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_FOODICO[playerid], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_FOODICO[playerid], 1);
+	PlayerTextDrawColor(playerid, HBE3_FOODICO[playerid], -1);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_FOODICO[playerid], 0);
+	PlayerTextDrawBoxColor(playerid, HBE3_FOODICO[playerid], 255);
+	PlayerTextDrawUseBox(playerid, HBE3_FOODICO[playerid], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_FOODICO[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_FOODICO[playerid], 0);
+	PlayerTextDrawSetPreviewModel(playerid, HBE3_FOODICO[playerid], 2768);
+	PlayerTextDrawSetPreviewRot(playerid, HBE3_FOODICO[playerid], -10.000000, 0.000000, -20.000000, 1.000000);
+	PlayerTextDrawSetPreviewVehCol(playerid, HBE3_FOODICO[playerid], 1, 1);
+
+	HBE3_DRINKICO[playerid] = CreatePlayerTextDraw(playerid, 533.000000, 422.000000, "Preview_Model");
+	PlayerTextDrawFont(playerid, HBE3_DRINKICO[playerid], 5);
+	PlayerTextDrawLetterSize(playerid, HBE3_DRINKICO[playerid], 0.600000, 2.000000);
+	PlayerTextDrawTextSize(playerid, HBE3_DRINKICO[playerid], 13.500000, 21.500000);
+	PlayerTextDrawSetOutline(playerid, HBE3_DRINKICO[playerid], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_DRINKICO[playerid], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_DRINKICO[playerid], 1);
+	PlayerTextDrawColor(playerid, HBE3_DRINKICO[playerid], -1);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_DRINKICO[playerid], 0);
+	PlayerTextDrawBoxColor(playerid, HBE3_DRINKICO[playerid], 255);
+	PlayerTextDrawUseBox(playerid, HBE3_DRINKICO[playerid], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_DRINKICO[playerid], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_DRINKICO[playerid], 0);
+	PlayerTextDrawSetPreviewModel(playerid, HBE3_DRINKICO[playerid], 1484);
+	PlayerTextDrawSetPreviewRot(playerid, HBE3_DRINKICO[playerid], -10.000000, 0.000000, -23.000000, 0.990000);
+	PlayerTextDrawSetPreviewVehCol(playerid, HBE3_DRINKICO[playerid], 1, 1);
+
+	HBE3_SPEEDO[playerid][2] = CreatePlayerTextDraw(playerid, 532.000000, 370.000000, "health");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][2], 2);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][2], 0.137500, 0.900000);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][2], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][2], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][2], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][2], 1);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][2], 9109759);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][2], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][2], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][2], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][2], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][2], 0);
+
+	HBE3_SPEEDO[playerid][3] = CreatePlayerTextDraw(playerid, 532.000000, 360.000000, "SPEED");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][3], 2);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][3], 0.137500, 0.900000);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][3], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][3], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][3], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][3], 1);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][3], 9109759);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][3], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][3], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][3], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][3], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][3], 0);
+
+	HBE3_SPEEDO[playerid][4] = CreatePlayerTextDraw(playerid, 467.000000, 330.500000, "I");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][4], 1);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][4], 17.812520, 2.399963);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][4], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][4], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][4], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][4], 1);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][4], 205);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][4], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][4], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][4], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][4], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][4], 0);
+
+	HBE3_SPEEDO[playerid][5] = CreatePlayerTextDraw(playerid, 581.000000, 338.000000, "FUEL");
+	PlayerTextDrawFont(playerid, HBE3_SPEEDO[playerid][5], 2);
+	PlayerTextDrawLetterSize(playerid, HBE3_SPEEDO[playerid][5], 0.191666, 0.800000);
+	PlayerTextDrawTextSize(playerid, HBE3_SPEEDO[playerid][5], 400.000000, 17.000000);
+	PlayerTextDrawSetOutline(playerid, HBE3_SPEEDO[playerid][5], 0);
+	PlayerTextDrawSetShadow(playerid, HBE3_SPEEDO[playerid][5], 0);
+	PlayerTextDrawAlignment(playerid, HBE3_SPEEDO[playerid][5], 2);
+	PlayerTextDrawColor(playerid, HBE3_SPEEDO[playerid][5], -1);
+	PlayerTextDrawBackgroundColor(playerid, HBE3_SPEEDO[playerid][5], 255);
+	PlayerTextDrawBoxColor(playerid, HBE3_SPEEDO[playerid][5], 50);
+	PlayerTextDrawUseBox(playerid, HBE3_SPEEDO[playerid][5], 0);
+	PlayerTextDrawSetProportional(playerid, HBE3_SPEEDO[playerid][5], 1);
+	PlayerTextDrawSetSelectable(playerid, HBE3_SPEEDO[playerid][5], 0);
 
 	HUNGERBAR_2[playerid] = CreatePlayerTextDraw(playerid, 594.500000, 433.500000, "ld_dual:white");
 	PlayerTextDrawFont(playerid, HUNGERBAR_2[playerid], 4);

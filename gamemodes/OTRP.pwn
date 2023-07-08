@@ -95,12 +95,13 @@ enum E_LOGLEVEL
 #include <notify>
 #include <actor_plus>
 #include <LiveCam>
+#include <progress2>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
 #endif
 
-#if !defined SendClientCheck
+#if !defined SendClientCheck~
 	native SendClientCheck(playerid, actionid, memaddr, memOffset, bytesCount);
 #endif              
 

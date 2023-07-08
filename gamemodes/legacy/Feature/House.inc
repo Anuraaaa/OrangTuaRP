@@ -1307,4 +1307,4 @@ task OnHouseAsellCheck[3600000]() {
 		}
 	}
 	return 1;
-}//a
+}

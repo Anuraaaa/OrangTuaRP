@@ -699,7 +699,7 @@ CMD:veh(playerid, params[])
 	VehicleData[vehicleid][vFuel] = 100;
 	Vehicle_SetType(vehicleid, VEHICLE_TYPE_ADMIN);
 
-	SendServerMessage(playerid, "You have spawned a %s.", ReturnVehicleModelName(model[0]));
+	SendServerMessage(playerid, "You have spawned a %s (ID:%d).", ReturnVehicleModelName(model[0]), vehicleid);
 	return 1;
 }
 
