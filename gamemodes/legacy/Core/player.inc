@@ -185,8 +185,8 @@ SQL_SaveCharacter(playerid)
 	    mysql_format(sqlcon, query, sizeof(query), "%s`Gender`='%d', ", query, PlayerData[playerid][pGender]);
 	    mysql_format(sqlcon, query, sizeof(query), "%s`Skin`='%d', ", query, PlayerData[playerid][pSkin]);
 	    mysql_format(sqlcon, query, sizeof(query), "%s`Accent`='%s', ", query, PlayerData[playerid][pAccent]);
-	    mysql_format(sqlcon, query, sizeof(query), "%s`Hunger`='%d', ", query, PlayerData[playerid][pHunger]);
-	    mysql_format(sqlcon, query, sizeof(query), "%s`Thirst`='%d', ", query, PlayerData[playerid][pThirst]);
+	    mysql_format(sqlcon, query, sizeof(query), "%s`Hunger`='%f', ", query, PlayerData[playerid][pHunger]);
+	    mysql_format(sqlcon, query, sizeof(query), "%s`Thirst`='%f', ", query, PlayerData[playerid][pThirst]);
 	    mysql_format(sqlcon, query, sizeof(query), "%s`AdminLevel`='%d', ", query, PlayerData[playerid][pAdmin]);
 	    mysql_format(sqlcon, query, sizeof(query), "%s`InBiz`='%d', ", query, PlayerData[playerid][pInBiz]);
 	    mysql_format(sqlcon, query, sizeof(query), "%s`InHouse`='%d', ", query, PlayerData[playerid][pInHouse]);
@@ -300,8 +300,8 @@ function LoadCharacterData(playerid)
 	cache_get_value_name_int(0, "Skin", PlayerData[playerid][pSkin]);
 	//cache_get_value_name(0, "UCP", PlayerData[playerid][pUCP]);
 	cache_get_value_name(0, "Accent", PlayerData[playerid][pAccent]);
-	cache_get_value_name_int(0, "Hunger", PlayerData[playerid][pHunger]);
-	cache_get_value_name_int(0, "Thirst", PlayerData[playerid][pThirst]);
+	cache_get_value_name_float(0, "Hunger", PlayerData[playerid][pHunger]);
+	cache_get_value_name_float(0, "Thirst", PlayerData[playerid][pThirst]);
 	cache_get_value_name_int(0, "AdminLevel", PlayerData[playerid][pAdmin]);
 	cache_get_value_name_int(0, "InBiz", PlayerData[playerid][pInBiz]);
 	cache_get_value_name_int(0, "InHouse", PlayerData[playerid][pInHouse]);
