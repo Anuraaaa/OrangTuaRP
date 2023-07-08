@@ -445,7 +445,6 @@ UnloadPlayerVehicle(playerid) {
 
 	foreach(new vehicleid : Vehicle) if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vExtraID] == PlayerData[playerid][pID])
 	{
-		printf("vehicleid: %d", vehicleid);
 		Vehicle_Save(vehicleid, false);
 
 		new Float:health;
@@ -567,7 +566,7 @@ Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, 
 		if(database)
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `vehicle` (`vehModel`) VALUES('%d')", VehicleData[vehicleid][vModel]), "Vehicle_OnVehicleCreated", "d", vehicleid);
 	
-		foreach(new i : Vehicle) if(IsVehicleInRangeOfVehicle(i, vehicleid, 5.0, false) && (Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL)) {
+		foreach(new i : Vehicle) if(IsVehicleInRangeOfVehicle(i, vehicleid, 3.0, false) && (Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL)) {
 
 			if(vehicleid == i)
 				continue;
@@ -1140,7 +1139,7 @@ function OnVehicleLoaded() {
 
 				mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle_object` WHERE `vehicle`='%d' ORDER BY `id` DESC LIMIT 5", VehicleData[i][vID]), "Vehicle_ObjectLoad", "d", i);
 
-				foreach(new vehicleid : Vehicle) if(IsVehicleInRangeOfVehicle(vehicleid, i, 5.0, false) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)) {
+				foreach(new vehicleid : Vehicle) if(IsVehicleInRangeOfVehicle(vehicleid, i, 3.0, false) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)) {
 
 					if(vehicleid == i)
 						continue;

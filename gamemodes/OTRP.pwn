@@ -2785,7 +2785,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				cache_get_value_name_float(0, "vehY", y);
 				cache_get_value_name_float(0, "vehZ", z);
 
-				foreach(new i : Vehicle) if(IsVehicleInRangeOfPoint3D(i, 10.0,  x, y, z)) {
+				foreach(new i : Vehicle) if(IsVehicleInRangeOfPoint3D(i, 3.0,  x, y, z)) {
 					thereis  = true;
 					break;
 				}
