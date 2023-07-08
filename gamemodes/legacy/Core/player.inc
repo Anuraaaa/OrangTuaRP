@@ -1355,21 +1355,21 @@ UpdateHBE(playerid)
 			divided = floatdiv(23.399999,100);
 			lapar = floatmul(PlayerData[playerid][pHunger], divided);
 			PlayerTextDrawTextSize(playerid, HUNGERBAR_2[playerid], lapar, 3.5);
-			PlayerTextDrawColor(playerid, HUNGERBAR_2[playerid], ConvertHBEColor(PlayerData[playerid][pHunger]));
+			PlayerTextDrawColor(playerid, HUNGERBAR_2[playerid], ConvertHBEColor(floatround(PlayerData[playerid][pHunger])));
 			PlayerTextDrawShow(playerid, HUNGERBAR_2[playerid]);
 
 			divided = floatdiv( 23.899999,100);
 			haus = floatmul(PlayerData[playerid][pThirst], divided);
 			
 			PlayerTextDrawTextSize(playerid, THIRSTBAR_2[playerid], haus, 3.5);
-			PlayerTextDrawColor(playerid, THIRSTBAR_2[playerid], ConvertHBEColor(PlayerData[playerid][pThirst]));
+			PlayerTextDrawColor(playerid, THIRSTBAR_2[playerid], ConvertHBEColor(floatround(PlayerData[playerid][pThirst])));
 			PlayerTextDrawShow(playerid, THIRSTBAR_2[playerid]);		
 		}
 		else {
 			SetPlayerProgressBarValue(playerid, PROGRESS_HUNGER[playerid], PlayerData[playerid][pHunger]);
 			SetPlayerProgressBarValue(playerid, PROGRESS_THIRST[playerid], PlayerData[playerid][pThirst]);
-			SetPlayerProgressBarColour(playerid, PROGRESS_HUNGER[playerid], ConvertHBEColor(PlayerData[playerid][pHunger]));
-			SetPlayerProgressBarColour(playerid, PROGRESS_THIRST[playerid], ConvertHBEColor(PlayerData[playerid][pThirst]));
+			SetPlayerProgressBarColour(playerid, PROGRESS_HUNGER[playerid], ConvertHBEColor(floatround(PlayerData[playerid][pHunger])));
+			SetPlayerProgressBarColour(playerid, PROGRESS_THIRST[playerid], ConvertHBEColor(floatround(PlayerData[playerid][pThirst])));
 		}
 	}
 	return 1;

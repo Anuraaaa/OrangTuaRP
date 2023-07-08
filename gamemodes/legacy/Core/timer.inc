@@ -50,18 +50,7 @@ ptask OnSickCharacterCheck[1000](playerid)
 				}
 			}
 		}
-	}
-	return 1;
-}
-
-ptask Player_CharacterCough[1000](playerid)
-{
-    if(!IsPlayerSpawned(playerid))
-        return 0;
-
-    if(Character_CanUpdate(playerid))
-    {
-        if(PlayerData[playerid][pCough] > 0)
+        if(PlayerData[playerid][pCough])
         {
             if(++PlayerData[playerid][pCoughTime] > 120)
             {
@@ -70,29 +59,56 @@ ptask Player_CharacterCough[1000](playerid)
                 PlayerData[playerid][pCoughTime] = 0;
             }
         }
-    }
-    return 1;
+	}
+	return 1;
 }
-task EnergyUpdate[90000]()
+
+ptask OnEnergyUpdate[1000](playerid)
 {
-	foreach(new playerid : Player) if(PlayerData[playerid][pSpawned] && !PlayerData[playerid][pAduty] && PlayerData[playerid][pJailTime] < 1)
+	if(PlayerData[playerid][pSpawned] && !PlayerData[playerid][pAduty] && !PlayerData[playerid][pJailTime])
 	{
-		if(PlayerData[playerid][pHunger] > 0)
-		{
-		    PlayerData[playerid][pHunger] -= RandomEx(1, 2);
+		new animidx = GetPlayerAnimationIndex(playerid),
+			k,
+			ud,
+			lr,
+			Float:adjustment,
+			Float:adjustment1;    
+
+		GetPlayerKeys(playerid, k, ud, lr);
+
+		if(animidx == 43) {
+			adjustment = (0.06 * 0.4);
+			adjustment1 = (0.06 * 0.3); // Sitting
+		} else if(animidx == 1159) {
+			adjustment = (0.06 * 0.7);
+			adjustment1 = (0.06 * 0.7); // Crouching
+		} else if(animidx == 1195) {
+			adjustment = (0.06 * 1.9);
+			adjustment1 = (0.06 * 1.5); // Jumping
+		} else if(animidx == 1231) {
+			if(k & KEY_WALK) {
+				adjustment = (0.06 * 0.08);
+				adjustment1 = (0.06 * 0.07); // Walking
+			} else if(k & KEY_SPRINT) {
+				adjustment = (0.06 * 1.5);
+				adjustment1 = (0.06 * 1.2); // Sprinting
+			} else if(k & KEY_JUMP) {
+				adjustment = (0.06 * 1.8);
+				adjustment1 = (0.06 * 1.7); // Jumping
+			} else {
+				adjustment = (0.06 * 0.8);
+				adjustment1 = (0.06 * 0.4); // Jogging
+			}
+		} else {
+			adjustment = 0.05;
+			adjustment1 = 0.04;
 		}
-		if(PlayerData[playerid][pThirst] > 0)
-		{
-			PlayerData[playerid][pThirst] -= RandomEx(1, 2);
-		}
-		if(PlayerData[playerid][pHunger] < 0)
-		{
-			PlayerData[playerid][pHunger] = 0;
-		}
-		if(PlayerData[playerid][pThirst] < 0)
-		{
-			PlayerData[playerid][pThirst] = 0;
-		}
+
+		adjustment *= 0.2;
+		adjustment1 *= 0.2;
+
+		PlayerData[playerid][pHunger] -= adjustment;
+		PlayerData[playerid][pThirst] -= adjustment1;
 	}
 	return 1;
 }
