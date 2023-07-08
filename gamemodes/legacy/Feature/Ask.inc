@@ -110,7 +110,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
             strcat(string, sprintf("Ask from: %s\n", GetName(targetid, false)));
             strcat(string, sprintf("Question: %s\n", PlayerData[targetid][pAsk]));
-            ShowPlayerDialog(playerid, DIALOG_ASKS_ANSWER, DIALOG_STYLE_MSGBOX, sprintf("Answer question of %s", GetName(targetid, false)), string, "Send", "Close");
+            ShowPlayerDialog(playerid, DIALOG_ASKS_ANSWER, DIALOG_STYLE_INPUT, sprintf("Answer question of %s", GetName(targetid, false)), string, "Send", "Close");
         }
     }
     if(dialogid == DIALOG_ASKS_ANSWER) {
