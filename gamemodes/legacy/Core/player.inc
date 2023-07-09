@@ -1477,20 +1477,12 @@ HidePlayerHUD(playerid) {
 	PlayerTextDrawHide(playerid, HBE3_FOODICO[playerid]);
 	PlayerTextDrawHide(playerid, HBE3_DRINKICO[playerid]);
 
-	if(IsValidPlayerProgressBar(playerid, PROGRESS_HUNGER[playerid]))
-		DestroyPlayerProgressBar(playerid, PROGRESS_HUNGER[playerid]);
+	DestroyPlayerProgressBar(playerid, PROGRESS_HUNGER[playerid]);
 
-	if(IsValidPlayerProgressBar(playerid, PROGRESS_THIRST[playerid]))
-		DestroyPlayerProgressBar(playerid, PROGRESS_THIRST[playerid]);
+	DestroyPlayerProgressBar(playerid, PROGRESS_THIRST[playerid]);
 
 	
 
-	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-		for(new i = 0; i < 6; i++) {
-			PlayerTextDrawShow(playerid, HBE3_SPEEDO[playerid][i]);
-		}
-		PROGRESS_FUEL[playerid] = CreatePlayerProgressBar(playerid, 534.000000, 396.000000, 100.000000, 4.000000, -2016478465, 100.000000, 0);
-	}
 	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
 
 		for(new i = 4; i < 11; i++) 
@@ -1511,15 +1503,14 @@ HidePlayerHUD(playerid) {
 			PlayerTextDrawHide(playerid, HBE3_SPEEDO[playerid][i]);
 		}
 
-		if(IsValidPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]))
-			DestroyPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]);
+		DestroyPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]);
 	}
 
 
 	return 1;
 }
 
-stock UpdatePlayerSkin(playerid, skinid)
+UpdatePlayerSkin(playerid, skinid)
 {
 	SetPlayerSkin(playerid, skinid);
 	PlayerData[playerid][pSkin] = skinid;
