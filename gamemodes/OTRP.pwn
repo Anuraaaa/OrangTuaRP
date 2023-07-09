@@ -11279,6 +11279,9 @@ function OnPlayerCharacterCreated(playerid) {
 		return 0;
 		
 	PlayerData[playerid][pID] = cache_insert_id();
+	PlayerData[playerid][pPos][0] = -1415.9169;
+	PlayerData[playerid][pPos][1] = -300.1727;
+	PlayerData[playerid][pPos][2] = 14.1484;
 	format(PlayerData[playerid][pName], MAX_PLAYER_NAME, PlayerData[playerid][pTempName]);
 	SetupPlayerData(playerid);
 	CancelSelectTextDraw(playerid);
