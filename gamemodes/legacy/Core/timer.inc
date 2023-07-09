@@ -286,7 +286,7 @@ ptask PlayerUpdate[1000](playerid)
 		UpdateHBE(playerid);
 		AFKCheck(playerid);
 		UpdateTime(playerid);
-		
+
 		if(PlayerData[playerid][pHunger] > 100)
 			PlayerData[playerid][pHunger] = 100;
 
