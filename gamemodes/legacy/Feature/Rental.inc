@@ -13,7 +13,7 @@ enum e_rental
 
 new RentData[MAX_RENTAL][e_rental];
 
-stock Rental_Create(playerid, veh1, veh2)
+Rental_Create(playerid, veh1, veh2)
 {
 	new
 	    Float:x,
@@ -85,7 +85,7 @@ function Rental_Load()
 	return 1;
 }
 
-stock Rental_Spawn(i)
+Rental_Spawn(i)
 {
 	new string[156];
 	format(string, sizeof(string), "[ID %d]\n{FFFFFF}Rental Point\n{FFFFFF}Use {FFFF00}/renthelp", i);
@@ -94,7 +94,7 @@ stock Rental_Spawn(i)
 	return 1;
 }
 
-stock Rental_Delete(id)
+Rental_Delete(id)
 {
 	if(!RentData[id][rentExists])
 		return 0;
@@ -114,7 +114,7 @@ stock Rental_Delete(id)
 	return 1;
 }
 
-stock Rental_Refresh(id)
+Rental_Refresh(id)
 {
 	if(id != -1 && RentData[id][rentExists])
 	{		    
@@ -129,7 +129,7 @@ stock Rental_Refresh(id)
 	return 1;
 }
 
-stock Rental_Save(id)
+Rental_Save(id)
 {
 	new query[1052];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `rental` SET ");
@@ -149,7 +149,7 @@ stock Rental_Save(id)
 	return 1;
 }
 
-stock VehicleRental_Count(playerid)
+VehicleRental_Count(playerid)
 {
 	new count = 0;
 	foreach(new i : Vehicle) if(IsValidVehicle(i) && Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL && VehicleData[i][vExtraID] == PlayerData[playerid][pID])

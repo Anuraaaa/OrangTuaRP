@@ -18,7 +18,7 @@ function UpdateFare(playerid, driverid)
     return 1;
 }
 
-stock CreateTaxi(playerid)
+CreateTaxi(playerid)
 {
 	PlayerTextDrawShow(playerid, TAXIBOX[playerid]);
 	PlayerTextDrawShow(playerid, FARETD[playerid]);
@@ -26,7 +26,7 @@ stock CreateTaxi(playerid)
 	return 1;
 }
 
-stock HideTaxi(playerid)
+HideTaxi(playerid)
 {
 	PlayerTextDrawHide(playerid, TAXIBOX[playerid]);
 	PlayerTextDrawHide(playerid, FARETD[playerid]);
@@ -34,7 +34,7 @@ stock HideTaxi(playerid)
 	return 1;
 }
 
-stock Taxi_ShowCalls(playerid)
+Taxi_ShowCalls(playerid)
 {
     static
 	    string[2048];

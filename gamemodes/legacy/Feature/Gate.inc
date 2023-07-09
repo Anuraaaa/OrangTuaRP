@@ -19,7 +19,7 @@ enum e_gateData {
 
 new GateData[MAX_GATES][e_gateData];
 
-stock Gate_Nearest(playerid)
+Gate_Nearest(playerid)
 {
     for (new i = 0; i != MAX_GATES; i ++) if (GateData[i][gateExists] && IsPlayerInRangeOfPoint(playerid, GateData[i][gateRadius], GateData[i][gatePos][0], GateData[i][gatePos][1], GateData[i][gatePos][2]))
 	{
@@ -30,7 +30,7 @@ stock Gate_Nearest(playerid)
 }
 
 
-stock GetGateByID(sqlid)
+GetGateByID(sqlid)
 {
 	for (new i = 0; i != MAX_GATES; i ++) if (GateData[i][gateExists] && GateData[i][gateID] == sqlid)
 	    return i;
@@ -56,7 +56,7 @@ public CloseGate(gateid, linkid, Float:fX, Float:fY, Float:fZ, Float:speed, Floa
 	return 0;
 }
 
-stock Gate_Operate(gateid, playerid = INVALID_PLAYER_ID)
+Gate_Operate(gateid, playerid = INVALID_PLAYER_ID)
 {
 	if (gateid != -1 && GateData[gateid][gateExists])
 	{
@@ -100,7 +100,7 @@ stock Gate_Operate(gateid, playerid = INVALID_PLAYER_ID)
 	return 1;
 }
 
-stock Gate_Create(playerid)
+Gate_Create(playerid)
 {
 	new
 	    Float:x,
@@ -154,7 +154,7 @@ function OnGateCreated(id)
 	GateData[id][gateID] = cache_insert_id();
 	Gate_Save(id);
 }
-stock Gate_Delete(gateid)
+Gate_Delete(gateid)
 {
 	if (gateid != -1 && GateData[gateid][gateExists])
 	{
@@ -181,7 +181,7 @@ stock Gate_Delete(gateid)
 	return 1;
 }
 
-stock Gate_Save(gateid)
+Gate_Save(gateid)
 {
 	new
 	    query[768];

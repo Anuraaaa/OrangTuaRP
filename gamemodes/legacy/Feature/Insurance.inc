@@ -5,7 +5,7 @@ new Float:Random_Insu[][] = {
 {-1950.2317,583.7834,35.3107,180.0581}
 };
 
-stock GetInsuPrice(modelid)
+GetInsuPrice(modelid)
 {
 	new price;
 	switch(modelid)

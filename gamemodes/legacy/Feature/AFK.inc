@@ -1,4 +1,4 @@
-stock AFKCheck(playerid)
+AFKCheck(playerid)
 {
 	if(PlayerData[playerid][pVendor] != -1)
 		return 0;

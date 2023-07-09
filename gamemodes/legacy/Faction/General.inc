@@ -253,56 +253,6 @@ function OnLookupMDC(playerid, string:namez[]) {
 	ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
 	return 1;
 }
-SendDutyMessage(faction, color, const str[], {Float,_}:...)
-{
-	static
-	    args,
-	    start,
-	    end,
-	    string[256]
-	;
-	#emit LOAD.S.pri 8
-	#emit STOR.pri args
-
-	if (args > 8)
-	{
-		#emit ADDR.pri str
-		#emit STOR.pri start
-
-	    for (end = start + (args - 8); end > start; end -= 4)
-		{
-	        #emit LREF.pri end
-	        #emit PUSH.pri
-		}
-		#emit PUSH.S str
-		#emit PUSH.C 144
-		#emit PUSH.C string
-
-		#emit LOAD.S.pri 8
-		#emit ADD.C 4
-		#emit PUSH.pri
-
-		#emit SYSREQ.C format
-		#emit LCTRL 5
-		#emit SCTRL 4
-
-        foreach (new i : Player)
-		{
-			if (GetFactionType(i) == faction && PlayerData[i][pOnDuty])
-			{
-  				SendClientMessage(i, color, string);
-			}
-		}
-		return 1;
-	}
-	foreach (new i : Player)
-	{
-		if (GetFactionType(i) == faction && PlayerData[i][pOnDuty]) {
-			SendClientMessage(i, color, str);
-		}
-	}
-	return 1;
-}
 
 SendFactionMessageEx(faction, color, const str[], {Float,_}:...)
 {

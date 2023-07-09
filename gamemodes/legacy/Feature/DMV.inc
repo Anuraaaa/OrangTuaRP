@@ -22,7 +22,7 @@ new Float:DMVPoint[][] =
 	{-2066.8625,-269.5647,34.2021}
 };
 
-stock CheckPlayerTest(playerid)
+CheckPlayerTest(playerid)
 {
 	if(PlayerData[playerid][pIndexTest] < 6)
 	{

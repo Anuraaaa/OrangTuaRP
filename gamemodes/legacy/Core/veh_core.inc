@@ -550,25 +550,13 @@ enum E_VEHICLE_OBJECT {
 };
 new VehicleObjects[MAX_VEHICLES][MAX_VEHICLE_OBJECT][E_VEHICLE_OBJECT];
 
-stock SwitchVehicleDoors(vehicleid,bool:doors_status){
-	new engine,lights,alarm,doors,bonnet,boot,objective;
-	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
-	SetVehicleParamsEx(vehicleid,engine,lights,alarm,_:doors_status,bonnet,boot,objective);
-}
-
-stock SwitchVehicleBonnet(vehicleid,bool:bonnet_status){
-	new engine,lights,alarm,doors,bonnet,boot,objective;
-	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
-	SetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,_:bonnet_status,boot,objective);
-}
-
-stock SwitchVehicleBoot(vehicleid,bool:boot_status){
+SwitchVehicleBoot(vehicleid,bool:boot_status){
 	new engine,lights,alarm,doors,bonnet,boot,objective;
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
 	SetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,_:boot_status,objective);
 }
 
-stock SwitchVehicleLight(vehicleid,bool:light_status){
+SwitchVehicleLight(vehicleid,bool:light_status){
 
 	if(light_status) {
         new panels, doors, lights, tires;
@@ -583,7 +571,7 @@ stock SwitchVehicleLight(vehicleid,bool:light_status){
 	SetVehicleParamsEx(vehicleid,engine,_:light_status,alarm,doors,bonnet,boot,objective);
 }
 
-stock SwitchVehicleEngine(vehicleid,bool:engine_status){
+SwitchVehicleEngine(vehicleid,bool:engine_status){
 	new engine,lights,alarm,doors,bonnet,boot,objective;
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
 	SetVehicleParamsEx(vehicleid,_:engine_status,lights,alarm,doors,bonnet,boot,objective);

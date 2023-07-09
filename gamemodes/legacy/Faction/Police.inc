@@ -5,7 +5,7 @@ new Float:ArrestPoint[][] =
     {1363.3896,1581.9220,1468.7877}
 };
 
-stock SetPlayerArrest(playerid)
+SetPlayerArrest(playerid)
 {
     FreezePlayer(playerid, 3000);
     new rand = random(3);

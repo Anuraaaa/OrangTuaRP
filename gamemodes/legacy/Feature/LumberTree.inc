@@ -16,7 +16,7 @@ enum tree_data
 
 new TreeData[MAX_TREE][tree_data];
 
-stock Tree_Save(id)
+Tree_Save(id)
 {
 	new query[512];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `tree` SET ");
@@ -30,7 +30,7 @@ stock Tree_Save(id)
 	mysql_format(sqlcon, query, sizeof(query), "%sWHERE `ID` = '%d'", query, TreeData[id][treeID]);
 	mysql_tquery(sqlcon, query);
 }
-stock Tree_Create(playerid)
+Tree_Create(playerid)
 {
 	new Float:x, Float:y, Float:z, Float:a;
 	if(GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, a))
@@ -82,7 +82,7 @@ function Tree_Load()
 	return 1;
 }
 
-stock Tree_Nearest(playerid)
+Tree_Nearest(playerid)
 {
 	forex(i, MAX_TREE) if(TreeData[i][treeExists]) if(IsPlayerInDynamicArea(playerid, TreeData[i][treeArea]))
 		return i;
@@ -90,7 +90,7 @@ stock Tree_Nearest(playerid)
 	return -1;
 }
 
-stock Tree_Refresh(id)
+Tree_Refresh(id)
 {
 	if(TreeData[id][treeExists])
 	{
@@ -114,7 +114,7 @@ function OnTreeCreated(id)
 	TreeData[id][treeID] = cache_insert_id();
 	Tree_Save(id);
 }
-stock Tree_Spawn(id)
+Tree_Spawn(id)
 {
 	if(TreeData[id][treeExists])
 	{
@@ -128,7 +128,7 @@ stock Tree_Spawn(id)
 	return 1;
 }
 
-stock Tree_Delete(id)
+Tree_Delete(id)
 {
 	if(!TreeData[id][treeExists])
 		return 0;

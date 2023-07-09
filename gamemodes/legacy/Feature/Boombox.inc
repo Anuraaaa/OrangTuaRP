@@ -53,7 +53,7 @@ IsPlayerInRangeOfDynamicObject(playerid, objectid, Float:radius)
 	return 0;
 }
 
-stock SetMusicStream(type, playerid, url[])
+SetMusicStream(type, playerid, url[])
 {
 	switch(type)
 	{
@@ -102,7 +102,7 @@ stock SetMusicStream(type, playerid, url[])
 	}
 }
 
-stock DestroyBoombox(playerid)
+DestroyBoombox(playerid)
 {
 	if(PlayerData[playerid][pBoomboxPlaced])
 	{
@@ -119,7 +119,7 @@ stock DestroyBoombox(playerid)
 	}
 }
 
-stock GetNearbyBoombox(playerid)
+GetNearbyBoombox(playerid)
 {
 	foreach(new i : Player)
 	{

@@ -82,7 +82,7 @@ LoadStaticVehicle()
 	}
 }
 
-stock LoadActor()
+LoadActor()
 {
 	CreateActor(29, -774.2181,2425.2349,157.1011,226.0966); //sell drugs actor
 	CreateDynamic3DTextLabel("Drop the {FFFF00}Rolled Weed {FFFFFF}here to sell", -1, -774.2181,2425.2349,157.1011, 5.0);
@@ -90,7 +90,7 @@ stock LoadActor()
 
 }
 
-stock LoadPoint()
+LoadPoint()
 {
 	CreateDynamic3DTextLabel(""YELLOW"/propose "WHITE"here.", -1, 2214.3958,-1332.6309,252.4141, 3.0);
 
@@ -186,14 +186,14 @@ stock LoadPoint()
 	CreateDynamic3DTextLabel("{FFFF00}[Insurance Center]\n{FFFF00}/insu buy {FFFFFF}- to purchase insurance\n{FFFF00}/insu claim {FFFFFF}- to claim vehicle", -1, -1939.4851,555.0747,35.1719, 20.0);
 }
 
-stock UpdateServerStock(SERVER_STOCK) {
+UpdateServerStock(SERVER_STOCK) {
 	switch(SERVER_STOCK) {
 		case SERVER_STOCK_COMPONENT: UpdateDynamic3DTextLabelText(LabelData[labelComponent], -1, sprintf(""LIGHTBLUE"[Component]\n"WHITE"Stock: "YELLOW"%d/10000\n"WHITE"Price: "GREEN"$0.50", StockData[stockComponent]));
 		case SERVER_STOCK_ROCK: UpdateDynamic3DTextLabelText(LabelData[labelRock], -1, sprintf(""LIGHTBLUE"[Rock]\n"WHITE"Stock: "YELLOW"%d/500", StockData[stockRock]));
 	}
 	return 1;
 }
-stock SaveServerData()
+SaveServerData()
 {
 	new coordsString[128];
 	format(coordsString, sizeof(coordsString), "%s,%s,%d,%d,%d,%d", MotdData[motdPlayer], MotdData[motdAdmin], GovData[govVault], GovData[govTax], StockData[stockComponent], StockData[stockRock]);
@@ -203,7 +203,7 @@ stock SaveServerData()
 	return 1;	
 }
 
-stock LoadServerData()
+LoadServerData()
 {
 	new arrCoords[20][64];
 	new strFromFile2[256];

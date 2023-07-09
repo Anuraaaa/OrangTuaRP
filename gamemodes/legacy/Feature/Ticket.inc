@@ -8,7 +8,7 @@ enum ticketData
 };
 new TicketData[MAX_PLAYERS][MAX_PLAYER_TICKETS][ticketData];
 
-stock Ticket_Add(suspectid, price, reason[])
+Ticket_Add(suspectid, price, reason[])
 {
     new
         string[160];
@@ -29,7 +29,7 @@ stock Ticket_Add(suspectid, price, reason[])
     return -1;
 }
 
-stock Ticket_Remove(playerid, ticketid)
+Ticket_Remove(playerid, ticketid)
 {
     if (ticketid != -1 && TicketData[playerid][ticketid][ticketExists])
     {

@@ -2,7 +2,7 @@
 new STREAMER_TAG_OBJECT:tmpobjid, vip_house_1, vip_house_2, vip_house_3, vip_house_4,
 	vip_house_5, vip_house_6, vip_house_7, vip_house_8, vip_house_9, vip_house_10;
 
-stock LoadServerMap()
+LoadServerMap()
 {
 	new time = GetTickCount();
 

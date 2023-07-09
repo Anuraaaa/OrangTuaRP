@@ -38,7 +38,7 @@ enum vendor_data
 };
 new VendorData[MAX_VENDOR][vendor_data];
 
-stock SetupVendor()
+SetupVendor()
 {
 	VendorData[0][vendorCP] = CreateDynamicCP(-1978.8419,174.9800,27.6875, 1.0, -1, -1, -1, 2.0);
 	VendorData[1][vendorCP] = CreateDynamicCP(-1978.9037,179.9693,27.6875, 1.0, -1, -1, -1, 2.0);
@@ -67,7 +67,7 @@ function CookFood(playerid, food, id)
 	return 1;
 }
 
-stock IsVendorUsed(id)
+IsVendorUsed(id)
 {
 	foreach(new i : Player) if(PlayerData[i][pVendor] == id)
 	{
@@ -75,7 +75,7 @@ stock IsVendorUsed(id)
 	}
 	return 0;
 }
-stock SetupPlayerVendor(playerid)
+SetupPlayerVendor(playerid)
 {
 	switch(PlayerData[playerid][pVendor])
 	{

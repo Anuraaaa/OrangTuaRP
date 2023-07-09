@@ -64,7 +64,6 @@
 #include ".\legacy\Feature\GPS"
 #include ".\legacy\Feature\MappingInGame"
 #include ".\legacy\Feature\Boombox"
-#include ".\legacy\Feature\Family" 
 #include ".\legacy\Feature\AntiCheat" 
 #include ".\legacy\Feature\Accent" 
 #include ".\legacy\Feature\Spike"

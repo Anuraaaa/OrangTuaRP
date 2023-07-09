@@ -31,7 +31,7 @@ enum ddInfo
 };
 new DoorData[MAX_DDOORS][ddInfo];
 
-stock SaveDynamicDoors()
+SaveDynamicDoors()
 {
 
 	new	szFileStr[512],
@@ -71,7 +71,7 @@ stock SaveDynamicDoors()
 	return fclose(fHandle);
 }
 
-stock CreateDynamicDoor(doorid)
+CreateDynamicDoor(doorid)
 {
 	new string[300];
 	format(string, sizeof(string), "[{C6E2FF}ID: %d{FFFFFF}]\n[ {C6E2FF}%s {FFFFFF}] \nPress {FF0000}ENTER {FFFFFF}or {FF0000}/enter\n{FFFFFF}To enter/exit the door.",doorid, DoorData[doorid][ddDescription]);

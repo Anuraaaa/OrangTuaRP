@@ -12,7 +12,7 @@ enum e_weed
 };
 new WeedData[MAX_WEED][e_weed];
 
-stock IsAtDrugField(playerid)
+IsAtDrugField(playerid)
 {
 	if(IsPlayerInDynamicArea(playerid, AreaData[areaDrug]))
 		return 1;
@@ -20,7 +20,7 @@ stock IsAtDrugField(playerid)
 	return 0;
 }
 
-stock Weed_Delete(id)
+Weed_Delete(id)
 {
 	if(!WeedData[id][weedExists])
 		return 0;
@@ -52,7 +52,7 @@ function HarvestWeed(playerid, wid)
 	SendClientMessage(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Item added to inventory: {FFFF00}Weed +1");
 	return 1;
 }
-stock Weed_Nearest(playerid)
+Weed_Nearest(playerid)
 {
 	new index = -1;
 	
@@ -66,7 +66,7 @@ stock Weed_Nearest(playerid)
 	return index;
 }
 
-stock Weed_Count()
+Weed_Count()
 {
 	new count = 0;
 	forex(i, MAX_WEED) if(WeedData[i][weedExists])
@@ -99,7 +99,7 @@ function PlantWeed(playerid, Float:x, Float:y, Float:z)
 	return 1;
 }
 
-stock Weed_Create(Float:x, Float:y, Float:z)
+Weed_Create(Float:x, Float:y, Float:z)
 {
 	forex(i, MAX_WEED) if(!WeedData[i][weedExists])
 	{ 
@@ -122,7 +122,7 @@ function OnWeedCreated(id)
 	WeedData[id][weedID] = cache_insert_id();
 	Weed_Save(id);
 }
-stock Weed_Refresh(plantid)
+Weed_Refresh(plantid)
 {
 	if (plantid != -1 && WeedData[plantid][weedExists])
 	{
@@ -164,7 +164,7 @@ function Weed_Load()
 	return 1;
 }
 
-stock Weed_Save(id)
+Weed_Save(id)
 {
 	new query[352];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `weed` SET ");

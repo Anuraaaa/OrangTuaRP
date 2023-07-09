@@ -45,7 +45,7 @@ hook OnGameModeInit() {
 	fishSea = CreateDynamicPolygon(arr_fishSea);
 }
 
-stock ReturnFishPlace(playerid)
+ReturnFishPlace(playerid)
 {
 	if(!IsPlayerConnected(playerid))
 		return FISHPLACE_NONE;

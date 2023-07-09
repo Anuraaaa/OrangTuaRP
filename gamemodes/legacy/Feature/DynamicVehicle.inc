@@ -342,20 +342,6 @@ Vehicle_IsOwner(playerid, carid)
 	return 0;
 }
 
-Vehicle_OwnerName(carid)
-{
-	static Oname[MAX_PLAYER_NAME];
-	foreach(new i : Player)
-	{
-		if(VehicleData[carid][vExtraID] == PlayerData[i][pID])
-		{
-			format(Oname, MAX_PLAYER_NAME, PlayerData[i][pName]);
-			break;
-		}
-	}
-	return Oname;
-}
-
 Crate_Count(vid)
 {
 	if(!Iter_Contains(Vehicle, vid))
@@ -393,17 +379,6 @@ function OnLoadCrate(carid)
 		printf("[CRATE] Loaded %d crate for Vehicle SQLID %d", rows, VehicleData[carid][vID]);
 	}
 	return 1;
-}
-
-Vehicle_HaveAccess(playerid, carid)
-{
-	if(PlayerData[playerid][pID] == -1)
-		return 0;
-
-	if(Iter_Contains(Vehicle, carid) && VehicleData[carid][vExtraID] == PlayerData[playerid][pID])
-		return 1;
-
-	return 0;
 }
 
 Vehicle_SetType(vehicleid, veh_type = VEHICLE_TYPE_ADMIN) {

@@ -22,7 +22,7 @@ new TagText[MAX_PLAYERS][64],
 	TagColor[MAX_PLAYERS];
 
 
-stock Tag_Create(playerid)
+Tag_Create(playerid)
 {
 	new id = Iter_Free(SprayTag), Float:x, Float:y, Float:z, Float:a;
 	if(id != INVALID_ITERATOR_SLOT)
@@ -55,7 +55,7 @@ stock Tag_Create(playerid)
 	return INVALID_ITERATOR_SLOT;
 }
 
-stock Tag_Delete(id)
+Tag_Delete(id)
 {
 	if(!Iter_Contains(SprayTag, id))
 		return 1;
@@ -72,7 +72,7 @@ stock Tag_Delete(id)
 	return 1;
 }
 
-stock Tag_Spawn(id)
+Tag_Spawn(id)
 {
 	TagData[id][tagObject] = CreateDynamicObject(19483, TagData[id][tagPos][0], TagData[id][tagPos][1], TagData[id][tagPos][2], TagData[id][tagPos][3], TagData[id][tagPos][4], TagData[id][tagPos][5], TagData[id][tagWorld], TagData[id][tagInterior], -1, 30.0, 30.0);
 
@@ -90,13 +90,13 @@ stock Tag_Spawn(id)
 	return 1;
 }
 
-stock ShowTagSetup(playerid)
+ShowTagSetup(playerid)
 {
 	ShowPlayerDialog(playerid, DIALOG_SPRAYTAG, DIALOG_STYLE_LIST, "Tag - Setup", "Font\nFont Size\nToggle Bold\nText Color\n{FFFF00}Create", "Select", "Close");
 	return 1;
 }
 
-stock HexToInt(string[])
+HexToInt(string[])
 {
 	if(!string[0])
   	{
@@ -127,7 +127,7 @@ function OnSprayTagCreated(id)
 	Tag_Save(id);
 }
 
-stock Tag_Save(id)
+Tag_Save(id)
 {
 	if(!Iter_Contains(SprayTag, id))
 		return 1;

@@ -79,7 +79,7 @@ new const CargoLoc[][E_CARGO_LOC] = {
     {"Component Cargo", -1304.1875,2491.8530,87.1437},
     {"Equipment Cargo", -1886.6575,1444.1444,7.1842}
 };
-stock ShowPublicLocation(playerid)
+ShowPublicLocation(playerid)
 {
 	new str[1556];
 	format(str, sizeof(str), "Name\tDistance\n");
@@ -91,7 +91,7 @@ stock ShowPublicLocation(playerid)
 	return 1;
 }
 
-stock ShowJobLocation(playerid)
+ShowJobLocation(playerid)
 {
 	new str[456];
 	format(str, sizeof(str), "Name\tDistance\n");
@@ -103,7 +103,7 @@ stock ShowJobLocation(playerid)
 	return 1;
 }
 
-stock ShowWorkshopLocation(playerid) {
+ShowWorkshopLocation(playerid) {
 
     new str[1212]; 
     format(str, sizeof(str), "Index\tName\tLocation\n");
@@ -112,7 +112,7 @@ stock ShowWorkshopLocation(playerid) {
     }
     return ShowPlayerDialog(playerid, DIALOG_GPS_WORKSHOP, DIALOG_STYLE_TABLIST_HEADERS, "Workshop Location", str, "Select", "Close");
 }
-stock ShowTreeLocation(playerid)
+ShowTreeLocation(playerid)
 {
 	new str[2512], hour, minute, second;
 	format(str, sizeof(str), "Index\tStatus\tDistance\n");
@@ -131,7 +131,7 @@ stock ShowTreeLocation(playerid)
 	return ShowPlayerDialog(playerid, DIALOG_GPS_TREE, DIALOG_STYLE_TABLIST_HEADERS, "Tree Location", str, "Find", "Close");
 }
 
-stock ShowGarageLocation(playerid) {
+ShowGarageLocation(playerid) {
 
     new str[1512];
     strcat(str, "Index\tLocation\tDistance\n");
@@ -140,7 +140,7 @@ stock ShowGarageLocation(playerid) {
     }
     return ShowPlayerDialog(playerid, DIALOG_GPS_GARAGE, DIALOG_STYLE_TABLIST_HEADERS, "Garage Location", str, "Find", "Close");
 }
-stock ShowBizTypeLocation(playerid, type) {
+ShowBizTypeLocation(playerid, type) {
 
 	new str[1556], count = 0;
 	format(str, sizeof(str), "Index\tName\tDistance\n");
@@ -152,12 +152,12 @@ stock ShowBizTypeLocation(playerid, type) {
 	ShowPlayerDialog(playerid, DIALOG_GPS_BUSINESS_LISTED, DIALOG_STYLE_TABLIST_HEADERS, "Business Location", str, "Select", "Close");
     return 1;
 }
-stock ShowBusinessLocation(playerid)
+ShowBusinessLocation(playerid)
 {
     ShowPlayerDialog(playerid, DIALOG_GPS_BUSINESS, DIALOG_STYLE_LIST, "Find Business", "Market 24/7\nFast Food\nClothes\nElectronic\nEquipment", "Select", "Close");
 	return 1;
 }
-stock ShowDealerLocation(playerid)
+ShowDealerLocation(playerid)
 {
 	new str[1512];
 	format(str, sizeof(str), "Name\tDistance\n");
@@ -168,7 +168,7 @@ stock ShowDealerLocation(playerid)
 	ShowPlayerDialog(playerid, DIALOG_GPS_DEALER, DIALOG_STYLE_TABLIST_HEADERS, "Dealer Location", str, "Select", "Close");
 }
 
-stock ReturnSpecificLocation(playerid, &Float:x, &Float:y, &Float:z)
+ReturnSpecificLocation(playerid, &Float:x, &Float:y, &Float:z)
 {
 	new doorz = PlayerData[playerid][pInDoor], biz = PlayerData[playerid][pInBiz], house = House_Inside(playerid);
 	if(doorz != -1)
@@ -197,7 +197,7 @@ stock ReturnSpecificLocation(playerid, &Float:x, &Float:y, &Float:z)
 	return 1;	
 }
 
-stock GetSpecificLocation(playerid)
+GetSpecificLocation(playerid)
 {
 	new Float:x, Float:y, Float:z, str[32];
 	new doorz = PlayerData[playerid][pInDoor], biz = PlayerData[playerid][pInBiz], house = House_Inside(playerid);
@@ -227,7 +227,7 @@ stock GetSpecificLocation(playerid)
 	return str;
 }
 
-stock ShowVehicleLocation(playerid)
+ShowVehicleLocation(playerid)
 {
 	new str[512];
 	new Float:pos[3];
@@ -247,15 +247,7 @@ stock ShowVehicleLocation(playerid)
 
 	return 1;
 }
-
-stock ReturnPlayerLocation(playerid, bool:remove_space) {
-    new Float:x, Float:y, Float:z, str[64];
-    GetPlayerPos(playerid, x, y,z);
-    format(str, sizeof(str), "%s", (remove_space) ? (RemoveSpace(GetLocation(x, y, z))) : (GetLocation(x, y, z)));
-    return str;
-}
-
-stock GetLocation(Float:fX, Float:fY, Float:fZ)
+GetLocation(Float:fX, Float:fY, Float:fZ)
 {
     enum e_ZoneData
     {

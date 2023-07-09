@@ -42,7 +42,7 @@ function Speed_Load()
 	}
 	return 1;
 }
-stock Speed_Refresh(speedid)
+Speed_Refresh(speedid)
 {
 	if (speedid != -1 && SpeedData[speedid][speedExists])
 	{
@@ -69,7 +69,7 @@ stock Speed_Refresh(speedid)
 	return 1;
 }
 
-stock Speed_RefreshText(speedid)
+Speed_RefreshText(speedid)
 {
 	if (speedid != -1 && SpeedData[speedid][speedExists])
 	{
@@ -86,7 +86,7 @@ stock Speed_RefreshText(speedid)
 	return 1;
 }
 
-stock Speed_Save(speedid)
+Speed_Save(speedid)
 {
 	new
 	    query[352];
@@ -106,7 +106,7 @@ stock Speed_Save(speedid)
 	return mysql_tquery(sqlcon, query);
 }
 
-stock Speed_Nearest(playerid)
+Speed_Nearest(playerid)
 {
 	for (new i = 0; i < MAX_SPEEDCAM; i ++) if (SpeedData[i][speedExists] && IsPlayerInRangeOfPoint(playerid, SpeedData[i][speedRange], SpeedData[i][speedPos][0], SpeedData[i][speedPos][1], SpeedData[i][speedPos][2]))
 	    return i;
@@ -114,7 +114,7 @@ stock Speed_Nearest(playerid)
 	return -1;
 }
 
-stock Speed_Delete(speedid)
+Speed_Delete(speedid)
 {
     if (speedid != -1 && SpeedData[speedid][speedExists])
 	{
@@ -141,7 +141,7 @@ stock Speed_Delete(speedid)
 	return 1;
 }
 
-stock Speed_Create(playerid, Float:limit, Float:range)
+Speed_Create(playerid, Float:limit, Float:range)
 {
 	new
 	    Float:x,

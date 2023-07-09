@@ -42,7 +42,7 @@ new Float:arr_Drug[] = {
 	-2143.91, 2715.07
 };
 
-stock IsPlayerInArea(playerid, Float:max_x, Float:min_x, Float:max_y, Float:min_y)
+IsPlayerInArea(playerid, Float:max_x, Float:min_x, Float:max_y, Float:min_y)
 {
 	new Float:X, Float:Y, Float:Z;
 	GetPlayerPos(playerid, X, Y, Z);
@@ -50,13 +50,13 @@ stock IsPlayerInArea(playerid, Float:max_x, Float:min_x, Float:max_y, Float:min_
 	return false;
 }
 
-stock LoadGangZone()
+LoadGangZone()
 {
 	GangZoneData[gzSafezone] = GangZoneCreate(-3000, -3000, 3000, 3000);
 
 }
 
-stock LoadArea()
+LoadArea()
 {
 	AreaData[areaDrug] = CreateDynamicPolygon(arr_Drug);
 
@@ -67,12 +67,4 @@ stock LoadArea()
 
 	AreaData[areaMechanic] = CreateDynamicPolygon(arr_Mechanic);
 	AreaData[areaMechanicBoat] = CreateDynamicPolygon(arr_MechBoat);
-}
-
-stock IsSafeZone(STREAMER_TAG_AREA:areaid)
-{
-	if(areaid == AreaData[areaPershing] || areaid == AreaData[areaHospital] || areaid == AreaData[areaBank] || areaid == AreaData[areaNews])
-		return 1;
-
-	return 0;
 }

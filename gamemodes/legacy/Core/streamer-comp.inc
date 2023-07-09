@@ -4,18 +4,11 @@
 
 new Float:TP_AwaitingPos[MAX_PLAYERS][3];
 
-stock Float:TP_GetDistanceFromAwaiting(playerid)
-{
-	new Float:pX, Float:pY, Float:pZ;
-	GetPlayerPos(playerid, pX, pY, pZ);
-	return (floatsqroot(floatpower(pX - TP_AwaitingPos[playerid][0], 2.0) + floatpower(pY - TP_AwaitingPos[playerid][1], 2.0) + floatpower(pZ - TP_AwaitingPos[playerid][2], 2.0)));
-}
-
 hook OnPlayerConnect(playerid) {
     TP_AwaitingPos[playerid][0] = -1.0;
 }
 
-stock SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
+SetPlayerCompensatedPos(playerid, Float:X, Float:Y, Float:Z, wait_time = TP_WAIT_TIME, world = -1, interior = -1)
 {
 	if (!IsPlayerConnected(playerid)) return 0;
 	

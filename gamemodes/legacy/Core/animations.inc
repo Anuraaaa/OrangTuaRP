@@ -46,7 +46,7 @@ CMD:stopanim(playerid, params[])
 	return 1;
 }
 
-stock PlayAnimation(playerid, animlib[], animname[])
+PlayAnimation(playerid, animlib[], animname[])
 {
 	ShowMessage(playerid, "Press ~r~SPACE ~w~to stop animation", 1);
 	ApplyAnimation(playerid, animlib, animname, 4.0, 1, 0, 0, 0, 0);
@@ -144,13 +144,7 @@ CMD:wash(playerid, params[])
 	ShowMessage(playerid, "Press ~r~SPACE ~w~to stop animation", 3);
 	return 1;
 }
-
-stock OnePlayAnim(playerid,animlib[],animname[], Float:Speed, looping, lockx, locky, freeze, lp)
-{
-	ApplyAnimation(playerid, animlib, animname, Speed, looping, lockx, locky, freeze, lp, 1);
-}
-
-stock LoopingAnimEx(playerid,animlib[],animname[], Float:Speed, looping, lockx, locky, freeze, lp)
+LoopingAnimEx(playerid,animlib[],animname[], Float:Speed, looping, lockx, locky, freeze, lp)
 {
     ShowMessage(playerid, "Press ~r~SPACE ~w~to stop animation", 3);
 	ApplyAnimation(playerid, animlib, animname, Speed, looping, lockx, locky, freeze, lp, 1);

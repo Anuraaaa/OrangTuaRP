@@ -35,10 +35,10 @@ function OnWeaponsLoaded(playerid)
 	return 1;
 }
 
-stock IsWeaponWearable(weaponid)
+IsWeaponWearable(weaponid)
     return (weaponid >= 22 && weaponid <= 31);
  
-stock IsWeaponHideable(weaponid)
+IsWeaponHideable(weaponid)
     return (weaponid >= 22 && weaponid <= 24 || weaponid == 28 || weaponid == 32);
 
 GetWeaponObjectSlot(weaponid)
@@ -56,7 +56,7 @@ GetWeaponObjectSlot(weaponid)
 }
  
  
-stock GetWeaponModel(weaponid) //Will only return the model of wearable weapons (22-38)
+GetWeaponModel(weaponid) //Will only return the model of wearable weapons (22-38)
 {
     new model;
    

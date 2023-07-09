@@ -10,7 +10,7 @@ enum contactData
 new ContactData[MAX_PLAYERS][MAX_CONTACTS][contactData];
 new ListedContacts[MAX_PLAYERS][MAX_CONTACTS];
 
-stock HasPhoneSignal(playerid)
+HasPhoneSignal(playerid)
 {
 	if(IsPlayerInRangeOfPoint(playerid, 40.0, 322.8956,1795.4436,899.3750)) return true;
 	if(IsPlayerInRangeOfPoint(playerid, 50.0, -1271.2010, -2061.0656, 22.9706)) return true;
@@ -24,7 +24,7 @@ stock HasPhoneSignal(playerid)
 	return true;
 }
 
-stock CancelCall(playerid)
+CancelCall(playerid)
 {
     if (PlayerData[playerid][pCallLine] != INVALID_PLAYER_ID)
 	{
@@ -40,7 +40,7 @@ stock CancelCall(playerid)
 	return 1;
 }
 
-stock IsPlayerOnPhone(playerid)
+IsPlayerOnPhone(playerid)
 {
 	if (PlayerData[playerid][pCallLine] != INVALID_PLAYER_ID || ServiceIndex[playerid] != 0)
 	    return 1;
@@ -89,7 +89,7 @@ Contact_Add(playerid, number, name[]) {
 	}
 	return id;
 }
-stock ShowContacts(playerid)
+ShowContacts(playerid)
 {
 	new
 	    string[48 * MAX_CONTACTS],

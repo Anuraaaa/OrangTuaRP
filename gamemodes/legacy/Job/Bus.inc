@@ -121,7 +121,7 @@ stock const arr_busRoute[][array_busRoute] =
   
 };
 
-stock IsBus2Vehicle(vehicleid)
+IsBus2Vehicle(vehicleid)
 {
 	forex(i, sizeof(Bus2Vehicle))
 	{
@@ -131,7 +131,7 @@ stock IsBus2Vehicle(vehicleid)
 }
 
 
-stock IsBusVehicle(vehicleid)
+IsBusVehicle(vehicleid)
 {
 	forex(i, sizeof(BusVehicle))
 	{

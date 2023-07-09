@@ -1,6 +1,6 @@
 new ListedCrate[MAX_PLAYERS][MAX_CRATES];
 
-stock IsTruckerCar(vehicleid)
+IsTruckerCar(vehicleid)
 {
 	new modelid = GetVehicleModel(vehicleid);
 

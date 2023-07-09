@@ -1,18 +1,18 @@
-stock Streamer_SetPosition(type, STREAMER_ALL_TAGS:id, Float:x, Float:y, Float:z)
+Streamer_SetPosition(type, STREAMER_ALL_TAGS:id, Float:x, Float:y, Float:z)
 {
 	Streamer_SetFloatData(type, id, E_STREAMER_X, x);
 	Streamer_SetFloatData(type, id, E_STREAMER_Y, y);
 	Streamer_SetFloatData(type, id, E_STREAMER_Z, z);
 }
 
-stock Streamer_SetRotation(type, STREAMER_ALL_TAGS:id, Float:rx, Float:ry, Float:rz)
+Streamer_SetRotation(type, STREAMER_ALL_TAGS:id, Float:rx, Float:ry, Float:rz)
 {
 	Streamer_SetFloatData(type, id, E_STREAMER_R_X, rx);
 	Streamer_SetFloatData(type, id, E_STREAMER_R_Y, ry);
 	Streamer_SetFloatData(type, id, E_STREAMER_R_Z, rz);
 }
 
-stock StreamerConfig()
+StreamerConfig()
 {
 	Streamer_MaxItems(STREAMER_TYPE_OBJECT, 990000);
 	Streamer_MaxItems(STREAMER_TYPE_MAP_ICON, 2000);

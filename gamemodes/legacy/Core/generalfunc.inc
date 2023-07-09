@@ -10,7 +10,7 @@ GetHoodStatus(vehicleid)
 }
 
 
-stock IsVehicleUpsideDown(vehicleid)
+IsVehicleUpsideDown(vehicleid)
 {
 	new
 		Float:w,
@@ -76,19 +76,10 @@ Float:GetVehicleSpeed(vehicleid)
     
     return floatmul(speed, 195.12); 
 }
-stock IsABike(vehicleid)
+IsABike(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid)) {
 		case 448, 461..463, 468, 521..523, 581, 586, 481, 509, 510: return 1;
-	}
-	return 0;
-}
-
-stock IsSportCar(vehicleid)
-{
-	new Sport[] = { 502, 409, 587, 602, 589, 555, 503, 504, 494, 541, 411, 477, 562, 506, 451, 565, 429, 560, 603, 559, 402, 561, 558, 415, 480 };
-	for(new i = 0; i < sizeof(Sport); i++) {
-	    if(GetVehicleModel(vehicleid) == Sport[i]) return 1;
 	}
 	return 0;
 }
@@ -104,54 +95,8 @@ ConvertTimestamp(Timestamp:timestamp, bool:date = true)
 }
 
 
-stock ReturnTimelapse(start, till)
-{
-    new ret[32];
-	new second = till - start;
 
-	const
-		MINUTE = 60,
-		HOUR = 60 * MINUTE,
-		DAY = 24 * HOUR,
-		MONTH = 30 * DAY;
-
-	if (second == 1)
-		format(ret, sizeof(ret), "a second");
-	if (second < (1 * MINUTE))
-		format(ret, sizeof(ret), "%i seconds", second);
-	else if (second < (2 * MINUTE))
-		format(ret, sizeof(ret), "a minute");
-	else if (second < (45 * MINUTE))
-		format(ret, sizeof(ret), "%i minutes", (second / MINUTE));
-	else if (second < (90 * MINUTE))
-		format(ret, sizeof(ret), "an hour");
-	else if (second < (24 * HOUR))
-		format(ret, sizeof(ret), "%i hours", (second / HOUR));
-	else if (second < (48 * HOUR))
-		format(ret, sizeof(ret), "a day");
-	else if (second < (30 * DAY))
-		format(ret, sizeof(ret), "%i days", (second / DAY));
-	else if (second < (12 * MONTH))
-    {
-		new month = floatround(second / DAY / 30);
-      	if (month <= 1)
-			format(ret, sizeof(ret), "a month");
-      	else
-			format(ret, sizeof(ret), "%i months", month);
-	}
-    else
-    {
-      	new year = floatround(second / DAY / 365);
-      	if (year <= 1)
-			format(ret, sizeof(ret), "a year");
-      	else
-			format(ret, sizeof(ret), "%i years", year);
-	}
-	return ret;
-}
-		
-
-stock ReturnWeaponName(weaponid)
+ReturnWeaponName(weaponid)
 {
     new weapon[22];
     switch(weaponid)
@@ -166,7 +111,7 @@ stock ReturnWeaponName(weaponid)
     return weapon;
 }
 
-stock GetNearestVehicle(playerid, Float:radius)
+GetNearestVehicle(playerid, Float:radius)
 {
 	new
 	    Float:fX,
@@ -184,14 +129,14 @@ stock GetNearestVehicle(playerid, Float:radius)
 	return idx;
 }
 
-stock LockVehicle(vehicleid,status)
+LockVehicle(vehicleid,status)
 {
 	new engine,lights,alarm,doors,bonnet,boot,objective;
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
 	SetVehicleParamsEx(vehicleid,engine,lights,alarm,status,bonnet,boot,objective);
 }
 
-stock GetTrunkStatus(vehicleid)
+GetTrunkStatus(vehicleid)
 {
 	static
 	engine,
@@ -210,7 +155,7 @@ stock GetTrunkStatus(vehicleid)
 	return 1;
 }
 
-stock GetElapsedTime(time, &hours, &minutes, &seconds)
+GetElapsedTime(time, &hours, &minutes, &seconds)
 {
 	hours = 0;
 	minutes = 0;
@@ -229,7 +174,7 @@ stock GetElapsedTime(time, &hours, &minutes, &seconds)
 	return (seconds = time);
 }
 
-stock SetVehicleCheckpoint(vehicleid, Float:x, Float:y, Float:z, Float:size, bool:isTracing = false) {
+SetVehicleCheckpoint(vehicleid, Float:x, Float:y, Float:z, Float:size, bool:isTracing = false) {
 
 	foreach(new i : Player) if(IsPlayerInVehicle(i, vehicleid)) {
 		SetPlayerCheckpoint(i, x, y, z, size);
@@ -285,7 +230,7 @@ IsASportBike(vehicleid)
 	return 0;
 }
 
-stock ShowBox(playerid, header[] = "", text[] = "", time)
+ShowBox(playerid, header[] = "", text[] = "", time)
 {
 	new validtime = time*1000;
 
@@ -321,7 +266,7 @@ function HidePlayerBoxTD(playerid)
 	return 1;
 }
 
-stock ShowMessage(playerid, string[], time = 3, sound = 0)//Time in Sec.
+ShowMessage(playerid, string[], time = 3, sound = 0)//Time in Sec.
 {
 	new validtime = time*1000;
 
@@ -352,20 +297,10 @@ function HidePlayerMessage(playerid) {
 }
 
 
-stock RandomEx(min, max)
+RandomEx(min, max)
 {
 	new rand = random(max-min)+min;
 	return rand;
-}
-
-stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z)
-{
-	TogglePlayerControllable(playerid, false);
-	SetPlayerPos(playerid, x, y, z);
-	GameTextForPlayer(playerid, "Rendering objects...", 2000, 3);
-	SetTimerEx("UnFreeze", 2000, false, "d", playerid);
-
-	return 1;
 }
 
 function UnFreeze(playerid)
@@ -373,7 +308,7 @@ function UnFreeze(playerid)
     TogglePlayerControllable(playerid, true);
 }
 
-stock ShowText(playerid, text[], time)
+ShowText(playerid, text[], time)
 {
 	new total = time * 1000;
 	new str[256];
@@ -405,7 +340,7 @@ RemoveSpace(text[])
 	return str;
 }
 
-new stock g_arrVehicleNames[][] = {
+new g_arrVehicleNames[][] = {
     "Landstalker", "Bravura", "Buffalo", "Linerunner", "Perrenial", "Sentinel", "Dumper", "Firetruck", "Trashmaster",
     "Stretch", "Manana", "Infernus", "Voodoo", "Pony", "Mule", "Cheetah", "Ambulance", "Leviathan", "Moonbeam",
     "Esperanto", "Taxi", "Washington", "Bobcat", "Whoopee", "BF Injection", "Hunter", "Premier", "Enforcer",
@@ -430,7 +365,7 @@ new stock g_arrVehicleNames[][] = {
     "Boxville", "Tiller", "Utility Trailer"
 };
 
-stock GetVehicleDriver(vehicleid) {
+GetVehicleDriver(vehicleid) {
 	
 	new
 		driver_id = INVALID_PLAYER_ID;
@@ -445,7 +380,7 @@ stock GetVehicleDriver(vehicleid) {
 	return driver_id;
 }
 
-stock GetVehicleModelByName(const name[])
+GetVehicleModelByName(const name[])
 {
 	if(IsNumeric(name) && (strval(name) >= 400 && strval(name) <= 611))
 		return strval(name);
@@ -491,47 +426,7 @@ GetEngineStatus(vehicleid)
 	return 1;
 }
 
-stock HideCharacterSetup(playerid)
-{
-	CancelSelectTextDraw(playerid);
-	forex(i, 7)
-	{
-		PlayerTextDrawHide(playerid, SETUPTD[playerid][i]);
-	}
-	PlayerTextDrawHide(playerid, SETNAME[playerid]);
-	PlayerTextDrawHide(playerid, SETBIRTHDATE[playerid]);
-	PlayerTextDrawHide(playerid, SETORIGIN[playerid]);
-	PlayerTextDrawHide(playerid, SETGENDER[playerid]);
-	PlayerTextDrawHide(playerid, ORIGINTD[playerid]);
-	PlayerTextDrawHide(playerid, BIRTHDATETD[playerid]);
-	PlayerTextDrawHide(playerid, GENDERTD[playerid]);
-	PlayerTextDrawHide(playerid, NAMETD[playerid]);
-	PlayerTextDrawHide(playerid, FINISHSETUP[playerid]);	
-	return 1;
-}
-
-
-/*----- [ Textdraw Login ]
-stock ShowCharacterSetup(playerid)
-{
-	SelectTextDraw(playerid, COLOR_YELLOW);
-	forex(i, 7)
-	{
-		PlayerTextDrawShow(playerid, SETUPTD[playerid][i]);
-	}
-	PlayerTextDrawShow(playerid, SETNAME[playerid]);
-	PlayerTextDrawShow(playerid, SETBIRTHDATE[playerid]);
-	PlayerTextDrawShow(playerid, SETORIGIN[playerid]);
-	PlayerTextDrawShow(playerid, SETGENDER[playerid]);
-	PlayerTextDrawShow(playerid, ORIGINTD[playerid]);
-	PlayerTextDrawShow(playerid, BIRTHDATETD[playerid]);
-	PlayerTextDrawShow(playerid, GENDERTD[playerid]);
-	PlayerTextDrawShow(playerid, NAMETD[playerid]);
-	PlayerTextDrawShow(playerid, FINISHSETUP[playerid]);
-	return 1;
-}*/
-
-stock ShowCharacterSetup(playerid)
+ShowCharacterSetup(playerid)
 {
 	new string[352], gender[20];
 
@@ -549,7 +444,7 @@ stock ShowCharacterSetup(playerid)
 	return 1;
 }
 
-stock CreateGlobalTextDraw()
+CreateGlobalTextDraw()
 {
 	sen = TextDrawCreate(580.000000, 80.000000, ".");
 	TextDrawBackgroundColor(sen, 255);
@@ -570,7 +465,7 @@ stock CreateGlobalTextDraw()
 	TextDrawSetSelectable(koma2, 0);
 }
 
-stock FormatNumber(Float:amount, delimiter[2]=".", comma[2]=",")
+FormatNumber(Float:amount, delimiter[2]=".", comma[2]=",")
 {
 	#define MAX_MONEY_String 16
 	new txt[MAX_MONEY_String], str[24];
@@ -636,7 +531,7 @@ Database_Connect()
 	return 1;
 }
 
-stock IsRoleplayName(const name[])
+IsRoleplayName(const name[])
 {
     if(!name[0] || strfind(name, "_") == -1)
         return 0;
@@ -654,7 +549,7 @@ stock IsRoleplayName(const name[])
     return 1;
 }
 
-stock IsPlayerNearPlayer(playerid, targetid, Float:radius)
+IsPlayerNearPlayer(playerid, targetid, Float:radius)
 {
 	static
 		Float:fX,
@@ -666,21 +561,14 @@ stock IsPlayerNearPlayer(playerid, targetid, Float:radius)
 	return (GetPlayerInterior(playerid) == GetPlayerInterior(targetid) && GetPlayerVirtualWorld(playerid) == GetPlayerVirtualWorld(targetid)) && IsPlayerInRangeOfPoint(playerid, radius, fX, fY, fZ);
 }
 
-stock SendClientMessageEx(playerid, colour, const text[], va_args<>)
+SendClientMessageEx(playerid, colour, const text[], va_args<>)
 {
     new str[145];
     va_format(str, sizeof(str), text, va_start<3>);
     return SendClientMessage(playerid, colour, str);
 }
 
-stock IsDiesel(vehicleid)
-{
-	switch (GetVehicleModel(vehicleid)) {
-		case 499, 609, 598, 524, 532, 578, 486, 406, 573, 455, 588, 403, 423, 414, 443, 515, 525: return 1;
-	}
-	return 0;
-}
-stock IsEngineVehicle(vehicleid)
+IsEngineVehicle(vehicleid)
 {
 	new const g_aEngineStatus[] = {
 	    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -703,7 +591,7 @@ stock IsEngineVehicle(vehicleid)
     return (g_aEngineStatus[modelid - 400]);
 }
 
-stock IsSpeedoVehicle(vehicleid)
+IsSpeedoVehicle(vehicleid)
 {
 	if (GetVehicleModel(vehicleid) == 509 || GetVehicleModel(vehicleid) == 510 || GetVehicleModel(vehicleid) == 481 || !IsEngineVehicle(vehicleid)) {
 	    return 0;
@@ -711,7 +599,7 @@ stock IsSpeedoVehicle(vehicleid)
 	return 1;
 }
 
-stock ProxDetectorOnPosition(Float:x, Float:y, Float:z, interior, virtualworld, Float:max_range, color, string[], Float:max_ratio = 1.6)
+ProxDetectorOnPosition(Float:x, Float:y, Float:z, interior, virtualworld, Float:max_range, color, string[], Float:max_ratio = 1.6)
 {
     new
         Float:range,
@@ -743,7 +631,7 @@ stock ProxDetectorOnPosition(Float:x, Float:y, Float:z, interior, virtualworld, 
     return 1;
 }
 
-stock ProxDetector(playerid, Float:max_range, color, string[], Float:max_ratio = 1.6)
+ProxDetector(playerid, Float:max_range, color, string[], Float:max_ratio = 1.6)
 {
     new
         Float:pos_x,
@@ -796,7 +684,7 @@ stock ProxDetector(playerid, Float:max_range, color, string[], Float:max_ratio =
     return 1;
 }
 
-stock GetVehicleFromBehind(vehicleid)
+GetVehicleFromBehind(vehicleid)
 {
 	static
 	    Float:fCoords[7];
@@ -812,7 +700,7 @@ stock GetVehicleFromBehind(vehicleid)
 	return INVALID_VEHICLE_ID;
 }
 
-stock IsPlayerNearBoot(playerid, vehicleid)
+IsPlayerNearBoot(playerid, vehicleid)
 {
 	static
 		Float:fX,
@@ -824,7 +712,7 @@ stock IsPlayerNearBoot(playerid, vehicleid)
 	return (GetPlayerVirtualWorld(playerid) == GetVehicleVirtualWorld(vehicleid)) && IsPlayerInRangeOfPoint(playerid, 3.5, fX, fY, fZ);
 }
 
-stock GetVehicleBoot(vehicleid, &Float:x, &Float:y, &Float:z)
+GetVehicleBoot(vehicleid, &Float:x, &Float:y, &Float:z)
 {
 	if (!GetVehicleModel(vehicleid) || vehicleid == INVALID_VEHICLE_ID)
 	    return (x = 0.0, y = 0.0, z = 0.0), 0;
@@ -859,7 +747,7 @@ function PressJump(playerid)
     return 1;
 }
 
-stock strcash(value[])
+strcash(value[])
 {
 	new dollars, cents, totalcash[64];
 	if(strfind(value, ".", true) != -1)
@@ -883,7 +771,7 @@ function SyncPlayerTime(playerid)
 	return 1;
 }
 
-stock GetMonthName(Month)
+GetMonthName(Month)
 {
 	new MonthName[12];
 
@@ -906,7 +794,7 @@ stock GetMonthName(Month)
 	return MonthName;
 }
 
-stock GetDay(Day)
+GetDay(Day)
 {
 	new str[12];
 	switch(Day)
@@ -945,7 +833,7 @@ stock GetDay(Day)
 	}
 	return str;
 }
-stock GetWeekDay(day=0, month=0, year=0)
+GetWeekDay(day=0, month=0, year=0)
 {
 	if(!day)
 			getdate(year, month, day);
@@ -976,26 +864,7 @@ stock GetWeekDay(day=0, month=0, year=0)
 	return szWeekDay;
 }
 
-stock GetHealthName(Float:amount)
-{
-	new str[80];
-	if(amount <= 20.0)
-	{
-	    str = "{FF0000}Fatal";
-	}
-	else if(amount > 20.0 && amount <= 70.0)
-	{
-	    str = "{FFFF00}Normal";
-	}
-	else if(amount > 70.0 && amount <= 100.0)
-	{
-	    str = "{00FF00}Healthy";
-	}
-	return str;
-}
-
-
-stock FlipVehicle(vehicleid)
+FlipVehicle(vehicleid)
 {
 	new
 	    Float:fAngle;
@@ -1017,35 +886,6 @@ timer ToggleFreeze[5000](playerid)
 {
 	TogglePlayerControllable(playerid, 1);
 	return 1;
-}
-
-SendSplitMessage(playerid, color, msg[])
-{
-	new ml = 115, result[160], len = strlen(msg);
-	if(len > ml)
-	{
-		new repeat = (len / ml);
-		for(new i = 0; i <= repeat; i++)
-		{
-			result[0] = 0;
-			if(len - (i * ml) > ml)
-			{
-				strmid(result, msg, ml * i, ml * (i+1));
-				format(result, sizeof(result), "%s", result);
-			}
-			else
-			{
-				strmid(result, msg, ml * i, len);
-				format(result, sizeof(result), "%s", result);
-			}
-			SendClientMessage(playerid, color, result);
-		}
-	}
-	else
-	{
-		SendClientMessage(playerid, color, msg);
-	}
-	return true;
 }
 
 LoadRemoveBuilding(playerid)
@@ -1422,7 +1262,7 @@ LoadRemoveBuilding(playerid)
 	RemoveBuildingForPlayer(playerid, 11011, -2144.3516, -132.9609, 38.3359, 0.25);
 	RemoveBuildingForPlayer(playerid, 11009, -2128.5391, -142.8438, 39.1406, 0.25);
 }
-stock FormatText(text[])
+FormatText(text[])
 {
 	new len = strlen(text);
 	if(len > 1)
@@ -1459,12 +1299,12 @@ stock FormatText(text[])
 	return 1;
 }
 
-stock cache_get_field_content(row, const field_name[], destination[], max_len = sizeof(destination))
+cache_get_field_content(row, const field_name[], destination[], max_len = sizeof(destination))
 {
     cache_get_value_name(row, field_name, destination, max_len);
 }
 
-stock Float:cache_get_field_float(row, const field_name[])
+Float:cache_get_field_float(row, const field_name[])
 {
     new
         str[16];
@@ -1473,14 +1313,14 @@ stock Float:cache_get_field_float(row, const field_name[])
     return floatstr(str);
 }
 
-stock  cache_get_field_int(row, const field_name[])
+ cache_get_field_int(row, const field_name[])
 {
     new val;
     cache_get_value_name_int(row, field_name, val);
     return val;
 }
 
-stock PlayReloadAnimation(playerid, weaponid)
+PlayReloadAnimation(playerid, weaponid)
 {
 	switch (weaponid)
 	{
@@ -1507,7 +1347,7 @@ PlayerHasWeaponAttachment(playerid, weaponid)
     return 0;
 }
 
-stock IsWindowedVehicle(vehicleid)
+IsWindowedVehicle(vehicleid)
 {
 	new const g_aWindowStatus[] = {
 	    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -1531,7 +1371,7 @@ stock IsWindowedVehicle(vehicleid)
 }
 
 
-stock SendVehicleMessage(vehicleid, color, const str[], {Float,_}:...)
+SendVehicleMessage(vehicleid, color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -1574,7 +1414,7 @@ stock SendVehicleMessage(vehicleid, color, const str[], {Float,_}:...)
 }
 
 
-stock DragCheck(playerid)
+DragCheck(playerid)
 {
 	new targetid = IsDragging[playerid];
 	if(targetid != INVALID_PLAYER_ID && IsPlayerConnected(targetid))
@@ -1583,7 +1423,7 @@ stock DragCheck(playerid)
 	}
 	return 1;
 }
-stock RemoveDrag(playerid)
+RemoveDrag(playerid)
 {
 	foreach(new i : Player) if(IsDragging[i] == playerid)
 	{
@@ -1627,7 +1467,7 @@ function OnCharCheck(playerid, ucpname[]) {
 	}
 	return 1;
 }
-stock GetNameFromSQLID(sqlid)
+GetNameFromSQLID(sqlid)
 {
 	new query[128], Cache:execute, name[24];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `pID` = '%d' LIMIT 1", sqlid);
@@ -1650,7 +1490,7 @@ function HidePlayerBox(playerid, PlayerText:boxid)
 	return 1;
 }
 
-stock PlayerText:ShowPlayerBox(playerid, color)
+PlayerText:ShowPlayerBox(playerid, color)
 {
 	new
 	    PlayerText:textid;
@@ -1671,7 +1511,7 @@ function StopChatting(playerid)
     ApplyAnimation(playerid, "CARRY", "crry_prtial", 4.0, 0, 0, 0, 0, 0);
 }
 
-stock IsABoat(vehicleid)
+IsABoat(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid)) {
 		case 430, 446, 452, 453, 454, 472, 473, 484, 493, 595: return 1;
@@ -1679,7 +1519,7 @@ stock IsABoat(vehicleid)
 	return 0;
 }
 
-stock SetPlayerCurrentPos(playerid)
+SetPlayerCurrentPos(playerid)
 {
 	new Float:x, Float:y, Float:z, Float:a;
 	GetPlayerPos(playerid, x, y, z);
@@ -1690,7 +1530,7 @@ stock SetPlayerCurrentPos(playerid)
 	return 1;
 }
 
-stock GetLightStatus(vehicleid)
+GetLightStatus(vehicleid)
 {
 	static
 	engine,
@@ -1709,56 +1549,12 @@ stock GetLightStatus(vehicleid)
 	return 1;
 }
 
-stock GetIPVal(const ip[])
-{
-    new len = strlen(ip);
-    if (!(len > 0 && len < 17))
-        return 0;
-
-    new count;
-    new pos;
-    new dest[3];
-    new val[4];
-    for (new i; i < len; i++)
-    {
-        if (ip[i] == '.' || i == len)
-        {
-            strmid(dest, ip, pos, i);
-            pos = (i + 1);
-        
-            val[count] = strval(dest);
-            if (!(1 <= val[count] <= 255))
-                return 0;
-                
-            count++;
-            if (count > 3)
-                return 0;
-        }
-    }
-    
-    if (count != 3)
-        return 0;
-
-    return ((val[0] * 16777216) + (val[1] * 65536) + (val[2] * 256) + (val[3]));
-}
-
-stock IpMatch(const ip1[], const ip2[], rangetype = 26)
-{
-    new ip = GetIPVal(ip1);
-    new subnet = GetIPVal(ip2);
-
-    new mask = -1 << (32 - rangetype);
-    subnet &= mask;
-
-    return bool:((ip & mask) == subnet);
-}
-
-stock VariableConfig()
+VariableConfig()
 {
 	ToggleData[togOOC] = true;
 }
 
-stock IsDoorVehicle(vehicleid)
+IsDoorVehicle(vehicleid)
 {
 	switch (GetVehicleModel(vehicleid))
 	{
@@ -1774,7 +1570,7 @@ stock IsDoorVehicle(vehicleid)
 	return 0;
 }
 
-stock GetVehicleMaxSeats(vehicleid)
+GetVehicleMaxSeats(vehicleid)
 {
     new const g_arrMaxSeats[] = {
 		4, 2, 2, 2, 4, 4, 1, 2, 2, 4, 2, 2, 2, 4, 2, 2, 4, 2, 4, 2, 4, 4, 2, 2, 2, 1, 4, 4, 4, 2,
@@ -1796,7 +1592,7 @@ stock GetVehicleMaxSeats(vehicleid)
 }
 
 
-stock IsVehicleSeatUsed(vehicleid, seat)
+IsVehicleSeatUsed(vehicleid, seat)
 {
 	foreach (new i : Player) if (IsPlayerInVehicle(i, vehicleid) && GetPlayerVehicleSeat(i) == seat) {
 	    return 1;
@@ -1804,7 +1600,7 @@ stock IsVehicleSeatUsed(vehicleid, seat)
 	return 0;
 }
 
-stock GetAvailableSeat(vehicleid, start = 1)
+GetAvailableSeat(vehicleid, start = 1)
 {
 	new seats = GetVehicleMaxSeats(vehicleid);
 
@@ -1814,14 +1610,14 @@ stock GetAvailableSeat(vehicleid, start = 1)
 	return -1;
 }
 
-stock ReturnHealth(playerid)
+ReturnHealth(playerid)
 {
 	new Float:hp;
 	GetPlayerHealth(playerid, hp);
 	return floatround(hp);
 }
 
-stock SetPlayerFace(playerid, Float:X, Float:Y)
+SetPlayerFace(playerid, Float:X, Float:Y)
 {
 	new Float:pX, Float:pY, Float:pZ, Float:ang;
 	GetPlayerPos(playerid, pX, pY, pZ);
@@ -1837,7 +1633,7 @@ stock SetPlayerFace(playerid, Float:X, Float:Y)
 	return false;
 }
 
-stock SetPlayerToFacePlayer(playerid, targetid)
+SetPlayerToFacePlayer(playerid, targetid)
 {
 	if(!IsPlayerConnected(playerid) || !IsPlayerConnected(targetid)) return false;
 
@@ -1856,22 +1652,6 @@ stock SetPlayerToFacePlayer(playerid, targetid)
 	return false;
 }
 
-stock RV_GetBodyPartName(num)
-{
-	new str[56];
-	switch(num)
-	{
-		case 0: str = "Head";
-		case 1: str = "Torso";
-		case 2: str = "Right Arm";
-		case 3: str = "Left Arm";
-		case 4: str = "Groin";
-		case 5: str = "Right Leg";
-		case 6: str = "Left Left";
-	}
-	return str;
-}
-
 Float:DistanceCameraTargetToLocation(Float:CamX, Float:CamY, Float:CamZ, Float:ObjX, Float:ObjY, Float:ObjZ, Float:FrX, Float:FrY, Float:FrZ)
 {
         new Float:TGTDistance;
@@ -1887,7 +1667,7 @@ Float:DistanceCameraTargetToLocation(Float:CamX, Float:CamY, Float:CamZ, Float:O
         return floatsqroot((tmpX - ObjX) * (tmpX - ObjX) + (tmpY - ObjY) * (tmpY - ObjY) + (tmpZ - ObjZ) * (tmpZ - ObjZ));
 }
 
-stock IsAtBank(playerid) {
+IsAtBank(playerid) {
 	if(IsPlayerInRangeOfPoint(playerid, 5.0, -2217.9900,296.9721,35.9590) ||  IsPlayerInRangeOfPoint(playerid, 5.0, -2217.7244,278.7101,35.9590) || IsPlayerInRangeOfPoint(playerid, 5.0, -2217.8130,287.6309,35.9590))
 		return 1;
 
@@ -1895,7 +1675,7 @@ stock IsAtBank(playerid) {
 }
 
 
-stock TimestampToDate(Timestamp, &year, &month, &day, &hour, &minute, &second, HourGMT = 7, MinuteGMT = 0)
+TimestampToDate(Timestamp, &year, &month, &day, &hour, &minute, &second, HourGMT = 7, MinuteGMT = 0)
 {
 	new tmp = 2;
 	year = 1970;
@@ -1986,13 +1766,13 @@ ConvertHBEColor(value)
     return color;
 }
 
-stock IsLeapYear(year)
+IsLeapYear(year)
 {
 	if(year % 4 == 0) return true;
 	else return false;
 }
 
-stock PlayerPlayNearbySound(playerid, soundid)
+PlayerPlayNearbySound(playerid, soundid)
 {
 	new Float:plPos[3];
 	GetPlayerPos(playerid, plPos[0], plPos[1], plPos[2]);
@@ -2006,7 +1786,7 @@ stock PlayerPlayNearbySound(playerid, soundid)
 	return true;
 }
 
-stock SendClientMessageToAllEx(color, const text[], {Float, _}:...)
+SendClientMessageToAllEx(color, const text[], {Float, _}:...)
 {
 	static
 	    args,
@@ -2056,7 +1836,7 @@ DestroyVehicleEx(vehicleid) {
 	}
 	return DestroyVehicle(vehicleid);
 }
-stock ReturnDate(bool:panjang = true)
+ReturnDate(bool:panjang = true)
 {
 	static
 	    date[36];
@@ -2071,7 +1851,7 @@ stock ReturnDate(bool:panjang = true)
 	return date;
 }
 
-stock GetDuration(time)
+GetDuration(time)
 {
 	new
 	    str[32];
@@ -2106,7 +1886,7 @@ stock GetDuration(time)
 	return str;
 }
 
-stock Log_Write(const path[], const str[], {Float,_}:...)
+Log_Write(const path[], const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -2205,13 +1985,13 @@ Float:GetPointAngleToPoint(Float:x2, Float:y2, Float:X, Float:Y)
   return floatadd(angle, 90.0);
 }
 
-stock GetXYInFrontOfPoint(&Float:x, &Float:y, Float:angle, Float:distance)
+GetXYInFrontOfPoint(&Float:x, &Float:y, Float:angle, Float:distance)
 {
         x += (distance * floatsin(-angle, degrees));
         y += (distance * floatcos(-angle, degrees));
 }
 
-stock IsPlayerAimingAt(playerid, Float:x, Float:y, Float:z, Float:radius)
+IsPlayerAimingAt(playerid, Float:x, Float:y, Float:z, Float:radius)
 {
     new Float:camera_x,Float:camera_y,Float:camera_z,Float:vector_x,Float:vector_y,Float:vector_z;
     GetPlayerCameraPos(playerid, camera_x, camera_y, camera_z);
@@ -2238,81 +2018,14 @@ stock IsPlayerAimingAt(playerid, Float:x, Float:y, Float:z, Float:radius)
     return false;
 }
 
-stock UpdateTime(playerid)
+UpdateTime(playerid)
 {
 	new hour, minute, second;
 	gettime(hour, minute, second);
 	PlayerTextDrawSetString(playerid, TIMETD[playerid], sprintf("%02d:%02d:%02d", hour, minute, second));
 }
 
-stock GetFullDate()
-{
-	new date[56], year, month, day, hour, minute, second;
-
-	getdate(year, month, day);
-	gettime(hour, minute, second);
-	format(date, sizeof(date), "%02d/%02d/%i, %02d:%02d:%02d", day, month, year, hour, minute, second);
-	return date;
-}
-
-stock IsValidObjectModel(modelid)
-{
-	if (modelid < 0 || modelid > 20000)
-	    return 0;
-
-    switch (modelid)
-	{
-		case 18632..18645, 18646..18658, 18659..18667, 18668..19299, 19301..19515, 18631, 331, 333..339, 318..321, 325, 326, 341..344, 346..353, 355..370, 372:
-			return 1;
-	}
-
-    new const g_arrModelData[] =
-	{
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128,
-        -515899393, -134217729, -1, -1, 33554431, -1, -1, -1, -14337, -1, -33,
-      	127, 0, 0, 0, 0, 0, -8388608, -1, -1, -1, -16385, -1, -1, -1, -1, -1,
-       -1, -1, -33, -1, -771751937, -1, -9, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, 33554431, -25, -1, -1, -1, -1, -1, -1,
-       -1073676289, -2147483648, 34079999, 2113536, -4825600, -5, -1, -3145729,
-       -1, -16777217, -63, -1, -1, -1, -1, -201326593, -1, -1, -1, -1, -1,
-       -257, -1, 1073741823, -133122, -1, -1, -65, -1, -1, -1, -1, -1, -1,
-       -2146435073, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1073741823, -64, -1,
-       -1, -1, -1, -2635777, 134086663, 0, -64, -1, -1, -1, -1, -1, -1, -1,
-       -536870927, -131069, -1, -1, -1, -1, -1, -1, -1, -1, -16384, -1,
-       -33554433, -1, -1, -1, -1, -1, -1610612737, 524285, -128, -1,
-       2080309247, -1, -1, -1114113, -1, -1, -1, 66977343, -524288, -1, -1, -1,
-       -1, -2031617, -1, 114687, -256, -1, -4097, -1, -4097, -1, -1,
-       1010827263, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -32768, -1, -1, -1, -1, -1,
-       2147483647, -33554434, -1, -1, -49153, -1148191169, 2147483647,
-       -100781080, -262145, -57, 134217727, -8388608, -1, -1, -1, -1, -1, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1048577, -1, -449, -1017, -1, -1, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1835009, -2049, -1, -1, -1, -1, -1, -1,
-       -8193, -1, -536870913, -1, -1, -1, -1, -1, -87041, -1, -1, -1, -1, -1,
-       -1, -209860, -1023, -8388609, -2096897, -1, -1048577, -1, -1, -1, -1,
-       -1, -1, -897, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1610612737,
-       -3073, -28673, -1, -1, -1, -1537, -1, -1, -13, -1, -1, -1, -1, -1985,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1056964609, -1, -1, -1,
-       -1, -1, -1, -1, -2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -236716037, -1, -1, -1, -1, -1, -1, -1, -536870913, 3, 0, 0, 0, 0, 0, 0,
-       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-       0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -1, -1, -1, -1, -1, -2097153, -2109441, -1, 201326591, -4194304, -1, -1,
-       -241, -1, -1, -1, -1, -1, -1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-       0, -32768, -1, -1, -1, -2, -671096835, -1, -8388609, -66323585, -13,
-       -1793, -32257, -247809, -1, -1, -513, 16252911, 0, 0, 0, -131072,
-       33554383, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-       0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8356095, 0, 0, 0, 0, 0,
-       0, -256, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       -268435449, -1, -1, -2049, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-       92274627, -65536, -2097153, -268435457, 591191935, 1, 0, -16777216, -1,
-       -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 127
-	};
- 	return ((modelid >= 0) && ((modelid / 32) < sizeof(g_arrModelData)) && (g_arrModelData[modelid / 32] & (1 << (modelid % 32))));
-}
-
-stock IsPlayerNearTowTruck(playerid) {
+IsPlayerNearTowTruck(playerid) {
 
 	new vehicleid = INVALID_VEHICLE_ID,
 		Float:x, Float:y, Float:z;
@@ -2327,7 +2040,7 @@ stock IsPlayerNearTowTruck(playerid) {
 	return vehicleid;
 }
 
-stock GetVehicleNearExceptThisVehicle(playerid, what_vehicle) {
+GetVehicleNearExceptThisVehicle(playerid, what_vehicle) {
 	new vehicleid = INVALID_VEHICLE_ID,
 		Float:x, Float:y, Float:z;
 	foreach(new i : Vehicle) if(IsValidVehicle(i) && i != what_vehicle) {
@@ -2348,7 +2061,7 @@ RemovePlayerADO(playerid)
 	return 1;
 }
 
-stock RemoveVendingMachines(playerid)
+RemoveVendingMachines(playerid)
 {
 
 	/* Vendings */
@@ -2418,15 +2131,4 @@ function UnfreezeHospital(playerid)
 	InHospital[playerid] = false;
 	SetCameraBehindPlayer(playerid);
 	return 1;
-}
-
-GetDate()
-{
-	new date[5], datestring[24];
-
-	getdate(date[0], date[1], date[2]);
-	gettime(date[3], date[4]);
-
-	format(datestring, sizeof(datestring), "%i-%02d-%02d %02d:%02d", date[0], date[1], date[2], date[3], date[4]);
-	return datestring;
 }

@@ -26,7 +26,7 @@ enum emergency_data
 };
 new EmergencyData[MAX_EMERGENCY][emergency_data];
 
-stock ShowEmergencyDetails(playerid, id)
+ShowEmergencyDetails(playerid, id)
 {
 	new date[6];
 	TimestampToDate(EmergencyData[id][emgTime], date[2], date[1], date[0], date[3], date[4], date[5]);
@@ -43,7 +43,7 @@ stock ShowEmergencyDetails(playerid, id)
 	return 1;
 }
 
-stock ReturnSector(playerid)
+ReturnSector(playerid)
 {
 	if(GetFactionType(playerid) == FACTION_POLICE)
 	{
@@ -58,7 +58,7 @@ stock ReturnSector(playerid)
 		return 0;
 	}
 }
-stock ShowEmergency(playerid)
+ShowEmergency(playerid)
 {
 	new str[1012];
 	new bool:found = false;
@@ -81,7 +81,7 @@ stock ShowEmergency(playerid)
 }
 
 
-stock ProcessServiceCall(playerid, text[])
+ProcessServiceCall(playerid, text[])
 {
 	if(ServiceIndex[playerid] == 1)
 	{
@@ -166,7 +166,7 @@ stock ProcessServiceCall(playerid, text[])
 	return 1;
 }
 
-stock Emergency_Delete(id)
+Emergency_Delete(id)
 {
 	if(!EmergencyData[id][emgExists])
 		return 0;
@@ -179,7 +179,7 @@ stock Emergency_Delete(id)
 	EmergencyData[id][emgID] = 0;
 	return 1;
 }
-stock Emergency_Add(playerid)
+Emergency_Add(playerid)
 {
 	forex(i, MAX_EMERGENCY) if(!EmergencyData[i][emgExists])
 	{
@@ -221,7 +221,7 @@ function Emergency_Load()
 	}
 	return 1;
 }
-stock Emergency_Save(id)
+Emergency_Save(id)
 {
 	new query[1052];
 	mysql_format(sqlcon, query, sizeof(query), "UPDATE `911calls` SET ");
@@ -242,7 +242,7 @@ function OnEmergencyAdded(id)
 	Emergency_Save(id);
 }
 
-stock GetProblemType(sectorid,problemid)
+GetProblemType(sectorid,problemid)
 {
 	new reason[64];
 	if(sectorid == 1)

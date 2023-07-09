@@ -14,7 +14,7 @@ enum atm_data
 
 new AtmData[MAX_ATM][atm_data];
 
-stock ATM_Delete(atmid)
+ATM_Delete(atmid)
 {
 	if (atmid != -1 && AtmData[atmid][atmExists])
 	{
@@ -39,7 +39,7 @@ stock ATM_Delete(atmid)
 	return 1;
 }
 
-stock ATM_Create(playerid)
+ATM_Create(playerid)
 {
     new
 	    Float:x,
@@ -73,7 +73,7 @@ stock ATM_Create(playerid)
 	return -1;
 }
 
-stock ATM_Refresh(atmid)
+ATM_Refresh(atmid)
 {
 	if (atmid != -1 && AtmData[atmid][atmExists])
 	{
@@ -92,7 +92,7 @@ stock ATM_Refresh(atmid)
 	return 0;
 }
 
-stock ATM_Nearest(playerid)
+ATM_Nearest(playerid)
 {
     for (new i = 0; i != MAX_ATM; i ++) if (AtmData[i][atmExists] && IsPlayerInDynamicArea(playerid, AtmData[i][atmArea]))
 		return i;
@@ -134,7 +134,7 @@ function OnATMCreated(atmid)
 	return 1;
 }
 
-stock ATM_Save(atmid)
+ATM_Save(atmid)
 {
 	new
 	    query[512];

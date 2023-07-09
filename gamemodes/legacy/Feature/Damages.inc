@@ -1,4 +1,4 @@
-stock DisplayTemporaryDamages(targetid, playerid)
+DisplayTemporaryDamages(targetid, playerid)
 {
     if(!CountDamages(playerid)) 
     	return SendErrorMessage(targetid, "There is no temporary damages on %s", ReturnName(targetid));

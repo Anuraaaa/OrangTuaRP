@@ -28,7 +28,7 @@ enum E_CRATE_DATA
 new CrateData[MAX_CRATES][E_CRATE_DATA],
 	Iterator:Crate<MAX_CRATES>;
 
-stock Crate_Delete(id)
+Crate_Delete(id)
 {
 
 	new str[156];
@@ -47,7 +47,7 @@ Crate_GetFreeID() {
 
 	return Iter_Free(Crate);
 }
-stock Crate_Create(playerid, type)
+Crate_Create(playerid, type)
 {
 	new id = INVALID_ITERATOR_SLOT;
 
@@ -73,7 +73,7 @@ function OnCrateCreated(cid)
 	return 1;
 }
 
-stock Crate_Save(cid)
+Crate_Save(cid)
 {
 
 	if(!Iter_Contains(Crate, cid))

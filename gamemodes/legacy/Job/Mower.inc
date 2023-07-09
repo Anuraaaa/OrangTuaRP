@@ -32,7 +32,7 @@ stock const arr_MowerCP[][E_MOWER_CP] =
     {-2310.3923,147.8261,34.8847}
 };
 
-stock IsMowerVehicle(vehicleid)
+IsMowerVehicle(vehicleid)
 {
 	forex(i, sizeof(MowerVehicle))
 	{

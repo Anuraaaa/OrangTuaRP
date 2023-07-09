@@ -1,4 +1,4 @@
-stock CheckAccount(playerid)
+CheckAccount(playerid)
 {
 	inline const OnCheckBanned() {
 		if(cache_num_rows()) {
@@ -127,7 +127,7 @@ function KickLogin(playerid) {
 	Kick(playerid);
 	return 1;
 }
-stock SetupPlayerData(playerid)
+SetupPlayerData(playerid)
 {
 	Inventory_Clear(playerid);
 	PlayerData[playerid][pHealth] = 100.0;
@@ -495,50 +495,8 @@ function OnPasswordCreated(playerid) {
 
 	return 1;
 }
-stock HideCharacter(playerid)
-{
-	forex(i, 5)
-	{
-		PlayerTextDrawHide(playerid, UCPTD[playerid][i]);
-	}
-	forex(i, 3)
-	{
-		PlayerTextDrawHide(playerid, CHARTD[playerid][i]);
-	}
-	CancelSelectTextDraw(playerid);
-	return 1;
-}
-//----- [ Textdraw Login ]
-/*stock ShowCharacterList(playerid)
-{
-	SelectTextDraw(playerid, COLOR_YELLOW);
-	//new name[256], count, sgstr[128];
-	forex(i, 5)
-	{
-		PlayerTextDrawShow(playerid, UCPTD[playerid][i]);
-	}
-	forex(i, MAX_CHARS)
-	{
-		PlayerTextDrawShow(playerid, CHARTD[playerid][i]);
-		PlayerTextDrawSetString(playerid, CHARTD[playerid][i], sprintf("%s", (PlayerChar[playerid][i][0] == EOS) ? ("Empty_Slot") : (PlayerChar[playerid][i])));
-	}
-	return 1;
-}
 
-function LoadCharacter(playerid)
-{
-	for (new i = 0; i < MAX_CHARS; i ++)
-	{
-		PlayerChar[playerid][i][0] = EOS;
-	}
-	for (new i = 0; i < cache_num_rows(); i ++)
-	{
-		cache_get_value_name(i, "Name", PlayerChar[playerid][i]);
-	}
-  	ShowCharacterList(playerid);
-  	return 1;
-}*/
-stock ShowCharacterList(playerid)
+ShowCharacterList(playerid)
 {
 	new name[256], count, sgstr[128];	
 	
@@ -571,12 +529,12 @@ function LoadCharacter(playerid)
   	return 1;
 }
 
-stock ShowVerifyMenu(playerid) {
+ShowVerifyMenu(playerid) {
 	new str[256];
 	format(str, sizeof(str), "Akun-mu belum terverifikasi! masukkan kode PIN untuk me-verifikasi akunmu:\n\n(note) kode pin bisa dilihat dari Bot Orang Tua Roleplay.");
 	return ShowPlayerDialog(playerid, DIALOG_VERIFY, DIALOG_STYLE_INPUT, "Account Verification", str, "Confirm", "Close");
 }
-stock ShowRegisterMenu(playerid) {
+ShowRegisterMenu(playerid) {
 
 	new str[256];
 	format(str, sizeof(str), ""WHITE"Selamat datang di "LIGHTBLUE"%s\n\n"WHITE"Akun-mu belum terdaftar di server, masukkan password-mu dibawah untuk membuat akun.\n"GREY"Untuk keamanan akun, masukkan "TOMATO"password unik "GREY"yang belum pernah kamu gunakan:", SERVER_NAME);
@@ -584,7 +542,7 @@ stock ShowRegisterMenu(playerid) {
 	return 1;
 }
 
-stock ShowLoginMenu(playerid) {
+ShowLoginMenu(playerid) {
 
 	new str[256];
 	format(str, sizeof(str), ""WHITE"Selamat datang kembali di "LIGHTBLUE"%s\n\n"WHITE"Akun-mu telah terdaftar di server.\nMasukkan password akun-mu untuk login:", SERVER_NAME);
@@ -617,7 +575,7 @@ function OnPlayerPasswordChecked(playerid, bool:success)
 	return 1;
 }
 
-stock IsNameUsed(playerid, name[]) {
+IsNameUsed(playerid, name[]) {
 
 	new bool:ada = false;
 
@@ -658,7 +616,7 @@ function InsertPlayerName(playerid, name[])
 	return 1;
 }
 
-stock ReturnName(playerid)
+ReturnName(playerid)
 {
     static
         name[MAX_PLAYER_NAME + 1];
@@ -678,7 +636,7 @@ stock ReturnName(playerid)
     return name;
 }
 
-stock ReturnIP(playerid)
+ReturnIP(playerid)
 {
 	static
 	    ip[16];
@@ -687,7 +645,7 @@ stock ReturnIP(playerid)
 	return ip;
 }
 
-stock GetName(playerid, bool:underscore = true)
+GetName(playerid, bool:underscore = true)
 {
 	new name[MAX_PLAYER_NAME];
 	GetPlayerName(playerid,name,sizeof(name));
@@ -702,14 +660,14 @@ stock GetName(playerid, bool:underscore = true)
 	return name;
 }
 
-stock CheckPlayerJob(playerid, job = JOB_NONE) {
+CheckPlayerJob(playerid, job = JOB_NONE) {
 	if(PlayerData[playerid][pJob] != job && PlayerData[playerid][pJob2] != job)
 		return 0;
 
 	return 1;
 }
 
-stock IsHungerOrThirst(playerid) {
+IsHungerOrThirst(playerid) {
 
 	if(PlayerData[playerid][pHunger] < 20)
 		return 1;
@@ -719,7 +677,7 @@ stock IsHungerOrThirst(playerid) {
 	
 	return 0;
 }
-stock ResetPlayerStatistics(playerid)
+ResetPlayerStatistics(playerid)
 {
 
 	PlayerData[playerid][pLastNumber] = 0;
@@ -1025,14 +983,14 @@ stock ResetPlayerStatistics(playerid)
 	return 1;
 }
 
-stock HideWaypoint(playerid)
+HideWaypoint(playerid)
 {
 	PlayerTextDrawHide(playerid, GPSTD[playerid]);
 	PlayerData[playerid][pWP] = false;
 	DisablePlayerCheckpoint(playerid);
 }
 
-stock SetWaypoint(playerid, Float:x, Float:y, Float:z, Float:rad)
+SetWaypoint(playerid, Float:x, Float:y, Float:z, Float:rad)
 {
 	Destination[playerid][0] = x;
 	Destination[playerid][1] = y;
@@ -1044,7 +1002,7 @@ stock SetWaypoint(playerid, Float:x, Float:y, Float:z, Float:rad)
 
 }
 
-stock GetWeapon(playerid)
+GetWeapon(playerid)
 {
 	new weaponid = GetPlayerWeapon(playerid);
 
@@ -1054,7 +1012,7 @@ stock GetWeapon(playerid)
 	return 0;
 }
 
-stock ShowWeapon(playerid, targetid)
+ShowWeapon(playerid, targetid)
 {
 	new mstr[512], lstr[1024];
 	format(mstr, sizeof(mstr), "%s Weapon List", ReturnName(targetid));
@@ -1073,25 +1031,7 @@ stock ShowWeapon(playerid, targetid)
     ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, mstr, lstr,"Close","");
     return 1;
 }
-
-stock UpdateWeapons(playerid)
-{
-	forex(i, 13) if (PlayerData[playerid][pGuns][i])
-    {
-		if ((i == 2))
-		    continue;
-
-        GetPlayerWeaponData(playerid, i, PlayerData[playerid][pGuns][i], PlayerData[playerid][pAmmo][i]);
-
-        if (PlayerData[playerid][pGuns][i] != 0 && !PlayerData[playerid][pAmmo][i])
-		{
-            PlayerData[playerid][pGuns][i] = 0;
-		}
-	}
-	return 1;
-}
-
-stock PlayerHasWeapon(playerid, weaponid)
+PlayerHasWeapon(playerid, weaponid)
 {
 	new
 	    weapon,
@@ -1105,13 +1045,13 @@ stock PlayerHasWeapon(playerid, weaponid)
 	return 0;
 }
 
-stock IsWeaponHaveRound(weaponid) {
+IsWeaponHaveRound(weaponid) {
 	if(weaponid == 25 || weaponid == 33 || weaponid == 34)
 		return  0;
 
 	return 1;
 }
-stock GetWeaponRound(weaponid) {
+GetWeaponRound(weaponid) {
 
 	new round = 0;
 	switch(weaponid) {
@@ -1128,7 +1068,7 @@ stock GetWeaponRound(weaponid) {
 	}
 	return round;
 }
-stock SetWeapons(playerid)
+SetWeapons(playerid)
 {
 	ResetPlayerWeapons(playerid);
 
@@ -1148,7 +1088,7 @@ stock SetWeapons(playerid)
 	return 1;
 }
 
-stock ResetWeapons(playerid)
+ResetWeapons(playerid)
 {
 	ResetPlayerWeapons(playerid);
 
@@ -1162,7 +1102,7 @@ stock ResetWeapons(playerid)
 	return 1;
 }
 
-stock ResetWeapon(playerid, weaponid)
+ResetWeapon(playerid, weaponid)
 {
 	ResetPlayerWeapons(playerid);
 
@@ -1193,7 +1133,7 @@ stock ResetWeapon(playerid, weaponid)
 	return 1;
 }
 
-stock PassWeaponToPlayer(playerid, weaponid, ammo, dura, highvelo = 0)
+PassWeaponToPlayer(playerid, weaponid, ammo, dura, highvelo = 0)
 {
 	if (weaponid < 0 || weaponid > 46)
 	    return 0;
@@ -1215,7 +1155,7 @@ stock PassWeaponToPlayer(playerid, weaponid, ammo, dura, highvelo = 0)
 	return GivePlayerWeapon(playerid, weaponid, 999999);
 }
 
-stock GiveWeaponToPlayer(playerid, weaponid, ammo = 100, dura = 500, highvelo = 0)
+GiveWeaponToPlayer(playerid, weaponid, ammo = 100, dura = 500, highvelo = 0)
 {
 	if (weaponid < 0 || weaponid > 46)
 	    return 0;
@@ -1564,7 +1504,7 @@ function FirstAidUpdate(playerid)
 	return 1;
 }
 
-stock GiveMoney(playerid, amount, string:reason[] = "")
+GiveMoney(playerid, amount, string:reason[] = "")
 {
 	if(strlen(reason) > 0) {
 		printf("[CASH UPDATE] %s(%s) | Before: $%s | After: $%s | Reason: %s", GetName(playerid), GetUsername(playerid), FormatNumber(GetMoney(playerid)), FormatNumber(GetMoney(playerid) + amount), reason);
@@ -1586,12 +1526,12 @@ stock GiveMoney(playerid, amount, string:reason[] = "")
 	return 1;
 }
 	
-stock GetMoney(playerid)
+GetMoney(playerid)
 {
 	return PlayerData[playerid][pMoney];
 }
 
-stock SendNearbyMessage(playerid, Float:radius, color, const str[], {Float,_}:...)
+SendNearbyMessage(playerid, Float:radius, color, const str[], {Float,_}:...)
 {
 	static
 	    args,
@@ -1673,7 +1613,7 @@ function OnUCPBanned(playerid, name[], reason[])
 	}
 	return 1;
 }
-stock SendPlayerToPlayer(playerid, targetid)
+SendPlayerToPlayer(playerid, targetid)
 {
 	new
 	    Float:x,
@@ -1701,7 +1641,7 @@ stock SendPlayerToPlayer(playerid, targetid)
 	PlayerData[playerid][pInWorkshop] = PlayerData[targetid][pInWorkshop];
 	return 1;
 }
-stock GetAdminRank(playerid)
+GetAdminRank(playerid)
 {
  	new astring[28];
  	if(PlayerData[playerid][pAdmin] == 0) format(astring, sizeof(astring), "None");
@@ -1715,7 +1655,7 @@ stock GetAdminRank(playerid)
 	return astring;
 }
 
-stock SetPlayerSeatbelt(playerid)
+SetPlayerSeatbelt(playerid)
 {
 	if(!PlayerData[playerid][pSeatbelt])
 	{
@@ -1754,7 +1694,7 @@ EquipItem(playerid, equip) {
 	return 1;
 }
 
-stock DisplayHealth(playerid, userid)
+DisplayHealth(playerid, userid)
 {
     new string[1351];
     strcat(string, ""LIGHTBLUE"============== "LIGHTGREEN"DAMAGE STATUS   "LIGHTBLUE"==============\n");
@@ -1822,7 +1762,7 @@ function UnTazer(playerid)
 	return 1;
 }
 
-stock GetNumberOwner(number)
+GetNumberOwner(number)
 {
 	foreach (new i : Player) if (PlayerData[i][pPhoneNumber] == number && PlayerHasItem(i, "Cellphone"))
 	{

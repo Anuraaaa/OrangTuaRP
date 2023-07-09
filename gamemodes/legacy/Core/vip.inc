@@ -66,14 +66,14 @@ function OnPlayerVIPChecked(playerid) {
     }
     return 1;
 }
-stock SetPlayerVIP(playerid, level, expired) {
+SetPlayerVIP(playerid, level, expired) {
 
     PlayerVIP[playerid][vipLevel] = level;
     PlayerVIP[playerid][vipExpired] = expired;
     return 1;
 }
 
-stock RemovePlayerVIP(playerid) {
+RemovePlayerVIP(playerid) {
 
     PlayerVIP[playerid][vipLevel] = 0;
     PlayerVIP[playerid][vipExpired] = 0;

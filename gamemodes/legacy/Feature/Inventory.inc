@@ -79,7 +79,7 @@ hook OnPlayerExpireVIP(playerid) {
 
 	Inventory_Remove(playerid, "Boombox", -1);
 }
-stock Inventory_Clear(playerid)
+Inventory_Clear(playerid)
 {
 	static
 	    string[64];
@@ -97,7 +97,7 @@ stock Inventory_Clear(playerid)
 	return mysql_tquery(sqlcon, string);
 }
 
-stock Inventory_GetItemID(playerid, item[])
+Inventory_GetItemID(playerid, item[])
 {
 
 	if(playerid == INVALID_PLAYER_ID)
@@ -113,7 +113,7 @@ stock Inventory_GetItemID(playerid, item[])
 	return -1;
 }
 
-stock Inventory_GetFreeID(playerid)
+Inventory_GetFreeID(playerid)
 {
 	if (Inventory_Items(playerid) >= 20)
 		return -1;
@@ -126,7 +126,7 @@ stock Inventory_GetFreeID(playerid)
 	return -1;
 }
 
-stock Inventory_Items(playerid)
+Inventory_Items(playerid)
 {
     new count;
 
@@ -136,7 +136,7 @@ stock Inventory_Items(playerid)
 	return count;
 }
 
-stock Inventory_Count(playerid, item[])
+Inventory_Count(playerid, item[])
 {
 	new itemid = Inventory_GetItemID(playerid, item);
 
@@ -146,12 +146,12 @@ stock Inventory_Count(playerid, item[])
 	return 0;
 }
 
-stock PlayerHasItem(playerid, item[])
+PlayerHasItem(playerid, item[])
 {
 	return (Inventory_GetItemID(playerid, item) != -1);
 }
 
-stock Inventory_Set(playerid, item[], model, amount)
+Inventory_Set(playerid, item[], model, amount)
 {
 	new itemid = Inventory_GetItemID(playerid, item);
 
@@ -167,7 +167,7 @@ stock Inventory_Set(playerid, item[], model, amount)
 	return 1;
 }
 
-stock Inventory_SetQuantity(playerid, item[], quantity)
+Inventory_SetQuantity(playerid, item[], quantity)
 {
 	new
 	    itemid = Inventory_GetItemID(playerid, item),
@@ -183,7 +183,7 @@ stock Inventory_SetQuantity(playerid, item[], quantity)
 	return 1;
 }
 
-stock Inventory_Remove(playerid, item[], quantity = 1)
+Inventory_Remove(playerid, item[], quantity = 1)
 {
 	new
 		itemid = Inventory_GetItemID(playerid, item),
@@ -348,7 +348,7 @@ function ShowInventory(playerid, targetid)
 
 }
 
-stock OpenInventory(playerid)
+OpenInventory(playerid)
 {
     if (!IsPlayerConnected(playerid))
 	    return 0;

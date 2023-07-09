@@ -47,7 +47,7 @@ function OnObjectCreated(id)
 	return 1;
 }
 
-stock Object_Create(playerid, idx)
+Object_Create(playerid, idx)
 {
 	new
 	    Float:x,
@@ -86,7 +86,7 @@ stock Object_Create(playerid, idx)
 	return -1;
 }
 
-stock Object_Save(id)
+Object_Save(id)
 {
 	new
 	    query[768];
@@ -106,7 +106,7 @@ stock Object_Save(id)
 	return mysql_tquery(sqlcon, query);
 }
 
-stock Object_Duplicate(playerid, idx)
+Object_Duplicate(playerid, idx)
 {
 	for (new i = 0; i < MAX_MAPOBJECTS; i ++) if (!ObjectData[i][mobjExists])
 	{
@@ -136,7 +136,7 @@ stock Object_Duplicate(playerid, idx)
 	return -1;
 }
 
-stock Object_Refresh(id)
+Object_Refresh(id)
 {
     if(id != 1 && ObjectData[id][mobjExists])
     {
@@ -152,7 +152,7 @@ stock Object_Refresh(id)
     return 1;
 }
 
-stock Object_Delete(id)
+Object_Delete(id)
 {
 	if (id != -1 && ObjectData[id][mobjExists])
 	{

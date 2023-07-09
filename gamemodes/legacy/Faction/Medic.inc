@@ -25,7 +25,7 @@ function Float:GetXYInFrontOfPlayer(playerid, &Float:X, &Float:Y, Float:distance
 	return A;
 }
 
-stock IsPlayerOnStretcher(playerid) {
+IsPlayerOnStretcher(playerid) {
 	new index = INVALID_PLAYER_ID;
 	foreach(new i : Player) if(StretcherPlayerID[i] == playerid) {
 		index = i;
@@ -33,7 +33,7 @@ stock IsPlayerOnStretcher(playerid) {
 	}
 	return index;
 }
-stock SpawnStretcher(playerid)
+SpawnStretcher(playerid)
 {
 	new Float:angle;
 	GetPlayerFacingAngle(playerid, angle);

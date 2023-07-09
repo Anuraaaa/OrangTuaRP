@@ -14,14 +14,14 @@ new const Job_Type[][jobtype] =
 	{"Miner",			JOB_MINER},
 	{"Smuggler", 		JOB_SMUGGLER}
 };
-stock GetJobName(job)
+GetJobName(job)
 {
 	new str[50];
 	format(str, sizeof(str), "%s", Job_Type[job][jobName]);
 	return str;
 }
 
-stock SendJobMessage(job, color, const str[], {Float,_}:...)
+SendJobMessage(job, color, const str[], {Float,_}:...)
 {
 	static
 	    args,

@@ -17,7 +17,7 @@ enum droppedItems
 
 new DroppedItems[MAX_DROPPED_ITEMS][droppedItems];
 
-stock Item_Delete(itemid)
+Item_Delete(itemid)
 {
     new
 	    query[64];
@@ -46,7 +46,7 @@ stock Item_Delete(itemid)
 	return 1;
 }
 
-stock Item_Nearest(playerid)
+Item_Nearest(playerid)
 {
     for (new i = 0; i != MAX_DROPPED_ITEMS; i ++) if (DroppedItems[i][droppedModel] && IsPlayerInRangeOfPoint(playerid, 1.5, DroppedItems[i][droppedPos][0], DroppedItems[i][droppedPos][1], DroppedItems[i][droppedPos][2]))
 	{
@@ -56,7 +56,7 @@ stock Item_Nearest(playerid)
 	return -1;
 }
 
-stock PickupItem(playerid, itemid)
+PickupItem(playerid, itemid)
 {
 	if (itemid != -1 && DroppedItems[itemid][droppedModel])
 	{

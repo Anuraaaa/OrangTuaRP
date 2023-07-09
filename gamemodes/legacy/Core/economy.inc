@@ -5,7 +5,7 @@ new salarySweeper = 1500,
 	serverVault = 0;
 
 
-stock SaveEconomyData()
+SaveEconomyData()
 {
 	new coordsString[128];
 	format(coordsString, sizeof(coordsString), "%d, %d, %d, %d, %d", salarySweeper, salaryBus, salaryTrashmaster, salaryMower, serverVault);
@@ -15,7 +15,7 @@ stock SaveEconomyData()
 	return 1;	
 }
 
-stock LoadEconomyData()
+LoadEconomyData()
 {
 	new arrCoords[20][64];
 	new strFromFile2[256];
@@ -36,23 +36,23 @@ stock LoadEconomyData()
 	return 1;
 }
 
-stock ShowMowerEconomy(playerid) {
+ShowMowerEconomy(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_ECONOMY_MOWER, DIALOG_STYLE_INPUT, "Mower Economy", sprintf("Masukkan salary baru untuk sidejob mower:\n(current: $%s)", FormatNumber(salaryMower)), "Set", "Close");
 
 }
 
 
-stock ShowSweeperEconomy(playerid) {
+ShowSweeperEconomy(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_ECONOMY_SWEEPER, DIALOG_STYLE_INPUT, "Sweeper Economy", sprintf("Masukkan salary baru untuk sidejob sweeper:\n(current: $%s)", FormatNumber(salarySweeper)), "Set", "Close");
 
 }
 
-stock ShowBusEconomy(playerid) {
+ShowBusEconomy(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_ECONOMY_BUS, DIALOG_STYLE_INPUT, "Bus Economy", sprintf("Masukkan salary baru untuk sidejob bus:\n(current: $%s)", FormatNumber(salaryBus)), "Set", "Close");
 
 }
 
-stock ShowTrashmasterEconomy(playerid) {
+ShowTrashmasterEconomy(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_ECONOMY_TRASHMASTER, DIALOG_STYLE_INPUT, "Sweeper Economy", sprintf("Masukkan salary baru untuk sidejob trashmaster (per-trashbag):\n(current: $%s)", FormatNumber(salaryTrashmaster)), "Set", "Close");
 
 }

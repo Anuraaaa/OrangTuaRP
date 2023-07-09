@@ -196,7 +196,7 @@ function TimeRepairEngine(playerid, vehicleid)
 	return 1;
 }
 
-stock GetComponent(playerid)
+GetComponent(playerid)
 {
 	return Inventory_Count(playerid, "Component");
 }

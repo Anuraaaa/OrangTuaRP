@@ -1,6 +1,6 @@
 #include <YSI_Coding\y_hooks>
 
-stock IsSweeperVehicle(vehicleid)
+IsSweeperVehicle(vehicleid)
 {
 	forex(i, sizeof(SweeperVehicle))
 	{
