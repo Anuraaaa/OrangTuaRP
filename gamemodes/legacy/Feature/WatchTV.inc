@@ -244,11 +244,13 @@ CMD:camera(playerid, params[]) {
 
         TextDrawSetString(LIVETD[1], "_");
         TextDrawSetString(LIVETD[5], "_");
-
+        SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Siaran langsung telah "RED"berakhir");
+        SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+        
         foreach(new i : Player) if(IsPlayerWatchingCamera(i)) {
             StopPlayerWatchingCamera(i);
-            SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Siaran langsung telah "RED"berakhir");
-            SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
+            
+        
 
             HideLiveTD(i);
         }
