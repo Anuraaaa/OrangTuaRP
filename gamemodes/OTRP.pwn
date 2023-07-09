@@ -96,6 +96,7 @@ enum E_LOGLEVEL
 #include <actor_plus>
 #include <LiveCam>
 #include <progress2>
+#include <PreviewModelDialog2>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
@@ -2533,7 +2534,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				execute = mysql_query(sqlcon, query);
 
 				if(cache_num_rows()) {
-					mysql_tquery(sqlcon, sprintf("DELETE FROM `workshop_employee` WHERE `Name` = '%s' AND `WorkshopID` = '%d'", inputtext, WorkshopData[id][wsID]));
+					mysql_format(sqlcon, query, sizeof(query), sprintf("DELETE FROM `workshop_employee` WHERE `Name` = '%e' AND `WorkshopID` = '%d'", inputtext, WorkshopData[id][wsID]));
+					mysql_tquery(sqlcon, query);
 
 					SendServerMessage(playerid, "Pekerja %s berhasil dihapus dari daftar.", inputtext);
 				}
@@ -3214,10 +3216,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return 1;
 			}
 
-			new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `acc_preset` WHERE `PresetName` = '%s'", inputtext));
+			new query[1356];
+			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `PresetName` = '%e'", inputtext);
+			new Cache:result = mysql_query(sqlcon, query);
 
 			if(!cache_num_rows()) {
-				new query[352], id = PlayerData[playerid][pAksesoris];
+				new id = PlayerData[playerid][pAksesoris];
 
 				mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `acc_preset` (`OwnerID`,`PresetName`,`Model`,`Bone`,`X`,`Y`,`Z`,`RX`,`RY`,`RZ`,`SX`,`SY`,`SZ`) VALUES('%d','%e','%d','%d','%f','%f','%f','%f','%f','%f','%f','%f','%f')",
 					PlayerData[playerid][pID], inputtext,  AccData[playerid][id][accModel], AccData[playerid][id][accBone], AccData[playerid][id][accOffset][0], AccData[playerid][id][accOffset][1],AccData[playerid][id][accOffset][2], AccData[playerid][id][accRot][0], AccData[playerid][id][accRot][1], AccData[playerid][id][accRot][2], AccData[playerid][id][accScale][0], AccData[playerid][id][accScale][1], AccData[playerid][id][accScale][2]);
