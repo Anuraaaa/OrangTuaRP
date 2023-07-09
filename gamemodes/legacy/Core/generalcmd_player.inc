@@ -1867,8 +1867,9 @@ CMD:pay(playerid, params[])
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
         ApplyAnimation(id, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
 		Log_Write("Logs/pay_log.txt", "[%s] %s(%s) has paid to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
-
-        if(!IsPlayerInAnyVehicle(playerid))
+		ShowMessage(playerid, sprintf("~w~Kamu telah memberikan ~g~$%s ~w~ kepada %s", FormatNumber(strval(totalcash)), ReturnName(id)));
+        ShowMessage(id, sprintf("~w~Kamu telah menerima ~g~$%s ~w~ dari %s", FormatNumber(strval(totalcash)), ReturnName(playerid)));
+		if(!IsPlayerInAnyVehicle(playerid))
         	SetPlayerToFacePlayer(playerid, id);
 
         if(!IsPlayerInAnyVehicle(id))
