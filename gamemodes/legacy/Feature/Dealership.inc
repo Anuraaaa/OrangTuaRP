@@ -213,13 +213,13 @@ CMD:buyvehicle(playerid, params[])
 
 		if(!GetDealerTotalVehicle(id))
 			return SendErrorMessage(playerid, "Tidak ada kendaraan yang dapat ditampilkan.");
-
+		
 		new str[MAX_DEALER_VEHICLE * 32];
-		strcat(str, "Vehicle\tPrice\tStock\n");
 		for(new i = 0; i < MAX_DEALER_VEHICLE; i++) if(DealerVehicle[id][i][dealer_veh_exists]) {
-			strcat(str, sprintf(""WHITE"%d. %s\t"DARKGREEN"$%s\t"WHITE"%d\n", i + 1, ReturnVehicleModelName(DealerVehicle[id][i][dealer_veh_model]), FormatNumber(DealerVehicle[id][i][dealer_veh_price]), DealerVehicle[id][i][dealer_veh_stock]));
+			format(str, sizeof(str), "%s%i\t~g~$%s~n~~w~%s\n", str, DealerVehicle[id][i][dealer_veh_model], FormatNumber(DealerVehicle[id][i][dealer_veh_price]), ReturnVehicleModelName(DealerVehicle[id][i][dealer_veh_model]));
+			//strcat(str, sprintf(""WHITE"%d. %s\t"DARKGREEN"$%s\t"WHITE"%d\n", i + 1, ReturnVehicleModelName(DealerVehicle[id][i][dealer_veh_model]), FormatNumber(DealerVehicle[id][i][dealer_veh_price]), DealerVehicle[id][i][dealer_veh_stock]));
 		}
-		ShowPlayerDialog(playerid, DIALOG_DEALER_BUY, DIALOG_STYLE_TABLIST_HEADERS, "Beli Kendaraan", str, "Select", "Close");
+		ShowPlayerDialog(playerid, DIALOG_DEALER_BUY, DIALOG_STYLE_PREVIEW_MODEL, "Beli Kendaraan", str, "Select", "Close");
 		PlayerData[playerid][pSelecting] = id;
 		
 	}
