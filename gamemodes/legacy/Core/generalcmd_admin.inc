@@ -1665,9 +1665,16 @@ CMD:unban(playerid, params[])
 	if(sscanf(params, "s[24]", name))
 		return SendSyntaxMessage(playerid, "/unban [UCP name]");
 
-	new characterQuery[178];
-	mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `playerucp` WHERE `UCP` = '%s' LIMIT 1", name);
-	mysql_tquery(sqlcon, characterQuery, "OnUCPUnban", "ds", playerid, name);
+	inline const OnUnbanUsername() {
+		if(cache_num_rows()) {
+			SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been unbanned by %s", name, PlayerData[playerid][pUCP]);
+			mysql_tquery(sqlcon, sprintf("DELETE FROM `banneds` WHERE `Username` = '%s'", name));
+		}
+		else {
+			SendErrorMessage(playerid, "Username %s tidak ada pada banned-list.", name);
+		}
+	}
+	MySQL_TQueryInline(sqlcon, using inline OnUnbanUsername, "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);
 	return 1;	
 }
 
@@ -1681,7 +1688,7 @@ CMD:oban(playerid, params[])
 		return SendSyntaxMessage(playerid, "/obanucp [UCP name] [Reason]");
 
 	new characterQuery[178];
-	mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `playerucp` WHERE `UCP` = '%s' LIMIT 1", name);
+	mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `playerucp` WHERE `UCP` = '%e' LIMIT 1", name);
 	mysql_tquery(sqlcon, characterQuery, "OnUCPBanned", "dss", playerid, name, reason);
 	return 1;
 }
@@ -1702,20 +1709,21 @@ CMD:ban(playerid, params[])
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
 	SendAdminAction(playerid, "IP Akun yang anda banned adalah %s",  ReturnIP(targetid));
 
-	new temptime = gettime();
-	new date[6];
+	new string[552];
 
-	TimestampToDate(temptime, date[2], date[1], date[0], date[3], date[4], date[5]);
-
-	new query[325];
-	mysql_format(sqlcon, query,sizeof(query),"UPDATE `playerucp` SET `Banned` = 1, `BannedBy` = '%s', `BannedReason` = '%s', `BannedTime` = '%d' WHERE `UCP` = '%s'", PlayerData[playerid][pUCP], reason, temptime,PlayerData[targetid][pUCP]);
-	mysql_tquery(sqlcon, query);	
-
-	mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `banip` (`IP`, `Admin`, `Reason`) VALUES('%e', '%e', '%e')", ReturnIP(targetid), GetUsername(playerid), reason);
+	new query[379];
+	mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `banneds` (`Username`, `Admin`, `Reason`, `Date`, `IP`) VALUES ('%e', '%e', '%e', '%e', '%e')", GetUsername(targetid), GetUsername(playerid), reason, ReturnDate(true), ReturnIP(targetid));
 	mysql_tquery(sqlcon, query);
 
-	format(query, sizeof(query),"{FFFFFF}Your UCP has been Banned from this server\n{FF0000}Reason: {FFFFFF}%s\n{FF0000}Banned By: {FFFFFF}%s\n{FF0000}Banned Date: {FFFFFF}%i/%02d/%02d %02d:%02d\n{FFFFFF}For Unbanned please visit our discord at {FF0000}https://discord.gg/WQKYCW8pzQ", reason, PlayerData[playerid][pUCP], date[2], date[0], date[1], date[3], date[4]);
-	ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "{FFFFFF}Banned Alert - UCP Ban", query, "Close", "");	
+	strcat(string, sprintf(""WHITE"Akun anda "GREY"(%s) "WHITE"telah dibanned dari server.\n\n", GetUsername(targetid)));
+	strcat(string, sprintf(""GREY"Username: "WHITE"%s\n", GetUsername(targetid)));
+	strcat(string, sprintf(""GREY"IP Address: "WHITE"%s\n", ReturnIP(targetid)));
+	strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", GetUsername(playerid)));
+	strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", ReturnDate(false)));
+	strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
+	strcat(string, "unbanned appeals pada forum/discord Orang Tua Roleplay.");
+
+	ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
 
 	KickEx(targetid);
 	return 1;
