@@ -206,6 +206,9 @@ CMD:pickupcrate(playerid, params[]) {
     if(!IsForkliftVehicle(vehicleid))
         return SendErrorMessage(playerid, "Kamu harus mengemudi Forklift!");
 
+    if(VehicleData[vehicleid][vHaveCrate])
+        return SendErrorMessage(playerid, "Kendaraan ini sudah mengangkut Crate!");
+
     StartPlayerLoadingBar(playerid, 150, "Picking_up_crate...", 30, "OnLoadingForkliftCrate");
     TogglePlayerControllable(playerid, false);
     return 1;
