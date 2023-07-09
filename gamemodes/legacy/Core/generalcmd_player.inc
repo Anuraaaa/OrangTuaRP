@@ -1558,7 +1558,7 @@ CMD:help(playerid, params[])
 CMD:unimpound(playerid, params[])
 {
 	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1378.8019,1557.6079,3001.0859))
-		return SendErrorMessage(playerid, "You're not at SAPD lobby!");
+		return SendErrorMessage(playerid, "You're not at SFPD lobby!");
 
 	mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehType` = '%d' AND `vehExtraID` = '%d' AND `vehState` = '%d' ORDER BY `vehID` ASC;", VEHICLE_TYPE_PLAYER, PlayerData[playerid][pID], VEHICLE_STATE_IMPOUNDED), "Vehicle_OnUnimpound", "d", playerid);
 	return 1;	
@@ -1567,7 +1567,7 @@ CMD:unimpound(playerid, params[])
 CMD:buyplate(playerid, params[])
 {
 	if(!IsPlayerInRangeOfPoint(playerid, 3.0, 1380.9594,1557.6090,3001.0859))
-		return SendErrorMessage(playerid, "You're not at SAPD lobby!");
+		return SendErrorMessage(playerid, "You're not at SFPD lobby!");
 
 	new str[512], bool:found = false, count = 0;
 	format(str, sizeof(str), "Model\tPrice\n");

@@ -1827,20 +1827,20 @@ CMD:send(playerid, params[]) {
 		targetid, place[24];
 
 	if(sscanf(params, "us[24]", targetid, place))
-		return SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sapd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance");
+		return SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sfpd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance");
 
 	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
-	if(!strcmp(place, "sapd", true)) {
+	if(!strcmp(place, "sfpd", true)) {
 		SetPlayerPos(targetid, -1605.8027,711.7601,13.8672);
 		SetPlayerInterior(targetid, 0);
 		SetPlayerVirtualWorld(targetid, 0);
 
 		ResetInteriorData(targetid);
 
-		SendAdminAction(playerid, "You have send %s to SAPD.", ReturnName(targetid));
-		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"SAPD "WHITE"oleh "RED"%s", GetUsername(playerid));
+		SendAdminAction(playerid, "You have send %s to SFPD.", ReturnName(targetid));
+		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"SFPD "WHITE"oleh "RED"%s", GetUsername(playerid));
 	}
 	else if(!strcmp(place, "insurance", true)) {
 		SetPlayerPos(targetid,-1939.5687,562.9002,35.1899);
@@ -2004,7 +2004,7 @@ CMD:send(playerid, params[]) {
 		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"Hospital "WHITE"oleh "RED"%s", GetUsername(playerid));
 
 	}
-	else SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sapd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance");
+	else SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sfpd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance");
 	return 1;
 }
 CMD:sendtoveh(playerid, params[]) {

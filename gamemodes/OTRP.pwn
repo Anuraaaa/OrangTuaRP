@@ -1220,7 +1220,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		PlayerTextDrawSetString(playerid, AMMOTD[playerid], "_");
 
 		if(!PlayerData[playerid][pLicense][0])
-			SendClientMessage(playerid, X11_TOMATO, "(Warning) "YELLOW"Kamu tidak memiliki "CYAN"lisensi mengemudi! "YELLOW"kamu bisa saja terkena tilang oleh SA-PD.");
+			SendClientMessage(playerid, X11_TOMATO, "(Warning) "YELLOW"Kamu tidak memiliki "CYAN"lisensi mengemudi! "YELLOW"kamu bisa saja terkena tilang oleh SF-PD.");
 	    
 		if(IsEngineVehicle(vehicleid) && IsSpeedoVehicle(vehicleid) && !PlayerData[playerid][pTogHud])
 	    {

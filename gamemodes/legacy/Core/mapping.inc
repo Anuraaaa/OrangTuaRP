@@ -18893,7 +18893,7 @@ LoadServerMap()
 	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000}DETECTIVE BUREAU OFFICE", 140, "Impact", 60, 1, 0x00000000, 0x00000000, 1);
 	tmpobjid = CreateDynamicObject(19482, 1370.341064, 1560.375854, 3005.487792, 0.000000, 0.000000, -93.399986, 19, 19, -1, 800.00, 800.00); 
 	SetDynamicObjectMaterial(tmpobjid, 0, 10101, "2notherbuildsfe", "ferry_build14", 0x00000000);
-	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000} SAPD SPORT CENTER", 140, "Impact", 60, 1, 0x00000000, 0x00000000, 1);
+	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000} SFPD SPORT CENTER", 140, "Impact", 60, 1, 0x00000000, 0x00000000, 1);
 	tmpobjid = CreateDynamicObject(19482, 1370.661621, 1553.307617, 3005.096923, 0.000000, 0.000000, 0.000000, 19, 19, -1, 800.00, 800.00); 
 	SetDynamicObjectMaterial(tmpobjid, 0, 10101, "2notherbuildsfe", "ferry_build14", 0x00000000);
 	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000}POLICE COMMISSIONER OFFICE", 140, "Impact", 50, 1, 0x00000000, 0x00000000, 1);

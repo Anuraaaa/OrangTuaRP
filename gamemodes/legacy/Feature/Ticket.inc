@@ -77,7 +77,7 @@ CMD:payticket(playerid, params[])
         string[MAX_PLAYER_TICKETS * 64];
 
     if (!IsPlayerInRangeOfPoint(playerid, 3.0, 1380.9594,1557.6090,3001.0859))
-        return SendErrorMessage(playerid, "You must be at SAPD to pay your tickets.");
+        return SendErrorMessage(playerid, "You must be at SFPD to pay your tickets.");
 
     string[0] = 0;
 

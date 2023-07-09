@@ -543,7 +543,7 @@ CMD:backup(playerid, params[]) {
 	if (GetFactionType(playerid) != FACTION_POLICE && GetFactionType(playerid) != FACTION_MEDIC && GetFactionType(playerid) != FACTION_GOV)
 	    return SendErrorMessage(playerid, "You must be a civil service worker.");
 
-	ShowPlayerDialog(playerid, DIALOG_BACKUP, DIALOG_STYLE_LIST, "Backup", "SAPD\nSFFD", "Select", "Close");
+	ShowPlayerDialog(playerid, DIALOG_BACKUP, DIALOG_STYLE_LIST, "Backup", "SFPD\nSFFD", "Select", "Close");
 	return 1;
 }
 CMD:od(playerid, params[])

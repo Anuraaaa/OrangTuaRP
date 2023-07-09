@@ -1,7 +1,7 @@
 CMD:seal(playerid, params[]) {
 
     if(GetFactionType(playerid) != FACTION_POLICE)
-        return SendErrorMessage(playerid, "Command ini hanya dapat diakses oleh SAPD.");
+        return SendErrorMessage(playerid, "Command ini hanya dapat diakses oleh SFPD.");
 
     if(!PlayerData[playerid][pOnDuty])
         return SendErrorMessage(playerid, "Kamu harus bertugas terlebih dahulu untuk menggunakan command ini.");

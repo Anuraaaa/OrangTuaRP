@@ -177,10 +177,10 @@ LoadPoint()
 	CreateDynamic3DTextLabel("{0000FF}[Impound Point]\n{FFFFFF}/impound for impound vehicle.", -1, -1634.1038,653.5013,7.1875, 10.0);
 
 	CreateDynamicPickup(1239, 23, 1380.9594,1557.6090,3001.0859, -1, -1);
-	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/buyplate - for buy plate\n/payticket - for pay ticket", -1, 1380.9594,1557.6090,3001.0859, 5.0);
+	CreateDynamic3DTextLabel("{0000FF}[SFPD Desk]\n{FFFFFF}/buyplate - for buy plate\n/payticket - for pay ticket", -1, 1380.9594,1557.6090,3001.0859, 5.0);
 
 	CreateDynamicPickup(1239, 23, 1378.8019,1557.6079,3001.0859, -1, -1);
-	CreateDynamic3DTextLabel("{0000FF}[SAPD Desk]\n{FFFFFF}/unimpound - for release vehicle", -1, 1378.8019,1557.6079,3001.0859, 5.0);
+	CreateDynamic3DTextLabel("{0000FF}[SFPD Desk]\n{FFFFFF}/unimpound - for release vehicle", -1, 1378.8019,1557.6079,3001.0859, 5.0);
 
 	CreateDynamicPickup(1239, 23, -1939.4851,555.0747,35.1719, -1, -1);
 	CreateDynamic3DTextLabel("{FFFF00}[Insurance Center]\n{FFFF00}/insu buy {FFFFFF}- to purchase insurance\n{FFFF00}/insu claim {FFFFFF}- to claim vehicle", -1, -1939.4851,555.0747,35.1719, 20.0);

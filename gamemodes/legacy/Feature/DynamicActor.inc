@@ -351,7 +351,7 @@ public OnPlayerTargetActor(playerid, actorid, weaponid) {
 				return SendErrorMessage(playerid, "Tidak dapat melakukan perampokan (delay server %d detik)", rob_biz_delay);
 
 			if(Faction_CountDuty(FACTION_POLICE) < 4)
-				return SendErrorMessage(playerid, "Harus ada 4 SAPD OnDuty untuk melakukan perampokan.");
+				return SendErrorMessage(playerid, "Harus ada 4 SFPD OnDuty untuk melakukan perampokan.");
 
 			if(weaponid >= 22 && weaponid <= 38) {
 				
