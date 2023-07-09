@@ -588,3 +588,12 @@ stock SwitchVehicleEngine(vehicleid,bool:engine_status){
 	GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
 	SetVehicleParamsEx(vehicleid,_:engine_status,lights,alarm,doors,bonnet,boot,objective);
 }
+
+GetInsideVehicle(vehicleid) {
+
+	new total = 0;
+	foreach(new i : Player) if(IsPlayerInVehicle(i, vehicleid)) {
+		total++;
+	}
+	return total;
+}

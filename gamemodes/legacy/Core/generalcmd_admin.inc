@@ -412,6 +412,26 @@ CMD:destroyusername(playerid, params[])
 	return 1;
 }
 
+CMD:rac(playerid, params[]) {
+	if(PlayerData[playerid][pAdmin] < 4)
+		return SendErrorMessage(playerid, NO_PERMISSION);
+
+	SendClientMessageToAllEx(X11_TOMATO, "AdmCmd: All vehicles has been respawned by %s", GetUsername(playerid));
+	foreach(new i : Vehicle) if(!GetInsideVehicle(i)) {
+
+		GetVehiclePos(i, VehicleData[i][vPos][0], VehicleData[i][vPos][1], VehicleData[i][vPos][2]);
+		GetVehicleZAngle(i, VehicleData[i][vPos][3]);
+
+		SetVehicleToRespawn(i);
+
+		if(Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER) {
+
+			SetVehiclePos(i, VehicleData[i][vPos][0], VehicleData[i][vPos][1], VehicleData[i][vPos][2]);
+			SetVehicleZAngle(i, VehicleData[i][vPos][3]);
+		}
+	}
+	return 1;
+}
 
 CMD:respawnveh(playerid, params[])
 {
