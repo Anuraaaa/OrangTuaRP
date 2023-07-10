@@ -1144,7 +1144,7 @@ CMD:o(playerid, params[])
             new vip_level = GetPlayerVIPLevel(playerid);
             new chat_color[][] = {LIGHTBLUE, CYAN, YELLOW, GOLD};
 
-			SendClientMessageEx(i, -1, "(( %s%s"WHITE" (%d): %s ))", chat_color[vip_level], GetName(playerid, false), playerid, params);
+			SendClientMessageEx(i, -1, "(( %s%s %s"WHITE" (%d): %s ))", chat_color[vip_level], GetGlobalRank(playerid), GetName(playerid, false), playerid, params);
         }
     }
     return 1;

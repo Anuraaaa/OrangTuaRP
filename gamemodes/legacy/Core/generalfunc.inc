@@ -2132,3 +2132,17 @@ function UnfreezeHospital(playerid)
 	SetCameraBehindPlayer(playerid);
 	return 1;
 }
+
+
+GetGlobalRank(playerid) {
+	new e_level = PlayerData[playerid][pLevel],
+		e_str[24];
+
+	if(e_level > 30) {
+		e_str = "Supreme Leader";
+	}
+	else {
+		format(e_str, sizeof(e_str), "%s", global_ranks[e_level]);
+	}
+	return e_str;
+}

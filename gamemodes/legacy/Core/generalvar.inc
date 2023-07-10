@@ -855,3 +855,40 @@ new const g_aPreloadLibs[][] =
 };
 
 new rob_biz_delay = 0;
+
+new global_ranks[][] = {
+	{"None"},
+    // Level 1 - 10
+    {"Newbie"},
+    {"Rookie"},
+    {"Junior"},
+    {"Apprentice"},
+    {"Trainee"},
+    {"Novice"},
+    {"Intermediate"},
+    {"Skilled"},
+    {"Experienced"},
+    {"Seasoned"},
+    // Level 11 - 20
+    {"Adept"},
+    {"Advanced"},
+    {"Expert"},
+    {"Master"},
+    {"Prodigy"},
+    {"Veteran"},
+    {"Elite"},
+    {"Champion"},
+    {"Grandmaster"},
+    {"Legend"},
+    // Level 21 - 30
+    {"Hero"},
+    {"Demigod"},
+    {"Immortal"},
+    {"Ascendant"},
+    {"Almighty"},
+    {"Divine"},
+    {"Cosmic"},
+    {"Omniscient"},
+    {"Transcendent"},
+    {"Supreme"}
+};
