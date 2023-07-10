@@ -378,7 +378,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                     if(FactionData[factionid][factionType] == FACTION_POLICE || FactionData[factionid][factionType] == FACTION_MEDIC)
                         siren = 1;
 
-                    vehicleid = Vehicle_Create(modelid, FactionGarage[garage_id][fgSpawnPos][0], FactionGarage[garage_id][fgSpawnPos][1], FactionGarage[garage_id][fgSpawnPos][2], FactionGarage[garage_id][fgSpawnPos][3], color1, color2, siren, false, "FACTION");
+                    vehicleid = Vehicle_Create(modelid, FactionGarage[garage_id][fgSpawnPos][0], FactionGarage[garage_id][fgSpawnPos][1], FactionGarage[garage_id][fgSpawnPos][2], FactionGarage[garage_id][fgSpawnPos][3], color1, color2, siren, false, sprintf("%s", Faction_GetNameByID(factionid)));
                     
                     UpdateVehicleDamageStatus(vehicleid,  damage1, damage2, damage3, damage4);
                     SetVehicleHealth(vehicleid, health);
@@ -389,6 +389,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
                     VehicleData[vehicleid][vExtraID] = sql_id;
 
                     PutPlayerInVehicle(playerid, vehicleid, 0);
+                    SetVehicleNumberPlate(vehicleid, sprintf("%s", Faction_GetNameByID(factionid)));
 
                     mysql_tquery(sqlcon, sprintf("UPDATE `factiongaragevehs` SET `Spawned` = '1' WHERE `ID` = '%d'", sql_id));
                 }

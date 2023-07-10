@@ -413,6 +413,18 @@ function Faction_Load()
 	return 1;
 }
 
+Faction_GetNameByID(factionid)
+{
+    new
+		name[32] = "None";
+
+ 	if (factionid == -1)
+	    return name;
+
+	format(name, 32, FactionData[factionid][factionName]);
+	return name;
+}
+
 Faction_GetName(playerid)
 {
     new
