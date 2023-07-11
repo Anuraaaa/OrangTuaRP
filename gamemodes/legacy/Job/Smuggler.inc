@@ -332,8 +332,19 @@ CMD:trackpacket(playerid, params[]) {
 
                 SendClientMessage(playerid, X11_LIGHTBLUE, "(Smuggler) "WHITE"Smuggler packet is "TOMATO"moving");
 
-                SetPlayerCheckpoint(playerid, x, y, z, 5.0);
-                PlayerData[playerid][pTracking] = true;
+                
+                
+
+                if(IsPlayerInAnyVehicle(playerid)) {
+                    foreach(new i : Player) if(IsPlayerInVehicle(i, GetPlayerVehicleID(playerid))) {
+                        SetPlayerCheckpoint(i, x, y, z, 5.0);
+                        PlayerData[i][pTracking] = true;
+                    }
+                }
+                else {
+                    SetPlayerCheckpoint(playerid, x, y, z, 5.0);
+                    PlayerData[playerid][pTracking] = true;
+                }
             }
         }
     }
