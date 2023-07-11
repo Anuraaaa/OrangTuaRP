@@ -200,7 +200,7 @@ timer timer_TakeSmugglerPacketEx[5000](playerid) {
     return 1;
 }
 
-timer timer_TakeSmugglerPacket[5000](playerid) {
+function OnSmugglerTake(playerid) {
 
     TogglePlayerControllable(playerid, true);
     ClearAnimations(playerid, 1);
@@ -274,8 +274,8 @@ CMD:takepacket(playerid, params[]) {
                 SmugglerData[smugOnTaked] = true;
                 TogglePlayerControllable(playerid, false);
                 ApplyAnimation(playerid,"BOMBER","BOM_Plant_Loop", 4.1, 1, 0, 0, 1, 0, 1);
-                defer timer_TakeSmugglerPacket[5000](playerid);
-                StartPlayerLoadingBar(playerid, 5, "Taking_Packet", 1000);	
+                StartPlayerLoadingBar(playerid, 50, "Taking_Packet", 300, "OnSmugglerTake");	
+                
             }
             else {
                 if(!IsPlayerInRangeOfPoint(playerid, 3.0, SmugglerData[smugX],SmugglerData[smugY], SmugglerData[smugZ]))
