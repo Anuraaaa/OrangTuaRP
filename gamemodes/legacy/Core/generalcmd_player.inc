@@ -2538,3 +2538,40 @@ CMD:fixmask(playerid, params[]) {
 	Log_Write("Logs/maskid_log.txt", "[%s] %s(%s) new maskid: %d", ReturnDate(), GetName(playerid, false), GetUsername(playerid), PlayerData[playerid][pMaskID]);
 	return 1;
 }
+
+CMD:changenameme(playerid, params[]) {
+
+	inline const OnChangenameCheck() {
+		if(!cache_num_rows()) {
+			return SendErrorMessage(playerid, "Kamu belum membuat pending changename request.");
+		}
+
+		new 
+			status, birthdate[24], name[24], gender, origin[32];
+
+		cache_get_value_name_int(0, "cnStatus", status);
+
+		cache_get_value_name_int(0, "cnGender", gender);
+		cache_get_value_name(0, "cnName", name, sizeof(name));
+		cache_get_value_name(0, "cnBirtdate", birthdate, sizeof(birthdate));
+		cache_get_value_name(0, "cnOrigin", origin, sizeof(origin));
+
+		if(!status) {
+			return SendErrorMessage(playerid, "Changename requestmu belum disetujui.");
+		}
+
+
+
+		if(ChangeName(playerid, name)) {
+			mysql_tquery(sqlcon, sprintf("DELETE FROM `changenamesweb` WHERE `cnOwner` = '%d' AND `cnOwnerID` = '%d'", PlayerData[playerid][pID], UcpData[playerid][ucpID]));
+			format(PlayerData[playerid][pOrigin], 32, origin);
+			format(PlayerData[playerid][pBirthdate], 24, birthdate);
+			PlayerData[playerid][pGender] = gender;
+
+			SendServerMessage(playerid, "Namamu berhasil diubah menjadi "GREY"%s", name);
+		}
+
+	}
+	MySQL_TQueryInline(sqlcon, using inline OnChangenameCheck, "SELECT * FROM `changenamesweb` WHERE `cnOwner` = '%d' LIMIT 1;", PlayerData[playerid][pID]);
+	return 1;
+}

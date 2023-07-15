@@ -13,7 +13,7 @@ CheckAccount(playerid)
 			strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", admin));
 			strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", date));
 			strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
-			strcat(string, "unbanned appeals pada forum/discord Orang Tua Roleplay.");
+			strcat(string, "unbanned appeals pada forum Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)");
 			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
 
 			KickEx(playerid);
@@ -101,7 +101,9 @@ function CheckPlayerUCP(playerid)
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
 
 		if(active == 0) {
-			ShowVerifyMenu(playerid);
+			format(string,sizeof(string),"{FF0000}Username ini belum terdaftar!\n{FFFFFF}Silahkan daftar di: "YELLOW"orangtuarp.my.id");
+			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Unregistered Username",string,"Close","");
+			KickEx(playerid);
 		}
 		else 
 		{
@@ -112,7 +114,7 @@ function CheckPlayerUCP(playerid)
 	}
 	else
 	{
-		format(string,sizeof(string),"{FF0000}Username ini belum terverifikasi!\n{FFFFFF}Silahkan verifikasi di: https://discord.io/orangtuarp");
+		format(string,sizeof(string),"{FF0000}Username ini belum terdaftar!\n{FFFFFF}Silahkan daftar di: "YELLOW"orangtuarp.my.id");
 	    ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Unregistered Username",string,"Close","");
 		KickEx(playerid);
 	}
@@ -531,7 +533,7 @@ function LoadCharacter(playerid)
 
 ShowVerifyMenu(playerid) {
 	new str[256];
-	format(str, sizeof(str), "Akun-mu belum terverifikasi! masukkan kode PIN untuk me-verifikasi akunmu:\n\n(note) kode pin bisa dilihat dari Bot Orang Tua Roleplay.");
+	format(str, sizeof(str), "Akun-mu belum terverifikasi! masukkan kode PIN untuk me-verifikasi akunmu:\n\n(note) kode pin bisa dilihat dari G-Mail yang kamu daftarkan.");
 	return ShowPlayerDialog(playerid, DIALOG_VERIFY, DIALOG_STYLE_INPUT, "Account Verification", str, "Confirm", "Close");
 }
 ShowRegisterMenu(playerid) {

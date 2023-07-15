@@ -1741,7 +1741,7 @@ CMD:ban(playerid, params[])
 	strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", GetUsername(playerid)));
 	strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", ReturnDate(false)));
 	strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
-	strcat(string, "unbanned appeals pada forum/discord Orang Tua Roleplay.");
+	strcat(string, "unbanned appeals pada discord Orang Tua Roleplay ");
 
 	ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
 

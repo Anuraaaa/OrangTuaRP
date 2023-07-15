@@ -8389,6 +8389,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			if (response)
 			{
+				if(!IsInventoryCanDrop(string))
+					return SendErrorMessage(playerid, "Kamu tidak dapat menjatuhkan item ini!");
+
 			    if (isnull(inputtext))
 			        return format(str, sizeof(str), "Drop Item", "Item: %s - Quantity: %d\n\nPlease specify how much of this item you wish to drop:", string, InventoryData[playerid][itemid][invQuantity]),
 					ShowPlayerDialog(playerid, DIALOG_DROPITEM, DIALOG_STYLE_INPUT, "Drop Item", str, "Drop", "Cancel");
@@ -8581,9 +8584,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							DropPlayerItem(playerid, itemid);
 						}
 					}
-					else
+					else {
+
+						if(!IsInventoryCanDrop(string))
+							return SendErrorMessage(playerid, "Kamu tidak dapat menjatuhkan item ini!");
+
 						format(str, sizeof(str), "Item: %s - Quantity: %d\n\nPlease specify how much of this item you wish to drop:", string, InventoryData[playerid][itemid][invQuantity]),
 						ShowPlayerDialog(playerid, DIALOG_DROPITEM, DIALOG_STYLE_INPUT, "Drop Item", str, "Drop", "Cancel");
+
+					}
 				}
 			}
 		}
@@ -10856,50 +10865,56 @@ SaveServerStatistics() {
 }
 function OnAdminSetName(playerid, userid, newname[]) {
 
-	new query[256];
+	
 
 	if(cache_num_rows())
 		return SendErrorMessage(playerid, "Nama karakter \"%s\" sudah digunakan.", newname);
 
-	foreach(new i : House) if(House_IsOwner(userid, i)) {
+	ChangeName(userid, newname);
+
+	SendServerMessage(userid, "Your name has been changed to "YELLOW"%s", newname);
+	SendServerMessage(playerid, "You've been changed %s name to "YELLOW"%s", GetName(userid), newname);
+	return 1;
+}
+
+function ChangeName(playerid, newname[]) {
+	new query[256];
+	
+	foreach(new i : House) if(House_IsOwner(playerid, i)) {
 
 		format(HouseData[i][houseOwnerName], MAX_PLAYER_NAME, newname);
 		House_Save(i);
 		House_Refresh(i);
 	}
-	foreach(new i : Flat) if(Flat_IsOwner(userid, i)) {
+	foreach(new i : Flat) if(Flat_IsOwner(playerid, i)) {
 		format(FlatData[i][flatOwnerName], MAX_PLAYER_NAME, newname);
 		Flat_Save(i);
 		Flat_Sync(i);
 	}
-	foreach(new i : Workshop) if(Workshop_IsOwner(userid, i)) {
+	foreach(new i : Workshop) if(Workshop_IsOwner(playerid, i)) {
 		format(WorkshopData[i][wsOwnerName], MAX_PLAYER_NAME, newname);
 		Workshop_Save(i);
 		Workshop_Sync(i);
 	}
-	for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(userid, i)) {
+	for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(playerid, i)) {
 		format(BizData[i][bizOwnerName], MAX_PLAYER_NAME, newname);
 		Business_Save(i);
 		Business_Refresh(i);
 	}
 
-	mysql_format(sqlcon, query,sizeof(query),"UPDATE `characters` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
+	mysql_format(sqlcon, query,sizeof(query),"UPDATE `characters` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[playerid][pName]);
 	mysql_tquery(sqlcon, query);
-	mysql_format(sqlcon, query, sizeof(query), "UPDATE `workshop_employee` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
+	mysql_format(sqlcon, query, sizeof(query), "UPDATE `workshop_employee` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[playerid][pName]);
 	mysql_tquery(sqlcon, query);
-	mysql_format(sqlcon, query, sizeof(query), "UPDATE `housekeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
-	mysql_tquery(sqlcon, query);
-
-	mysql_format(sqlcon, query, sizeof(query), "UPDATE `flatkeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[userid][pName]);
+	mysql_format(sqlcon, query, sizeof(query), "UPDATE `housekeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[playerid][pName]);
 	mysql_tquery(sqlcon, query);
 
-	SendServerMessage(userid, "Your name has been changed to "YELLOW"%s", newname);
-	SendServerMessage(playerid, "You've been changed %s name to "YELLOW"%s", GetName(userid), newname);
-
-	Log_Write("Logs/changename.txt", "[%s] %s has changed %s name to %s.", ReturnDate(), GetUsername(playerid), GetName(userid, false), newname);
+	mysql_format(sqlcon, query, sizeof(query), "UPDATE `flatkeys` SET `Name` = '%e' WHERE `Name` = '%e'", newname, PlayerData[playerid][pName]);
+	mysql_tquery(sqlcon, query);
+	Log_Write("Logs/changename.txt", "[%s] %s has changed %s name to %s.", ReturnDate(), GetUsername(playerid), GetName(playerid, false), newname);
 	
-	SetPlayerName(userid, newname);
-	format(PlayerData[userid][pName], MAX_PLAYER_NAME, newname);
+	SetPlayerName(playerid, newname);
+	format(PlayerData[playerid][pName], MAX_PLAYER_NAME, newname);
 	return 1;
 }
 CountPlayerShootWound(playerid) {
