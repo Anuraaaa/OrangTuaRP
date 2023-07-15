@@ -101,8 +101,8 @@ function CheckPlayerUCP(playerid)
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
 
 		if(active == 0) {
-			format(string,sizeof(string),"{FF0000}Username ini belum terdaftar!\n{FFFFFF}Silahkan daftar di: "YELLOW"orangtuarp.my.id");
-			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Unregistered Username",string,"Close","");
+			format(string,sizeof(string),""WHITE"Username yang kamu gunakan belum terdaftar di server\nkamu bisa mendaftarkan akun-mu lewat website Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
 			KickEx(playerid);
 		}
 		else 
@@ -114,8 +114,8 @@ function CheckPlayerUCP(playerid)
 	}
 	else
 	{
-		format(string,sizeof(string),"{FF0000}Username ini belum terdaftar!\n{FFFFFF}Silahkan daftar di: "YELLOW"orangtuarp.my.id");
-	    ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Unregistered Username",string,"Close","");
+		format(string,sizeof(string),""WHITE"Username yang kamu gunakan belum terdaftar di server\nKamu bisa mendaftarkan akun-mu lewat website Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+	    ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
 		KickEx(playerid);
 	}
 	return 1;
