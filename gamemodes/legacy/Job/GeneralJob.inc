@@ -99,7 +99,6 @@ CMD:takejob(playerid, params[])
 
 			if(!GetPlayerVIPLevel(playerid))
 				return SendErrorMessage(playerid, "Job slot 2 hanya untuk status donater player.");
-
 			if(PlayerData[playerid][pJob2] != JOB_NONE)
 				return SendErrorMessage(playerid, "Silahkan keluar dari pekerjaanmu dahulu!");
 
@@ -109,6 +108,9 @@ CMD:takejob(playerid, params[])
 	}
 	else if(IsPlayerInRangeOfPoint(playerid, 3.0, -2215.5137,117.5038,35.3203)) {
 
+		if(PlayerData[playerid][pLevel] < 5)
+			return Error(playerid, "Kamu harus level 5 untuk bergabung Smuggler.");
+			
 		if(sscanf(params, "d", job))
 			return SendSyntaxMessage(playerid, "/takejob [slot (1/2)]");
 			

@@ -11,7 +11,8 @@ new WarningCode[MAX_PLAYERS][53],
     slapper_warn[MAX_PLAYERS],
     engine_hack_warn[MAX_PLAYERS],
     g_ArmourHack[MAX_PLAYERS],
-    speed_hack[MAX_PLAYERS];
+    speed_hack[MAX_PLAYERS],
+    airbreak_hack[MAX_PLAYERS];
 
 static GetCodeAC(code)
 {
@@ -137,6 +138,7 @@ hook OnPlayerConnect(playerid) {
     engine_hack_warn[playerid] = 0;
     g_ArmourHack[playerid] = 0;
     speed_hack[playerid] = 0;
+    airbreak_hack[playerid] = 0;
 }
 
 /* Funcs */
@@ -170,7 +172,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
                 }
             }
 		}
-		if (AC_GetPlayerSpeed(playerid) > 200.0 && PlayerData[playerid][pAdmin] < 1)
+		if (AC_GetPlayerSpeed(playerid) > 350.0 && PlayerData[playerid][pAdmin] < 1)
 		{
             SendAdminMessage(X11_TOMATO, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(%s)", GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack"));
 		    SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Speedhack).");
@@ -236,5 +238,30 @@ function OnPlayerCrasher(playerid) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
     SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Crasher)");
     KickEx(playerid);  
+    return 1;
+}
+
+function CheckWeaponHack(playerid, weaponid) {
+    if(weaponid != PlayerData[playerid][pWeapon])
+    {
+        PlayerData[playerid][pWeapon] = weaponid;
+
+        if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != weaponid && !PlayerData[playerid][pKicked])
+        {
+            SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
+            ResetWeapons(playerid);
+            KickEx(playerid);
+        }
+    }
+    return 1;
+}
+
+public OnPlayerAirbreak(playerid) {
+
+    if(++airbreak_hack[playerid] >= 5) {
+        SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Airbreak)", GetName(playerid));
+        SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Airbreak)");
+        KickEx(playerid);  
+    }
     return 1;
 }

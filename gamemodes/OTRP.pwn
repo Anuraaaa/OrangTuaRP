@@ -97,6 +97,7 @@ enum E_LOGLEVEL
 #include <LiveCam>
 #include <progress2>
 #include <PreviewModelDialog2>
+#include <OPA>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
@@ -1680,6 +1681,8 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
+	CheckWeaponHack(playerid, weaponid);
+
     if(GetWeapon(playerid) == weaponid && weaponid >= 22  && weaponid <= 38)
     {
 		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]) {
@@ -2171,17 +2174,10 @@ public OnPlayerUpdate(playerid)
 {
 	if(IsPlayerSpawned(playerid)) {
 		
-		if(GetPlayerWeapon(playerid) != PlayerData[playerid][pWeapon])
-		{
-			PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
-
-			if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != GetPlayerWeapon(playerid) && !PlayerData[playerid][pKicked])
-			{
-				SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
-				ResetWeapons(playerid);
-				KickEx(playerid);
-			}
+		if(GetPlayerWeapon(playerid)) {
+			CheckWeaponHack(playerid, GetPlayerWeapon(playerid));
 		}
+
 		if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
 		{
 			new keys,ud,lr;
