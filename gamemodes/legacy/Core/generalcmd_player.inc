@@ -2553,7 +2553,7 @@ CMD:changenameme(playerid, params[]) {
 
 		cache_get_value_name_int(0, "cnGender", gender);
 		cache_get_value_name(0, "cnName", name, sizeof(name));
-		cache_get_value_name(0, "cnBirtdate", birthdate, sizeof(birthdate));
+		cache_get_value_name(0, "cnBirthdate", birthdate, sizeof(birthdate));
 		cache_get_value_name(0, "cnOrigin", origin, sizeof(origin));
 
 		if(!status) {

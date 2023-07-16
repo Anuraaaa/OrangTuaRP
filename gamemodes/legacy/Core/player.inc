@@ -1328,6 +1328,31 @@ UpdateHBE(playerid)
 	return 1;
 }
 
+ShowPlayerSpeedometer(playerid, type) {
+	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+		if(type == 1) {
+			for(new i = 4; i < 11; i++) 
+				PlayerTextDrawShow(playerid, HUDTD[playerid][i]);
+
+			PlayerTextDrawShow(playerid, VHPTD[playerid]);
+			PlayerTextDrawShow(playerid, FUELTD[playerid]);
+			PlayerTextDrawShow(playerid, ENGINETD[playerid]);
+			PlayerTextDrawShow(playerid, KMHTD[playerid]);
+			PlayerTextDrawShow(playerid, VEHNAMETD[playerid]);
+			PlayerTextDrawShow(playerid, LOCATIONTD[playerid]);
+		}
+		else if(type == 2) {
+			PlayerTextDrawShow(playerid, SPEEDO_2[playerid]);
+		}
+		else if(type == 3) {
+			for(new i = 0; i < 6; i++) {
+				PlayerTextDrawShow(playerid, HBE3_SPEEDO[playerid][i]);
+			}
+			PROGRESS_FUEL[playerid] = CreatePlayerProgressBar(playerid, 534.000000, 396.000000, 100.000000, 4.000000, -2016478465, 100.000000, 0);
+		}
+	}
+	return 1;
+}
 ShowPlayerHUD(playerid) {
 
 	if(PlayerData[playerid][pTogHud])
@@ -1346,18 +1371,6 @@ ShowPlayerHUD(playerid) {
 		PlayerTextDrawShow(playerid, HUNGERTD[playerid]);
 		PlayerTextDrawShow(playerid, THIRSTTD[playerid]);
 
-		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-
-			for(new i = 4; i < 11; i++) 
-				PlayerTextDrawShow(playerid, HUDTD[playerid][i]);
-
-			PlayerTextDrawShow(playerid, VHPTD[playerid]);
-			PlayerTextDrawShow(playerid, FUELTD[playerid]);
-			PlayerTextDrawShow(playerid, ENGINETD[playerid]);
-			PlayerTextDrawShow(playerid, KMHTD[playerid]);
-			PlayerTextDrawShow(playerid, VEHNAMETD[playerid]);
-			PlayerTextDrawShow(playerid, LOCATIONTD[playerid]);
-		}
 	}
 	else if(PlayerData[playerid][pHudType] == 2) {
 		
@@ -1367,10 +1380,6 @@ ShowPlayerHUD(playerid) {
 
 		PlayerTextDrawShow(playerid, HUNGERBAR_2[playerid]);
 		PlayerTextDrawShow(playerid, THIRSTBAR_2[playerid]);
-
-		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-			PlayerTextDrawShow(playerid, SPEEDO_2[playerid]);
-		}
 	}
 	else {
 		PlayerTextDrawShow(playerid, HBE3_BOX[playerid]);
@@ -1379,13 +1388,6 @@ ShowPlayerHUD(playerid) {
 
 		PROGRESS_HUNGER[playerid] = CreatePlayerProgressBar(playerid, 552.000000, 416.000000, 71.000000, 6.500000, 852308735, 100.000000, 0);
 		PROGRESS_THIRST[playerid] = CreatePlayerProgressBar(playerid, 552.000000, 431.000000, 71.000000, 6.500000, 852308735, 100.000000, 0);
-
-		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-			for(new i = 0; i < 6; i++) {
-				PlayerTextDrawShow(playerid, HBE3_SPEEDO[playerid][i]);
-			}
-			PROGRESS_FUEL[playerid] = CreatePlayerProgressBar(playerid, 534.000000, 396.000000, 100.000000, 4.000000, -2016478465, 100.000000, 0);
-		}
 	}
 	return 1;
 }
@@ -1420,7 +1422,6 @@ HidePlayerHUD(playerid) {
 	PlayerTextDrawHide(playerid, HBE3_DRINKICO[playerid]);
 
 	DestroyPlayerProgressBar(playerid, PROGRESS_HUNGER[playerid]);
-
 	DestroyPlayerProgressBar(playerid, PROGRESS_THIRST[playerid]);
 
 	

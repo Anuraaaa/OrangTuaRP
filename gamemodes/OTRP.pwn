@@ -897,11 +897,12 @@ public OnPlayerCommandPerformed(playerid, cmdtext[], success)
 	}
 
     if (!success) 
-        return SendClientMessageEx(playerid, COLOR_GREY, "ERROR: Command \"%s\" is not found, check on \"/help\" please.", cmdtext);
+        return SendErrorMessage(playerid, "Command \"%s\" is not found, check on \"/help\" please.", cmdtext);
 
 	cmd_floodProtect[playerid] = gettime() + 2;
     return 1;
 }
+
 public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 {
 	if(PlayerData[playerid][pAdmin] > 0 && PlayerData[playerid][pAduty])
@@ -1224,7 +1225,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	    
 		if(IsEngineVehicle(vehicleid) && IsSpeedoVehicle(vehicleid) && !PlayerData[playerid][pTogHud])
 	    {
-			ShowPlayerHUD(playerid);
+			ShowPlayerSpeedometer(playerid, PlayerData[playerid][pHudType]);
 		}
 		if(!IsEngineVehicle(vehicleid))
 		{
@@ -2345,6 +2346,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			PlayerData[playerid][pHudType] = listitem + 1;
 
 			ShowPlayerHUD(playerid);
+
+			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+				ShowPlayerSpeedometer(playerid, PlayerData[playerid][pHudType]);
+			}
 		}
 	}
 	if(dialogid == DIALOG_CRIMERECORD) {
@@ -9142,6 +9147,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			mysql_tquery(sqlcon, query);
 			mysql_format(sqlcon, query, sizeof(query), "DELETE FROM `housekeys` WHERE `Name` = '%e'", PlayerChar[playerid][PlayerData[playerid][pChar]]);
 			mysql_tquery(sqlcon, query);
+			mysql_format(sqlcon, query, sizeof(query), "DELETE FROM `flatkeys` WHERE `Name` = '%e'", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+			mysql_tquery(sqlcon, query);
 
 			SendClientMessageEx(playerid, X11_RED, "CHARACTER: Karakter "YELLOW"%s "RED"berhasil dihapus secara permanen!", PlayerChar[playerid][PlayerData[playerid][pChar]]);
 
@@ -9879,11 +9886,7 @@ public OnPlayerSpawn(playerid)
 
 		
 		SetValidColor(playerid);
-
-		for (new i = 0; i < 100; i ++)
-		{
-			SendClientMessage(playerid, -1, "");
-		}
+		
 		SendServerMessage(playerid, "Selamat datang {00FF00}%s.", ReturnName(playerid));
 		SendClientMessageEx(playerid, -1, "{00FFFF}(MOTD) {FFFF00}%s", MotdData[motdPlayer]);
 		if(PlayerData[playerid][pAdmin] > 0)
