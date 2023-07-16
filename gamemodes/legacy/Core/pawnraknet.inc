@@ -4,6 +4,7 @@
 #define ANTICHEAT_VEHICLE_TOLERANCE_TIME (2000)
 #define MIN_DEPTH_VEHICLE_DROWNED        (0.5)
 
+static ARQ_callback[MAX_PLAYERS];
 new
     countNotification[MAX_PLAYERS],
     countNotificationLastCheck[MAX_PLAYERS]
@@ -100,8 +101,46 @@ timer Anticheat_IsVehicleDrown[1000](playerid, vehicleid)
 
     return 1;
 }
+public OnIncomingPacket(playerid, packetid, BitStream:bs) {
+    if(packetid == 0xCF)
+    {
+        new Float:OPTUD_w, Float:OPTUD_x, Float:OPTUD_y, Float:OPTUD_z;
+        
+        BS_SetReadOffset(bs, 0x98);
+        
+        BS_ReadValue(
+            bs,
+            PR_FLOAT, OPTUD_w,
+            PR_FLOAT, OPTUD_x,
+            PR_FLOAT, OPTUD_y,
+            PR_FLOAT, OPTUD_z
+        );
+            
+        BS_ResetReadPointer(bs);
+            
+        new const Float:OPTUD_angle = atan2(2 * ((OPTUD_y * OPTUD_z) + (OPTUD_w * OPTUD_x)), (OPTUD_w * OPTUD_w) - (OPTUD_x * OPTUD_x) - (OPTUD_y * OPTUD_y) + (OPTUD_z * OPTUD_z));
+        
+        if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_NONE) 
+        {
+            if((OPTUD_angle > 85.0 || OPTUD_angle < -85.0) && OPTUD_angle == OPTUD_angle)
+            {
+                if(gettime() > ARQ_callback[playerid])
+                {
+                    ARQ_callback[playerid] = gettime();
+                    CallLocalFunction("OnAntiCheatTurnUpsideDown", "df", playerid, OPTUD_angle);
+                }
+            }
+        }
+    }
+    return 1;
+}
 
-forward OnIncomingRPC(playerid, rpcid, BitStream:bs);
+function OnAntiCheatTurnUpsideDown(playerid, Float:angle) {
+    SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on "YELLOW"%s "TOMATO"(Upside Down)", GetName(playerid));
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal program (Upside Down).");
+    KickEx(playerid);
+    return 1;
+}
 public OnIncomingRPC(playerid, rpcid, BitStream:bs)
 {
     if (rpcid != 136)

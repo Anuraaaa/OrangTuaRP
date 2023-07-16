@@ -301,7 +301,7 @@ CMD:createdealer(playerid, params[])
 	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
 
 	if(sscanf(params, "s[32]", price))
-		return SendSyntaxMessage(playerid, "/createdealer [price]");
+		return SendSyntaxMessage(playerid, "/createdealer");
 
 	new id = CreateDealership(playerid, strcash(price));
 	if(id == -1)

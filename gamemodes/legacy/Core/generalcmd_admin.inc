@@ -2160,6 +2160,24 @@ CMD:sethp(playerid, params[])
 	return 1;
 }
 
+CMD:serverpassword(playerid, params[]) {
+    if (PlayerData[playerid][pAdmin] < 6)
+	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
+
+	if(isnull(params))
+		return SendSyntaxMessage(playerid, "/serverpassword [password] (\"remove\" to remove password)");
+
+	if(!strcmp(params, "remove", true)) {
+		SendRconCommand("password 0");
+		SendAdminMessage(X11_TOMATO, "RconCmd: password server has been removed by %s.", GetUsername(playerid));
+	}
+	else {
+		SendRconCommand(sprintf("password %s", params));
+		SendAdminMessage(X11_TOMATO, "RconCmd: password server has been updated by %s.", GetUsername(playerid));
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "Server Password: %s", params);
+	}
+	return 1;
+}
 CMD:kick(playerid, params[])
 {
 	static

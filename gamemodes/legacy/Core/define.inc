@@ -26,7 +26,7 @@
 #define DATABASE_NAME 				"independ_otrp"
 #define DATABASE_PASSWORD 			"BG6tW@VPc7xYy2Z"
 
-#define SERVER_NAME 			"Orang Tua Roleplay"
+#define SERVER_NAME 			"Orang Tua Roleplay | orangtuarp.my.id"
 #define SERVER_VERSION 			"v12.13.9"
 
 #if !defined BCRYPT_HASH_LENGTH

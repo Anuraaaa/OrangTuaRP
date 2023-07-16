@@ -118,4 +118,4 @@
 
 /* Raknet */
 
-// #include ".\legacy\Core\pawnraknet"
+#include ".\legacy\Core\pawnraknet"

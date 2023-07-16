@@ -13,7 +13,7 @@ CheckAccount(playerid)
 			strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", admin));
 			strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", date));
 			strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
-			strcat(string, "unbanned appeals pada forum Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)");
+			strcat(string, "unbanned appeals pada discord Orang Tua Roleplay");
 			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
 
 			KickEx(playerid);

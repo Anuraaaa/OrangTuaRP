@@ -2,11 +2,16 @@
 
 #define 	MAX_CHEAT_WARNING		2
 
+#define     BulletCrasher -5.5
+#define     InvalidSeat1 -1000000.0
+#define     InvalidSeat2 1000000.0
+
 new WarningCode[MAX_PLAYERS][53],
     tele_warn[MAX_PLAYERS],
     slapper_warn[MAX_PLAYERS],
     engine_hack_warn[MAX_PLAYERS],
-    g_ArmourHack[MAX_PLAYERS];
+    g_ArmourHack[MAX_PLAYERS],
+    speed_hack[MAX_PLAYERS];
 
 static GetCodeAC(code)
 {
@@ -33,6 +38,20 @@ static GetCodeAC(code)
         default: format(str, sizeof(str), "Code %d", code);
     }
     return str;
+}
+
+AC_PlayerHasWeapon(playerid, weaponid)
+{
+	new
+	    weapon,
+	    ammo;
+
+	for(new i = 0; i < 13; i++) {
+	    GetPlayerWeaponData(playerid, i, weapon, ammo);
+
+	    if (weapon == weaponid) return 1;
+	}
+	return 0;
 }
 
 static ResetPlayerWarningCode(playerid) {
@@ -66,6 +85,10 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(code == 6)
                 return 0;
                 
+            if(code == 27 && !IsPlayerUsingAndroid(playerid)) {
+                SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (%s).", GetCodeAC(code));
+                AntiCheatKickWithDesync(playerid, code);                  
+            }
             if(code == 15) {
 
                 if(GetPlayerWeapon(playerid) > 0)
@@ -113,6 +136,7 @@ hook OnPlayerConnect(playerid) {
     slapper_warn[playerid] = 0;
     engine_hack_warn[playerid] = 0;
     g_ArmourHack[playerid] = 0;
+    speed_hack[playerid] = 0;
 }
 
 /* Funcs */
@@ -158,6 +182,59 @@ ptask OnCheckAntiCheat[1000](playerid) {
                 KickEx(playerid);
             }
         }
+
+        new vehicleid = GetPlayerVehicleID(playerid);
+
+        if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !IsAPlane(vehicleid) && GetVehicleSpeed(vehicleid) > 300) {
+            if(++speed_hack[playerid] > 5) {
+                SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
+                SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Speedhack)");
+                KickEx(playerid);     
+            }
+        }
+        new Float:X,Float:Y,Float:Z;
+        GetPlayerPos(playerid,X,Y,Z);
+        if(Z == BulletCrasher || !(InvalidSeat1 <= Z <= InvalidSeat2)) {
+            new tipcrasher[56];
+            tipcrasher= "Bad Vehicle Crasher";
+            if(Z == BulletCrasher)
+                tipcrasher= "Bullet Crasher";
+
+            SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(%s)", GetName(playerid), tipcrasher);
+            SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (%s)", tipcrasher);
+            KickEx(playerid);
+        }
+        if(AC_PlayerHasWeapon(playerid, WEAPON_BOMB) && !PlayerData[playerid][pAdmin]) {
+            CallLocalFunction("OnPlayerCrasher", "d", playerid);
+        }
+		new Float:x,Float:y,Float:z;
+		GetPlayerCameraFrontVector(playerid,x,y,z);
+		if(floatcmp(1.0,floatabs(x))==-1 || floatcmp(1.0,floatabs(y))==-1 || floatcmp(1.0,floatabs(z))==-1)
+		{
+            if(AOFCT[playerid] < GetTickCount())
+                AOFCW[playerid] = 0;
+            else 
+                AOFCW[playerid]++;
+                
+            if(AOFCW[playerid] < 2) 
+                AOFCT[playerid]= GetTickCount()+1000; 
+            else {
+                CallLocalFunction("OnPlayerCrasher", "d", playerid);
+            }
+		}
     }
+    else {
+        if(AC_GetPlayerSpeed(playerid) > 1.0) {
+            SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Fake Spawn)");
+            KickEx(playerid);
+        }
+    }
+    return 1;
+}
+
+function OnPlayerCrasher(playerid) {
+    SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Crasher)");
+    KickEx(playerid);  
     return 1;
 }

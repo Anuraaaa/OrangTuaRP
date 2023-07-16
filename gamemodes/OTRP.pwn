@@ -2171,22 +2171,6 @@ public OnPlayerUpdate(playerid)
 {
 	if(IsPlayerSpawned(playerid)) {
 		
-		new Float:x,Float:y,Float:z;
-		GetPlayerCameraFrontVector(playerid,x,y,z);
-		if(floatcmp(1.0,floatabs(x))==-1 || floatcmp(1.0,floatabs(y))==-1 || floatcmp(1.0,floatabs(z))==-1)
-		{
-				if(AOFCT[playerid] < GetTickCount())
-					AOFCW[playerid] = 0;
-				else 
-					AOFCW[playerid]++;
-					
-				if(AOFCW[playerid] < 2) 
-					AOFCT[playerid]= GetTickCount()+1000; 
-				else {
-					SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(SA:MP Crasher)", GetName(playerid), PlayerData[playerid][pUCP]);
-					KickEx(playerid);
-				}
-		}
 		if(GetPlayerWeapon(playerid) != PlayerData[playerid][pWeapon])
 		{
 			PlayerData[playerid][pWeapon] = GetPlayerWeapon(playerid);
