@@ -109,8 +109,8 @@ CMD:takejob(playerid, params[])
 	else if(IsPlayerInRangeOfPoint(playerid, 3.0, -2215.5137,117.5038,35.3203)) {
 
 		if(PlayerData[playerid][pLevel] < 5)
-			return Error(playerid, "Kamu harus level 5 untuk bergabung Smuggler.");
-			
+			return SendErrorMessage(playerid, "Kamu harus level 5 untuk bergabung Smuggler.");
+
 		if(sscanf(params, "d", job))
 			return SendSyntaxMessage(playerid, "/takejob [slot (1/2)]");
 			
