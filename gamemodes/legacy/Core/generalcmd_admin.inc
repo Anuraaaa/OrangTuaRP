@@ -1827,7 +1827,7 @@ CMD:send(playerid, params[]) {
 		targetid, place[24];
 
 	if(sscanf(params, "us[24]", targetid, place))
-		return SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sfpd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance");
+		return SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sfpd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance, newspawn");
 
 	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "You have specified invalid player.");
@@ -1851,6 +1851,16 @@ CMD:send(playerid, params[]) {
 
 		SendAdminAction(playerid, "You have send %s to Insurance Center.", ReturnName(targetid));
 		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"Insurance Center "WHITE"oleh "RED"%s", GetUsername(playerid));
+	}
+	else if(!strcmp(place, "newspawn", true)) {
+		SetPlayerPos(targetid,-1425.2041,-291.0014,14.1484);
+		SetPlayerInterior(targetid, 0);
+		SetPlayerVirtualWorld(targetid, 0);
+
+		ResetInteriorData(targetid);
+
+		SendAdminAction(playerid, "You have send %s to Newbie Spawn.", ReturnName(targetid));
+		SendAdminAction(targetid, "Kamu telah diteleportasi ke "YELLOW"Newbie Spawn "WHITE"oleh "RED"%s", GetUsername(playerid));
 	}
 	else if(!strcmp(place, "news", true)) {
 		SetPlayerPos(targetid,-1908.7998,486.7876,35.1719);
