@@ -272,7 +272,7 @@ CMD:fish(playerid, params[])
 	SetTimerEx("TimeFishing", 35000, false, "i", playerid);
 	SendClientMessage(playerid, COLOR_SERVER, "(Fishing) {FFFFFF}Kamu mulai memancing, harap tunggu beberapa saat.");
 	Inventory_Remove(playerid, "Bait", 1);
-	PlayerData[playerid][pThirst] -= RandomEx(1, 3);
+	PlayerData[playerid][pThirst] -= 2.0;
  	ApplyAnimation(playerid, "SWORD", "SWORD_BLOCK", 4.1, 0, 0, 0, 1, 0);
 	SetPlayerAttachedObject(playerid, 9, 18632, 6, 0.1, 0.05, 0, 0, 180, 180, 0);
 	return 1;

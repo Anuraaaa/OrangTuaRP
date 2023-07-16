@@ -109,7 +109,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
         }
         DeletePVar(playerid, "HasilTambang");
 
-        PlayerData[playerid][pThirst] -= RandomEx(1,4);
+        PlayerData[playerid][pThirst] -= 2.0;
 
         PlayerData[playerid][pMineDelay] = 30;
 
@@ -158,7 +158,7 @@ CMD:mine(playerid, params[]) {
         GiveWeaponToPlayer(playerid, WEAPON_SHOVEL, 1, 1);
         SetPlayerArmedWeapon(playerid, WEAPON_SHOVEL);
 
-        PlayerData[playerid][pThirst] -= RandomEx(1, 3);
+        PlayerData[playerid][pThirst] -= 2.0;
 
         SetCameraBehindPlayer(playerid);
 

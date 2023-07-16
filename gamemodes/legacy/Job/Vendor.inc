@@ -202,8 +202,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
 			StartPlayerLoadingBar(playerid, 10, "Filling_Cola", 1000);
 			SetTimerEx("MakeDrink", 10000, false, "ddd", playerid, DRINK_COLA, vendorid);
-			PlayerData[playerid][pHunger] -= RandomEx(1, 4);
-			PlayerData[playerid][pThirst] -= RandomEx(1, 4);
+			PlayerData[playerid][pHunger] -= 2.0;
+			PlayerData[playerid][pThirst] -= 2.0;
 		}
 		else SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 	}
@@ -218,8 +218,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
 			StartPlayerLoadingBar(playerid, 10, "Filling_Sprunk", 1000);
 			SetTimerEx("MakeDrink", 10000, false, "ddd", playerid, DRINK_SPRUNK, vendorid);
-			PlayerData[playerid][pHunger] -= RandomEx(1, 4);
-			PlayerData[playerid][pThirst] -= RandomEx(1, 4);
+			PlayerData[playerid][pHunger] -= 2.0;
+			PlayerData[playerid][pThirst] -= 2.0;
 		}
 		else SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 	}
@@ -234,8 +234,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
 			StartPlayerLoadingBar(playerid, 10, "Cooking_Pizza", 1000);
 			SetTimerEx("CookFood", 10000, false, "ddd", playerid, FOOD_PIZZA, vendorid);
-			PlayerData[playerid][pHunger] -= RandomEx(1, 4);
-			PlayerData[playerid][pThirst] -= RandomEx(1, 4);
+			PlayerData[playerid][pHunger] -= 2.0;
+			PlayerData[playerid][pThirst] -= 2.0;
 		}
 		else SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 	}
@@ -250,8 +250,8 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 
 			StartPlayerLoadingBar(playerid, 10, "Cooking_Burger", 1000);
 			SetTimerEx("CookFood", 10000, false, "ddd", playerid, FOOD_BURGER, vendorid);
-			PlayerData[playerid][pHunger] -= RandomEx(1, 4);
-			PlayerData[playerid][pThirst] -= RandomEx(1, 4);
+			PlayerData[playerid][pHunger] -= 2.0;
+			PlayerData[playerid][pThirst] -= 2.0;
 		}
 		else SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 	}

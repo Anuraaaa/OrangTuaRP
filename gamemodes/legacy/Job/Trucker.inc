@@ -138,7 +138,7 @@ CMD:cargo(playerid, params[])
 
 		}
 
-		PlayerData[playerid][pThirst] -= RandomEx(1, 3);
+		PlayerData[playerid][pThirst] -= 2.0;
 	}
 	else if(!strcmp(params, "place", true))
 	{
