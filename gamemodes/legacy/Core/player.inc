@@ -81,7 +81,7 @@ function CheckPlayerUCP(playerid)
 	new rows = cache_num_rows();
 	new banned, banby[24], banreason[32], bantime;
 	new active;
-	new string[364];
+	new string[464], verified = 0;
 
 	if (rows)
 	{
@@ -99,14 +99,21 @@ function CheckPlayerUCP(playerid)
 	    cache_get_value_name(0, "email", UcpData[playerid][ucpEmail]);
 		cache_get_value_name(0, "Password", UcpData[playerid][uPassword], 128);
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
+		cache_get_value_name_int(0, "emailverified", verified);
 
 		if(active == 0) {
-			format(string,sizeof(string),""WHITE"Username yang kamu gunakan belum terdaftar di server\nkamu bisa mendaftarkan akun-mu lewat website Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+			format(string,sizeof(string),""WHITE"Username yang kamu gunakan belum terdaftar di server\nkamu bisa mendaftarkan akun-mu lewat website Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk verifikasi akun.");
 			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
 			KickEx(playerid);
 		}
 		else 
 		{
+			if(!verified) {
+				format(string,sizeof(string),""WHITE"Username kamu beluk diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
+				KickEx(playerid);
+				return 1;
+			}
 			ShowLoginMenu(playerid);
 			LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
 			SendClientMessage(playerid, X11_RED, "(Security) "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
