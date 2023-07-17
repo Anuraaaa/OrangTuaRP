@@ -43,22 +43,22 @@ OfflineWarnUser(playerid, name[], reason[])
 	new sqlid;
 	new string [192];
 
-	mysql_format(sqlcon, string, sizeof(string), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1", name);
-	new Cache:result = mysql_query(sqlcon, string, true);
-	if(cache_num_rows())
-	{
-		cache_get_value_name_int(0, "pID", sqlid);
-		mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `warnings` (`Owner`, `Type`, `Reason`, `Admin`, `Date`) VALUES('%d', '%d', '%e', '%e', CURRENT_TIMESTAMP())", sqlid, TYPE_WARN, reason, PlayerData[playerid][pUCP]);
-		mysql_tquery(sqlcon, string);
+	inline const OnOfflineWarn() {
+		if(cache_num_rows())
+		{
+			cache_get_value_name_int(0, "pID", sqlid);
+			mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `warnings` (`Owner`, `Type`, `Reason`, `Admin`, `Date`) VALUES('%d', '%d', '%e', '%e', CURRENT_TIMESTAMP())", sqlid, TYPE_WARN, reason, PlayerData[playerid][pUCP]);
+			mysql_tquery(sqlcon, string);
 
-		SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been offline warned by %s", name, PlayerData[playerid][pUCP]);
-		SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
+			SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been offline warned by %s", name, PlayerData[playerid][pUCP]);
+			SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
+		}
+		else
+		{
+			SendErrorMessage(playerid, "There is no character with name '%s'!", name);
+		}
 	}
-	else
-	{
-		SendErrorMessage(playerid, "There is no character with name '%s'!", name);
-	}
-	cache_delete(result);
+	MySQL_TQueryInline(sqlcon, using inline OnOfflineWarn, "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1", name);
 	return 1;
 }
 
@@ -71,29 +71,31 @@ ShowPlayerWarning(playerid, targetid)
 		"{FFFF00}OOC Jail",
 		"{FF0000}Banned"
 	};
-	new query[128], str[1012];
-	mysql_format(sqlcon, query, 128, "SELECT * FROM `warnings` WHERE `Owner` = '%d'", PlayerData[playerid][pID]);
-	new Cache:result = mysql_query(sqlcon, query, true);
-	if(cache_num_rows())
-	{
-		format(str, sizeof(str), "Type\tAdmin\tReason\tDate\n");
-		forex(i, cache_num_rows())
+	new str[1012];
+
+	inline const OnShowWarn() {
+		if(cache_num_rows())
 		{
-			new type, admin[24], reason[32], date[40], id;
-			cache_get_value_name_int(i, "ID", id);
-			cache_get_value_name_int(i, "Type", type);
-			cache_get_value_name(i, "Admin", admin, 24);
-			cache_get_value_name(i, "Reason", reason, 32);
-			cache_get_value_name(i, "Date", date, 40);
-			format(str, sizeof(str), "%s%s {FFFFFF}(%d)\t%s\t%s\t%s\n", str, warntype[type], id, admin, reason, date);
+			format(str, sizeof(str), "Type\tAdmin\tReason\tDate\n");
+			forex(i, cache_num_rows())
+			{
+				new type, admin[24], reason[32], date[40], id;
+				cache_get_value_name_int(i, "ID", id);
+				cache_get_value_name_int(i, "Type", type);
+				cache_get_value_name(i, "Admin", admin, 24);
+				cache_get_value_name(i, "Reason", reason, 32);
+				cache_get_value_name(i, "Date", date, 40);
+				format(str, sizeof(str), "%s%s {FFFFFF}(%d)\t%s\t%s\t%s\n", str, warntype[type], id, admin, reason, date);
+			}
+			ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Warning List: %s", GetName(playerid)), str, "Close", "");
 		}
-		ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Warning List: %s", GetName(playerid)), str, "Close", "");
+		else
+		{
+			SendErrorMessage(targetid, "Player %s has no warnings.", GetName(playerid, false));
+		}
 	}
-	else
-	{
-		SendErrorMessage(targetid, "Player %s has no warnings.", GetName(playerid, false));
-	}
-	cache_delete(result);
+	MySQL_TQueryInline(sqlcon, using inline OnShowWarn, "SELECT * FROM `warnings` WHERE `Owner` = '%d'", PlayerData[playerid][pID]);
+
 	return 1;
 }
 

@@ -260,21 +260,21 @@ CMD:findnumber(playerid, params[])
 	if(!IsNumeric(params))
 		return SendSyntaxMessage(playerid, "/findnumber [phone number]");
 
-	new query[128];
-	mysql_format(sqlcon, query, 128, "SELECT * FROM `characters` WHERE `Number` = '%d' LIMIT 1", strval(params));
-	mysql_query(sqlcon, query);
-	if(cache_num_rows())
-	{
-		new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
-		cache_get_value_name(0, "Name", name);
-		cache_get_value_name(0, "UCP", ucp);
+	inline const OnFindNumber() {
+		if(cache_num_rows())
+		{
+			new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
+			cache_get_value_name(0, "Name", name);
+			cache_get_value_name(0, "UCP", ucp);
 
-		SendClientMessageEx(playerid, COLOR_LIGHTRED, "NUMINFO: {FFFFFF}Number %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
+			SendClientMessageEx(playerid, COLOR_LIGHTRED, "NUMINFO: {FFFFFF}Number %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
+		}
+		else
+		{
+			SendErrorMessage(playerid, "There is no character with number %d", strval(params));
+		}
 	}
-	else
-	{
-		SendErrorMessage(playerid, "There is no character with number %d", strval(params));
-	}
+	MySQL_TQueryInline(sqlcon, using inline OnFindNumber, "SELECT * FROM `characters` WHERE `Number` = '%d' LIMIT 1", strval(params));
 	return 1;
 }
 
@@ -289,21 +289,21 @@ CMD:findmask(playerid, params[])
 	if(!IsNumeric(params))
 		return SendSyntaxMessage(playerid, "/findmask [mask id]");
 
-	new query[128];
-	mysql_format(sqlcon, query, 128, "SELECT * FROM `characters` WHERE `MaskID` = '%d' LIMIT 1", strval(params));
-	mysql_query(sqlcon, query);
-	if(cache_num_rows())
-	{
-		new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
-		cache_get_value_name(0, "Name", name);
-		cache_get_value_name(0, "UCP", ucp);
+	inline const OnFindMask() {
+		if(cache_num_rows())
+		{
+			new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
+			cache_get_value_name(0, "Name", name);
+			cache_get_value_name(0, "UCP", ucp);
 
-		SendClientMessageEx(playerid, COLOR_LIGHTRED, "(MaskInfo) {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
+			SendClientMessageEx(playerid, COLOR_LIGHTRED, "(MaskInfo) {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
+		}
+		else
+		{
+			SendErrorMessage(playerid, "There is no character with maskid %d", strval(params));
+		}
 	}
-	else
-	{
-		SendErrorMessage(playerid, "There is no character with maskid %d", strval(params));
-	}
+	MySQL_TQueryInline(sqlcon, using inline OnFindMask, "SELECT * FROM `characters` WHERE `MaskID` = '%d' LIMIT 1", strval(params));
 	return 1;
 }
 CMD:checkvehicle(playerid, params[])
@@ -397,10 +397,10 @@ CMD:destroyusername(playerid, params[])
 
 	new str[257];
 	mysql_format(sqlcon, str, sizeof(str), "DELETE FROM `playerucp` WHERE `UCP` = '%s'", params);
-	mysql_query(sqlcon, str, true);
+	mysql_tquery(sqlcon, str);
 
 	mysql_format(sqlcon, str, sizeof(str), "DELETE FROM `characters` WHERE `UCP` = '%s'", params);
-	mysql_query(sqlcon, str, true);
+	mysql_tquery(sqlcon, str);
 
 	foreach(new i : Player) if(!strcmp(PlayerData[i][pUCP], params, true))
 	{
@@ -1412,8 +1412,8 @@ CMD:setadmin(playerid, params[])
 	PlayerData[targetid][pAdmin] = UcpData[targetid][ucpAdmin];
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has adjusted %s admin level to %d", PlayerData[playerid][pUCP], GetName(targetid), rank);
 	SendServerMessage(targetid, "Your admin level has been adjusted by %s to %d", PlayerData[playerid][pUCP], rank);
-	mysql_format(sqlcon,query,sizeof(query),"UPDATE `playerucp` SET `Admin` = '%d' WHERE `UCP` = '%s'", rank, PlayerData[targetid][pUCP]);
-	mysql_query(sqlcon,query,true);
+	mysql_format(sqlcon,query,sizeof(query),"UPDATE `playerucp` SET `Admin` = '%d' WHERE `UCP` = '%e'", rank, PlayerData[targetid][pUCP]);
+	mysql_tquery(sqlcon,query);
 	return 1;
 }
 

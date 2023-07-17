@@ -29,34 +29,33 @@ CMD:insu(playerid, params[])
 
 	if(!strcmp(params, "claim", true))
 	{
-		new Cache:execute, output[255];
+		new output[255];
 
-		execute = mysql_query(sqlcon, sprintf("SELECT `vehID`, `vehInsuTime`, `vehModel` FROM `vehicle` WHERE `vehExtraID`='%d' AND `vehType`='%d' AND `vehState`='%d';", PlayerData[playerid][pID], VEHICLE_TYPE_PLAYER, VEHICLE_STATE_INSURANCE));
-
-		if(cache_num_rows())
-		{
-			strcat(output, sprintf("Vehicle Model\tClaim Time\n"));
-			for(new i = 0; i != cache_num_rows(); i++)
+		inline const OnViewVehClaim() {
+			if(cache_num_rows())
 			{
-				new 
-					id,
-					time, model;
+				strcat(output, sprintf("Vehicle Model\tClaim Time\n"));
+				for(new i = 0; i != cache_num_rows(); i++)
+				{
+					new 
+						id,
+						time, model;
 
-				cache_get_value_name_int(i, "vehInsuTime", time);
-				cache_get_value_name_int(i, "vehID", id);	
-				cache_get_value_name_int(i, "vehModel", model);
+					cache_get_value_name_int(i, "vehInsuTime", time);
+					cache_get_value_name_int(i, "vehID", id);	
+					cache_get_value_name_int(i, "vehModel", model);
 
-				g_Selected_Vehicle_ID[playerid][i] = id;
-				g_Selected_Vehicle_Time[playerid][i] = time;
-				g_Selected_Vehicle_Model[playerid][i] = model;
+					g_Selected_Vehicle_ID[playerid][i] = id;
+					g_Selected_Vehicle_Time[playerid][i] = time;
+					g_Selected_Vehicle_Model[playerid][i] = model;
 
-				strcat(output, sprintf(WHITE"%s\t%s\n", ReturnVehicleModelName(model), ConvertTimestamp(Timestamp:time)));
+					strcat(output, sprintf(WHITE"%s\t%s\n", ReturnVehicleModelName(model), ConvertTimestamp(Timestamp:time)));
+				}
+				ShowPlayerDialog(playerid, DIALOG_CLAIMINSU, DIALOG_STYLE_TABLIST_HEADERS, "Insurance Center", output, "Claim", "Close");
 			}
-			ShowPlayerDialog(playerid, DIALOG_CLAIMINSU, DIALOG_STYLE_TABLIST_HEADERS, "Insurance Center", output, "Claim", "Close");
+			else SendErrorMessage(playerid, "Tidak ada kendaraanmu dalam asuransi.");
 		}
-		else SendErrorMessage(playerid, "Tidak ada kendaraanmu dalam asuransi.");
-
-		cache_delete(execute);
+		MySQL_TQueryInline(sqlcon, using inline OnViewVehClaim, "SELECT `vehID`, `vehInsuTime`, `vehModel` FROM `vehicle` WHERE `vehExtraID`='%d' AND `vehType`='%d' AND `vehState`='%d';", PlayerData[playerid][pID], VEHICLE_TYPE_PLAYER, VEHICLE_STATE_INSURANCE);
 	}
 	else if(!strcmp(params, "buy", true))
 	{
@@ -89,33 +88,33 @@ CMD:forceinsurance(playerid, params[])
 	    return SendErrorMessage(playerid, "Invalid player ID!");
 	    
 	PlayerData[playerid][pTarget] = targetid;
-	new Cache:execute, output[255];
 
-	execute = mysql_query(sqlcon, sprintf("SELECT `vehID`, `vehInsuTime`, `vehModel` FROM `vehicle` WHERE `vehExtraID`='%d' AND `vehType`='%d' AND `vehState`='%d';", PlayerData[targetid][pID], VEHICLE_TYPE_PLAYER, VEHICLE_STATE_INSURANCE));
-
-	if(cache_num_rows())
-	{
-		strcat(output, sprintf("Vehicle Model\tClaim Time\n"));
-		for(new i = 0; i != cache_num_rows(); i++)
+	inline const OnForceInsu() {
+		if(cache_num_rows())
 		{
-			new 
-				id,
-				time, model;
+			new output[355];
 
-			cache_get_value_name_int(i, "vehInsuTime", time);
-			cache_get_value_name_int(i, "vehID", id);	
-			cache_get_value_name_int(i, "vehModel", model);
+			strcat(output, sprintf("Vehicle Model\tClaim Time\n"));
+			for(new i = 0; i != cache_num_rows(); i++)
+			{
+				new 
+					id,
+					time, model;
 
-			g_Selected_Vehicle_ID[playerid][i] = id;
-			g_Selected_Vehicle_Time[playerid][i] = time;
-			g_Selected_Vehicle_Model[playerid][i] = model;
+				cache_get_value_name_int(i, "vehInsuTime", time);
+				cache_get_value_name_int(i, "vehID", id);	
+				cache_get_value_name_int(i, "vehModel", model);
 
-			strcat(output, sprintf(WHITE"%s\t%s\n", ReturnVehicleModelName(model), ConvertTimestamp(Timestamp:time)));
+				g_Selected_Vehicle_ID[playerid][i] = id;
+				g_Selected_Vehicle_Time[playerid][i] = time;
+				g_Selected_Vehicle_Model[playerid][i] = model;
+
+				strcat(output, sprintf(WHITE"%s\t%s\n", ReturnVehicleModelName(model), ConvertTimestamp(Timestamp:time)));
+			}
+			ShowPlayerDialog(playerid, DIALOG_FORCEINSURANCE, DIALOG_STYLE_TABLIST_HEADERS, "Insurance Center", output, "Claim", "Close");
 		}
-		ShowPlayerDialog(playerid, DIALOG_FORCEINSURANCE, DIALOG_STYLE_TABLIST_HEADERS, "Insurance Center", output, "Claim", "Close");
+		else SendErrorMessage(playerid, "Tidak ada kendaraan %s dalam asuransi.", GetName(targetid));
 	}
-	else SendErrorMessage(playerid, "Tidak ada kendaraan %s dalam asuransi.", GetName(targetid));
-
-	cache_delete(execute);
+	MySQL_TQueryInline(sqlcon, using inline OnForceInsu, "SELECT `vehID`, `vehInsuTime`, `vehModel` FROM `vehicle` WHERE `vehExtraID`='%d' AND `vehType`='%d' AND `vehState`='%d';", PlayerData[targetid][pID], VEHICLE_TYPE_PLAYER, VEHICLE_STATE_INSURANCE);
 	return 1;
 }

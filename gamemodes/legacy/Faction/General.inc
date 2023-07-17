@@ -209,34 +209,35 @@ function OnLookupVehicle(playerid, string:plate[]) {
 	if(!cache_num_rows())
 		return SendErrorMessage(playerid, "Data for plate \"%s\" not found.", plate), ReturnMDC(playerid);
 
-	new owner, modelid, name[24], sqlid, Cache:result, str[512], vehicleid;
+	new owner, modelid, name[24], sqlid, str[512], vehicleid;
 	cache_get_value_name_int(0, "vehID", sqlid);
 	cache_get_value_name_int(0, "vehExtraID", owner);
 	cache_get_value_name_int(0, "vehModel", modelid);
 
-	result = mysql_query(sqlcon, sprintf("SELECT * FROM `characters` WHERE `pID` = %d LIMIT 1;", owner));
+	inline const QueryLookupVeh() {
+		if(cache_num_rows()) {
 
-	if(cache_num_rows()) {
+			cache_get_value_name(0, "Name", name, 24);
 
-		cache_get_value_name(0, "Name", name, 24);
+			strcat(str, "{AAC4E5}I. Owner Data\n");
+			strcat(str, sprintf(""WHITE"Name: "YELLOW"%s\n\n", name));
+			strcat(str, "{AAC4E5}II. Vehicle Data\n");
+			strcat(str, sprintf(""WHITE"Model: "YELLOW"%s\n", ReturnVehicleModelName(modelid)));
+			strcat(str, sprintf(""WHITE"Plate: "YELLOW"%s\n", plate));
 
-		strcat(str, "{AAC4E5}I. Owner Data\n");
-		strcat(str, sprintf(""WHITE"Name: "YELLOW"%s\n\n", name));
-		strcat(str, "{AAC4E5}II. Vehicle Data\n");
-		strcat(str, sprintf(""WHITE"Model: "YELLOW"%s\n", ReturnVehicleModelName(modelid)));
-		strcat(str, sprintf(""WHITE"Plate: "YELLOW"%s\n", plate));
+			if((vehicleid = Vehicle_GetFromID(sqlid)) != -1) {
+				new Float:x, Float:y, Float:z;
+				GetVehiclePos(vehicleid, x,y,z);
+				strcat(str, sprintf(""WHITE"Last Seen: "YELLOW"%s", GetLocation(x, y, z)));
+			}
 
-		if((vehicleid = Vehicle_GetFromID(sqlid)) != -1) {
-			new Float:x, Float:y, Float:z;
-			GetVehiclePos(vehicleid, x,y,z);
-			strcat(str, sprintf(""WHITE"Last Seen: "YELLOW"%s", GetLocation(x, y, z)));
-		}
+			ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC > Vehicle Lookup", str, "Return", "");
+		}	
+		else SendErrorMessage(playerid, "There is an error when lookup vehicle data (report to developer)"), ReturnMDC(playerid);
+	}
+	
+	MySQL_TQueryInline(sqlcon, using inline QueryLookupVeh, "SELECT * FROM `characters` WHERE `pID` = %d LIMIT 1;", owner);
 
-		ShowPlayerDialog(playerid, DIALOG_MDC_RETURN, DIALOG_STYLE_MSGBOX, "MDC > Vehicle Lookup", str, "Return", "");
-	}	
-	else SendErrorMessage(playerid, "There is an error when lookup vehicle data (report to developer)"), ReturnMDC(playerid);
-
-	cache_delete(result);
 	return 1;
 }
 function OnLookupMDC(playerid, string:namez[]) {

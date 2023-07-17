@@ -687,29 +687,29 @@ CMD:faction(playerid, params[])
 			return SendErrorMessage(playerid, "Player tersebut sedang online!");
 		}
 
-		new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `characters` WHERE `Name` = '%s' LIMIT 1;", string));
+		inline const OnOfflineRemove() {
+			if(cache_num_rows()) {
 
-		if(cache_num_rows()) {
+				new
+					faction;
 
-			new
-				faction;
+				cache_get_value_name_int(0, "Faction", faction);
+				if(faction != PlayerData[playerid][pFaction]) {
+					SendErrorMessage(playerid, "Player tersebut bukan pada faction-mu!");
+				}
+				else {
 
-			cache_get_value_name_int(0, "Faction", faction);
-			if(faction != PlayerData[playerid][pFaction]) {
-				SendErrorMessage(playerid, "Player tersebut bukan pada faction-mu!");
+					SendServerMessage(playerid, "You have kicked %s from your faction!", string);
+
+					new query[256];
+					mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `Faction` = '-1', `FactionID` = '-1', `FactionRank` = '0', `Onduty` = '0' WHERE `Name` = '%e'", string);
+					mysql_tquery(sqlcon, query);
+				}
 			}
-			else {
-
-				SendServerMessage(playerid, "You have kicked %s from your faction!", string);
-
-				new query[256];
-				mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `Faction` = '-1', `FactionID` = '-1', `FactionRank` = '0', `Onduty` = '0' WHERE `Name` = '%e'", string);
-				mysql_tquery(sqlcon, query);
-			}
+			else SendErrorMessage(playerid, "Tidak dapat menemukan karakter tersebut.");
 		}
-		else SendErrorMessage(playerid, "Tidak dapat menemukan karakter tersebut.");
+		MySQL_TQueryInline(sqlcon, using inline OnOfflineRemove, "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", string);
 
-		cache_delete(result);
 	}
 	else if(!strcmp(type, "invite", true))
 	{

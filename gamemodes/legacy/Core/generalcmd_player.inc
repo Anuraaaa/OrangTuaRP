@@ -2436,26 +2436,27 @@ CMD:v(playerid, params[])
 		ShowPlayerDialog(playerid, DIALOG_UNSTUCK, DIALOG_STYLE_LIST, "Unstuck Vehicle", str, "Unstuck", "Close");
 	}
 	else if(!strcmp(type, "spawn", true)) {
-		new Cache:result = mysql_query(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehState` = '%d' AND `vehExtraID` = '%d'", VEHICLE_STATE_STUCK, PlayerData[playerid][pID]));
 
-		if(cache_num_rows()) {
+		inline const QueryVehSpawn() {
+			if(cache_num_rows()) {
 
-			new count = 0;
-			for(new i = 0; i < cache_num_rows(); i++) {
+				new count = 0;
+				for(new i = 0; i < cache_num_rows(); i++) {
 
-				new sql_id, modelid;
+					new sql_id, modelid;
 
-				cache_get_value_name_int(i, "vehModel", modelid);
-				cache_get_value_name_int(i, "vehID", sql_id);
-				g_Selected_Vehicle_ID[playerid][count++] = sql_id;
-				strcat(string, sprintf("%d). %s\n", i + 1, ReturnVehicleModelName(modelid)));
+					cache_get_value_name_int(i, "vehModel", modelid);
+					cache_get_value_name_int(i, "vehID", sql_id);
+					g_Selected_Vehicle_ID[playerid][count++] = sql_id;
+					strcat(string, sprintf("%d). %s\n", i + 1, ReturnVehicleModelName(modelid)));
+				}
+				ShowPlayerDialog(playerid, DIALOG_VEHSPAWN, DIALOG_STYLE_LIST, "Despawned Vehicle", string, "Spawn", "Close");
 			}
-			ShowPlayerDialog(playerid, DIALOG_VEHSPAWN, DIALOG_STYLE_LIST, "Despawned Vehicle", string, "Spawn", "Close");
+			else {
+				SendErrorMessage(playerid, "Tidak ada kendaraanmu yang ter-despawn.");
+			}
 		}
-		else {
-			SendErrorMessage(playerid, "Tidak ada kendaraanmu yang ter-despawn.");
-		}
-		cache_delete(result);
+		MySQL_TQueryInline(sqlcon, using inline QueryVehSpawn, "SELECT * FROM `vehicle` WHERE `vehState` = '%d' AND `vehExtraID` = '%d'", VEHICLE_STATE_STUCK, PlayerData[playerid][pID]);
 	}
 	else if(!strcmp(type, "lock", true))
 	{

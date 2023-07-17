@@ -238,7 +238,7 @@ Trash_Save(id)
 	mysql_format(sqlcon, query, sizeof(query), "%s`TrashRotY`='%f', ", query, TrashData[id][TrashRotY]);
 	mysql_format(sqlcon, query, sizeof(query), "%s`TrashRotZ`='%f' ", query, TrashData[id][TrashRotZ]);
 	mysql_format(sqlcon, query, sizeof(query), "%sWHERE `TrashID` = '%d'", query, TrashData[id][TrashID]);
-	mysql_query(sqlcon, query, true);
+	mysql_tquery(sqlcon, query);
 	return 1;
 }
 
