@@ -46,12 +46,12 @@ hook OnPlayerEnterCheckpoint(playerid) {
         ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
         SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
 
-        new hasil_tambang = random(5) + 1;
+        new hasil_tambang = random(15) + 1;
         switch(hasil_tambang) {
-            case 1, 2: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN));
-            case 3: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY));
-            case 4: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD));
-            case 5: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN));
+            case 1, 2, 3, 4, 7, 8, 9, 10: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN));
+            case 12, 13, 14, 15: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY));
+            case 5, 11: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD));
+            case 6: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN));
         }
 
         SetPVarInt(playerid, "HasilTambang", hasil_tambang);
@@ -84,16 +84,16 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
             switch(rock_type) {
                 case 1: {
-                    bonus = RandomEx(1, 500);
+                    bonus = RandomEx(1, 300);
                 }
                 case 2: {
-                    bonus = RandomEx(1, 1500);
+                    bonus = RandomEx(1, 500);
                 }
                 case 3: {
-                    bonus = RandomEx(1, 2500);
+                    bonus = RandomEx(1, 1000);
                 }
                 case 4: {
-                    bonus = RandomEx(1, 4000);
+                    bonus = RandomEx(1, 2000);
                 }
             }
             gaji = rock_price[rock_type] + bonus;
@@ -111,7 +111,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         PlayerData[playerid][pThirst] -= 2.0;
 
-        PlayerData[playerid][pMineDelay] = 30;
+        PlayerData[playerid][pMineDelay] = 60;
 
         MinedRock[playerid] = -1;
     }
@@ -158,7 +158,8 @@ CMD:mine(playerid, params[]) {
         GiveWeaponToPlayer(playerid, WEAPON_SHOVEL, 1, 1);
         SetPlayerArmedWeapon(playerid, WEAPON_SHOVEL);
 
-        PlayerData[playerid][pThirst] -= 2.0;
+        PlayerData[playerid][pThirst] -= 3.6;
+        PlayerData[playerid][pHunger] -= 4.3;
 
         SetCameraBehindPlayer(playerid);
 
