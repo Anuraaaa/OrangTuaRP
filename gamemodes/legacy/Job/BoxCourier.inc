@@ -36,6 +36,10 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
         }
 
         if(g_CourierState[playerid] == COURIER_STATE_NOT_STARTED) {
+
+            if(Iter_Count(House) < 5)
+                return SendErrorMessage(playerid, "Rumah yang ada di server kurang dari 5, minta staff untuk membuat rumah.");
+
             ShowPlayerDialog(playerid, DIALOG_BOXCOURIER, DIALOG_STYLE_MSGBOX, "Box Courier", ""WHITE"Apakah kamu ingin memulai pekerjaan sebagai Box Courier? klik \"Start\" untuk mulai", "Start", "Close");
         }
         else if(g_CourierState[playerid] == COURIER_STATE_DELIVERING) {
