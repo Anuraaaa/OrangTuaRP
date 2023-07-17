@@ -125,7 +125,7 @@ LoadPoint()
 	LabelData[labelComponent] = CreateDynamic3DTextLabel(sprintf(""LIGHTBLUE"[Component]\n"WHITE"Stock: "YELLOW"%d/10000\n"WHITE"Price: "GREEN"$0.50", StockData[stockComponent]), -1, -1862.1053,-145.7666,11.8984, 10.0);
 
 	CreateDynamicPickup(1239, 23, -1304.1875,2491.8530,87.1437, -1);
-	LabelData[labelRock] = CreateDynamic3DTextLabel(sprintf(""LIGHTBLUE"[Rock]\n"WHITE"Stock: "YELLOW"%d/500", StockData[stockRock]), -1, -1304.1875,2491.8530,87.1437, 10.0);
+	LabelData[labelRock] = CreateDynamic3DTextLabel(sprintf(""LIGHTBLUE"[Rock]\n"WHITE"Stock: "YELLOW"%d/250", StockData[stockRock]), -1, -1304.1875,2491.8530,87.1437, 10.0);
 
 
 	CreateDynamicPickup(1239, 23, -1702.7526,33.5595,3.5547, -1);
@@ -189,7 +189,7 @@ LoadPoint()
 UpdateServerStock(SERVER_STOCK) {
 	switch(SERVER_STOCK) {
 		case SERVER_STOCK_COMPONENT: UpdateDynamic3DTextLabelText(LabelData[labelComponent], -1, sprintf(""LIGHTBLUE"[Component]\n"WHITE"Stock: "YELLOW"%d/10000\n"WHITE"Price: "GREEN"$0.50", StockData[stockComponent]));
-		case SERVER_STOCK_ROCK: UpdateDynamic3DTextLabelText(LabelData[labelRock], -1, sprintf(""LIGHTBLUE"[Rock]\n"WHITE"Stock: "YELLOW"%d/500", StockData[stockRock]));
+		case SERVER_STOCK_ROCK: UpdateDynamic3DTextLabelText(LabelData[labelRock], -1, sprintf(""LIGHTBLUE"[Rock]\n"WHITE"Stock: "YELLOW"%d/250", StockData[stockRock]));
 	}
 	return 1;
 }

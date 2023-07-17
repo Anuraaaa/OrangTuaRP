@@ -5,7 +5,7 @@ new
     MinerIndex[MAX_PLAYERS] = {0, ...},
     MinedRock[MAX_PLAYERS];
 
-new const rock_names[][] = {"None", ""BROWN"Bronze", ""BROWN"Bronze", ""GREY"Silver", ""GOLD"Gold", ""CYAN"Diamond"};
+new const rock_names[][] = {"None", ""BROWN"Bronze", ""GREY"Silver", ""GOLD"Gold", ""CYAN"Diamond"};
 
 hook OnPlayerConnect(playerid) {
     IsMining[playerid] = false;
@@ -46,12 +46,12 @@ hook OnPlayerEnterCheckpoint(playerid) {
         ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
         SetPlayerSpecialAction(playerid, SPECIAL_ACTION_CARRY);
 
-        new hasil_tambang = random(15) + 1;
-        switch(hasil_tambang) {
-            case 1, 2, 3, 4, 7, 8, 9, 10: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN));
-            case 12, 13, 14, 15: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY));
-            case 5, 11: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD));
-            case 6: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN));
+        new chance_rock = random(15) + 1, hasil_tambang = 0;
+        switch(chance_rock) {
+            case 1, 2, 3, 4, 7, 8, 9, 10: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN)), hasil_tambang = 1;
+            case 12, 13, 14, 15: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY)), hasil_tambang = 2;
+            case 5, 11: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD)), hasil_tambang = 3;
+            case 6: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN)), hasil_tambang = 4;
         }
 
         SetPVarInt(playerid, "HasilTambang", hasil_tambang);
@@ -73,12 +73,12 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         RemovePlayerAttachedObject(playerid, 9);
 
-        if(StockData[stockRock] < 500) {
+        if(StockData[stockRock] < 250) {
 
             StockData[stockRock]++;
 
             new rock_type = GetPVarInt(playerid, "HasilTambang"),
-                rock_price[] = {0, 1000, 1000, 2500, 5000, 10000},
+                rock_price[] = {0, 1000, 1500, 3500, 6000},
                 gaji = 0,
                 bonus;
 

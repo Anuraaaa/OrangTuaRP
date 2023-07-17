@@ -109,7 +109,7 @@ function CheckPlayerUCP(playerid)
 		else 
 		{
 			if(!verified) {
-				format(string,sizeof(string),""WHITE"Username kamu beluk diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+				format(string,sizeof(string),""WHITE"Username kamu belum diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
 				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
 				KickEx(playerid);
 				return 1;

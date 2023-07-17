@@ -495,7 +495,6 @@ public OnGameModeInit()
 		mysql_tquery(sqlcon, "SELECT * FROM `dropped`", "Dropped_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `doors`", "Doors_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `factions`", "Faction_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `familys`", "Family_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `flat`", "Flat_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `gates`", "Gate_Load", "");
 		mysql_tquery(sqlcon, "SELECT * FROM `garage`", "Garage_Load", "");
