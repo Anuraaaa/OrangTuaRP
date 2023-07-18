@@ -791,7 +791,7 @@ function Vehicle_ShowList(playerid) {
 			have = true;
 		}
 	}
-	foreach(new i : Vehicle) if(IsValidVehicle(i) && Vehicle_IsOwner(playerid, i)) {
+	foreach(new i : Vehicle) if(Vehicle_IsOwner(playerid, i)) {
 
 		if(Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL) 
 			strcat(str, sprintf("%s(ID:%d)\t%s\tSpawned\t(-)\n", GetVehicleName(i), i, VehicleData[i][vPlate]));

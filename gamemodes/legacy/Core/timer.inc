@@ -129,7 +129,7 @@ task SecondUpdate[1000]()
 
 task RentalUpdate[1000]()
 {
-	foreach(new i : Vehicle) if(IsValidVehicle(i) && VehicleData[i][vType] == VEHICLE_TYPE_RENTAL && VehicleData[i][vRental] != -1)
+	foreach(new i : Vehicle) if(VehicleData[i][vType] == VEHICLE_TYPE_RENTAL && VehicleData[i][vRental] != -1)
 	{
 		if(VehicleData[i][vRentTime])
 		{
@@ -147,8 +147,7 @@ task RentalUpdate[1000]()
 
 				new next = i;
 
-				if(IsValidVehicle(i))
-					DestroyVehicle(i);
+				DestroyVehicle(i);
 
 				Iter_SafeRemove(Vehicle, next, i);
 			}
@@ -179,7 +178,7 @@ task Timer_OnVehicleUpdate[35000]()
 {
 	foreach(new i : Vehicle) if (IsValidVehicle(i) && IsEngineVehicle(i) && GetEngineStatus(i) && GetVehicleSpeed(i) > 1)
 	{
-	    if (Vehicle_GetFuel(i) > 0)
+	    if (Vehicle_GetFuel(i))
 	    {
 	        if(--VehicleData[i][vFuel] == 0)
 			{
