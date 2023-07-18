@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+new countdown_tick = 0;
+
 CMD:ahelp(playerid, params[])
 {
 	if(PlayerData[playerid][pAdmin] < 1)
@@ -2375,4 +2377,31 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		}
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+
+CMD:countdown(playerid, params[])
+{
+    if (PlayerData[playerid][pAdmin] < 1)
+        return PermissionError(playerid);
+
+    static interval;
+
+    if(countdown_tick)
+    {
+        TextDrawHideForAll(COUNTDOWNGUI);
+        countdown_tick = 0;
+        return 1;
+    }
+
+    if(sscanf(params, "d", interval)) return SendSyntaxMessage(playerid, "/countdown [interval]");
+
+    TextDrawShowForAll(COUNTDOWNGUI);
+    countdown_tick = interval;
+    SendAdminMessage(X11_TOMATO_1, "AdmCmd: %s initiated coutdown with %d second.", GetUsername(playerid), interval);
+    return 1;
+}
+
+hook OnGameModeInit() {
+	countdown_tick = 0;
 }

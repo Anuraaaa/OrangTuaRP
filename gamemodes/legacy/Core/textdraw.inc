@@ -13,6 +13,8 @@ new PlayerText:DONEFOOD[MAX_PLAYERS];
 new PlayerText:DONEDRINK[MAX_PLAYERS];
 new PlayerText:AMMOTD[MAX_PLAYERS];
 
+new Text:COUNTDOWNGUI;
+
 new PlayerText:HBE3_SPEEDO[MAX_PLAYERS][6];
 new PlayerText:HBE3_BOX[MAX_PLAYERS];
 new PlayerText:HBE3_FOODICO[MAX_PLAYERS];
@@ -84,6 +86,17 @@ new Text:sen;
 new Text:koma2;
 
 CreatePublicHUD() {
+
+    COUNTDOWNGUI = TextDrawCreate(22.005966, 209.766693, "_");
+    TextDrawLetterSize(COUNTDOWNGUI, 0.263191, 1.156665);
+    TextDrawAlignment(COUNTDOWNGUI, 1);
+    TextDrawColor(COUNTDOWNGUI, -1);
+    TextDrawSetShadow(COUNTDOWNGUI, 0);
+    TextDrawSetOutline(COUNTDOWNGUI, 1);
+    TextDrawBackgroundColor(COUNTDOWNGUI, 255);
+    TextDrawFont(COUNTDOWNGUI, 3);
+    TextDrawSetProportional(COUNTDOWNGUI, 1);
+    TextDrawSetShadow(COUNTDOWNGUI, 0);
 
 	HUD2_TD[0] = TextDrawCreate(606.000000, 408.000000, "_");
 	TextDrawFont(HUD2_TD[0], 0);

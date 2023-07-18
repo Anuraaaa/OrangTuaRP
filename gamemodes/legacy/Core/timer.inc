@@ -124,6 +124,29 @@ task SecondUpdate[1000]()
 			Tree_Refresh(i);
 		}
 	}
+    if(countdown_tick)
+    {
+        new string[64], times[3];
+
+        countdown_tick--;
+
+        GetElapsedTime(countdown_tick, times[0], times[1], times[2]);
+
+        switch(countdown_tick)
+        {
+            case 0:
+            {
+                format(string, 32, "~p~Countdown:~w~Done");
+                TextDrawHideForAll(COUNTDOWNGUI);
+                countdown_tick = 0;
+            }
+            case 1:format(string, 32, "~p~Countdown:~g~~h~ %02d:%02d", times[1], times[2]);
+            case 2:format(string, 32, "~p~Countdown:~y~~h~ %02d:%02d", times[1], times[2]);
+            case 3:format(string, 32, "~p~Countdown:~r~~h~ %02d:%02d", times[1], times[2]);
+            default: format(string, 32, "~p~Countdown:~w~~h~ %02d:%02d", times[1], times[2]);
+        }
+        TextDrawSetString(COUNTDOWNGUI, string);
+    }
 	return 1;
 }
 
