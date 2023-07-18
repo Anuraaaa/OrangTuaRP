@@ -1129,6 +1129,7 @@ public OnPlayerDisconnectEx(playerid) {
 		DestroyDynamic3DTextLabel(PlayerData[playerid][pAdoLabel]);
 
 	DestroyBoombox(playerid);
+	DisablePlayerAllMultiCP(playerid);
 	return 1;
 }
 

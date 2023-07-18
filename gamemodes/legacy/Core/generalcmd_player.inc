@@ -1391,6 +1391,7 @@ CMD:autotreatment(playerid, params[])
 	PlayerData[playerid][pHealthy] = 100.0;
 	PlayerData[playerid][pCough] = 0;
 	PlayerData[playerid][pFever] = 0;
+	PlayerData[playerid][pFeverRate] = 0;
 
 	SendServerMessage(playerid, "Kamu berhasil melakukan autotreatment!");
 	serverVault += 15000;
@@ -2466,6 +2467,7 @@ CMD:v(playerid, params[])
 
 		if(IsPlayerInAnyVehicle(playerid))
 		{
+			
 			if(!Vehicle_IsOwner(playerid, vehicleid) && !Vehicle_IsShared(playerid, vehicleid))
 				return SendClientMessage(playerid, -1, "You don't have key for this vehicle!");
 
@@ -2479,7 +2481,7 @@ CMD:v(playerid, params[])
 		{
 			new str[312], count;
 			format(str, sizeof(str), "Vehicle\tModel\tStatus\n");
-			foreach(new i : Vehicle) if(IsValidVehicle(i) && Vehicle_IsOwner(playerid, i))
+			foreach(new i : Vehicle) if(Vehicle_IsOwner(playerid, i))
 			{
 				format(str, sizeof(str), "%s#%d\t%s\t%s\n", str, i, GetVehicleName(i), (VehicleData[i][vLocked]) ? ("{FF0000}Locked") : ("{00FF00}Unlocked"));
 				g_ListedVehicle[playerid][count++] = i;

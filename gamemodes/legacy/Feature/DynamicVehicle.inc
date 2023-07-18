@@ -553,7 +553,7 @@ Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, 
 			new v_str[256];
 			format(v_str, 256, ""RED"(Vehicle) "YELLOW"Your vehicle "LIGHTBLUE"(%s) "YELLOW"has been despawned due to collide with other vehicle.", GetVehicleName(i));
 			NotifyVehicleOwner(i, v_str);
-			format(v_str, 256, ""RED"(Vehicle) "YELLOW"Use "LIGHTBLUE"\"/v spawn\" to spawn vehicle back.");
+			format(v_str, 256, ""RED"(Vehicle) "YELLOW"Use "LIGHTBLUE"\"/v spawn\" "YELLOW"to spawn vehicle back.");
 			NotifyVehicleOwner(i, v_str);
 
 			defer Vehicle_SafeUnload[1000](i);

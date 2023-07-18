@@ -1530,6 +1530,7 @@ CMD:acure(playerid, params[]) {
 	PlayerData[targetid][pHealthy] = 100.0;
 	PlayerData[targetid][pFever] = 0;
 	PlayerData[targetid][pCough] = 0;
+	PlayerData[targetid][pFeverRate] = 0;
 	SetPlayerDrunkLevelEx(playerid, 0);
 	PlayerData[targetid][pHunger] = 30;
 	PlayerData[targetid][pThirst] = 30;
