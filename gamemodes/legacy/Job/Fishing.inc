@@ -107,13 +107,13 @@ function TimeFishing(playerid)
 				case FISHPLACE_SEA: {
 					 new random_fish = random(7);
 					 switch(random_fish) {
-							case 0: fWeight = RandomFloat(15.0,25.0);
+							case 0: fWeight = RandomFloat(15.0,30.0);
 							case 1: fWeight = RandomFloat(20.0,30.0);
 							case 2: fWeight = RandomFloat(15.0,35.0);
-							case 3: fWeight = RandomFloat(15.0,40.0);
-							case 4: fWeight = RandomFloat(15.0,25.0);
+							case 3: fWeight = RandomFloat(15.0,30.0);
+							case 4: fWeight = RandomFloat(15.0,30.0);
 							case 5: fWeight = RandomFloat(20.0,33.0);
-							case 6: fWeight = RandomFloat(15.0,25.0);
+							case 6: fWeight = RandomFloat(15.0,30.0);
 							case 7: fWeight = RandomFloat(15.0,34.0);
 					 }
 				}
@@ -196,7 +196,7 @@ CMD:sellfish(playerid, params[])
 		new total_price = floatround(count * fishPrice),
 			real_price;
 
-		real_price = 30 * total_price;
+		real_price = 15 * total_price;
 
 		SetPVarInt(playerid, "FishPrice", real_price);
 

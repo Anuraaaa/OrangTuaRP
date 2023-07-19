@@ -3952,7 +3952,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new total = GetPVarInt(playerid, "FishPrice");
 
-			PlayerData[playerid][pFishDelay] = 600;
+			PlayerData[playerid][pFishDelay] = 900;
 			AddSalary(playerid, "Sell Fish", total);
 			SendClientMessageEx(playerid, COLOR_SERVER, "(Fish) {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}on your {FFFF00}/salary", FormatNumber(total));
 			DeletePVar(playerid, "FishPrice");
