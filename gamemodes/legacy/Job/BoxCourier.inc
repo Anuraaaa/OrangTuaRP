@@ -65,7 +65,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 }
 
 hook OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid) {
-    if(checkpointid == CourierVehicleCP[playerid]) {
+    if(checkpointid == CourierVehicleCP[playerid] && g_CourierState[playerid] == COURIER_STATE_DELIVERING) {
         if(IsValidDynamicCP(CourierVehicleCP[playerid]))
             DestroyDynamicCP(CourierVehicleCP[playerid]);
 
