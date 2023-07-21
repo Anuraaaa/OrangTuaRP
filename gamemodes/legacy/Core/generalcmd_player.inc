@@ -127,7 +127,7 @@ CMD:rcp(playerid, params[]) {
 		SetPlayerRaceCheckpoint(playerid, 2, SmugglerData[smugDelivX], SmugglerData[smugDelivY], SmugglerData[smugDelivZ], 0.0, 0.0, 0.0, 5.0);
 	}
 	if(g_CourierState[playerid] == COURIER_STATE_ONFINISH) {
-		SetPlayerCheckpoint(playerid, -1941.6987,-1040.1519,32.1719,  3.5);
+		SetPlayerCheckpoint(playerid, -1945.0291,-1085.2745,30.7779,  3.5);
 	}
 	return 1;
 }
