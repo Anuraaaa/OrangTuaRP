@@ -25,13 +25,10 @@ new const ListAccent[][accent] =
 CMD:accent(playerid, params[])
 {
     new list[700];
-    if(isnull(list))
-	{
-	    for(new i = 0; i < sizeof(ListAccent); i ++)
-	    {
-	        format(list, sizeof(list), "%s\n%s", list, ListAccent[i][accName]);
-		}
-	}
+    for(new i = 0; i < sizeof(ListAccent); i ++)
+    {
+        format(list, sizeof(list), "%s\n%s", list, ListAccent[i][accName]);
+    }
 
 	ShowPlayerDialog(playerid, DIALOG_ACCENT, DIALOG_STYLE_LIST, "Accent Options", list, "Select", "Cancel");
 	return 1;
