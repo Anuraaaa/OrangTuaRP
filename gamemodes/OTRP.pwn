@@ -975,6 +975,9 @@ public OnPlayerDeath(playerid, killerid, reason)
 		Kick(killerid);
 		return 1;
 	}
+	if(killerid != INVALID_PLAYER_ID && !IsPlayerStreamedIn(killerid, playerid)) {
+		SendAdminMessage(X11_TOMATO_1, "AdmWarn: %s possibly using instant-kill by killing %s", ReturnName(playerid), ReturnName(killerid));
+	}
 
     if(IsPlayerSpawned(playerid))
     {
@@ -10539,6 +10542,28 @@ public OnVehicleSpawn(vehicleid)
 
 
 /* Main Functions */
+
+GetVehicleFuelMax(modelid) {
+	new Float:fuel;
+	switch(Model_GetCategory(modelid)) 
+	{
+		case CATEGORY_AIRPLANE: fuel = 50.0;
+		case CATEGORY_BIKE: fuel = 5.0;
+		case CATEGORY_BOAT: fuel = 15.0;
+		case CATEGORY_CONVERTIBLE: fuel = 25.0;
+		case CATEGORY_HELICOPTER: fuel = 50.0;
+		case CATEGORY_INDUSTRIAL: fuel = 20.0;
+		case CATEGORY_LOWRIDER: fuel = 20.0;
+		case CATEGORY_OFFROAD: fuel = 30.0;
+		case CATEGORY_PUBLIC: fuel = 25.0;
+		case CATEGORY_SALOONS: fuel = 15.0;
+		case CATEGORY_SPORT: fuel = 15.0;
+		case CATEGORY_STATION_WAGON: fuel = 20.0;
+		case CATEGORY_UNIQUE: fuel = 20.0;
+		default: fuel = 10.0;
+	}
+	return fuel;
+}
 
 GetVehicleCategoryName(modelid) {
 	new string[56];

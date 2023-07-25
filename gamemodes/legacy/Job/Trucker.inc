@@ -138,7 +138,7 @@ CMD:cargo(playerid, params[])
 
 		}
 
-		PlayerData[playerid][pThirst] -= 2.0;
+		PlayerData[playerid][pThirst] -= 1.1;
 	}
 	else if(!strcmp(params, "place", true))
 	{
