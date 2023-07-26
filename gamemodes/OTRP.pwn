@@ -470,7 +470,6 @@ public OnGameModeInit()
 		LoadStaticVehicle();
 		LoadServerMap();
 		LoadActor();
-		LoadDynamicDoors();
 		LoadGangZone();
 		ShowPlayerMarkers(PLAYER_MARKERS_MODE_OFF);
 		BlockGarages(true, GARAGE_TYPE_ALL, "");
@@ -10552,6 +10551,18 @@ public OnVehicleSpawn(vehicleid)
 
 /* Main Functions */
 
+IsHasWeaponParts(playerid) {
+	
+	new it_is = false;
+	for(new i = 0; i < MAX_INVENTORY; i++) if(InventoryData[playerid][i][invExists]) {
+		new string[128];
+		strunpack(string, InventoryData[playerid][i][invItem]);
+		if(GetItemTypeByName(string) == INV_TYPE_WEAPONPART) {
+			it_is = true;
+		}
+	}
+	return it_is;
+}
 GetVehicleFuelMax(modelid) {
 	new Float:fuel;
 	switch(Model_GetCategory(modelid)) 

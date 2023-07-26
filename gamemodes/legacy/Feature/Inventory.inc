@@ -275,6 +275,16 @@ Inventory_Add(playerid, item[], model, quantity = 1)
 	return itemid;
 }
 
+GetItemTypeByName(item[]) {
+
+	new type = 0;
+    for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if(!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))
+    {
+        type = g_aInventoryItems[i][e_InventoryType];
+		break;
+    }
+	return type;
+}
 IsInventoryCanDrop(item[]) {
 	new can_drop = true;
     for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if(!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))

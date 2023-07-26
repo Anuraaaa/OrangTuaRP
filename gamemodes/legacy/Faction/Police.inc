@@ -337,7 +337,7 @@ CMD:take(playerid, params[])
     if(PlayerHasItem(userid, "Weed") || PlayerHasItem(userid, "Rolled Weed") || PlayerHasItem(userid, "Weed Seed"))
         strcat(string, "Take Drugs\n");
 
-    if(PlayerHasItem(userid, "9mm Luger") || (PlayerHasItem(userid, "12 Gauge") || PlayerHasItem(userid, "9mm Silenced Schematic") || PlayerHasItem(userid, "Shotgun Schematic") || PlayerHasItem(userid, "9mm Silenced Material") || PlayerHasItem(userid, "Shotgun Material")))
+    if(IsHasWeaponParts(userid))
         strcat(string, "Take weapon parts\n");
 
     if(!strlen(string))
