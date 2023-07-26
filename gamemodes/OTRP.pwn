@@ -2267,12 +2267,14 @@ public OnPlayerUpdate(playerid)
 			for (new i = 2; i <= 7; i++)
 			{
 				GetPlayerWeaponData(playerid, i, weaponid, ammo);
-				index = weaponid - 22;           
-				if (weaponid && ammo && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)
+				index = weaponid - 22;
+
+				if((weaponid && PlayerData[playerid][pGuns][g_aWeaponSlots[weaponid]] == weaponid ) && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)         
+				//if (weaponid && ammo && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)
 				{
 					objectslot = GetWeaponObjectSlot(weaponid);
 	
-					if(GetPlayerWeapon(playerid) != weaponid)
+					if(GetWeapon(playerid) != weaponid)
 					{
 						SetPlayerAttachedObject(playerid, objectslot, GetWeaponModel(weaponid), WeaponSettings[playerid][index][Bone], WeaponSettings[playerid][index][Position][0], WeaponSettings[playerid][index][Position][1], WeaponSettings[playerid][index][Position][2], WeaponSettings[playerid][index][Position][3], WeaponSettings[playerid][index][Position][4], WeaponSettings[playerid][index][Position][5], 1.0, 1.0, 1.0);
 					}
@@ -2282,7 +2284,7 @@ public OnPlayerUpdate(playerid)
 					}
 				}
 			}
-			for (new i= 5; i < 8; i++)
+			for (new i= 2; i < 7; i++)
 			{ 
 				if(IsPlayerAttachedObjectSlotUsed(playerid, i))
 				{
@@ -6282,7 +6284,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(IsPlayerWatchingCamera(playerid))
 					return SendErrorMessage(playerid, "Kamu sedang menonton siaran langsung saat ini.");
 					
-				SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Kamu sekarang menonton televisi.");
+				SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Kamu sekarang menonton live broadcast.");
 				SendClientMessage(playerid, X11_LIGHTBLUE, "(Live) "WHITE"Gunakan "YELLOW"/stopwatchlive "WHITE"untuk berhenti.");
 
 				StartPlayerWatchingCamera(playerid, g_ReporterPlayerID);
