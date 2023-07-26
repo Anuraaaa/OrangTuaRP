@@ -909,19 +909,26 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 	{
 		if(PlayerData[playerid][pAdmin] >= 5)
 		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
-
-			else
+			}
+			else {
+				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+			}
+				
 		}
 		else if(PlayerData[playerid][pAdmin] > 0 && PlayerData[playerid][pAduty])
 		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
+			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
-
-			else
+			}
+			else {
+				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+			}
 		}
 		
 	}
