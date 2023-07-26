@@ -339,6 +339,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 
             if(ac_weapon[i] && PlayerData[playerid][pGuns][g_aWeaponSlots[ac_weapon[i]]] != ac_weapon[i]) {
                 SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack", GetName(playerid));
+                ResetWeapon(playerid, ac_weapon[i]);
                 ac_weapon_h[playerid]++;
 
                 if(ac_weapon_h[playerid] > 3) {
