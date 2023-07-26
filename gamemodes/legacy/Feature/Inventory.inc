@@ -12,7 +12,12 @@ enum inventoryData
 new InventoryData[MAX_PLAYERS][MAX_INVENTORY][inventoryData],
 	g_ListedInventory[MAX_PLAYERS][MAX_INVENTORY];
 
-	
+
+enum {
+	INV_TYPE_GENERAL = 1,
+	INV_TYPE_WEAPONPART,
+	INV_TYPE_DRUG,
+}
 enum e_InventoryItems
 {
 	e_InventoryItem[32],
@@ -20,54 +25,55 @@ enum e_InventoryItems
 	e_InventoryMax,
 	bool:e_InventoryGive,
 	bool:e_InventoryDrop,
-	bool:e_InventoryStore
+	bool:e_InventoryStore,
+	e_InventoryType
 };
 
 
 new const g_aInventoryItems[][e_InventoryItems] =
 {
-	{"Nitrous Oxide", 1010, 10, true, true, true},
-	{"Spraycan", 365, 10, true, true, true},
-	{"GPS", 18875, 1, true, false, false},
-	{"Cellphone", 18867, 1, false, false, false},
-	{"Medkit", 1580, 15, true, true, true},
-	{"Bandage", 1580, 5, true, true, true},
-	{"Portable Radio", 19942, 1, false, false, false},
-	{"Boombox", 2103, 1, true, true, true},
-	{"Mask", 19036, 1, false, false, false},
-	{"Snack", 2768, 5, true, true, true},
-	{"Water", 2958, 5, true, true, true},
-	{"Rolling Paper", 19873, 100, true, true, true},
-	{"Rolled Weed", 3027, 100, true, true, true},
-	{"Weed", 1578, 100, true, true, true},
-	{"Component", 19627, 5000, true, true, true},
-	{"Weed Seed", 1279, 100, true, true, true},
-	{"9mm Luger", 19995, 20, true, true, true},
-	{"12 Gauge", 19995, 20, true, true, true},
-	{".44 Magnum", 19995, 20, true, true, true},
-	{"7.62mm Caliber", 19995, 20, true, true, true},
-	{"9mm Silenced HV Schematic", 3111, 1, true, true, true},
-	{"Shotgun HV Schematic", 3111, 1, true, true, true},
-	{"Desert Eagle HV Schematic", 3111, 1, true, true, true},
-	{"Rifle HV Schematic", 3111, 1, true, true, true},
-	{"AK-47 HV Schematic", 3111, 1, true, true, true},
-	{"9mm Silenced Schematic", 3111, 1}, true, true, true,
-	{"Shotgun Schematic", 3111, 1, true, true, true},
-	{"Desert Eagle Schematic", 3111, 1, true, true, true},
-	{"Rifle Schematic", 3111, 1, true, true, true},
-	{"AK-47 Schematic", 3111, 1, true, true, true},
-	{"Desert Eagle Material", 3052, 20, true, true, true},
-	{"9mm Silenced Material", 3052, 20, true, true, true},
-	{"Shotgun Material", 3052, 20, true, true, true},
-	{"Rifle Material", 3052, 20, true, true, true},
-	{"AK-47 Material", 3052, 20, true, true, true},
-	{"Axe", 19631, 1, true, true, true},
-	{"Fish Rod", 18632, 1, true, true, true},
-	{"Bait", 19566, 25, true, true, true},
-	{"Fuel Can", 1650, 3, true, true, true},
-	{"Acetaminophen", 2709, 10, true, false, false},
-	{"Promethazine", 2709, 10, true, false, false},
-	{"Cigarettes", 19896, 20, true, true, true}
+	{"Nitrous Oxide", 1010, 10, true, true, true, INV_TYPE_GENERAL},
+	{"Spraycan", 365, 10, true, true, true, INV_TYPE_GENERAL},
+	{"GPS", 18875, 1, true, false, false, INV_TYPE_GENERAL},
+	{"Cellphone", 18867, 1, false, false, false, INV_TYPE_GENERAL},
+	{"Medkit", 1580, 15, true, true, true, INV_TYPE_GENERAL},
+	{"Bandage", 1580, 5, true, true, true, INV_TYPE_GENERAL},
+	{"Portable Radio", 19942, 1, false, false, false, INV_TYPE_GENERAL},
+	{"Boombox", 2103, 1, true, true, true, INV_TYPE_GENERAL},
+	{"Mask", 19036, 1, false, false, false, INV_TYPE_GENERAL},
+	{"Snack", 2768, 5, true, true, true, INV_TYPE_GENERAL},
+	{"Water", 2958, 5, true, true, true, INV_TYPE_GENERAL},
+	{"Rolling Paper", 19873, 100, true, true, true, INV_TYPE_GENERAL},
+	{"Rolled Weed", 3027, 100, true, true, true, INV_TYPE_DRUG},
+	{"Weed", 1578, 100, true, true, true, INV_TYPE_DRUG},
+	{"Component", 19627, 5000, true, true, true, INV_TYPE_GENERAL},
+	{"Weed Seed", 1279, 100, true, true, true, INV_TYPE_DRUG},
+	{"9mm Luger", 19995, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"12 Gauge", 19995, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{".44 Magnum", 19995, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"7.62mm Caliber", 19995, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"9mm Silenced HV Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Shotgun HV Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Desert Eagle HV Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Rifle HV Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"AK-47 HV Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"9mm Silenced Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Shotgun Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Desert Eagle Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Rifle Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"AK-47 Schematic", 3111, 1, true, true, true, INV_TYPE_WEAPONPART},
+	{"Desert Eagle Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"9mm Silenced Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"Shotgun Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"Rifle Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"AK-47 Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
+	{"Axe", 19631, 1, true, true, true, INV_TYPE_GENERAL},
+	{"Fish Rod", 18632, 1, true, true, true, INV_TYPE_GENERAL},
+	{"Bait", 19566, 25, true, true, true, INV_TYPE_GENERAL},
+	{"Fuel Can", 1650, 3, true, true, true, INV_TYPE_GENERAL},
+	{"Acetaminophen", 2709, 10, true, false, false, INV_TYPE_GENERAL},
+	{"Promethazine", 2709, 10, true, false, false, INV_TYPE_GENERAL},
+	{"Cigarettes", 19896, 20, true, true, true, INV_TYPE_GENERAL}
 };
 
 hook OnPlayerRedeemVIP(playerid) {
