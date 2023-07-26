@@ -173,9 +173,9 @@ ReturnSpecificLocation(playerid, &Float:x, &Float:y, &Float:z)
 	new doorz = PlayerData[playerid][pInDoor], biz = PlayerData[playerid][pInBiz], house = House_Inside(playerid);
 	if(doorz != -1)
 	{
-		x = DoorData[doorz][ddExteriorX];
-		y = DoorData[doorz][ddExteriorY];
-		z = DoorData[doorz][ddExteriorZ];
+		x = drData[doorz][dExtposX];
+		y = drData[doorz][dExtposY];
+		z = drData[doorz][dExtposZ];
         return 1;
 	}
 	if(biz != -1)
@@ -203,9 +203,9 @@ GetSpecificLocation(playerid)
 	new doorz = PlayerData[playerid][pInDoor], biz = PlayerData[playerid][pInBiz], house = House_Inside(playerid);
 	if(doorz != -1)
 	{
-		x = DoorData[doorz][ddExteriorX];
-		y = DoorData[doorz][ddExteriorY];
-		z = DoorData[doorz][ddExteriorZ];
+		x = drData[doorz][dExtposX];
+		y = drData[doorz][dExtposY];
+		z = drData[doorz][dExtposZ];
 	}
 	else if(biz != -1)
 	{

@@ -56,7 +56,7 @@
 #include ".\legacy\Feature\Advertisement"
 #include ".\legacy\Feature\Insurance"
 #include ".\legacy\Feature\Interior"
-#include ".\legacy\Feature\Door "
+//#include ".\legacy\Feature\Door"
 #include ".\legacy\Feature\SAM"
 #include ".\legacy\Feature\MOTD"
 #include ".\legacy\Feature\Workshop"

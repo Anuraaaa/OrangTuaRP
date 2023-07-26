@@ -1262,42 +1262,6 @@ LoadRemoveBuilding(playerid)
 	RemoveBuildingForPlayer(playerid, 11011, -2144.3516, -132.9609, 38.3359, 0.25);
 	RemoveBuildingForPlayer(playerid, 11009, -2128.5391, -142.8438, 39.1406, 0.25);
 }
-FormatText(text[])
-{
-	new len = strlen(text);
-	if(len > 1)
-	{
-		for(new i = 0; i < len; i++)
-		{
-			if(text[i] == 92)
-			{
-				// New line
-			    if(text[i+1] == 'n')
-			    {
-					text[i] = '\n';
-					for(new j = i+1; j < len; j++) text[j] = text[j+1], text[j+1] = 0;
-					continue;
-			    }
-
-				// Tab
-			    if(text[i+1] == 't')
-			    {
-					text[i] = '\t';
-					for(new j = i+1; j < len-1; j++) text[j] = text[j+1], text[j+1] = 0;
-					continue;
-			    }
-
-				// Literal
-			    if(text[i+1] == 92)
-			    {
-					text[i] = 92;
-					for(new j = i+1; j < len-1; j++) text[j] = text[j+1], text[j+1] = 0;
-			    }
-			}
-		}
-	}
-	return 1;
-}
 
 cache_get_field_content(row, const field_name[], destination[], max_len = sizeof(destination))
 {
