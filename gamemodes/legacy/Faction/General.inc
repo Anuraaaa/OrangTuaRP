@@ -374,6 +374,29 @@ CountFaction(faction)
 	return count;
 }
 
+CMD:gov(playerid, params[]) {
+    if(isnull(params))
+        return SendSyntaxMessage(playerid, "/gov [text]");
+    if(PlayerData[playerid][pFactionRank] > FactionData[PlayerData[playerid][pFaction]][factionRanks] - 3)
+        if(GetFactionType(playerid) == FACTION_POLICE) {
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"|___________ Government News Announcement ___________|");
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"** %s: %s %s: %s **",GetInitials(Faction_GetName(playerid)),Faction_GetRank(playerid), GetName(playerid, false) ,params);
+        }
+        else if(GetFactionType(playerid) == FACTION_MEDIC) {
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"|___________ Government News Announcement ___________|");
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"** %s: %s %s: %s **",GetInitials(Faction_GetName(playerid)),Faction_GetRank(playerid), GetName(playerid, false) ,params);
+        }
+        else if(GetFactionType(playerid) == FACTION_GOV) {
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"|___________ Government News Announcement ___________|");
+            SendClientMessageToAllEx(FactionData[PlayerData[playerid][pFaction]][factionColor],"** %s: %s %s: %s **",GetInitials(Faction_GetName(playerid)),Faction_GetRank(playerid), GetName(playerid, false) ,params);
+        }
+        else
+            return SendErrorMessage(playerid,"You're not in any government faction");
+    else
+        return SendErrorMessage(playerid, "Kamu harus pada rank %d untuk menggunakan ini.", FactionData[PlayerData[playerid][pFaction]][factionRanks] - 1);
+    return 1;
+}
+
 CMD:mdc(playerid, params[])
 {
 	if(GetFactionType(playerid) != FACTION_POLICE && GetFactionType(playerid) != FACTION_MEDIC)
