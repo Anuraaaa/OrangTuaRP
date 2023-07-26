@@ -2336,6 +2336,10 @@ CMD:jetpack(playerid, params[])
     SetPlayerSpecialAction(playerid, SPECIAL_ACTION_USEJETPACK);
     return 1;
 }
+
+CMD:aod(playerid, params[]) {
+	return cmd_aduty(playerid, "\0");
+}
 CMD:aduty(playerid, params[])
 {
     if(PlayerData[playerid][pAdmin] < 1)

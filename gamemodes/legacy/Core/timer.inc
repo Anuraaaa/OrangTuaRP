@@ -303,7 +303,7 @@ ptask OnSpeedometerUpdate[200](playerid) {
 }
 ptask PlayerUpdate[1000](playerid)
 {
-	if(PlayerData[playerid][pSpawned])
+	if(IsPlayerSpawned(playerid))
 	{
 		UpdateHBE(playerid);
 		AFKCheck(playerid);
@@ -448,12 +448,13 @@ ptask PlayerUpdate[1000](playerid)
 
 ptask DelayUpdate[1000](playerid)
 {
-	if(PlayerData[playerid][pSpawned])
+	if(IsPlayerSpawned(playerid))
 	{
-		if(GetFactionType(playerid) != FACTION_NONE && PlayerData[playerid][pOnDuty])
+		if(GetFactionType(playerid) != FACTION_NONE && PlayerData[playerid][pOnDuty] && !PlayerData[playerid][pAFK])
 		{
 			if(PlayerData[playerid][pDutyTime]) {
-				if(--PlayerData[playerid][pDutyTime] <= 0)
+				PlayerData[playerid][pDutyTime]--;
+				if(PlayerData[playerid][pDutyTime] <= 0)
 				{
 					AddSalary(playerid, "Faction Duty", FactionData[PlayerData[playerid][pFaction]][factionSalary][PlayerData[playerid][pFactionRank] - 1]);
 					PlayerData[playerid][pDutyTime] = 3600;

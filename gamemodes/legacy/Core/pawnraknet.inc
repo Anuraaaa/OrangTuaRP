@@ -137,7 +137,7 @@ public OnIncomingPacket(playerid, packetid, BitStream:bs) {
 
 function OnAntiCheatTurnUpsideDown(playerid, Float:angle) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on "YELLOW"%s "TOMATO"(Upside Down)", GetName(playerid));
-    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal program (Upside Down).");
+    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Upside Down)");
     KickEx(playerid);
     return 1;
 }

@@ -7,12 +7,14 @@
 #define     InvalidSeat2 1000000.0
 
 new WarningCode[MAX_PLAYERS][53],
-    tele_warn[MAX_PLAYERS],
-    slapper_warn[MAX_PLAYERS],
-    engine_hack_warn[MAX_PLAYERS],
-    g_ArmourHack[MAX_PLAYERS],
-    speed_hack[MAX_PLAYERS],
-    airbreak_hack[MAX_PLAYERS];
+    tele_warn[MAX_PLAYERS]= {0, ...},
+    slapper_warn[MAX_PLAYERS]= {0, ...},
+    engine_hack_warn[MAX_PLAYERS]= {0, ...},
+    g_ArmourHack[MAX_PLAYERS]= {0, ...},
+    speed_hack[MAX_PLAYERS]= {0, ...},
+    airbreak_hack[MAX_PLAYERS]= {0, ...},
+    ping_warning[MAX_PLAYERS]= {0, ...},
+    ac_weapon_h[MAX_PLAYERS]= {0, ...};
 
 static
     hack_health[MAX_PLAYERS] = {0, ...},
@@ -93,7 +95,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
     if(type) {
         return 1;
     }
-    
+
     switch(code)
     {
         //Onfoot airbreak
@@ -107,7 +109,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible onfoot airbreak hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible onfoot airbreak hack.", GetName(playerid));
         }
         //Vehicle airbreak
         case 1: {
@@ -120,7 +122,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle airbreak hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle airbreak hack.", GetName(playerid));
         }
         //Teleport hack
         case 2:
@@ -145,7 +147,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                     KickEx(playerid);
                     return 1;
                 }
-                SendAdminMessage(X11_TOMATO, "Anticheat: %s possible teleport hack.", ReturnName(playerid));
+                SendAdminMessage(X11_TOMATO, "Anticheat: %s possible teleport hack.", GetName(playerid));
             }
         }
 
@@ -154,24 +156,24 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         {
             if(++hack_vehtele[playerid] == 3) 
             {
-                SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", ReturnName(playerid));
+                SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", GetName(playerid));
         }
 
         //Wrap vehicle hack
         case 4: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible wrap vehicle hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible wrap vehicle hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
 
         //Vehicle teleport to player hack
         case 5: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport to player hack.", ReturnName(playerid)); 
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport to player hack.", GetName(playerid)); 
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
@@ -187,7 +189,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible on foot flyhack hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible on foot flyhack hack.", GetName(playerid));
         }    
         //Flyhack in vehicle
         case 8: {
@@ -200,11 +202,11 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle fly hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle fly hack.", GetName(playerid));
         }
         //Speedhack in vehicle
         case 10: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle speed hack (please check!).", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle speed hack (please check!).", GetName(playerid));
             //SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             //KickEx(playerid);
         }
@@ -218,7 +220,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle health hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle health hack.", GetName(playerid));
         }
         //Health hack
         case 12: {
@@ -232,31 +234,31 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible health hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible health hack.", GetName(playerid));
         }
         //Weapon hack
         case 15: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible weapon hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible weapon hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
 
         //Ammo hack
         case 16: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible add ammo hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible add ammo hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
 
         //Ammo hack infinite
         case 17: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible infinite ammo hack.", ReturnName(playerid)); 
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible infinite ammo hack.", GetName(playerid)); 
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
 
         case 18: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
@@ -275,7 +277,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 KickEx(playerid);
                 return 1;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible armour hack.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible armour hack.", GetName(playerid));
         }
         //Rapid fire hack
         case 26: {
@@ -283,12 +285,12 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(IsPlayerUsingAndroid(playerid)) {
                 return 0;
             }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible rapid fire hack.", ReturnName(playerid)); 
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible rapid fire hack.", GetName(playerid)); 
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);   
         }
         case 40: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using sandboxie.", ReturnName(playerid));
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using sandboxie.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
@@ -326,6 +328,28 @@ Float:AC_GetPlayerSpeed(playerid)
 ptask OnCheckAntiCheat[1000](playerid) {
 
     if(IsPlayerSpawned(playerid)) {
+
+        new
+            ac_weapon[13],
+            ac_ammo[13]
+            ;
+
+        for(new i = 0; i < 12; i++) {
+            GetPlayerWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
+
+            if(ac_weapon[i] && PlayerData[playerid][pGuns][g_aWeaponSlots[ac_weapon[i]]] != ac_weapon[i]) {
+                SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack", GetName(playerid));
+                ac_weapon_h[playerid]++;
+
+                if(ac_weapon_h[playerid] > 3) {
+                    SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack (has been kicked)", GetName(playerid));
+                    ResetWeapons(playerid);
+                    ac_weapon_h[playerid] = 0;
+                    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Weapon Hack)");
+                    KickEx(playerid);
+                }
+            }
+        }
         if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 		    new Float: ghX, Float: ghY, Float: ghZ;
@@ -341,12 +365,12 @@ ptask OnCheckAntiCheat[1000](playerid) {
 		if (AC_GetPlayerSpeed(playerid) > 350.0 && PlayerData[playerid][pAdmin] < 1)
 		{
             SendAdminMessage(X11_TOMATO, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(%s)", GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack"));
-		    SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Speedhack).");
+		    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
             KickEx(playerid);
 		}
         if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !GetEngineStatus(GetPlayerVehicleID(playerid)) && GetVehicleSpeed(GetPlayerVehicleID(playerid)) > 15.0) {
             if(++engine_hack_warn[playerid] >= 5) {
-                SendClientMessageEx(playerid, X11_TOMATO_1, "AntiCheat: "GREY"Kamu dikick dari server karena dicurigai menggunakan program ilegal (Engine Hack).");
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Engine Hack)");
                 KickEx(playerid);
             }
         }
@@ -356,7 +380,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
         if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && !IsAPlane(vehicleid) && GetVehicleSpeed(vehicleid) > 300) {
             if(++speed_hack[playerid] > 5) {
                 SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
-                SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Speedhack)");
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
                 KickEx(playerid);     
             }
         }
@@ -369,7 +393,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
                 tipcrasher= "Bullet Crasher";
 
             SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(%s)", GetName(playerid), tipcrasher);
-            SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (%s)", tipcrasher);
+            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
             KickEx(playerid);
         }
         if(AC_PlayerHasWeapon(playerid, WEAPON_BOMB) && !PlayerData[playerid][pAdmin]) {
@@ -390,10 +414,19 @@ ptask OnCheckAntiCheat[1000](playerid) {
                 CallLocalFunction("OnPlayerCrasher", "d", playerid);
             }
 		}
+		if(GetPlayerPing(playerid) > 800) {
+			ping_warning[playerid]++;
+            SendClientMessageEx(playerid, X11_YELLOW, "(Ping) "GREY"High ping detected on your account (%d/3)", ping_warning[playerid]);
+            if(ping_warning[playerid] > 3) {
+                ping_warning[playerid] = 0;
+                SendClientMessageToAllEx(X11_TOMATO, "BotCmd: %s has been kicked from the server due to high ping (%d/800)", GetName(playerid), GetPlayerPing(playerid));
+                KickEx(playerid);
+            }
+		}
     }
     else {
         if(AC_GetPlayerSpeed(playerid) > 1.0) {
-            SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Fake Spawn)");
+            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Fake Spawn)");
             KickEx(playerid);
         }
     }
@@ -402,13 +435,13 @@ ptask OnCheckAntiCheat[1000](playerid) {
 
 function OnPlayerCrasher(playerid) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
-    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Crasher)");
+    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
     KickEx(playerid);  
     return 1;
 }
 
 function CheckWeaponHack(playerid, weaponid) {
-    if(weaponid != PlayerData[playerid][pWeapon])
+    if(weaponid != PlayerData[playerid][pWeapon] && !PlayerData[playerid][pAdmin])
     {
         PlayerData[playerid][pWeapon] = weaponid;
 
