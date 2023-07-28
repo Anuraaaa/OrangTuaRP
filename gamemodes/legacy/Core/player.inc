@@ -84,7 +84,7 @@ function CheckPlayerUCP(playerid)
 	new rows = cache_num_rows();
 	new banned, banby[24], banreason[32], bantime;
 	new active;
-	new string[464], verified = 0;
+	new string[464], verified = 0, verifmailcode = 0;
 
 	if (rows)
 	{
@@ -103,9 +103,28 @@ function CheckPlayerUCP(playerid)
 		cache_get_value_name(0, "Password", UcpData[playerid][uPassword], 128);
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
 		cache_get_value_name_int(0, "emailverified", verified);
+		cache_get_value_name_int(0, "VerificationCode", verifmailcode);
 
 		new dc_verif = 0;
 		cache_get_value_name_int(0, "DiscordVerify", dc_verif);
+
+		if (verified || dc_verif) { // cek salah satunya email atau discord udah verif atau blm
+			ShowLoginMenu(playerid);
+			LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
+			SendClientMessage(playerid, X11_RED, "(Security) "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
+		}
+		else {
+			// cek dua2nya email dan verif udah verif atau blm
+			if(!verified && verifmailcode != 0) {
+				format(string,sizeof(string),""WHITE"Username kamu belum diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
+				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
+				KickEx(playerid);
+				return 1;
+			}
+			if (!dc_verif && UcpData[playerid][uVerifyCode] != 0) {
+				ShowVerifyMenu(playerid);
+			}
+		}
 
 
 		if(UcpData[playerid][uVerifyCode] != 0 && !dc_verif) {
