@@ -1,33 +1,36 @@
 CheckAccount(playerid)
 {
-	inline const OnCheckBanned() {
-		if(cache_num_rows()) {
-			new string[559], date[26], admin[24], ip[26];
-			cache_get_value_name(0, "Admin", admin);
-			cache_get_value_name(0, "Date", date);
-			cache_get_value_name(0, "IP", ip);
-
-			strcat(string, sprintf(""WHITE"Akun anda "GREY"(%s) "WHITE"telah dibanned dari server.\n\n", GetName(playerid)));
-			strcat(string, sprintf(""GREY"Username: "WHITE"%s\n", GetName(playerid)));
-			strcat(string, sprintf(""GREY"IP Address: "WHITE"%s\n", ip));
-			strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", admin));
-			strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", date));
-			strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
-			strcat(string, "unbanned appeals pada discord Orang Tua Roleplay");
-			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
-
-			KickEx(playerid);
-		}
-		else {
-			new query[256];
-			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `playerucp` WHERE `UCP` = '%e' LIMIT 1;", GetName(playerid));
-			mysql_tquery(sqlcon, query, "CheckPlayerUCP", "d", playerid);
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline OnCheckBanned, "SELECT * FROM `banneds` WHERE `Username` = '%e' LIMIT 1;", GetName(playerid));
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banneds` WHERE `Username` = '%e' LIMIT 1;", GetName(playerid));
+	mysql_tquery(sqlcon, query, "OnCheckBanned", "d", playerid);
 	return 1;
 }
 
+function OnCheckBanned(playerid) {
+	if(cache_num_rows()) {
+		new string[451], date[26], admin[24], ip[26];
+		cache_get_value_name(0, "Admin", admin);
+		cache_get_value_name(0, "Date", date);
+		cache_get_value_name(0, "IP", ip);
+
+		strcat(string, sprintf(""WHITE"Akun anda "GREY"(%s) "WHITE"telah dibanned dari server.\n\n", GetName(playerid)));
+		strcat(string, sprintf(""GREY"Username: "WHITE"%s\n", GetName(playerid)));
+		strcat(string, sprintf(""GREY"IP Address: "WHITE"%s\n", ip));
+		strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", admin));
+		strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", date));
+		strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
+		strcat(string, "unbanned appeals pada discord Orang Tua Roleplay");
+		ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
+
+		KickEx(playerid);
+	}
+	else {
+		new query[256];
+		mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `playerucp` WHERE `UCP` = '%e' LIMIT 1;", GetName(playerid));
+		mysql_tquery(sqlcon, query, "CheckPlayerUCP", "d", playerid);
+	}
+	return 1;
+}
 function PlayerCheck(playerid, rcc)
 {
 	if(rcc != g_RaceCheck{playerid})
@@ -1602,24 +1605,28 @@ function OnUCPBanned(playerid, name[], reason[])
 		new ip[26];
 		cache_get_value_name(0, "LastIP", ip, sizeof(ip));
 
-		inline const OnOfflineBanned() {
-			if(cache_num_rows()) {
-				SendErrorMessage(playerid, "Username %s sudah ada dalam banned-list.", name);
-			}
-			else {
-				new query[579];
-				mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `banneds` (`Username`, `Admin`, `Reason`, `Date`, `IP`) VALUES ('%e', '%e', '%e', '%e', '%e')", name, GetUsername(playerid), reason, ReturnDate(true), ip);
-				mysql_tquery(sqlcon, query);
-				SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been offline banned by %s", name, PlayerData[playerid][pUCP]);
-				SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);		
-
-			}
-		}
-		MySQL_TQueryInline(sqlcon, using inline OnOfflineBanned, "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);	
+		new query[156];
+		mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);
+		mysql_tquery(sqlcon, query, "OnOfflineBanned", "dsss", playerid, name, ip, reason);
 	}
 	else
 	{
 		SendErrorMessage(playerid, "Username %s tidak terdaftar di database.", name);
+	}
+	return 1;
+}
+
+function OnOfflineBanned(playerid, name[], ip[], reason[]) {
+	if(cache_num_rows()) {
+		SendErrorMessage(playerid, "Username %s sudah ada dalam banned-list.", name);
+	}
+	else {
+		new query[579];
+		mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `banneds` (`Username`, `Admin`, `Reason`, `Date`, `IP`) VALUES ('%e', '%e', '%e', '%e', '%e')", name, GetUsername(playerid), reason, ReturnDate(true), ip);
+		mysql_tquery(sqlcon, query);
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been offline banned by %s", name, PlayerData[playerid][pUCP]);
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);		
+
 	}
 	return 1;
 }

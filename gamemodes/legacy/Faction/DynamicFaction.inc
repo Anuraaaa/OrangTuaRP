@@ -687,28 +687,9 @@ CMD:faction(playerid, params[])
 			return SendErrorMessage(playerid, "Player tersebut sedang online!");
 		}
 
-		inline const OnOfflineRemove() {
-			if(cache_num_rows()) {
-
-				new
-					faction;
-
-				cache_get_value_name_int(0, "Faction", faction);
-				if(faction != PlayerData[playerid][pFaction]) {
-					SendErrorMessage(playerid, "Player tersebut bukan pada faction-mu!");
-				}
-				else {
-
-					SendServerMessage(playerid, "You have kicked %s from your faction!", string);
-
-					new query[256];
-					mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `Faction` = '-1', `FactionID` = '-1', `FactionRank` = '0', `Onduty` = '0' WHERE `Name` = '%e'", string);
-					mysql_tquery(sqlcon, query);
-				}
-			}
-			else SendErrorMessage(playerid, "Tidak dapat menemukan karakter tersebut.");
-		}
-		MySQL_TQueryInline(sqlcon, using inline OnOfflineRemove, "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", string);
+		new query[156];
+		mysql_format(sqlcon,query, sizeof(query), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", string);
+		mysql_tquery(sqlcon, query, "OnOfflineRemove", "ds", playerid, string);
 
 	}
 	else if(!strcmp(type, "invite", true))
@@ -882,5 +863,28 @@ CMD:faction(playerid, params[])
 		SendServerMessage(playerid, "You have quit from your faction (%s)", Faction_GetName(playerid));
 		ResetFaction(playerid);
 	}
+	return 1;
+}
+
+function OnOfflineRemove(playerid, string[]) {
+	if(cache_num_rows()) {
+
+		new
+			faction;
+
+		cache_get_value_name_int(0, "Faction", faction);
+		if(faction != PlayerData[playerid][pFaction]) {
+			SendErrorMessage(playerid, "Player tersebut bukan pada faction-mu!");
+		}
+		else {
+
+			SendServerMessage(playerid, "You have kicked %s from your faction!", string);
+
+			new query[256];
+			mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `Faction` = '-1', `FactionID` = '-1', `FactionRank` = '0', `Onduty` = '0' WHERE `Name` = '%e'", string);
+			mysql_tquery(sqlcon, query);
+		}
+	}
+	else SendErrorMessage(playerid, "Tidak dapat menemukan karakter tersebut.");
 	return 1;
 }

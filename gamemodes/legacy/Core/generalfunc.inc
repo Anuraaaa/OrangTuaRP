@@ -2110,3 +2110,79 @@ GetGlobalRank(playerid) {
 	}
 	return e_str;
 }
+
+function UpdateCrimeStatus(playerid, listitem) {
+	new sql_id = ListedItems[playerid][listitem];
+	if(cache_num_rows()) {
+		new status;
+
+		cache_get_value_name_int(0, "Status", status);
+
+		status = !(status);
+
+		mysql_tquery(sqlcon, sprintf("UPDATE `crime_record` SET `Status` = '%d' WHERE `ID` = '%d'", status, sql_id));
+		ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
+	}
+	else SendErrorMessage(playerid, "Terjadi kesalahan saat melakukan query.");
+	return 1;
+}
+
+function OnFindNumber(playerid, number) {
+	if(cache_num_rows())
+	{
+		new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
+		cache_get_value_name(0, "Name", name);
+		cache_get_value_name(0, "UCP", ucp);
+
+		SendClientMessageEx(playerid, COLOR_LIGHTRED, "NUMINFO: {FFFFFF}Number %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", number, name, ucp);
+	}
+	else
+	{
+		SendErrorMessage(playerid, "There is no character with number %d", number);
+	}
+	return 1;
+}
+
+function OnFindMask(playerid, maskid) {
+	if(cache_num_rows())
+	{
+		new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
+		cache_get_value_name(0, "Name", name);
+		cache_get_value_name(0, "UCP", ucp);
+
+		SendClientMessageEx(playerid, COLOR_LIGHTRED, "(MaskInfo) {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", maskid, name, ucp);
+	}
+	else
+	{
+		SendErrorMessage(playerid, "There is no character with maskid %d", maskid);
+	}
+	return 1;
+}
+
+function OnUnbanUsername(playerid, name[]) {
+	if(cache_num_rows()) {
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been unbanned by %s", name, PlayerData[playerid][pUCP]);
+		mysql_tquery(sqlcon, sprintf("DELETE FROM `banneds` WHERE `Username` = '%s'", name));
+	}
+	else {
+		SendErrorMessage(playerid, "Username %s tidak ada pada banned-list.", name);
+	}
+	return 1;
+}
+
+function ShowGateReq(playerid) {
+	new string[256], count = 0;
+	if(cache_num_rows()) {
+		for(new i = 0; i < cache_num_rows(); i++) {
+			new id = cache_get_field_int(i, "ID");
+			new name[24], date[26];
+			cache_get_value_name(i, "Name", name);
+			cache_get_value_name(i, "Date", date);
+
+			strcat(string, sprintf("%s\t(%s)\n", name, date));
+			ListedItems[playerid][count++] = id;
+		}
+		ShowPlayerDialog(playerid, DIALOG_GATEREQ, DIALOG_STYLE_TABLIST, "Pending Gate Request", string, "Done", "Close");
+	}
+	return 1;
+}

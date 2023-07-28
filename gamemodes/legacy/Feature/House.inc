@@ -1308,3 +1308,55 @@ task OnHouseAsellCheck[3600000]() {
 	}
 	return 1;
 }
+
+function HouseKeyShare(playerid, id) {
+	if(cache_num_rows() >= House_TenantLimit(HouseData[id][houseType])) {
+		
+		SendErrorMessage(playerid, "Kunci pada rumah tidak bisa diberikan lebih dari %d orang.", House_TenantLimit(HouseData[id][houseType]));
+	}
+	else {
+		ShowPlayerDialog(playerid, DIALOG_HOUSE_KEY_SHARE, DIALOG_STYLE_INPUT, "House Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Rumah.", "Share", "Close");
+	}
+	return 1;
+}
+
+function HouseKeyRemove(playerid) {
+	if(cache_num_rows()) {
+
+		new count = 0, string[512];
+		for(new i = 0; i < cache_num_rows(); i++) {
+			new sqlid, name[24];
+			cache_get_value_name(i, "Name", name, 24);
+			cache_get_value_name_int(i, "PlayerID", sqlid);
+			g_ListedTenant[playerid][count++] = sqlid;
+
+			strcat(string, sprintf("%d) Name: %s\n", i + 1, name));
+
+		}
+
+		if(count)
+			ShowPlayerDialog(playerid, DIALOG_HOUSE_TENANT_REMOVE, DIALOG_STYLE_LIST, "Remove Tenant", string, "Remove", "Close");
+	}
+	else {
+		SendServerMessage(playerid, "Tidak ada tenant pada rumah ini.");
+	}
+	return 1;
+}
+
+function HousePark(playerid) {
+	new gstr[352], count = 0;
+	if(!cache_num_rows())
+		return SendErrorMessage(playerid, "Tidak ada kendaraanmu pada garasi ini.");
+
+	for(new i = 0; i < cache_num_rows(); i++) {
+		new modelid, plate[16], vehid;
+		cache_get_value_name_int(i, "vehModel", modelid);
+		cache_get_value_name(i, "vehPlate", plate, sizeof(plate));
+		cache_get_value_name_int(i, "vehID", vehid);
+
+		strcat(gstr, sprintf("%d) %s, Plate: %s\n", i + 1, ReturnVehicleModelName(modelid), plate));
+		g_Selected_Vehicle_ID[playerid][count++] = vehid;
+	}
+	ShowPlayerDialog(playerid, DIALOG_HOUSE_PARK_TAKE, DIALOG_STYLE_LIST, "Parked Vehicle", gstr, "Take", "Close");
+	return 1;
+}

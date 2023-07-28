@@ -1783,3 +1783,53 @@ Vehicle_ObjectDelete(vehicleid, slot)
     }
     return 0;
 }
+
+function OnSpawnVehicle(playerid, sql_id) {
+
+	new bool:thereis = false;
+	if(cache_num_rows()) {
+
+		new Float:x, Float:y, Float:z;
+		cache_get_value_name_float(0, "vehX", x);
+		cache_get_value_name_float(0, "vehY", y);
+		cache_get_value_name_float(0, "vehZ", z);
+
+		foreach(new i : Vehicle) if(IsVehicleInRangeOfPoint3D(i, 3.0,  x, y, z)) {
+			thereis  = true;
+			break;
+		}
+
+		if(thereis) {
+			SendErrorMessage(playerid, "Sedang ada kendaraan lain ditempat terakhir kendaraan yang akan kamu spawn.");
+		}
+		else {
+			mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = %d WHERE `vehID` = %d", VEHICLE_STATE_SPAWNED, sql_id));
+
+			mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id), "OnVehicleLoaded", "");
+
+			SendServerMessage(playerid, "You have spawned your vehicle back :)");
+		}
+	}
+	return 1;
+}
+
+function QueryVehSpawn(playerid) {
+	if(cache_num_rows()) {
+
+		new count = 0, string[256];
+		for(new i = 0; i < cache_num_rows(); i++) {
+
+			new sql_id, modelid;
+
+			cache_get_value_name_int(i, "vehModel", modelid);
+			cache_get_value_name_int(i, "vehID", sql_id);
+			g_Selected_Vehicle_ID[playerid][count++] = sql_id;
+			strcat(string, sprintf("%d). %s\n", i + 1, ReturnVehicleModelName(modelid)));
+		}
+		ShowPlayerDialog(playerid, DIALOG_VEHSPAWN, DIALOG_STYLE_LIST, "Despawned Vehicle", string, "Spawn", "Close");
+	}
+	else {
+		SendErrorMessage(playerid, "Tidak ada kendaraanmu yang ter-despawn.");
+	}
+	return 1;
+}

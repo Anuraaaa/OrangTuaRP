@@ -2438,26 +2438,9 @@ CMD:v(playerid, params[])
 	}
 	else if(!strcmp(type, "spawn", true)) {
 
-		inline const QueryVehSpawn() {
-			if(cache_num_rows()) {
-
-				new count = 0;
-				for(new i = 0; i < cache_num_rows(); i++) {
-
-					new sql_id, modelid;
-
-					cache_get_value_name_int(i, "vehModel", modelid);
-					cache_get_value_name_int(i, "vehID", sql_id);
-					g_Selected_Vehicle_ID[playerid][count++] = sql_id;
-					strcat(string, sprintf("%d). %s\n", i + 1, ReturnVehicleModelName(modelid)));
-				}
-				ShowPlayerDialog(playerid, DIALOG_VEHSPAWN, DIALOG_STYLE_LIST, "Despawned Vehicle", string, "Spawn", "Close");
-			}
-			else {
-				SendErrorMessage(playerid, "Tidak ada kendaraanmu yang ter-despawn.");
-			}
-		}
-		MySQL_TQueryInline(sqlcon, using inline QueryVehSpawn, "SELECT * FROM `vehicle` WHERE `vehState` = '%d' AND `vehExtraID` = '%d'", VEHICLE_STATE_STUCK, PlayerData[playerid][pID]);
+		new query[156];
+		mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `vehicle` WHERE `vehState` = '%d' AND `vehExtraID` = '%d'", VEHICLE_STATE_STUCK, PlayerData[playerid][pID]);
+		mysql_tquery(sqlcon, query, "QueryVehSpawn", "d", playerid);
 	}
 	else if(!strcmp(type, "lock", true))
 	{
@@ -2544,37 +2527,40 @@ CMD:fixmask(playerid, params[]) {
 
 CMD:changenameme(playerid, params[]) {
 
-	inline const OnChangenameCheck() {
-		if(!cache_num_rows()) {
-			return SendErrorMessage(playerid, "Kamu belum membuat pending changename request.");
-		}
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `changenamesweb` WHERE `cnOwner` = '%d' LIMIT 1;", PlayerData[playerid][pID]);
+	mysql_tquery(sqlcon, query, "OnChangenameCheck", "d", playerid);
+	return 1;
+}
 
-		new 
-			status, birthdate[24], name[24], gender, origin[32];
-
-		cache_get_value_name_int(0, "cnStatus", status);
-
-		cache_get_value_name_int(0, "cnGender", gender);
-		cache_get_value_name(0, "cnName", name, sizeof(name));
-		cache_get_value_name(0, "cnBirthdate", birthdate, sizeof(birthdate));
-		cache_get_value_name(0, "cnOrigin", origin, sizeof(origin));
-
-		if(!status) {
-			return SendErrorMessage(playerid, "Changename requestmu belum disetujui.");
-		}
-
-
-
-		if(ChangeName(playerid, name)) {
-			mysql_tquery(sqlcon, sprintf("DELETE FROM `changenamesweb` WHERE `cnOwner` = '%d' AND `cnOwnerID` = '%d'", PlayerData[playerid][pID], UcpData[playerid][ucpID]));
-			format(PlayerData[playerid][pOrigin], 32, origin);
-			format(PlayerData[playerid][pBirthdate], 24, birthdate);
-			PlayerData[playerid][pGender] = gender;
-
-			SendServerMessage(playerid, "Namamu berhasil diubah menjadi "GREY"%s", name);
-		}
-
+function OnChangenameCheck(playerid) {
+	if(!cache_num_rows()) {
+		return SendErrorMessage(playerid, "Kamu belum membuat pending changename request.");
 	}
-	MySQL_TQueryInline(sqlcon, using inline OnChangenameCheck, "SELECT * FROM `changenamesweb` WHERE `cnOwner` = '%d' LIMIT 1;", PlayerData[playerid][pID]);
+
+	new 
+		status, birthdate[24], name[24], gender, origin[32];
+
+	cache_get_value_name_int(0, "cnStatus", status);
+
+	cache_get_value_name_int(0, "cnGender", gender);
+	cache_get_value_name(0, "cnName", name, sizeof(name));
+	cache_get_value_name(0, "cnBirthdate", birthdate, sizeof(birthdate));
+	cache_get_value_name(0, "cnOrigin", origin, sizeof(origin));
+
+	if(!status) {
+		return SendErrorMessage(playerid, "Changename requestmu belum disetujui.");
+	}
+
+
+
+	if(ChangeName(playerid, name)) {
+		mysql_tquery(sqlcon, sprintf("DELETE FROM `changenamesweb` WHERE `cnOwner` = '%d' AND `cnOwnerID` = '%d'", PlayerData[playerid][pID], UcpData[playerid][ucpID]));
+		format(PlayerData[playerid][pOrigin], 32, origin);
+		format(PlayerData[playerid][pBirthdate], 24, birthdate);
+		PlayerData[playerid][pGender] = gender;
+
+		SendServerMessage(playerid, "Namamu berhasil diubah menjadi "GREY"%s", name);
+	}
 	return 1;
 }

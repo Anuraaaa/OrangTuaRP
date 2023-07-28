@@ -432,3 +432,156 @@ CMD:acc(playerid, params[])
     ShowAksesorisMenu(playerid);
     return 1;
 }
+
+
+function AccPresetSearch(playerid, inputtext[]) {
+
+    new string[712];
+
+    if(cache_num_rows()) {
+
+        new Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:sx, Float:sy, Float:sz, bone, model, sql_id;
+
+        cache_get_value_name_int(0, "ID", sql_id);
+        SetPVarInt(playerid, "AccID", sql_id);
+
+        cache_get_value_name_float(0, "X", x);
+        cache_get_value_name_float(0, "Y", y);
+        cache_get_value_name_float(0, "Z", z);
+        cache_get_value_name_float(0, "RX", rx);
+        cache_get_value_name_float(0, "RY", ry);
+        cache_get_value_name_float(0, "RZ", rz);
+        cache_get_value_name_float(0, "SX", sx);
+        cache_get_value_name_float(0, "SY", sy);
+        cache_get_value_name_float(0, "SZ", sz);
+        cache_get_value_name_int(0, "Bone", bone);
+        cache_get_value_name_int(0, "Model", model);
+        strcat(string, sprintf(""GREEN"========== [ Preset %s ] ==========\n\n\n", inputtext));
+        strcat(string, sprintf(""WHITE"Model aksesoris yang digunakan: %d\n", model));
+        strcat(string, sprintf("Bone: %s\n", accBones[bone - 1]));
+        strcat(string, sprintf(""WHITE"X: %.2f\n", x));
+        strcat(string, sprintf(""WHITE"Y: %.2f\n", y));
+        strcat(string, sprintf(""WHITE"Z: %.2f\n", z));
+        strcat(string, sprintf(""WHITE"RX: %.2f\n", rx));
+        strcat(string, sprintf(""WHITE"RY: %.2f\n", ry));
+        strcat(string, sprintf(""WHITE"RZ: %.2f\n", rz));
+        strcat(string, sprintf(""WHITE"SX: %.2f\n", sx));
+        strcat(string, sprintf(""WHITE"SY: %.2f\n", sy));
+        strcat(string, sprintf(""WHITE"SZ: %.2f\n", sz));
+
+        strcat(string, "Silahkan pilih "YELLOW"YES "WHITE"jika anda ingin menggunakan preset ini.");
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_FOUND, DIALOG_STYLE_MSGBOX, "Preset found!", string, "Yes", "No");
+    }
+    else {
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "(error) preset tidak ditemukan!\n\nSilahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
+    }
+    return 1;
+}
+
+function AccPresetFound(playerid) {
+    if(cache_num_rows()) {
+
+        new id = PlayerData[playerid][pAksesoris], name[24];
+
+        cache_get_value_name(0, "PresetName", name, sizeof(name));
+        cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
+        cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
+        cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
+        cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
+        cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
+        cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
+        cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
+        cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
+        cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
+        cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
+
+        RemovePlayerAttachedObject(playerid, id);
+        Aksesoris_Attach(playerid, id);
+
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+    }
+    return 1;
+}
+
+function AccPreset(playerid) {
+    if(cache_num_rows()) {
+
+        new string[15 * 24], count = 0;
+
+        for(new i = 0; i < cache_num_rows(); i++) {
+            new preset_name[24], sqlid;
+            cache_get_value_name(i, "PresetName", preset_name, 24);
+            cache_get_value_name_int(i, "ID", sqlid);
+
+            strcat(string, sprintf("%d) %s\n", i + 1, preset_name));
+            ListedPreset[playerid][count++] = sqlid;
+        }
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "Preset found!", string, "Use", "Close");
+    }
+    else {
+        SendErrorMessage(playerid, "Tidak ada preset dengan model yang kamu gunakan!");
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
+    }
+    return 1;
+}
+
+function ShowMyPreset(playerid) {
+    if(cache_num_rows()) {
+
+        new string[15 * 24], count = 0;
+
+        for(new i = 0; i < cache_num_rows(); i++) {
+            
+            new sqlid, presetname[24];
+
+            cache_get_value_name_int(i, "ID", sqlid);
+            cache_get_value_name(i, "PresetName", presetname, 24);
+
+            ListedPreset[playerid][count++] = sqlid;
+
+            strcat(string, sprintf("%d) %s\n", i + 1, presetname));
+        }
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "My Preset", string, "Use", "Close");
+    }
+    return 1;
+}
+
+function AccPresetListed(playerid) {
+    if(cache_num_rows()) {
+
+        new name[24], id = PlayerData[playerid][pAksesoris];
+        cache_get_value_name(0, "PresetName", name, 24);
+        cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
+        cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
+        cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
+        cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
+        cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
+        cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
+        cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
+        cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
+        cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
+        cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
+
+        RemovePlayerAttachedObject(playerid, id);
+        Aksesoris_Attach(playerid, id);
+
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
+    }
+    return 1;
+}
+
+function AccPresetCreate(playerid, inputtext[]) {
+    if(!cache_num_rows()) {
+        new id = PlayerData[playerid][pAksesoris], query[512];
+
+        mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `acc_preset` (`OwnerID`,`PresetName`,`Model`,`Bone`,`X`,`Y`,`Z`,`RX`,`RY`,`RZ`,`SX`,`SY`,`SZ`) VALUES('%d','%e','%d','%d','%f','%f','%f','%f','%f','%f','%f','%f','%f')",
+            PlayerData[playerid][pID], inputtext,  AccData[playerid][id][accModel], AccData[playerid][id][accBone], AccData[playerid][id][accOffset][0], AccData[playerid][id][accOffset][1],AccData[playerid][id][accOffset][2], AccData[playerid][id][accRot][0], AccData[playerid][id][accRot][1], AccData[playerid][id][accRot][2], AccData[playerid][id][accScale][0], AccData[playerid][id][accScale][1], AccData[playerid][id][accScale][2]);
+        mysql_tquery(sqlcon, query);
+
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset aksesoris dengan nama "YELLOW"\"%s\" "WHITE"berhasil dibuat!", inputtext);
+    }
+    else {
+        ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "(error) nama preset tersebut telah digunakan!\n\nSilahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
+    }
+    return 1;
+}

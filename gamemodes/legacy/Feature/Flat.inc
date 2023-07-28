@@ -913,3 +913,37 @@ task OnFlatAsellCheck[3600000]() {
 	}
 	return 1;
 }
+
+function FlatKeyShare(playerid) {
+	if(cache_num_rows()) {
+		
+		SendErrorMessage(playerid, "Kunci pada Flat tidak bisa diberikan lebih dari 1 orang.");
+	}
+	else {
+		ShowPlayerDialog(playerid, DIALOG_FLAT_KEY_SHARE, DIALOG_STYLE_INPUT, "Flat Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Flat.", "Share", "Close");
+	}
+	return 1;
+}
+
+function FlatKeyRemove(playerid) {
+	if(cache_num_rows()) {
+
+		new count = 0, string[512];
+		for(new i = 0; i < cache_num_rows(); i++) {
+			new sqlid, name[24];
+			cache_get_value_name(i, "Name", name, 24);
+			cache_get_value_name_int(i, "PlayerID", sqlid);
+			g_ListedTenant[playerid][count++] = sqlid;
+
+			strcat(string, sprintf("%d) Name: %s\n", i + 1, name));
+
+		}
+
+		if(count)
+			ShowPlayerDialog(playerid, DIALOG_FLAT_TENANT_REMOVE, DIALOG_STYLE_LIST, "Remove Tenant", string, "Remove", "Close");
+	}
+	else {
+		SendServerMessage(playerid, "Tidak ada tenant pada flat ini.");
+	}
+	return 1;
+}

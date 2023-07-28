@@ -40,30 +40,44 @@ WarnUser(playerid, targetid, reason[])
 
 OfflineWarnUser(playerid, name[], reason[])
 {
-	new sqlid;
-	new string [192];
 
-	inline const OnOfflineWarn() {
-		if(cache_num_rows())
-		{
-			cache_get_value_name_int(0, "pID", sqlid);
-			mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `warnings` (`Owner`, `Type`, `Reason`, `Admin`, `Date`) VALUES('%d', '%d', '%e', '%e', CURRENT_TIMESTAMP())", sqlid, TYPE_WARN, reason, PlayerData[playerid][pUCP]);
-			mysql_tquery(sqlcon, string);
-
-			SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been offline warned by %s", name, PlayerData[playerid][pUCP]);
-			SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
-		}
-		else
-		{
-			SendErrorMessage(playerid, "There is no character with name '%s'!", name);
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline OnOfflineWarn, "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1", name);
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1", name);
+	mysql_tquery(sqlcon, query, "OnOfflineWarn", "dss", playerid, name, reason);
 	return 1;
 }
 
+function OnOfflineWarn(playerid, name[], reason[]) {
+
+	new sqlid;
+	new string[192];
+
+	if(cache_num_rows())
+	{
+		cache_get_value_name_int(0, "pID", sqlid);
+		mysql_format(sqlcon, string, sizeof(string), "INSERT INTO `warnings` (`Owner`, `Type`, `Reason`, `Admin`, `Date`) VALUES('%d', '%d', '%e', '%e', CURRENT_TIMESTAMP())", sqlid, TYPE_WARN, reason, PlayerData[playerid][pUCP]);
+		mysql_tquery(sqlcon, string);
+
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been offline warned by %s", name, PlayerData[playerid][pUCP]);
+		SendClientMessageToAllEx(COLOR_LIGHTRED, "Reason: %s", reason);
+	}
+	else
+	{
+		SendErrorMessage(playerid, "There is no character with name '%s'!", name);
+	}
+	return 1;
+}
 ShowPlayerWarning(playerid, targetid)
 {
+
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `warnings` WHERE `Owner` = '%d'", PlayerData[playerid][pID]);
+	mysql_tquery(sqlcon, query, "OnShowWarn", "dd", playerid, targetid);
+
+	return 1;
+}
+
+function OnShowWarn(playerid, targetid) {
 
 	new const warntype[][] = {
 		"None",
@@ -73,32 +87,27 @@ ShowPlayerWarning(playerid, targetid)
 	};
 	new str[1012];
 
-	inline const OnShowWarn() {
-		if(cache_num_rows())
+	if(cache_num_rows())
+	{
+		format(str, sizeof(str), "Type\tAdmin\tReason\tDate\n");
+		forex(i, cache_num_rows())
 		{
-			format(str, sizeof(str), "Type\tAdmin\tReason\tDate\n");
-			forex(i, cache_num_rows())
-			{
-				new type, admin[24], reason[32], date[40], id;
-				cache_get_value_name_int(i, "ID", id);
-				cache_get_value_name_int(i, "Type", type);
-				cache_get_value_name(i, "Admin", admin, 24);
-				cache_get_value_name(i, "Reason", reason, 32);
-				cache_get_value_name(i, "Date", date, 40);
-				format(str, sizeof(str), "%s%s {FFFFFF}(%d)\t%s\t%s\t%s\n", str, warntype[type], id, admin, reason, date);
-			}
-			ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Warning List: %s", GetName(playerid)), str, "Close", "");
+			new type, admin[24], reason[32], date[40], id;
+			cache_get_value_name_int(i, "ID", id);
+			cache_get_value_name_int(i, "Type", type);
+			cache_get_value_name(i, "Admin", admin, 24);
+			cache_get_value_name(i, "Reason", reason, 32);
+			cache_get_value_name(i, "Date", date, 40);
+			format(str, sizeof(str), "%s%s {FFFFFF}(%d)\t%s\t%s\t%s\n", str, warntype[type], id, admin, reason, date);
 		}
-		else
-		{
-			SendErrorMessage(targetid, "Player %s has no warnings.", GetName(playerid, false));
-		}
+		ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Warning List: %s", GetName(playerid)), str, "Close", "");
 	}
-	MySQL_TQueryInline(sqlcon, using inline OnShowWarn, "SELECT * FROM `warnings` WHERE `Owner` = '%d'", PlayerData[playerid][pID]);
-
+	else
+	{
+		SendErrorMessage(targetid, "Player %s has no warnings.", GetName(playerid, false));
+	}
 	return 1;
 }
-
 CMD:checkwarn(playerid, params[]) {
 
 	new targetid;

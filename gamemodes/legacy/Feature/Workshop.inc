@@ -433,3 +433,35 @@ CMD:workshop(playerid, params[]) {
     return 1;
 
 }
+
+function ShowWorkshopEmployee(playerid) {
+    if(cache_num_rows()) {
+
+        new str[312];
+
+        for(new i = 0; i < cache_num_rows(); i++) {
+
+            new
+                char_name[MAX_PLAYER_NAME];
+
+            cache_get_value_name(i, "Name", char_name, MAX_PLAYER_NAME);
+
+            strcat(str, sprintf("%d) %s\n", i + 1, char_name));
+        }
+        ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_LIST, "Listed Employee", str, "Close", "");
+    }
+    else SendErrorMessage(playerid, "Workshop ini tidak memiliki pekerja satupun.");
+    return 1;
+}
+function OnRemoveEmployee(playerid, id, inputtext[]) {
+    if(cache_num_rows()) {
+
+        new query[256];
+        mysql_format(sqlcon, query, sizeof(query), sprintf("DELETE FROM `workshop_employee` WHERE `Name` = '%e' AND `WorkshopID` = '%d'", inputtext, WorkshopData[id][wsID]));
+        mysql_tquery(sqlcon, query);
+
+        SendServerMessage(playerid, "Pekerja %s berhasil dihapus dari daftar.", inputtext);
+    }
+    else SendErrorMessage(playerid, "Tidak ada pekerjamu dengan nama tersebut.");
+    return 1;
+}

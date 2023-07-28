@@ -262,21 +262,9 @@ CMD:findnumber(playerid, params[])
 	if(!IsNumeric(params))
 		return SendSyntaxMessage(playerid, "/findnumber [phone number]");
 
-	inline const OnFindNumber() {
-		if(cache_num_rows())
-		{
-			new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
-			cache_get_value_name(0, "Name", name);
-			cache_get_value_name(0, "UCP", ucp);
-
-			SendClientMessageEx(playerid, COLOR_LIGHTRED, "NUMINFO: {FFFFFF}Number %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
-		}
-		else
-		{
-			SendErrorMessage(playerid, "There is no character with number %d", strval(params));
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline OnFindNumber, "SELECT * FROM `characters` WHERE `Number` = '%d' LIMIT 1", strval(params));
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `Number` = '%d' LIMIT 1", strval(params));
+	mysql_tquery(sqlcon, query, "OnFindNumber", "dd", playerid, strval(params));
 	return 1;
 }
 
@@ -291,21 +279,9 @@ CMD:findmask(playerid, params[])
 	if(!IsNumeric(params))
 		return SendSyntaxMessage(playerid, "/findmask [mask id]");
 
-	inline const OnFindMask() {
-		if(cache_num_rows())
-		{
-			new name[MAX_PLAYER_NAME], ucp[MAX_PLAYER_NAME];
-			cache_get_value_name(0, "Name", name);
-			cache_get_value_name(0, "UCP", ucp);
-
-			SendClientMessageEx(playerid, COLOR_LIGHTRED, "(MaskInfo) {FFFFFF}Mask %d is owned by {FFFF00}%s {FFFFFF}with username {FFFF00}%s", strval(params), name, ucp);
-		}
-		else
-		{
-			SendErrorMessage(playerid, "There is no character with maskid %d", strval(params));
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline OnFindMask, "SELECT * FROM `characters` WHERE `MaskID` = '%d' LIMIT 1", strval(params));
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `MaskID` = '%d' LIMIT 1", strval(params));
+	mysql_tquery(sqlcon, query, "OnFindMask", "dd", playerid, strval(params));
 	return 1;
 }
 CMD:checkvehicle(playerid, params[])
@@ -1688,16 +1664,9 @@ CMD:unban(playerid, params[])
 	if(sscanf(params, "s[24]", name))
 		return SendSyntaxMessage(playerid, "/unban [UCP name]");
 
-	inline const OnUnbanUsername() {
-		if(cache_num_rows()) {
-			SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been unbanned by %s", name, PlayerData[playerid][pUCP]);
-			mysql_tquery(sqlcon, sprintf("DELETE FROM `banneds` WHERE `Username` = '%s'", name));
-		}
-		else {
-			SendErrorMessage(playerid, "Username %s tidak ada pada banned-list.", name);
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline OnUnbanUsername, "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);
+	new query[156];
+	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);
+	mysql_tquery(sqlcon, query, "OnUnbanUsername", "ds", playerid, name);
 	return 1;	
 }
 
@@ -2258,22 +2227,8 @@ CMD:gaterequest(playerid, params[]) {
 	if(PlayerData[playerid][pAdmin] < 6)
 		return SendErrorMessage(playerid, "You don't have permission to use this command!");
 
-	new string[256], count = 0;
-	inline const ShowGateReq() {
-		if(cache_num_rows()) {
-			for(new i = 0; i < cache_num_rows(); i++) {
-				new id = cache_get_field_int(i, "ID");
-				new name[24], date[26];
-				cache_get_value_name(i, "Name", name);
-				cache_get_value_name(i, "Date", date);
 
-				strcat(string, sprintf("%s\t(%s)\n", name, date));
-				ListedItems[playerid][count++] = id;
-			}
-			ShowPlayerDialog(playerid, DIALOG_GATEREQ, DIALOG_STYLE_TABLIST, "Pending Gate Request", string, "Done", "Close");
-		}
-	}
-	MySQL_TQueryInline(sqlcon, using inline ShowGateReq, "SELECT * FROM `gaterequests`");
+	mysql_tquery(sqlcon, "SELECT * FROM `gaterequests`", "ShowGateReq", "d", playerid);
 	return 1;
 }
 CMD:givecoin(playerid, params[]) {

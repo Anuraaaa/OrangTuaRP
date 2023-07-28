@@ -211,24 +211,27 @@ CMD:editfgarage(playerid, params[]) {
         if(sscanf(string, "d", sql_id))
             return SendSyntaxMessage(playerid, "/editfgarage [garage id] [removeveh] [vehicle sql id]");
 
-        inline const FactionRemoveVeh() {
-            if(cache_affected_rows()) {
-                SendAdminAction(playerid, "You have successfully removed vehicle sql id %d.", sql_id);
-
-                foreach(new i : Vehicle) if(Vehicle_GetType(i) == VEHICLE_TYPE_FACTION && VehicleData[i][vExtraID] == sql_id) {
-                    Vehicle_Delete(i);
-                    break;
-                }
-            }
-            else {
-                SendErrorMessage(playerid, "Cannot find faction garage vehicle sql id %d.", sql_id);
-            }
-        }
-        MySQL_TQueryInline(sqlcon, using inline FactionRemoveVeh, "DELETE FROM `factiongaragevehs` WHERE `ID` = '%d'", sql_id);
+        new query[156];
+        mysql_format(sqlcon, query, sizeof(query), "DELETE FROM `factiongaragevehs` WHERE `ID` = '%d'", sql_id);
+        mysql_tquery(sqlcon,query, "FactionRemoveVeh", "dd", playerid, sql_id);
     }
     return 1;
 }
 
+function FactionRemoveVeh(playerid, sql_id) {
+    if(cache_affected_rows()) {
+        SendAdminAction(playerid, "You have successfully removed vehicle sql id %d.", sql_id);
+
+        foreach(new i : Vehicle) if(Vehicle_GetType(i) == VEHICLE_TYPE_FACTION && VehicleData[i][vExtraID] == sql_id) {
+            Vehicle_Delete(i);
+            break;
+        }
+    }
+    else {
+        SendErrorMessage(playerid, "Cannot find faction garage vehicle sql id %d.", sql_id);
+    }
+    return 1;
+}
 CMD:fgarage(playerid, params[]) {
 
     new garage_id = -1;
@@ -243,36 +246,9 @@ CMD:fgarage(playerid, params[]) {
                 return SendErrorMessage(playerid, "Faction Garage ini belum memiliki spawn point.");
             }
 
-            new string[2012];
-
-            inline const OnFacGarage() {
-                if(cache_num_rows()) {
-
-                    format(string, sizeof(string), "Unique ID\tVehicle Model\tHealth Left\n");
-
-                    new count = 0;
-                    for(new i = 0; i < cache_num_rows(); i++) {
-                        new modelid, Float:health, sqlid, spawned;
-
-                        cache_get_value_name_int(i, "Model", modelid);
-                        cache_get_value_name_float(i, "Health", health);
-                        cache_get_value_name_int(i, "ID", sqlid);
-                        cache_get_value_name_int(i, "Spawned", spawned);
-
-                        if(!spawned)
-                            format(string, sizeof(string), "%s#%d\t%s\t%.2f\n", string, sqlid, ReturnVehicleModelName(modelid), health);
-                        else 
-                            format(string, sizeof(string), "%s#%d\t%s "YELLOW"("WHITE"Used ID:%d"YELLOW")\t"WHITE"%.2f\n", string, sqlid, ReturnVehicleModelName(modelid), FactionGarage_GetVehicleID(sqlid), health);
-                        
-                        ListedGarageVeh[playerid][count++] = sqlid;
-                    }
-                    ShowPlayerDialog(playerid, DIALOG_FGARAGE_SPAWN, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Faction Garage (ID:%d)", garage_id), string, "Spawn", "Close");
-                }
-                else {
-                    SendErrorMessage(playerid, "Faction Garage ini tidak memiliki kendaraan yang dapat dispawn.");
-                }
-            }
-            MySQL_TQueryInline(sqlcon, using inline OnFacGarage, "SELECT * FROM `factiongaragevehs` WHERE `Garage` = '%d'", FactionGarage[garage_id][fgID]);
+            new query[178];
+            mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `factiongaragevehs` WHERE `Garage` = '%d'", FactionGarage[garage_id][fgID]);
+            mysql_tquery(sqlcon, query, "OnFactionGarage", "dd", playerid, garage_id);
         }
         else {
 
@@ -309,6 +285,35 @@ CMD:fgarage(playerid, params[]) {
     return 1;
 }
 
+function OnFactionGarage(playerid, garage_id) {
+    new string[1012];
+    if(cache_num_rows()) {
+
+        format(string, sizeof(string), "Unique ID\tVehicle Model\tHealth Left\n");
+
+        new count = 0;
+        for(new i = 0; i < cache_num_rows(); i++) {
+            new modelid, Float:health, sqlid, spawned;
+
+            cache_get_value_name_int(i, "Model", modelid);
+            cache_get_value_name_float(i, "Health", health);
+            cache_get_value_name_int(i, "ID", sqlid);
+            cache_get_value_name_int(i, "Spawned", spawned);
+
+            if(!spawned)
+                format(string, sizeof(string), "%s#%d\t%s\t%.2f\n", string, sqlid, ReturnVehicleModelName(modelid), health);
+            else 
+                format(string, sizeof(string), "%s#%d\t%s "YELLOW"("WHITE"Used ID:%d"YELLOW")\t"WHITE"%.2f\n", string, sqlid, ReturnVehicleModelName(modelid), FactionGarage_GetVehicleID(sqlid), health);
+            
+            ListedGarageVeh[playerid][count++] = sqlid;
+        }
+        ShowPlayerDialog(playerid, DIALOG_FGARAGE_SPAWN, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Faction Garage (ID:%d)", garage_id), string, "Spawn", "Close");
+    }
+    else {
+        SendErrorMessage(playerid, "Faction Garage ini tidak memiliki kendaraan yang dapat dispawn.");
+    }
+    return 1;
+}
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
  	if (newkeys & KEY_CROUCH && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
@@ -352,48 +357,53 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
         if(response) {
             new sql_id = ListedGarageVeh[playerid][listitem], garage_id = FactionGarage_Nearest(playerid);
 
-            inline const SpawnFacGarage() {
-                if(cache_num_rows()) {
-                    new modelid, Float:health, damage1, damage2, damage3, damage4, color1, color2, vehicleid, siren = 0, spawned = 0;
 
-                    cache_get_value_name_int(0, "Model", modelid);
-                    cache_get_value_name_float(0, "Health", health);
-                    cache_get_value_name_int(0, "Color1", color1);
-                    cache_get_value_name_int(0, "Color2", color2);
-                    cache_get_value_name_int(0, "Damage1", damage1);
-                    cache_get_value_name_int(0, "Damage2", damage2);
-                    cache_get_value_name_int(0, "Damage3", damage3);
-                    cache_get_value_name_int(0, "Damage4", damage4);
-                    cache_get_value_name_int(0, "Spawned", spawned);
-
-                    if(spawned)
-                    {
-                        SendErrorMessage(playerid, "Kendaraan ini sudah terspawn!");
-                    }
-                    else {
-                        new factionid = FactionGarage[garage_id][fgFaction];
-
-                        if(FactionData[factionid][factionType] == FACTION_POLICE || FactionData[factionid][factionType] == FACTION_MEDIC)
-                            siren = 1;
-
-                        vehicleid = Vehicle_Create(modelid, FactionGarage[garage_id][fgSpawnPos][0], FactionGarage[garage_id][fgSpawnPos][1], FactionGarage[garage_id][fgSpawnPos][2], FactionGarage[garage_id][fgSpawnPos][3], color1, color2, siren, false, sprintf("%s", Faction_GetNameByID(factionid)));
-                        
-                        UpdateVehicleDamageStatus(vehicleid,  damage1, damage2, damage3, damage4);
-                        SetVehicleHealth(vehicleid, health);
-
-                        VehicleData[vehicleid][vFactionType] = FactionData[factionid][factionType];
-                        Vehicle_SetType(vehicleid, VEHICLE_TYPE_FACTION);
-                        VehicleData[vehicleid][vGarageID] = garage_id;
-                        VehicleData[vehicleid][vExtraID] = sql_id;
-
-                        PutPlayerInVehicle(playerid, vehicleid, 0);
-                        SetVehicleNumberPlate(vehicleid, sprintf("%s", Faction_GetNameByID(factionid)));
-
-                        mysql_tquery(sqlcon, sprintf("UPDATE `factiongaragevehs` SET `Spawned` = '1' WHERE `ID` = '%d'", sql_id));
-                    }
-                }
-            }
-            MySQL_TQueryInline(sqlcon, using inline SpawnFacGarage, "SELECT * FROM `factiongaragevehs` WHERE `ID` = '%d' LIMIT 1;", sql_id);
+            new query[156];
+            mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `factiongaragevehs` WHERE `ID` = '%d' LIMIT 1;", sql_id);
+            mysql_tquery(sqlcon, query, "SpawnFacGarage", "ddd", playerid, sql_id, garage_id);
         }
     }
+}
+
+function SpawnFacGarage(playerid, sql_id, garage_id) {
+    if(cache_num_rows()) {
+        new modelid, Float:health, damage1, damage2, damage3, damage4, color1, color2, vehicleid, siren = 0, spawned = 0;
+
+        cache_get_value_name_int(0, "Model", modelid);
+        cache_get_value_name_float(0, "Health", health);
+        cache_get_value_name_int(0, "Color1", color1);
+        cache_get_value_name_int(0, "Color2", color2);
+        cache_get_value_name_int(0, "Damage1", damage1);
+        cache_get_value_name_int(0, "Damage2", damage2);
+        cache_get_value_name_int(0, "Damage3", damage3);
+        cache_get_value_name_int(0, "Damage4", damage4);
+        cache_get_value_name_int(0, "Spawned", spawned);
+
+        if(spawned)
+        {
+            SendErrorMessage(playerid, "Kendaraan ini sudah terspawn!");
+        }
+        else {
+            new factionid = FactionGarage[garage_id][fgFaction];
+
+            if(FactionData[factionid][factionType] == FACTION_POLICE || FactionData[factionid][factionType] == FACTION_MEDIC)
+                siren = 1;
+
+            vehicleid = Vehicle_Create(modelid, FactionGarage[garage_id][fgSpawnPos][0], FactionGarage[garage_id][fgSpawnPos][1], FactionGarage[garage_id][fgSpawnPos][2], FactionGarage[garage_id][fgSpawnPos][3], color1, color2, siren, false, sprintf("%s", Faction_GetNameByID(factionid)));
+            
+            UpdateVehicleDamageStatus(vehicleid,  damage1, damage2, damage3, damage4);
+            SetVehicleHealth(vehicleid, health);
+
+            VehicleData[vehicleid][vFactionType] = FactionData[factionid][factionType];
+            Vehicle_SetType(vehicleid, VEHICLE_TYPE_FACTION);
+            VehicleData[vehicleid][vGarageID] = garage_id;
+            VehicleData[vehicleid][vExtraID] = sql_id;
+
+            PutPlayerInVehicle(playerid, vehicleid, 0);
+            SetVehicleNumberPlate(vehicleid, sprintf("%s", Faction_GetNameByID(factionid)));
+
+            mysql_tquery(sqlcon, sprintf("UPDATE `factiongaragevehs` SET `Spawned` = '1' WHERE `ID` = '%d'", sql_id));
+        }
+    }
+    return 1;
 }

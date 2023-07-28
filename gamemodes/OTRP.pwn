@@ -909,11 +909,9 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 		if(PlayerData[playerid][pAdmin] >= 5)
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
 			}
 			else {
-				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetPlayerPosFindZ(playerid, fX, fY, fZ);
 			}
 				
@@ -921,11 +919,9 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 		else if(PlayerData[playerid][pAdmin] > 0 && PlayerData[playerid][pAduty])
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
 			}
 			else {
-				MapAndreas_FindZ_For2DCoord(fX, fY, fZ);
 				SetPlayerPosFindZ(playerid, fX, fY, fZ);
 			}
 		}
@@ -2344,26 +2340,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 	}
 	if(dialogid == DIALOG_CRIMERECORD) {
+
+		new sql_id = ListedItems[playerid][listitem];
+		
 		if(!response) {
 			ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
 		}
 		else {
-			new sql_id = ListedItems[playerid][listitem];
-
-			inline const UpdateCrimeStatus() {
-				if(cache_num_rows()) {
-					new status;
-
-					cache_get_value_name_int(0, "Status", status);
-
-					status = !(status);
-
-					mysql_tquery(sqlcon, sprintf("UPDATE `crime_record` SET `Status` = '%d' WHERE `ID` = '%d'", status, sql_id));
-					ShowPlayerDialog(playerid, DIALOG_MDC_CITIZEN_MENU, DIALOG_STYLE_LIST, "MDC > Lookup Menu", "Summary\nArrest history\nUnpaid tickets\nCrime record", "Select", "Close");
-				}
-				else SendErrorMessage(playerid, "Terjadi kesalahan saat melakukan query.");
-			}
-			MySQL_TQueryInline(sqlcon, using inline UpdateCrimeStatus, "SELECT * FROM `crime_record` WHERE `ID` = '%d' LIMIT 1;", sql_id);
+			mysql_tquery(sqlcon, sprintf("SELECT * FROM `crime_record` WHERE `ID` = '%d' LIMIT 1;", sql_id), "UpdateCrimeStatus", "dd", playerid, listitem);
 		}
 	}
 	if(dialogid == DIALOG_ADS_POST) {
@@ -2526,17 +2510,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			if(id != -1 && Workshop_IsOwner(playerid, id)) {
 
-				inline const OnRemoveEmployee() {
-					if(cache_num_rows()) {
-						mysql_format(sqlcon, query, sizeof(query), sprintf("DELETE FROM `workshop_employee` WHERE `Name` = '%e' AND `WorkshopID` = '%d'", inputtext, WorkshopData[id][wsID]));
-						mysql_tquery(sqlcon, query);
-
-						SendServerMessage(playerid, "Pekerja %s berhasil dihapus dari daftar.", inputtext);
-					}
-					else SendErrorMessage(playerid, "Tidak ada pekerjamu dengan nama tersebut.");
-				}
 				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `workshop_employee` WHERE `Name` = '%e' AND `WorkshopID` = '%d'", inputtext, WorkshopData[id][wsID]);
-				MySQL_TQueryInline(sqlcon, using inline OnRemoveEmployee, query);
+				mysql_tquery(sqlcon, query, "OnRemoveEmployee", "dds", playerid, id, inputtext);
 
 				cmd_workshop(playerid, "employee");
 			}
@@ -2544,7 +2519,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_WS_EMPLOYEE) {
 		if(response) {
-			new id = Workshop_Nearest(playerid), str[512];
+			new id = Workshop_Nearest(playerid);
 
 			if(id != -1 && Workshop_IsOwner(playerid, id)) {
 				if(listitem == 0) {
@@ -2555,22 +2530,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				if(listitem == 2) {
 
-					inline const ShowWorkshopEmployee() {
-						if(cache_num_rows()) {
-							for(new i = 0; i < cache_num_rows(); i++) {
-
-								new
-									char_name[MAX_PLAYER_NAME];
-
-								cache_get_value_name(i, "Name", char_name, MAX_PLAYER_NAME);
-
-								strcat(str, sprintf("%d) %s\n", i + 1, char_name));
-							}
-							ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_LIST, "Listed Employee", str, "Close", "");
-						}
-						else SendErrorMessage(playerid, "Workshop ini tidak memiliki pekerja satupun.");
-					}
-					MySQL_TQueryInline(sqlcon, using inline ShowWorkshopEmployee, "SELECT * FROM `workshop_employee` WHERE `WorkshopID` = '%d'", WorkshopData[id][wsID]);
+					mysql_tquery(sqlcon, sprintf("SELECT * FROM `workshop_employee` WHERE `WorkshopID` = '%d'", WorkshopData[id][wsID]), "ShowWorkshopEmployee", "d", playerid);
 
 				}
 			}
@@ -2778,35 +2738,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_VEHSPAWN) {
 		if(response) {
-			new sql_id = g_Selected_Vehicle_ID[playerid][listitem], bool:thereis = false;
-			
+			new sql_id = g_Selected_Vehicle_ID[playerid][listitem];
 
-			inline const QueryVehSpawn() {
-				if(cache_num_rows()) {
-
-					new Float:x, Float:y, Float:z;
-					cache_get_value_name_float(0, "vehX", x);
-					cache_get_value_name_float(0, "vehY", y);
-					cache_get_value_name_float(0, "vehZ", z);
-
-					foreach(new i : Vehicle) if(IsVehicleInRangeOfPoint3D(i, 3.0,  x, y, z)) {
-						thereis  = true;
-						break;
-					}
-
-					if(thereis) {
-						SendErrorMessage(playerid, "Sedang ada kendaraan lain ditempat terakhir kendaraan yang akan kamu spawn.");
-					}
-					else {
-						mysql_tquery(sqlcon, sprintf("UPDATE `vehicle` SET `vehState` = %d WHERE `vehID` = %d", VEHICLE_STATE_SPAWNED, sql_id));
-
-						mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id), "OnVehicleLoaded", "");
-
-						SendServerMessage(playerid, "You have spawned your vehicle back :)");
-					}
-				}
-			}
-			MySQL_TQueryInline(sqlcon, using inline QueryVehSpawn, "SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id);
+			mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehID`='%d';", sql_id), "OnSpawnVehicle", "dd", playerid, sql_id);
 		}
 	}
 	if(dialogid == DIALOG_UNIMPOUND) {
@@ -3042,48 +2976,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			}
 
-			new string[712];
-
-			inline const AccPresetSearch() {
-				if(cache_num_rows()) {
-
-					new Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz, Float:sx, Float:sy, Float:sz, bone, model, sql_id;
-
-					cache_get_value_name_int(0, "ID", sql_id);
-					SetPVarInt(playerid, "AccID", sql_id);
-
-					cache_get_value_name_float(0, "X", x);
-					cache_get_value_name_float(0, "Y", y);
-					cache_get_value_name_float(0, "Z", z);
-					cache_get_value_name_float(0, "RX", rx);
-					cache_get_value_name_float(0, "RY", ry);
-					cache_get_value_name_float(0, "RZ", rz);
-					cache_get_value_name_float(0, "SX", sx);
-					cache_get_value_name_float(0, "SY", sy);
-					cache_get_value_name_float(0, "SZ", sz);
-					cache_get_value_name_int(0, "Bone", bone);
-					cache_get_value_name_int(0, "Model", model);
-					strcat(string, sprintf(""GREEN"========== [ Preset %s ] ==========\n\n\n", inputtext));
-					strcat(string, sprintf(""WHITE"Model aksesoris yang digunakan: %d\n", model));
-					strcat(string, sprintf("Bone: %s\n", accBones[bone - 1]));
-					strcat(string, sprintf(""WHITE"X: %.2f\n", x));
-					strcat(string, sprintf(""WHITE"Y: %.2f\n", y));
-					strcat(string, sprintf(""WHITE"Z: %.2f\n", z));
-					strcat(string, sprintf(""WHITE"RX: %.2f\n", rx));
-					strcat(string, sprintf(""WHITE"RY: %.2f\n", ry));
-					strcat(string, sprintf(""WHITE"RZ: %.2f\n", rz));
-					strcat(string, sprintf(""WHITE"SX: %.2f\n", sx));
-					strcat(string, sprintf(""WHITE"SY: %.2f\n", sy));
-					strcat(string, sprintf(""WHITE"SZ: %.2f\n", sz));
-
-					strcat(string, "Silahkan pilih "YELLOW"YES "WHITE"jika anda ingin menggunakan preset ini.");
-					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_FOUND, DIALOG_STYLE_MSGBOX, "Preset found!", string, "Yes", "No");
-				}
-				else {
-					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "(error) preset tidak ditemukan!\n\nSilahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
-				}
-			}
-			MySQL_TQueryInline(sqlcon, using inline AccPresetSearch, "SELECT * FROM `acc_preset` WHERE `PresetName` = '%e' LIMIT 1;", inputtext);
+			new query[156];
+			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `PresetName` = '%e' LIMIT 1;", inputtext);
+			mysql_tquery(sqlcon, query, "AccPresetSearch", "ds", playerid, inputtext);
 		}
 		else {
 			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
@@ -3092,30 +2987,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	if(dialogid == DIALOG_ACC_PRESET_FOUND) {
 		if(response) {
 
-			inline const AccPresetFound() {
-				if(cache_num_rows()) {
-
-					new id = PlayerData[playerid][pAksesoris], name[24];
-
-					cache_get_value_name(0, "PresetName", name, sizeof(name));
-					cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
-					cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
-					cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
-					cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
-					cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
-					cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
-					cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
-					cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
-					cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
-					cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
-
-					RemovePlayerAttachedObject(playerid, id);
-					Aksesoris_Attach(playerid, id);
-
-					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
-				}
-			}
-			MySQL_TQueryInline(sqlcon, using inline AccPresetFound, "SELECT * FROM `acc_preset` WHERE `ID` = '%d' LIMIT 1;", GetPVarInt(playerid, "AccID"));
+			new query[156];
+			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `ID` = '%d' LIMIT 1;", GetPVarInt(playerid, "AccID"));
+			mysql_tquery(sqlcon, query, "AccPresetFound", "d", playerid);
 		}
 		else {
 			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
@@ -3127,84 +3001,28 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_SEARCH, DIALOG_STYLE_INPUT, "Search preset", "Silahkan masukkan nama preset yang ingin kamu cari:", "Search", "Close");
 			} 
 			if(listitem == 1) {
-
-				inline const AccPreset() {
-					if(cache_num_rows()) {
-
-						new string[15 * 24], count = 0;
-
-						for(new i = 0; i < cache_num_rows(); i++) {
-							new preset_name[24], sqlid;
-							cache_get_value_name(i, "PresetName", preset_name, 24);
-							cache_get_value_name_int(i, "ID", sqlid);
-
-							strcat(string, sprintf("%d) %s\n", i + 1, preset_name));
-							ListedPreset[playerid][count++] = sqlid;
-						}
-						ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "Preset found!", string, "Use", "Close");
-					}
-					else {
-						SendErrorMessage(playerid, "Tidak ada preset dengan model yang kamu gunakan!");
-						ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline AccPreset, "SELECT * FROM `acc_preset` WHERE `Model` = '%d' LIMIT 15;", AccData[playerid][PlayerData[playerid][pAksesoris]][accModel]);
-
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `Model` = '%d' LIMIT 15;", AccData[playerid][PlayerData[playerid][pAksesoris]][accModel]);
+				mysql_tquery(sqlcon, query, "AccPreset", "d", playerid);
+				
 			}
 			if(listitem == 2) {
 				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "Silahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
 			}
 			if(listitem == 3) {
 
-				inline const ShowMyPreset() {
-					if(cache_num_rows()) {
-
-						new string[15 * 24], count = 0;
-
-						for(new i = 0; i < cache_num_rows(); i++) {
-							
-							new sqlid, presetname[24];
-
-							cache_get_value_name_int(i, "ID", sqlid);
-							cache_get_value_name(i, "PresetName", presetname, 24);
-
-							ListedPreset[playerid][count++] = sqlid;
-
-							strcat(string, sprintf("%d) %s\n", i + 1, presetname));
-						}
-						ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_LISTED, DIALOG_STYLE_LIST, "My Preset", string, "Use", "Close");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline ShowMyPreset, "SELECT * FROM `acc_preset` WHERE `OwnerID` = '%d' ORDER BY `ID` ASC LIMIT 15;", PlayerData[playerid][pID]);
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `OwnerID` = '%d' ORDER BY `ID` ASC LIMIT 15;", PlayerData[playerid][pID]);
+				mysql_tquery(sqlcon, query, "ShowMyPreset", "d", playerid);
 			}
 		}
 	}
 	if(dialogid == DIALOG_ACC_PRESET_LISTED) {
 		if(response) {
 
-			inline const AccPresetListed() {
-				if(cache_num_rows()) {
-
-					new name[24], id = PlayerData[playerid][pAksesoris];
-					cache_get_value_name(0, "PresetName", name, 24);
-					cache_get_value_name_float(0, "X", AccData[playerid][id][accOffset][0]);
-					cache_get_value_name_float(0, "Y", AccData[playerid][id][accOffset][1]);
-					cache_get_value_name_float(0, "Z", AccData[playerid][id][accOffset][2]);
-					cache_get_value_name_float(0, "RX", AccData[playerid][id][accRot][0]);
-					cache_get_value_name_float(0, "RY", AccData[playerid][id][accRot][1]);
-					cache_get_value_name_float(0, "RZ", AccData[playerid][id][accRot][2]);
-					cache_get_value_name_float(0, "SX", AccData[playerid][id][accScale][0]);
-					cache_get_value_name_float(0, "SY", AccData[playerid][id][accScale][1]);
-					cache_get_value_name_float(0, "SZ", AccData[playerid][id][accScale][2]);
-					cache_get_value_name_int(0, "Bone", AccData[playerid][id][accBone]);
-
-					RemovePlayerAttachedObject(playerid, id);
-					Aksesoris_Attach(playerid, id);
-
-					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset "YELLOW"\"%s\" "WHITE"berhasil digunakan pada aksesoris index #%d", name, id);
-				}
-			}
-			MySQL_TQueryInline(sqlcon, using inline AccPresetListed, "SELECT * FROM `acc_preset` WHERE `ID` = '%d'", ListedPreset[playerid][listitem]);
+			new query[156];
+			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `ID` = '%d'", ListedPreset[playerid][listitem]);
+			mysql_tquery(sqlcon, query, "AccPresetListed", "d", playerid);
 		}
 		else {
 			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
@@ -3216,23 +3034,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "Silahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
 				return 1;
 			}
-
-			inline const AccPresetCreate() {
-
-				if(!cache_num_rows()) {
-					new id = PlayerData[playerid][pAksesoris], query[512];
-
-					mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `acc_preset` (`OwnerID`,`PresetName`,`Model`,`Bone`,`X`,`Y`,`Z`,`RX`,`RY`,`RZ`,`SX`,`SY`,`SZ`) VALUES('%d','%e','%d','%d','%f','%f','%f','%f','%f','%f','%f','%f','%f')",
-						PlayerData[playerid][pID], inputtext,  AccData[playerid][id][accModel], AccData[playerid][id][accBone], AccData[playerid][id][accOffset][0], AccData[playerid][id][accOffset][1],AccData[playerid][id][accOffset][2], AccData[playerid][id][accRot][0], AccData[playerid][id][accRot][1], AccData[playerid][id][accRot][2], AccData[playerid][id][accScale][0], AccData[playerid][id][accScale][1], AccData[playerid][id][accScale][2]);
-					mysql_tquery(sqlcon, query);
-
-					SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Acc-Preset) "WHITE"Preset aksesoris dengan nama "YELLOW"\"%s\" "WHITE"berhasil dibuat!", inputtext);
-				}
-				else {
-					ShowPlayerDialog(playerid, DIALOG_ACC_PRESET_CREATE, DIALOG_STYLE_INPUT, "Create preset", "(error) nama preset tersebut telah digunakan!\n\nSilahkan masukkan nama preset yang akan kamu buat: (tidak bisa lebih dari 24 huruf!)", "Create", "Close");
-				}
-			}
-			MySQL_TQueryInline(sqlcon, using inline AccPresetCreate, "SELECT * FROM `acc_preset` WHERE `PresetName` = '%e'", inputtext);
+			new query[156];
+			mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `acc_preset` WHERE `PresetName` = '%e'", inputtext);
+			mysql_tquery(sqlcon, query, "AccPresetCreate", "d", playerid);
 		}
 		else {
 			ShowPlayerDialog(playerid, DIALOG_ACC_PRESET, DIALOG_STYLE_LIST, sprintf("Accessory #%d Preset", PlayerData[playerid][pAksesoris]), "Search preset (by name)\nSearch preset (by used model)\nCreate preset\n"YELLOW"My preset", "Select", "Close");
@@ -3567,47 +3371,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!House_IsOwner(playerid, id))
 					return 0;
 
-				inline const HouseKeyShare() {
-					if(cache_num_rows() >= House_TenantLimit(HouseData[id][houseType])) {
-						
-						SendErrorMessage(playerid, "Kunci pada rumah tidak bisa diberikan lebih dari %d orang.", House_TenantLimit(HouseData[id][houseType]));
-					}
-					else {
-						ShowPlayerDialog(playerid, DIALOG_HOUSE_KEY_SHARE, DIALOG_STYLE_INPUT, "House Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Rumah.", "Share", "Close");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline HouseKeyShare, "SELECT * FROM `housekeys` WHERE `HouseID` = %d", HouseData[id][houseID]);
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `housekeys` WHERE `HouseID` = %d", HouseData[id][houseID]);
+				mysql_tquery(sqlcon, query, "HouseKeyShare", "dd", playerid, id);
 			}
 			case 1: 
 			{
 
-				inline const HouseKeyRemove() {
-					if(cache_num_rows()) {
-
-						new count = 0, string[512];
-						for(new i = 0; i < cache_num_rows(); i++) {
-							new sqlid, name[24];
-							cache_get_value_name(i, "Name", name, 24);
-							cache_get_value_name_int(i, "PlayerID", sqlid);
-							g_ListedTenant[playerid][count++] = sqlid;
-
-							strcat(string, sprintf("%d) Name: %s\n", i + 1, name));
-
-						}
-
-						if(count)
-							ShowPlayerDialog(playerid, DIALOG_HOUSE_TENANT_REMOVE, DIALOG_STYLE_LIST, "Remove Tenant", string, "Remove", "Close");
-					}
-					else {
-						SendServerMessage(playerid, "Tidak ada tenant pada rumah ini.");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline HouseKeyRemove, "SELECT * FROM `housekeys` WHERE `HouseID` = '%d' ORDER BY `ID` ASC", HouseData[id][houseID]);
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `housekeys` WHERE `HouseID` = '%d' ORDER BY `ID` ASC", HouseData[id][houseID]);
+				mysql_tquery(sqlcon, query, "HouseKeyRemove", "d", playerid);
 
 			}
 			case 2: 
 			{
-
 				mysql_tquery(sqlcon, sprintf("SELECT * FROM `housekeys` WHERE `HouseID` = %d ORDER BY `ID` ASC", HouseData[id][houseID]), "House_CheckSharedKey", "dd", playerid, id);
 			}
 		}
@@ -3677,41 +3454,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!Flat_IsOwner(playerid, flatid))
 					return 0;
 
-				inline const FlatKeyShare() {
-					if(cache_num_rows()) {
-						
-						SendErrorMessage(playerid, "Kunci pada Flat tidak bisa diberikan lebih dari 1 orang.");
-					}
-					else {
-						ShowPlayerDialog(playerid, DIALOG_FLAT_KEY_SHARE, DIALOG_STYLE_INPUT, "Flat Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Flat.", "Share", "Close");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline FlatKeyShare, "SELECT * FROM `flatkeys` WHERE `FlatID` = %d", FlatData[flatid][flatID]);
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `flatkeys` WHERE `FlatID` = %d", FlatData[flatid][flatID]);
+				mysql_tquery(sqlcon, query, "FlatKeyShare", "d", playerid);
 			}
 			case 1: 
 			{
-				inline const FlatKeyRemove() {
-					if(cache_num_rows()) {
 
-						new count = 0, string[512];
-						for(new i = 0; i < cache_num_rows(); i++) {
-							new sqlid, name[24];
-							cache_get_value_name(i, "Name", name, 24);
-							cache_get_value_name_int(i, "PlayerID", sqlid);
-							g_ListedTenant[playerid][count++] = sqlid;
-
-							strcat(string, sprintf("%d) Name: %s\n", i + 1, name));
-
-						}
-
-						if(count)
-							ShowPlayerDialog(playerid, DIALOG_FLAT_TENANT_REMOVE, DIALOG_STYLE_LIST, "Remove Tenant", string, "Remove", "Close");
-					}
-					else {
-						SendServerMessage(playerid, "Tidak ada tenant pada flat ini.");
-					}
-				}
-				MySQL_TQueryInline(sqlcon, using inline FlatKeyRemove, "SELECT * FROM `flatkeys` WHERE `FlatID` = '%d' ORDER BY `ID` ASC", FlatData[flatid][flatID]);
+				new query[156];
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `flatkeys` WHERE `FlatID` = '%d' ORDER BY `ID` ASC", FlatData[flatid][flatID]);
+				mysql_tquery(sqlcon, query, "FlatKeyRemove", "d", playerid);
 
 			}
 			case 2: 
@@ -5290,24 +5042,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if(listitem == 0)
 			{
-				new gstr[352], count = 0;
 
-				inline const HousePark() {
-					if(!cache_num_rows())
-						return SendErrorMessage(playerid, "Tidak ada kendaraanmu pada garasi ini.");
-
-					for(new i = 0; i < cache_num_rows(); i++) {
-						new modelid, plate[16], vehid;
-						cache_get_value_name_int(i, "vehModel", modelid);
-						cache_get_value_name(i, "vehPlate", plate, sizeof(plate));
-						cache_get_value_name_int(i, "vehID", vehid);
-
-						strcat(gstr, sprintf("%d) %s, Plate: %s\n", i + 1, ReturnVehicleModelName(modelid), plate));
-						g_Selected_Vehicle_ID[playerid][count++] = vehid;
-					}
-					ShowPlayerDialog(playerid, DIALOG_HOUSE_PARK_TAKE, DIALOG_STYLE_LIST, "Parked Vehicle", gstr, "Take", "Close");
-				}
-				MySQL_TQueryInline(sqlcon, using inline HousePark, "SELECT * FROM `vehicle` WHERE `vehState` = %d AND `vehHouse` = %d AND `vehExtraID` = %d", VEHICLE_STATE_HOUSEPARK, HouseData[HousePark_Nearest(playerid)][houseID], PlayerData[playerid][pID]);
+				new query[156];
+				mysql_format(sqlcon,query, sizeof(query), "SELECT * FROM `vehicle` WHERE `vehState` = %d AND `vehHouse` = %d AND `vehExtraID` = %d", VEHICLE_STATE_HOUSEPARK, HouseData[HousePark_Nearest(playerid)][houseID], PlayerData[playerid][pID]);
+				mysql_tquery(sqlcon, query, "HousePark", "d", playerid);
 			}
 			if(listitem == 1)
 			{

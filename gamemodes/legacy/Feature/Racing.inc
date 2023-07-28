@@ -182,43 +182,10 @@ hook OnPlayerDisconnectEx(playerid) {
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
     if(dialogid == DIALOG_LOAD_RACE) {
         if(response) {
-            inline const OnLoadRace() {
 
-                if(cache_num_rows()) {
-
-                    RaceData[playerid][raceFinish] = -1;
-
-                    for(new i = 0; i < MAX_RACING_CP; i++) {
-                        RaceData[playerid][raceX][i] = 0.0;
-                        RaceData[playerid][raceY][i] = 0.0;
-                        RaceData[playerid][raceZ][i] = 0.0;
-                        RaceData[playerid][racePosExists][i] = false;
-                    }
-
-                    for(new i = 0; i < cache_num_rows(); i++) {
-                        new race_idx[16], type = cache_get_field_int(i, "Type"), 
-                            Float:x,
-                            Float:y,
-                            Float:z
-                        ;
-                        cache_get_value_name(i, "CPIndex", race_idx, sizeof(race_idx));
-                        cache_get_value_name_float(i, "PosX", x);
-                        cache_get_value_name_float(i, "PosY", y);
-                        cache_get_value_name_float(i, "PosZ", z);
-
-                        RaceData[playerid][raceX][i] = x;
-                        RaceData[playerid][raceY][i] = y;
-                        RaceData[playerid][raceZ][i] = z;
-                        RaceData[playerid][racePosExists][i] = true;
-
-                        if(type == RACE_CP_FINISH) {
-                            RaceData[playerid][raceFinish] = i;
-                        }
-                    }
-                    SendClientMessage(playerid, X11_YELLOW, "(Race) "WHITE"Kamu berhasil me-load map race.");
-                }
-            }
-            MySQL_TQueryInline(sqlcon, using inline OnLoadRace, "SELECT * FROM `race_cps` WHERE `RaceID` = '%d' ORDER BY `ID` ASC;", ListedItems[playerid][listitem]);
+            new query[172];
+            mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `race_cps` WHERE `RaceID` = '%d' ORDER BY `ID` ASC;", ListedItems[playerid][listitem]);
+            mysql_tquery(sqlcon, query, "OnLoadRace", "d", playerid);
         }
     }
     return Y_HOOKS_CONTINUE_RETURN_1;
@@ -310,39 +277,16 @@ CMD:race(playerid, params[]) {
         if(strlen(string) > 24)
             return SendErrorMessage(playerid, "Nama map balapan tidak boleh lebih dari 24 huruf.");
 
-        inline const CheckRaceName() {
-            if(cache_num_rows()) {
-                SendErrorMessage(playerid, "Nama map ini sudah digunakan!");
-            }
-            else {
-                new query[352];
-                mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `race_list` (`OwnerID`, `RaceName`, `CreationDate`) VALUES('%d','%e','%e')", PlayerData[playerid][pID], string, ReturnDate(false));
-                mysql_tquery(sqlcon, query, "OnRaceListCreated", "d", playerid);
-            }
-        }
-        MySQL_TQueryInline(sqlcon, using inline CheckRaceName, "SELECT * FROM `race_list` WHERE `RaceName` = '%s'", string);
+        new query[156];
+        mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `race_list` WHERE `RaceName` = '%s'", string);
+        mysql_tquery(sqlcon, query, "CheckRaceName", "ds", playerid, string);
 
     }
     else if(!strcmp(type, "load", true)) {
 
-        inline const OnLoadRaceCheck() {
-
-            new e_str[512], count = 0;
-            if(cache_num_rows()) {
-                for(new i = 0; i < cache_num_rows(); i++) {
-                    new race_name[24], build_date[26], id;
-                    cache_get_value_name(i, "RaceName", race_name);
-                    cache_get_value_name(i, "CreationDate", build_date);
-                    id = cache_get_field_int(i, "ID");
-
-                    strcat(e_str, sprintf("%s\t%s\n", race_name, build_date));
-
-                    ListedItems[playerid][count++] = id;
-                }
-                ShowPlayerDialog(playerid, DIALOG_LOAD_RACE, DIALOG_STYLE_TABLIST, "Race List", e_str, "Load", "Close");
-            }
-        }
-        MySQL_TQueryInline(sqlcon, using inline OnLoadRaceCheck, "SELECT * FROM `race_list` WHERE `OwnerID` = '%d'", PlayerData[playerid][pID]);
+        new query[156];
+        mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `race_list` WHERE `OwnerID` = '%d'", PlayerData[playerid][pID]);
+        mysql_tquery(sqlcon, query, "OnLoadRaceCheck", "d", playerid);    
     }
     else if(!strcmp(type, "removefinish", true)) {
 
@@ -466,6 +410,73 @@ CMD:race(playerid, params[]) {
             SetCameraBehindPlayer(i);
             SendClientMessageEx(i, X11_YELLOW, "(Race) "WHITE"%s telah menginisiasikan untuk memulai balapan dalam %d detik.", ReturnName(playerid), time);
         }
+    }
+    return 1;
+}
+
+function OnLoadRaceCheck(playerid) {
+    new e_str[512], count = 0;
+    if(cache_num_rows()) {
+        for(new i = 0; i < cache_num_rows(); i++) {
+            new race_name[24], build_date[26], id;
+            cache_get_value_name(i, "RaceName", race_name);
+            cache_get_value_name(i, "CreationDate", build_date);
+            id = cache_get_field_int(i, "ID");
+
+            strcat(e_str, sprintf("%s\t%s\n", race_name, build_date));
+
+            ListedItems[playerid][count++] = id;
+        }
+        ShowPlayerDialog(playerid, DIALOG_LOAD_RACE, DIALOG_STYLE_TABLIST, "Race List", e_str, "Load", "Close");
+    }
+    return 1;
+}
+
+function CheckRaceName(playerid, name[]) {
+    if(cache_num_rows()) {
+        SendErrorMessage(playerid, "Nama map ini sudah digunakan!");
+    }
+    else {
+        new query[352];
+        mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `race_list` (`OwnerID`, `RaceName`, `CreationDate`) VALUES('%d','%e','%e')", PlayerData[playerid][pID], name, ReturnDate(false));
+        mysql_tquery(sqlcon, query, "OnRaceListCreated", "d", playerid);
+    }
+    return 1;
+}
+
+function OnLoadRace(playerid) {
+    if(cache_num_rows()) {
+
+        RaceData[playerid][raceFinish] = -1;
+
+        for(new i = 0; i < MAX_RACING_CP; i++) {
+            RaceData[playerid][raceX][i] = 0.0;
+            RaceData[playerid][raceY][i] = 0.0;
+            RaceData[playerid][raceZ][i] = 0.0;
+            RaceData[playerid][racePosExists][i] = false;
+        }
+
+        for(new i = 0; i < cache_num_rows(); i++) {
+            new race_idx[16], type = cache_get_field_int(i, "Type"), 
+                Float:x,
+                Float:y,
+                Float:z
+            ;
+            cache_get_value_name(i, "CPIndex", race_idx, sizeof(race_idx));
+            cache_get_value_name_float(i, "PosX", x);
+            cache_get_value_name_float(i, "PosY", y);
+            cache_get_value_name_float(i, "PosZ", z);
+
+            RaceData[playerid][raceX][i] = x;
+            RaceData[playerid][raceY][i] = y;
+            RaceData[playerid][raceZ][i] = z;
+            RaceData[playerid][racePosExists][i] = true;
+
+            if(type == RACE_CP_FINISH) {
+                RaceData[playerid][raceFinish] = i;
+            }
+        }
+        SendClientMessage(playerid, X11_YELLOW, "(Race) "WHITE"Kamu berhasil me-load map race.");
     }
     return 1;
 }
