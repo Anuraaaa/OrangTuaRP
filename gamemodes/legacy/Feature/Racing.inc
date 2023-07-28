@@ -440,6 +440,8 @@ function CheckRaceName(playerid, name[]) {
         new query[352];
         mysql_format(sqlcon, query, sizeof(query), "INSERT INTO `race_list` (`OwnerID`, `RaceName`, `CreationDate`) VALUES('%d','%e','%e')", PlayerData[playerid][pID], name, ReturnDate(false));
         mysql_tquery(sqlcon, query, "OnRaceListCreated", "d", playerid);
+
+        SendServerMessage(playerid, "Kamu telah menyimpan map balapan dengan nama "YELLOW"%s", name);
     }
     return 1;
 }
