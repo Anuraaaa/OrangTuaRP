@@ -125,23 +125,6 @@ function CheckPlayerUCP(playerid)
 				ShowVerifyMenu(playerid);
 			}
 		}
-
-
-		if(UcpData[playerid][uVerifyCode] != 0 && !dc_verif) {
-			ShowVerifyMenu(playerid);
-		}
-		else 
-		{
-			if(!verified) {
-				format(string,sizeof(string),""WHITE"Username kamu belum diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
-				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
-				KickEx(playerid);
-				return 1;
-			}
-			ShowLoginMenu(playerid);
-			LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
-			SendClientMessage(playerid, X11_RED, "(Security) "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
-		}
 	}
 	else
 	{
@@ -564,7 +547,7 @@ function LoadCharacter(playerid)
 
 ShowVerifyMenu(playerid) {
 	new str[256];
-	format(str, sizeof(str), "Akun-mu belum terverifikasi! masukkan kode PIN untuk me-verifikasi akunmu:\n\n(note) kode pin bisa dilihat dari G-Mail yang kamu daftarkan.");
+	format(str, sizeof(str), "Akun-mu belum terverifikasi! masukkan kode PIN untuk me-verifikasi akunmu:\n\n(note) kode pin bisa dilihat dari PM Discord BOT OTRP.");
 	return ShowPlayerDialog(playerid, DIALOG_VERIFY, DIALOG_STYLE_INPUT, "Account Verification", str, "Confirm", "Close");
 }
 ShowRegisterMenu(playerid) {
