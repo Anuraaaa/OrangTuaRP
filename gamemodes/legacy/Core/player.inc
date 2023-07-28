@@ -104,10 +104,12 @@ function CheckPlayerUCP(playerid)
 		cache_get_value_name_int(0, "DiscordCode", UcpData[playerid][uVerifyCode]);
 		cache_get_value_name_int(0, "emailverified", verified);
 
-		if(active == 0) {
-			format(string,sizeof(string),""WHITE"Username yang kamu gunakan belum terdaftar di server\nkamu bisa mendaftarkan akun-mu lewat website Orang Tua Roleplay "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk verifikasi akun.");
-			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
-			KickEx(playerid);
+		new dc_verif = 0;
+		cache_get_value_name_int(0, "DiscordVerify", dc_verif);
+
+
+		if(UcpData[playerid][uVerifyCode] != 0 && !dc_verif) {
+			ShowVerifyMenu(playerid);
 		}
 		else 
 		{

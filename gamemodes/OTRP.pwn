@@ -8799,7 +8799,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return ShowVerifyMenu(playerid);
 			}
 			if(strval(inputtext) == UcpData[playerid][uVerifyCode]) {
-				ShowRegisterMenu(playerid);
+
+				mysql_tquery(sqlcon, sprintf("UPDATE `playerucp` SET `DiscordVerify` = '1' WHERE `UCP` = '%s'", GetName(playerid)));
+				ShowLoginMenu(playerid);
 			}
 			else
 				ShowVerifyMenu(playerid);
