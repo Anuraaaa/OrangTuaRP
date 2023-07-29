@@ -107,8 +107,12 @@ ptask OnEnergyUpdate[1000](playerid)
 		adjustment *= 0.2;
 		adjustment1 *= 0.2;
 
-		PlayerData[playerid][pHunger] -= adjustment;
-		PlayerData[playerid][pThirst] -= adjustment1;
+		if(PlayerData[playerid][pHunger] > 0) {
+			PlayerData[playerid][pHunger] -= adjustment;
+		}
+		if(PlayerData[playerid][pThirst] > 0){ 
+			PlayerData[playerid][pThirst] -= adjustment1;
+		}
 	}
 	return 1;
 }
@@ -314,6 +318,14 @@ ptask PlayerUpdate[1000](playerid)
 
 		if(PlayerData[playerid][pThirst] > 100)
 			PlayerData[playerid][pThirst] = 100;
+
+		if(PlayerData[playerid][pThirst] < 1) {
+			PlayerData[playerid][pThirst] = 0;
+		}
+
+		if(PlayerData[playerid][pHunger] < 1) {
+			PlayerData[playerid][pHunger] = 0;
+		}
 
 		if (GetPlayerMoney(playerid) != PlayerData[playerid][pMoney])
 		{

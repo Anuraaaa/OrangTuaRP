@@ -206,9 +206,12 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         }
         //Speedhack in vehicle
         case 10: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle speed hack (please check!).", GetName(playerid));
-            //SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-            //KickEx(playerid);
+            if(++speed_hack[playerid] > 5) {
+                SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
+                speed_hack[playerid] = 0;   
+                KickEx(playerid);  
+            }
         }
         
         //Vehicle speed hack
@@ -382,7 +385,8 @@ ptask OnCheckAntiCheat[1000](playerid) {
             if(++speed_hack[playerid] > 5) {
                 SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
-                KickEx(playerid);     
+                speed_hack[playerid] = 0;   
+                KickEx(playerid);  
             }
         }
         new Float:X,Float:Y,Float:Z;
