@@ -100,11 +100,22 @@ CMD:report(playerid, params[]) {
 		return SendErrorMessage(playerid, "Server ini tidak bisa menampung lebih banyak report.");
 
 	if(strlen(reason) > 64) {
-		SendAdminDutyMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%.64s", GetName(playerid), playerid, reason);
-		SendAdminDutyMessage(-1, "...%s", reason[64]);
+		if(CountAdminDuty() > 1) {
+			SendAdminDutyMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%.64s", GetName(playerid), playerid, reason);
+			SendAdminDutyMessage(-1, "...%s", reason[64]);
+		}
+		else {
+			SendAdminMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%.64s", GetName(playerid), playerid, reason);
+			SendAdminMessage(-1, "...%s", reason[64]);
+		}
 	}
 	else {
-		SendAdminDutyMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%s.", GetName(playerid), playerid, reason);
+		if(CountAdminDuty() > 1) {
+			SendAdminDutyMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%s.", GetName(playerid), playerid, reason);
+		}
+		else {
+			SendAdminMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%s.", GetName(playerid), playerid, reason);
+		}
 	}
 	SendServerMessage(playerid, "Laporanmu berhasil dikirim ke administrator yang sedang online.");
 	reportDelay[playerid] = 300;

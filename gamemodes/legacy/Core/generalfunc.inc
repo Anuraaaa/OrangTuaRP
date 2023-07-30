@@ -891,93 +891,10 @@ timer ToggleFreeze[5000](playerid)
 LoadRemoveBuilding(playerid)
 {
 	RemoveVendingMachines(playerid);
-
-	/* Excel */
-	RemoveBuildingForPlayer(playerid, 9316, -2484.909, 2356.770, 6.726, 0.250);
-	RemoveBuildingForPlayer(playerid, 9428, -2484.909, 2356.770, 6.726, 0.250);
-	RemoveBuildingForPlayer(playerid, 9299, -2514.909, 2357.050, 8.484, 0.250);
-	RemoveBuildingForPlayer(playerid, 9374, -2514.909, 2357.050, 8.484, 0.250);
-	RemoveBuildingForPlayer(playerid, 1227, -2520.719, 2353.129, 4.757, 0.250);
-	RemoveBuildingForPlayer(playerid, 1227, -2524.060, 2353.129, 4.757, 0.250);
-	RemoveBuildingForPlayer(playerid, 1227, -2527.239, 2353.129, 4.757, 0.250);
-	RemoveBuildingForPlayer(playerid, 1227, -2503.070, 2364.219, 4.757, 0.250);
-	RemoveBuildingForPlayer(playerid, 1227, -2503.050, 2368.050, 4.757, 0.250);
-	RemoveBuildingForPlayer(playerid, 1440, -2506.699, 2369.659, 4.390, 0.250);
-	RemoveBuildingForPlayer(playerid, 1440, -2503.310, 2341.370, 4.453, 0.250);
-	RemoveBuildingForPlayer(playerid, 9314, -2493.860, 2363.429, 14.875, 0.250);
-	RemoveBuildingForPlayer(playerid, 9301, -2530.350, 2346.199, 7.968, 0.250);
-	RemoveBuildingForPlayer(playerid, 9373, -2530.350, 2346.199, 7.968, 0.250);
-	RemoveBuildingForPlayer(playerid, 1689, -2544.550, 2348.020, 13.242, 0.250);
-	RemoveBuildingForPlayer(playerid, 1617, -2539.620, 2352.340, 11.148, 0.250);
-	RemoveBuildingForPlayer(playerid, 1617, -2548.989, 2352.340, 11.148, 0.250);
-	RemoveBuildingForPlayer(playerid, 9315, -2519.629, 2356.020, 3.929, 0.250);
-	RemoveBuildingForPlayer(playerid, 9375, -2519.629, 2356.020, 3.929, 0.250);
-	/* DPC */
-	RemoveBuildingForPlayer(playerid, 16390, 704.531, 1977.869, 6.523, 0.250);
-	RemoveBuildingForPlayer(playerid, 16388, 694.414, 1973.839, 4.531, 0.250);
-	RemoveBuildingForPlayer(playerid, 16626, 694.414, 1973.839, 4.531, 0.250);
-	RemoveBuildingForPlayer(playerid, 16389, 704.414, 1978.699, 3.929, 0.250);
-	RemoveBuildingForPlayer(playerid, 16624, 704.414, 1978.699, 3.929, 0.250);
 	/* Midday HS */
 	RemoveBuildingForPlayer(playerid, 3310, -2159.198, -2543.979, 31.656, 0.250);
 	RemoveBuildingForPlayer(playerid, 3325, -2159.198, -2543.979, 31.656, 0.250);
 	RemoveBuildingForPlayer(playerid, 778, -2162.870, -2552.888, 29.608, 0.250);
-	/* El Quebrados */
-	RemoveBuildingForPlayer(playerid, 11451, -1385.760, 2640.860, 54.984, 0.250);
-	RemoveBuildingForPlayer(playerid, 11601, -1385.760, 2640.860, 54.984, 0.250);
-	RemoveBuildingForPlayer(playerid, 11452, -1382.449, 2648.090, 55.171, 0.250);
-	RemoveBuildingForPlayer(playerid, 700, -1375.359, 2630.270, 53.171, 0.250);
-	RemoveBuildingForPlayer(playerid, 669, -1368.589, 2635.239, 51.734, 0.250);
-	RemoveBuildingForPlayer(playerid, 11611, -1383.550, 2616.520, 56.679, 0.250);
-	RemoveBuildingForPlayer(playerid, 11453, -1414.510, 2650.479, 57.562, 0.250);
-	RemoveBuildingForPlayer(playerid, 11454, -1512.160, 2514.449, 54.890, 0.250);
-	RemoveBuildingForPlayer(playerid, 11599, -1512.160, 2514.449, 54.890, 0.250);
-	/* Rumah Azura */
-	RemoveBuildingForPlayer(playerid, 1529, 1098.812, -1292.546, 17.140, 0.250);
-	RemoveBuildingForPlayer(playerid, 5934, 1076.710, -1358.093, 15.445, 0.250);
-	RemoveBuildingForPlayer(playerid, 5935, 1120.156, -1303.453, 18.570, 0.250);
-	RemoveBuildingForPlayer(playerid, 5936, 1090.054, -1310.531, 17.546, 0.250);
-	RemoveBuildingForPlayer(playerid, 5731, 1076.710, -1358.093, 15.445, 0.250);
-	RemoveBuildingForPlayer(playerid, 5788, 1080.984, -1305.523, 16.359, 0.250);
-	RemoveBuildingForPlayer(playerid, 5787, 1090.054, -1310.531, 17.546, 0.250);
-	RemoveBuildingForPlayer(playerid, 1440, 1141.984, -1346.109, 13.265, 0.250);
-	RemoveBuildingForPlayer(playerid, 5737, 1120.156, -1303.453, 18.570, 0.250);
-	RemoveBuildingForPlayer(playerid, 5708, 1134.250, -1338.079, 23.156, 0.250);
-	RemoveBuildingForPlayer(playerid, 5930, 1134.250, -1338.079, 23.156, 0.250);
-	RemoveBuildingForPlayer(playerid, 617, 1178.599, -1332.069, 12.890, 0.250);
-	RemoveBuildingForPlayer(playerid, 618, 1177.729, -1315.660, 13.296, 0.250);
-	RemoveBuildingForPlayer(playerid, 5737, 1120.160, -1303.449, 18.570, 0.250);
-	RemoveBuildingForPlayer(playerid, 5935, 1120.160, -1303.449, 18.570, 0.250);
-	RemoveBuildingForPlayer(playerid, 5787, 1090.050, -1310.530, 17.546, 0.250);
-	RemoveBuildingForPlayer(playerid, 5936, 1090.050, -1310.530, 17.546, 0.250);
-	RemoveBuildingForPlayer(playerid, 5731, 1076.709, -1358.089, 15.445, 0.250);
-	RemoveBuildingForPlayer(playerid, 5934, 1076.709, -1358.089, 15.445, 0.250);
-	RemoveBuildingForPlayer(playerid, 5788, 1080.979, -1305.520, 16.359, 0.250);
-	RemoveBuildingForPlayer(playerid, 618, 1177.729, -1315.660, 13.296, 0.250);
-	RemoveBuildingForPlayer(playerid, 1408, -2903.989, 717.085, 28.539, 0.250);
-	RemoveBuildingForPlayer(playerid, 1408, -2898.560, 717.554, 28.539, 0.250);
-	RemoveBuildingForPlayer(playerid, 1408, -2893.129, 718.023, 28.539, 0.250);
-	RemoveBuildingForPlayer(playerid, 1408, -2887.699, 718.492, 28.539, 0.250);
-	RemoveBuildingForPlayer(playerid, 715, -2873.489, 731.000, 36.687, 0.250);
-	RemoveBuildingForPlayer(playerid, 715, -2867.110, 708.687, 31.570, 0.250);
-	/* Demonions MC */
-
-	/*
-	RemoveBuildingForPlayer(playerid, 1334, -2107.209, -2423.889, 30.796, 0.250);
-	RemoveBuildingForPlayer(playerid, 1338, -2098.100, -2412.419, 30.335, 0.250);
-	RemoveBuildingForPlayer(playerid, 1338, -2091.860, -2415.709, 30.335, 0.250);
-	RemoveBuildingForPlayer(playerid, 1338, -2081.840, -2428.229, 30.335, 0.250);
-	RemoveBuildingForPlayer(playerid, 698, -2057.439, -2417.090, 34.812, 0.250);
-	RemoveBuildingForPlayer(playerid, 1332, -2087.989, -2440.949, 30.695, 0.250);
-	RemoveBuildingForPlayer(playerid, 18257, -2084.419, -2423.719, 29.617, 0.250);
-	RemoveBuildingForPlayer(playerid, 18240, -2097.449, -2430.199, 29.617, 0.250);
-	RemoveBuildingForPlayer(playerid, 18528, -2097.449, -2430.199, 29.617, 0.250);
-	RemoveBuildingForPlayer(playerid, 1332, -2085.320, -2414.510, 30.640, 0.250);
-	*/
-	
-	/* BDMC */
-	RemoveBuildingForPlayer(playerid, 1333, -2218.879, -2336.209, 30.484, 0.250);
-	RemoveBuildingForPlayer(playerid, 1333, -2213.959, -2339.300, 30.484, 0.250);
 	/* Miner */
 	RemoveBuildingForPlayer(playerid, 11458, -1316.849, 2542.669, 86.828, 0.250);
 	RemoveBuildingForPlayer(playerid, 11457, -1303.770, 2550.229, 86.226, 0.250);
@@ -2088,6 +2005,13 @@ RemoveVendingMachines(playerid)
 	RemoveBuildingForPlayer(playerid, 1776, -17.0036,-90.9709,1003.5469, 20.0); //Snach vender @ Others 24/7 stores
 }
 
+CountAdminDuty() {
+	new count = 0;
+	foreach(new playerid : Player) if(PlayerData[playerid][pAdmin] && PlayerData[playerid][pAduty]) {
+		count++;
+	}
+	return count;
+}
 function UnfreezeHospital(playerid)
 {
 	ClearAnimations(playerid, 1);

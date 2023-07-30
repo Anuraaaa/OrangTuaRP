@@ -208,25 +208,25 @@ CMD:setfuel(playerid, params[])
 {
 	new
 	    id = 0,
-		amount;
+		Float:amount;
 
     if (PlayerData[playerid][pAdmin] < 5)
 	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
 
-	if (sscanf(params, "dd", id, amount))
+	if (sscanf(params, "df", id, amount))
  	{
 	 	if (IsPlayerInAnyVehicle(playerid))
 		{
 		    id = GetPlayerVehicleID(playerid);
 
-		    if (sscanf(params, "d", amount))
+		    if (sscanf(params, "f", amount))
 		        return SendSyntaxMessage(playerid, "/setfuel [amount]");
 
 			if (amount < 0)
 			    return SendErrorMessage(playerid, "The amount can't be below 0.");
 
 			VehicleData[id][vFuel] = amount;
-			SendServerMessage(playerid, "You have set the fuel of vehicle ID: %d to %d percent.", id, amount);
+			SendServerMessage(playerid, "You have set the fuel of vehicle ID: %d to %.2f percent.", id, amount);
 			return 1;
 		}
 		else return SendSyntaxMessage(playerid, "/setfuel [vehicle id] [amount]");
@@ -238,7 +238,7 @@ CMD:setfuel(playerid, params[])
  		return SendErrorMessage(playerid, "The amount can't be below 0.");
 
 	VehicleData[id][vFuel] = amount;
-	SendServerMessage(playerid, "You have set the fuel of vehicle ID: %d to %d percent.", id, amount);
+	SendServerMessage(playerid, "You have set the fuel of vehicle ID: %d to %.2f percent.", id, amount);
 	return 1;
 }
 

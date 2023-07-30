@@ -638,6 +638,6 @@ CMD:gps(playerid, params[])
 	if(!PlayerHasItem(playerid, "GPS"))
 		return SendErrorMessage(playerid, "Kamu tidak memiliki GPS!");
 
-	ShowPlayerDialog(playerid, DIALOG_GPS, DIALOG_STYLE_LIST, "GPS Menu", "My Current Location\nPublic Location\nJob Location\nFind Vehicle\nFind Business\nFind Dealership\nFind Tree\nFind Cargo\nFind Garage\nFind Workshop", "Select", "Close");
+	ShowPlayerDialog(playerid, DIALOG_GPS, DIALOG_STYLE_LIST, "GPS Menu", "My Current Location\nPublic Location\nJob Location\nFind Vehicle\nFind Business\nFind Dealership\nFind Tree\nFind Cargo\nFind Garage\nFind Workshop\nFind House", "Select", "Close");
 	return 1;
 }

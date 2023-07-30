@@ -105,16 +105,24 @@ function CheckPlayerUCP(playerid)
 		cache_get_value_name_int(0, "emailverified", verified);
 		cache_get_value_name_int(0, "VerificationCode", verifmailcode);
 
-		new dc_verif = 0;
+		new dc_verif = 0, recovery_code = 0;
 		cache_get_value_name_int(0, "DiscordVerify", dc_verif);
+		cache_get_value_name_int(0, "dcRecoveryCode", recovery_code);
 
-		if (verified || dc_verif) { // cek salah satunya email atau discord udah verif atau blm
+
+
+		if(recovery_code != 0) {
+
+			ShowRecoveryMenu(playerid);
+			SetPVarInt(playerid, "RecoveryCode", recovery_code);
+			return 1;
+		}
+		if (verified || dc_verif) {
 			ShowLoginMenu(playerid);
 			LoginTimer[playerid] = SetTimerEx("KickLogin", 30000, false, "d", playerid);
 			SendClientMessage(playerid, X11_RED, "(Security) "WHITE"Kamu diberikan waktu "YELLOW"30 detik "WHITE"untuk memasukkan password.");
 		}
 		else {
-			// cek dua2nya email dan verif udah verif atau blm
 			if(!verified && verifmailcode != 0) {
 				format(string,sizeof(string),""WHITE"Username kamu belum diverifikasi!\nkamu bisa melakukan verifikasi akun dengan memasukan kode yang dikirim ke G-mail saat mendaftar pada website OT:RP "YELLOW"(orangtuarp.my.id)\n"WHITE"Silahkan quitgame terlebih dahulu untuk mendaftarkan akun.");
 				ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, ""WHITE"Unregistered Username",string,"Close","");
@@ -472,6 +480,25 @@ function LoadCharacterData(playerid)
     return 1;
 }
 
+function OnPlayerPasswordRecovery(playerid, hashid)
+{
+	new
+		query[256],
+		hash[BCRYPT_HASH_LENGTH];
+
+    bcrypt_get_hash(hash, sizeof(hash));
+
+	mysql_format(sqlcon,query,sizeof(query),"UPDATE `playerucp` SET `password` = '%e' WHERE `UCP` = '%e'",hash, GetName(playerid));
+	mysql_tquery(sqlcon,query);
+
+	SendServerMessage(playerid, "Recovery password telah berhasil! silahkan login dengan password baru anda.");
+	mysql_tquery(sqlcon, sprintf("UPDATE `playerucp` SET `dcRecoveryCode` = '0' WHERE `UCP` = '%s'", GetName(playerid)));
+	DeletePVar(playerid, "RecoveryCode");
+
+	ShowLoginMenu(playerid);
+	return 1;
+}
+
 function OnPlayerPasswordChange(playerid, hashid)
 {
 	new
@@ -558,6 +585,19 @@ ShowRegisterMenu(playerid) {
 	return 1;
 }
 
+ShowRecoveryMenu(playerid) {
+	new str[256];
+	format(str, sizeof(str), ""WHITE"Akun anda terdeteksi melakukan "TOMATO"password recovery "WHITE"silahkan masukkan\nCode Recovery yang telah dikirim oleh BOT Orang Tua Roleplay ke direct message anda.\n"YELLOW"(input below)");
+	ShowPlayerDialog(playerid, DIALOG_RECOVERY_CODE, DIALOG_STYLE_INPUT, "OT:RP Recovery", str, "Confirm", "Exit");
+	return 1;
+}
+
+ShowRecoveryPassword(playerid) {
+	new str[256];
+	format(str, sizeof(str), ""WHITE"Silahkan masukkan password baru anda pada kolom dibawah ini.\n"GREY"Untuk keamanan akun, masukkan "TOMATO"password unik "GREY"yang belum pernah kamu gunakan:");
+	ShowPlayerDialog(playerid, DIALOG_RECOVERY_PW, DIALOG_STYLE_PASSWORD, "OT:RP - Recovery", str, "Confirm", "Exit");
+	return 1;
+}
 ShowLoginMenu(playerid) {
 
 	new str[256];
@@ -693,9 +733,19 @@ IsHungerOrThirst(playerid) {
 	
 	return 0;
 }
+
+IssuePendingSalary(playerid) {
+	if(PlayerData[playerid][pPendingSalary]) {
+
+		AddSalary(playerid, "Job Duty", PlayerData[playerid][pPendingSalary]);
+		SendServerMessage(playerid, "Pending Salary sebesar "GREEN"$%s "WHITE"telah dimasukkan ke "YELLOW"/salary", FormatNumber(PlayerData[playerid][pPendingSalary]));
+		PlayerData[playerid][pPendingSalary] = 0;
+	}
+	return 1;
+}
 ResetPlayerStatistics(playerid)
 {
-
+	PlayerData[playerid][pPendingSalary] = 0;
 	PlayerData[playerid][pLastNumber] = 0;
 	PlayerData[playerid][pCourierDelay] = 0;
 	PlayerData[playerid][pHudType] = 1;
@@ -1363,6 +1413,7 @@ ShowPlayerSpeedometer(playerid, type) {
 				PlayerTextDrawShow(playerid, HBE3_SPEEDO[playerid][i]);
 			}
 			PROGRESS_FUEL[playerid] = CreatePlayerProgressBar(playerid, 534.000000, 396.000000, 100.000000, 4.000000, -2016478465, 100.000000, 0);
+			SetPlayerProgressBarMaxValue(playerid, PROGRESS_FUEL[playerid], GetVehicleFuelMax(GetVehicleModel(GetPlayerVehicleID(playerid))));
 		}
 	}
 	return 1;

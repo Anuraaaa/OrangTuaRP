@@ -379,7 +379,8 @@ enum E_PLAYER_DATA
 	pLastNumber,
 	bool:pToggleSpeed,
 	pCourierDelay,
-	pAdminPoint
+	pAdminPoint,
+	pPendingSalary
 };
 
 new PlayerData[MAX_PLAYERS][E_PLAYER_DATA];
@@ -1038,6 +1039,9 @@ public OnPlayerDeath(playerid, killerid, reason)
 
 public OnPlayerDisconnectEx(playerid) {
 
+	if(PlayerData[playerid][pJobduty]) {
+		IssuePendingSalary(playerid);
+	}
 	if(Biz_GetCount(playerid)) {
 		for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(playerid, i)) {
 
@@ -1232,6 +1236,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(IsEngineVehicle(vehicleid) && IsSpeedoVehicle(vehicleid) && !PlayerData[playerid][pTogHud])
 	    {
 			ShowPlayerSpeedometer(playerid, PlayerData[playerid][pHudType]);
+		}
+		if(PlayerData[playerid][pJobduty] && CheckPlayerJob(playerid, JOB_TAXI) && GetPlayerVehicleID(playerid) == GetPVarInt(playerid, "TaxiVehicle")) {
+			
+			CreateTaxi(playerid);
 		}
 		if(!IsEngineVehicle(vehicleid))
 		{
@@ -1460,8 +1468,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(PlayerData[playerid][pJobduty] && (PlayerData[playerid][pJob] == JOB_TAXI || PlayerData[playerid][pJob2] == JOB_TAXI))
 		{
 			HideTaxi(playerid);
-			PlayerData[playerid][pJobduty] = false;
-			SetPlayerColor(playerid, COLOR_WHITE);
 		}
 	}
 	if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
@@ -2266,7 +2272,7 @@ public OnPlayerUpdate(playerid)
 		if (NetStats_GetConnectedTime(playerid) - WeaponTick[playerid] >= 250)
 		{
 			new weaponid, ammo, objectslot, count, index; 
-			for (new i = 2; i <= 7; i++)
+			for (new i = 5; i <= 8; i++)
 			{
 				GetPlayerWeaponData(playerid, i, weaponid, ammo);
 				index = weaponid - 22;
@@ -2286,7 +2292,7 @@ public OnPlayerUpdate(playerid)
 					}
 				}
 			}
-			for (new i= 2; i < 7; i++)
+			for (new i= 5; i < 8; i++)
 			{ 
 				if(IsPlayerAttachedObjectSlotUsed(playerid, i))
 				{
@@ -2325,6 +2331,34 @@ public OnPlayerUpdate(playerid)
 }
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(dialogid == DIALOG_RECOVERY_PW) {
+		if(response) {
+	        if(strlen(inputtext) < 8)
+				return ShowRecoveryPassword(playerid);
+
+	        if(strlen(inputtext) > 32)
+				return ShowRecoveryPassword(playerid);
+
+            bcrypt_hash(playerid, "OnPlayerPasswordRecovery", inputtext, BCRYPT_COST);		
+
+		}
+	}
+	if(dialogid == DIALOG_RECOVERY_CODE) {
+		if(response) {
+			new code = GetPVarInt(playerid, "RecoveryCode");
+
+			if(strval(inputtext) != code) {
+				SendErrorMessage(playerid, "Recovery code tidak sesuai!");
+				ShowRecoveryMenu(playerid);
+				return 1;
+			}
+
+			ShowRecoveryPassword(playerid);
+		}
+		else {
+			Kick(playerid);
+		}
+	}
 	if(dialogid == DIALOG_HUD_TYPE) {
 		if(response) {
 
@@ -3715,7 +3749,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new total = GetPVarInt(playerid, "FishPrice");
 
-			PlayerData[playerid][pFishDelay] = 900;
+			PlayerData[playerid][pFishDelay] = 1800;
 			AddSalary(playerid, "Sell Fish", total);
 			SendClientMessageEx(playerid, COLOR_SERVER, "(Fish) {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}on your {FFFF00}/salary", FormatNumber(total));
 			DeletePVar(playerid, "FishPrice");
@@ -5528,6 +5562,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(totalcash < 1)
 				return ShowPlayerDialog(playerid, DIALOG_ATM_WITHDRAW, DIALOG_STYLE_INPUT, sprintf("Balance: $%s", FormatNumber(PlayerData[playerid][pBank])), "ERROR: Invalid amount!\nPlease input the amount of cash you want to withdraw:", "Get", "Close");
 
+			if(totalcash > 5000000)
+				return ShowPlayerDialog(playerid, DIALOG_ATM_WITHDRAW, DIALOG_STYLE_INPUT, sprintf("Balance: $%s", FormatNumber(PlayerData[playerid][pBank])), "ERROR: Invalid amount!\nPlease input the amount of cash you want to withdraw:", "Get", "Close");
+
 			if(PlayerData[playerid][pBank] < totalcash)
 				return ShowPlayerDialog(playerid, DIALOG_ATM_WITHDRAW, DIALOG_STYLE_INPUT, sprintf("Balance: $%s", FormatNumber(PlayerData[playerid][pBank])), "ERROR: There is no enough money on your bank!\nPlease input the amount of cash you want to withdraw:", "Get", "Close");
 
@@ -5555,8 +5592,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				sscanf(cash, "p<.>dd", dollars, cents);
 				format(totalcash, sizeof(totalcash), "%d%02d", dollars, cents);
-				if(strval(totalcash) < 0)
+				
+				if(strval(totalcash) > 5000000)
 					return ShowPlayerDialog(playerid, DIALOG_ATM_TRANSFER_AMOUNT, DIALOG_STYLE_INPUT, "Transfer", "Please input amount of cash you want to transfer:\nFormat: [amount (opt:dollar.cents)]", "Transfer", "Close");
+
+				if(strval(totalcash) < 1)
+					return ShowPlayerDialog(playerid, DIALOG_ATM_TRANSFER_AMOUNT, DIALOG_STYLE_INPUT, "Transfer", "Please input amount of cash you want to transfer:\nFormat: [amount (opt:dollar.cents)]", "Transfer", "Close");
+
 
 				if(PlayerData[playerid][pBank] < strval(totalcash))
 					return ShowPlayerDialog(playerid, DIALOG_ATM_TRANSFER_AMOUNT, DIALOG_STYLE_INPUT, "Transfer", "Please input amount of cash you want to transfer:\nFormat: [amount (opt:dollar.cents)]", "Transfer", "Close");
@@ -5571,7 +5613,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				sscanf(cash, "d", dollars);
 				format(totalcash, sizeof(totalcash), "%d00", dollars);
 
-				if(strval(totalcash) < 0)
+				if(strval(totalcash) > 5000000)
+					return ShowPlayerDialog(playerid, DIALOG_ATM_TRANSFER_AMOUNT, DIALOG_STYLE_INPUT, "Transfer", "Please input amount of cash you want to transfer:\nFormat: [amount (opt:dollar.cents)]", "Transfer", "Close");
+
+				if(strval(totalcash) < 1)
 					return ShowPlayerDialog(playerid, DIALOG_ATM_TRANSFER_AMOUNT, DIALOG_STYLE_INPUT, "Transfer", "Please input amount of cash you want to transfer:\nFormat: [amount (opt:dollar.cents)]", "Transfer", "Close");
 
 				if(PlayerData[playerid][pBank] < strval(totalcash))
@@ -7576,8 +7621,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new i = g_ListedVehicle[playerid][listitem];
 			
 			PlayerData[playerid][pTracking] = true;
-			GetVehiclePos(i, pos[0], pos[1], pos[2]);
 			SetWaypoint(playerid, pos[0], pos[1], pos[2], 4.0);
+			GetVehiclePos(i, pos[0], pos[1], pos[2]);
 			SendClientMessageEx(playerid, COLOR_SERVER, "(GPS) {FFFFFF}Your {FFFF00}%s {FFFFFF}has been marked on radar (%s)", GetVehicleName(i), GetLocation(pos[0], pos[1], pos[2]));
 		}
 	}
@@ -7617,7 +7662,27 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 8) ShowGarageLocation(playerid);
 			if(listitem == 9) ShowWorkshopLocation(playerid);
+			if(listitem == 10) {
+				ShowPlayerDialog(playerid, DIALOG_GPS_HOUSE, DIALOG_STYLE_INPUT, "Find House", "Silahkan masukkan House ID/ID Rumah yang akan dilacak:", "Find", "Close");
+			}
 		}
+	}
+	if(dialogid == DIALOG_GPS_HOUSE) {
+
+		if(!response) {
+			return 1;
+		}
+
+		if(!Iter_Contains(House, strval(inputtext))) {
+			return SendErrorMessage(playerid, "Rumah dengan ID tersebut tidak ada.");
+		}
+
+		new id = strval(inputtext);
+
+		PlayerData[playerid][pTracking] = true;
+		SetWaypoint(playerid, HouseData[id][housePos][0], HouseData[id][housePos][1], HouseData[id][housePos][2], 5.0);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}House ID "RED"d {FFFFFF}located at your radar.", id);
+
 	}
 	if(dialogid == DIALOG_TAKEJOB2)
 	{
@@ -7680,16 +7745,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		new pump_index = PlayerData[playerid][pGasPump];
 		new vehicleid = GetPlayerVehicleID(playerid),
 			payment = 0,
-			bizid = Pump_GetBizID(PumpData[pump_index][pumpBusiness]);
+			bizid = Pump_GetBizID(PumpData[pump_index][pumpBusiness]), 
+			Float:fuel = floatstr(inputtext),
+			valid_amount = floatround(fuel);
 
         if(!IsValidVehicle(vehicleid))
             return SendErrorMessage(playerid, "Kendaraan tidak lagi valid.");
 
         if(!strcmp(inputtext, "FULLTANK", true))
         {
-            new total_fuel = 100 - VehicleData[vehicleid][vFuel];
+            new Float:total_fuel = GetVehicleFuelMax(GetVehicleModel(vehicleid)) - VehicleData[vehicleid][vFuel];
 
-            payment = total_fuel * 50;
+            payment = floatround(total_fuel) * 50;
 
             if(PumpData[pump_index][pumpFuel] < total_fuel)
         	    return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) tidak ada stok bahan bakar yang cukup pada fuelpump.\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
@@ -7697,7 +7764,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(GetMoney(playerid) < payment)
                 return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) kamu tidak memiliki cukup uang.\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
 
-			VehicleData[vehicleid][vFuel] = 100;
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 			PumpData[pump_index][pumpFuel] -= total_fuel;	
 			BizData[bizid][bizVault] += payment;
 
@@ -7706,33 +7773,33 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Pump_Sync(pump_index);
 			Business_Save(bizid);
 
-			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"$%s.", total_fuel, FormatNumber(payment));
+			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%.2f liter "WHITE" dengan harga "GREEN"$%s.", total_fuel, FormatNumber(payment));
         }
         else 
         {
-            payment = (strval(inputtext) * 50);
+            payment = (valid_amount * 50);
 
-            if(!(0 < strval(inputtext) <= 100))
+            if(!(0.0 < fuel <= GetVehicleFuelMax(GetVehicleModel(vehicleid))))
                 return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) jumlah yang anda masukan invalid.\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
 
-            if(PumpData[pump_index][pumpFuel] < strval(inputtext))
+            if(PumpData[pump_index][pumpFuel] < fuel)
                 return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) tidak ada stok bahan bakar yang cukup pada fuelpump.\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
 
             if(GetMoney(playerid) < payment)
                 return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) kamu tidak memiliki cukup uang.\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
 
-            if(VehicleData[vehicleid][vFuel] + strval(inputtext) > 100)
+            if(VehicleData[vehicleid][vFuel] + fuel > GetVehicleFuelMax(GetVehicleModel(vehicleid)))
                 return ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""RED"(error) kendaraan tidak bisa menampung sebanyak itu!\n"WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
 
-			VehicleData[vehicleid][vFuel] +=  strval(inputtext);
-			PumpData[pump_index][pumpFuel] -=  strval(inputtext);	
+			VehicleData[vehicleid][vFuel] +=  fuel;
+			PumpData[pump_index][pumpFuel] -=  fuel;	
 			BizData[bizid][bizVault] += payment;
 			
 			GiveMoney(playerid, -payment, "Beli bensin");
 			Pump_Save(pump_index);
 			Pump_Sync(pump_index);
 			Business_Save(bizid);
-			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%d liter "WHITE" dengan harga "GREEN"$%s.", strval(inputtext), FormatNumber(payment));
+			SendServerMessage(playerid, "Berhasil mengisi bahan bakar sebanyak "YELLOW"%.2f liter "WHITE" dengan harga "GREEN"$%s.", fuel, FormatNumber(payment));
         }     
 	}
 	if(dialogid == DIALOG_SELLCARGO)
@@ -7997,7 +8064,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new amount = strcash(inputtext), id = PlayerData[playerid][pInBiz];
-			if(amount < 1)
+			if(amount < 1 || amount > 50000)
 				return ShowPlayerDialog(playerid, DIALOG_BIZ_DP, DIALOG_STYLE_INPUT, "Business Deposit", "ERROR: Invalid amount!\nPlease input amount of money you want to deposit:", "Deposit", "Close");
 		
 			if(GetMoney(playerid) < amount)
@@ -8018,7 +8085,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new amount = strcash(inputtext), id = PlayerData[playerid][pInBiz];
-			if(amount < 1)
+			if(amount < 1 || amount > 50000)
 				return ShowPlayerDialog(playerid, DIALOG_BIZ_WD, DIALOG_STYLE_INPUT, "Business Withdraw", "ERROR: Invalid amount!\nPlease input amount of vault you want to withdraw:", "Withdraw", "Close");
 		
 			if(BizData[id][bizVault] < amount)
@@ -10207,6 +10274,7 @@ public OnVehicleSpawn(vehicleid)
 				{
 					VehicleData[vehicleid][vInsurance] --;
 					VehicleData[vehicleid][vInsuTime] = gettime() + (1 * 10800);
+					mysql_tquery(sqlcon, sprintf("DELETE FROM `crates` WHERE `Vehicle` = '%d'", VehicleData[vehicleid][vID]));
 					Vehicle_SetState(vehicleid, VEHICLE_STATE_INSURANCE);
 
 					Vehicle_Save(vehicleid);
@@ -10302,27 +10370,6 @@ IsHasWeaponParts(playerid) {
 		}
 	}
 	return it_is;
-}
-GetVehicleFuelMax(modelid) {
-	new Float:fuel;
-	switch(Model_GetCategory(modelid)) 
-	{
-		case CATEGORY_AIRPLANE: fuel = 50.0;
-		case CATEGORY_BIKE: fuel = 5.0;
-		case CATEGORY_BOAT: fuel = 15.0;
-		case CATEGORY_CONVERTIBLE: fuel = 25.0;
-		case CATEGORY_HELICOPTER: fuel = 50.0;
-		case CATEGORY_INDUSTRIAL: fuel = 20.0;
-		case CATEGORY_LOWRIDER: fuel = 20.0;
-		case CATEGORY_OFFROAD: fuel = 30.0;
-		case CATEGORY_PUBLIC: fuel = 25.0;
-		case CATEGORY_SALOONS: fuel = 15.0;
-		case CATEGORY_SPORT: fuel = 15.0;
-		case CATEGORY_STATION_WAGON: fuel = 20.0;
-		case CATEGORY_UNIQUE: fuel = 20.0;
-		default: fuel = 10.0;
-	}
-	return fuel;
 }
 
 GetVehicleCategoryName(modelid) {
@@ -10940,7 +10987,7 @@ timer OnAutoAimCheck[2000](playerid) {
 	return 1;
 }
 task OnServerDataUpdate[1800000]() {
-	fishPrice = RandomFloat(3.8,6.0);
+	fishPrice = RandomFloat(3.0,4.5);
 	woodPrice = RandomEx(2500, 5000);
 	return 1;
 }

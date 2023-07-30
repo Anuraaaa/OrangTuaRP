@@ -160,6 +160,8 @@ CMD:refuel(playerid, params[])
 	vehicleid = GetPlayerVehicleID(playerid);
     if((index = Pump_Nearest(playerid, 7.0)) != -1)
     {
+
+
 	    if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER)
 	        return SendErrorMessage(playerid, "Kamu harus mengemudi kendaraan untuk mengisi bensin.");
 	    
@@ -181,6 +183,7 @@ CMD:refuel(playerid, params[])
 		if(Vehicle_GetFuel(vehicleid) > 100)
 			return SendErrorMessage(playerid, "Kendaraan ini sudah memiliki bensin yang penuh.");
 
+		SendServerMessage(playerid, "Kendaraan ini dapat menampung bahan bakar hingga %.2f liter.", GetVehicleFuelMax(GetVehicleModel(vehicleid)));
 		PlayerData[playerid][pGasPump] = index;
 		ShowPlayerDialog(playerid, DIALOG_REFUEL, DIALOG_STYLE_INPUT, "Refuel Vehicle", ""WHITE"Masukkan jumlah bahan bakar (liter) untuk mengisi kendaraan ini\nHarga per-liter nya adalah "GREEN"$0.5\n\n"GREY"(ketik \"FULLTANK\" jika ingin mengisi hingga penuh)", "Refuel", "Close");
     }
@@ -1710,8 +1713,11 @@ CMD:transfer(playerid, params[])
 		sscanf(cash, "p<.>dd", dollars, cents);
 		format(totalcash, sizeof(totalcash), "%d%02d", dollars, cents);
 
-		if(strval(totalcash) < 0) 
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 
 		if(PlayerData[playerid][pBank] < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu di bank.");
@@ -1731,8 +1737,11 @@ CMD:transfer(playerid, params[])
 		sscanf(cash, "d", dollars);
 		format(totalcash, sizeof(totalcash), "%d00", dollars);
 
-		if(strval(totalcash) < 0) 
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 
 		if(PlayerData[playerid][pBank] < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu di bank.");
@@ -1773,6 +1782,12 @@ CMD:deposit(playerid, params[])
 
 	amount = strcash(cash);
 
+	if(amount < 1)
+		return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+	if(amount > 5000000)
+		return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
+
 	if(GetMoney(playerid) < amount)
 		return SendErrorMessage(playerid, "Kamu tidak membawa uang sebanyak itu! ($%s)", FormatNumber(amount));
 
@@ -1795,8 +1810,11 @@ CMD:withdraw(playerid, params[])
 	{
 		sscanf(cash, "p<.>dd", dollars, cents);
 		format(totalcash, sizeof(totalcash), "%d%02d", dollars, cents);
-		if(strval(totalcash) < 0)
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 
 		if(PlayerData[playerid][pBank] < strval(totalcash))
 			return SendErrorMessage(playerid, "Tidak ada uang sebanyak itu dalam Bank-mu!");
@@ -1810,8 +1828,11 @@ CMD:withdraw(playerid, params[])
 		sscanf(cash, "d", dollars);
 		format(totalcash, sizeof(totalcash), "%d00", dollars);
 
-		if(strval(totalcash) < 0)
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 
 		if(PlayerData[playerid][pBank] < strval(totalcash))
 			return SendErrorMessage(playerid, "Tidak ada uang sebanyak itu dalam Bank-mu!");
@@ -1852,8 +1873,11 @@ CMD:pay(playerid, params[])
 		sscanf(cash, "p<.>dd", dollars, cents);
 		format(totalcash, sizeof(totalcash), "%d%02d", dollars, cents);
 
-		if(strval(totalcash) < 0) 
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 
 		if(GetMoney(playerid) < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu.");
@@ -1885,8 +1909,11 @@ CMD:pay(playerid, params[])
 		sscanf(cash, "d", dollars);
 		format(totalcash, sizeof(totalcash), "%d00", dollars);
 
-		if(strval(totalcash) < 0) 
-			return SendErrorMessage(playerid, "Jumlah tidak bisa dibawah $0.00!");
+		if(strval(totalcash) < 1)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
+
+		if(strval(totalcash) > 5000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
 		
 		if(GetMoney(playerid) < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu.");
@@ -2470,7 +2497,7 @@ CMD:v(playerid, params[])
 				g_ListedVehicle[playerid][count++] = i;
 				found = true;
 			}
-			foreach(new i : Vehicle) if(Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER && Vehicle_IsShared(playerid, i)) {
+			foreach(new i : Vehicle) if((Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL) && Vehicle_IsShared(playerid, i)) {
 				format(str, sizeof(str), "%s#%d\t%s "YELLOW"(Shared)\t"WHITE"%s\n", str, i, GetVehicleName(i), (VehicleData[i][vLocked]) ? ("{FF0000}Locked") : ("{00FF00}Unlocked"));
 				g_ListedVehicle[playerid][count++] = i;
 				found = true;

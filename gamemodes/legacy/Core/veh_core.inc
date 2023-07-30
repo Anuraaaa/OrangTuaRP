@@ -20,7 +20,7 @@ enum E_VEHICLE_DATA
 	Float:vPos[4],
 	vWorld,
 	vInterior,
-	vFuel,
+	Float:vFuel,
 	vVehicle,
 	vDamage[4],
 	bool:vExists,
@@ -584,4 +584,32 @@ GetInsideVehicle(vehicleid) {
 		total++;
 	}
 	return total;
+}
+
+Float:GetVehicleFuelMax(modelid) {
+	new Float:fuel;
+	switch(Model_GetCategory(modelid)) 
+	{
+		case CATEGORY_AIRPLANE: fuel = 50.0;
+		case CATEGORY_BIKE: fuel = 5.0;
+		case CATEGORY_BOAT: fuel = 15.0;
+		case CATEGORY_CONVERTIBLE: fuel = 25.0;
+		case CATEGORY_HELICOPTER: fuel = 50.0;
+		case CATEGORY_INDUSTRIAL: fuel = 20.0;
+		case CATEGORY_LOWRIDER: fuel = 20.0;
+		case CATEGORY_OFFROAD: fuel = 30.0;
+		case CATEGORY_PUBLIC: fuel = 25.0;
+		case CATEGORY_SALOONS: fuel = 15.0;
+		case CATEGORY_SPORT: fuel = 15.0;
+		case CATEGORY_STATION_WAGON: fuel = 20.0;
+		case CATEGORY_UNIQUE: fuel = 20.0;
+		default: fuel = 10.0;
+	}
+	return fuel;
+}
+
+
+Float:Vehicle_GetFuel(vehicleid)
+{
+	return VehicleData[vehicleid][vFuel];
 }

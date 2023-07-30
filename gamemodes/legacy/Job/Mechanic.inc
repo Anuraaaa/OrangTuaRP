@@ -412,6 +412,7 @@ CMD:mech(playerid, params[])
 	    	PlayerData[playerid][pJobduty] = false;
 	    	SetPlayerColor(playerid, COLOR_WHITE);
 	    	SendClientMessage(playerid, COLOR_SERVER, "(Mechanic) {FFFFFF}Kamu tidak lagi on-duty sebagai "YELLOW"Mechanic");
+			IssuePendingSalary(playerid);
 	    }
 	}
     return 1;
@@ -427,6 +428,7 @@ hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 			PlayerData[playerid][pJobduty] = false;
 			SetPlayerColor(playerid, COLOR_WHITE);
 			SendClientMessage(playerid, COLOR_SERVER, "(Mechanic) {FFFFFF}Kamu tidak lagi on-duty sebagai "YELLOW"Mechanic "WHITE"karena keluar dari area mekanik.");
+			IssuePendingSalary(playerid);
 		}
 	}
 }

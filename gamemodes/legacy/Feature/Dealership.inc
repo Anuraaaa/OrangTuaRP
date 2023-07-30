@@ -411,11 +411,14 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				format(string, sizeof(string), ""GREY"Nama kendaraan:\n"LIGHTBLUE"%s\n\n\
 												"GREY"Kategori:\n\
 												"LIGHTBLUE"%s\n\n\
+												"GREY"Kapasitas bahan bakar:\n\
+												"GOLD"%.2f liter/h\n\n\
 												"GREY"Potensial TopSpeed (km/h):\n\
 												"GOLD"%ikm/h\n\n\n\n\
 												"WHITE"Kendaraan ini dihargai sebesar "GREEN"$%s",
 												ReturnVehicleModelName(DealerVehicle[id][index][dealer_veh_model]),
 												GetVehicleCategoryName(DealerVehicle[id][index][dealer_veh_model]),
+												GetVehicleFuelMax(DealerVehicle[id][index][dealer_veh_model]),
 												Model_TopSpeed(DealerVehicle[id][index][dealer_veh_model]),
 												FormatNumber(DealerVehicle[id][index][dealer_veh_price]));
 				ShowPlayerDialog(playerid, DIALOG_DEALER_RETURN, DIALOG_STYLE_MSGBOX, "Detail Kendaraan", string, "Return", "");
@@ -444,6 +447,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				DealerVehicle[id][index][dealer_veh_stock]--;
 
 				SQL_UpdateDealerVehicle(id, index);
+				PutPlayerInVehicle(playerid, vehicleid, 0);
 			}
 		}
 	}

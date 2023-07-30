@@ -205,15 +205,16 @@ task Timer_OnVehicleUpdate[35000]()
 {
 	foreach(new i : Vehicle) if (IsValidVehicle(i) && IsEngineVehicle(i) && GetEngineStatus(i) && GetVehicleSpeed(i) > 1)
 	{
-	    if (Vehicle_GetFuel(i))
+	    if (Vehicle_GetFuel(i) > 0.0)
 	    {
-	        if(--VehicleData[i][vFuel] == 0)
+			VehicleData[i][vFuel] -= RandomFloat(0.1, 0.5);
+	        if(VehicleData[i][vFuel] <= 0.0)
 			{
-			    VehicleData[i][vFuel] = 0;
+			    VehicleData[i][vFuel] = 0.0;
 	      		SwitchVehicleEngine(i, false);
 				
 				if(GetVehicleDriver(i) != INVALID_PLAYER_ID)
-	      			GameTextForPlayer(GetVehicleDriver(i), "Vehicle out of ~r~Fuel!", 3000, 3);
+	      			GameTextForPlayer(GetVehicleDriver(i), "Bensin kendaraan telah habis!", 3000, 3);
 			}
 		}
 	}
@@ -250,7 +251,7 @@ ptask OnSpeedometerUpdate[200](playerid) {
 			GetPlayerPos(playerid, x, y, z);
 			
 			if(PlayerData[playerid][pHudType] == 1) {
-				fuel = VehicleData[vehicleid][vFuel] * 59.5/100;
+				fuel = VehicleData[vehicleid][vFuel] * 59.5/GetVehicleFuelMax(GetVehicleModel(vehicleid));
 				PlayerTextDrawTextSize(playerid,FUELTD[playerid], fuel, 6.5);
 				PlayerTextDrawShow(playerid, FUELTD[playerid]);
 
@@ -280,20 +281,19 @@ ptask OnSpeedometerUpdate[200](playerid) {
 				PlayerTextDrawSetString(playerid, ENGINETD[playerid], sprintf("%s", (GetEngineStatus(vehicleid)) ? ("~g~ON") : ("~r~OFF")));
 			}
 			else if(PlayerData[playerid][pHudType] == 2) {
-				new string[156], fuel_percent;
+				new string[156];
 
-				fuel_percent = VehicleData[vehicleid][vFuel];
+				new Float:fuel_percent = VehicleData[vehicleid][vFuel];
 				
-				format(string, sizeof(string), "%s I %s~n~%dKM/h I Fuel: %d%% I Health: %.2f I Engine: %s",
+				format(string, sizeof(string), "%s I %s~n~%dKM/h I Fuel: %.2f%% I Health: %.2f I Engine: %s",
 					GetVehicleName(vehicleid), GetLocation(x, y, z), floatround(GetVehicleSpeed(vehicleid)), fuel_percent, fDamage, GetEngineStatus(vehicleid) ? ("ON") : ("OFF"));
 			
 				PlayerTextDrawSetString(playerid, SPEEDO_2[playerid], string);
 			}
 			else {
 
-				new fuel_percent;
 
-				fuel_percent = VehicleData[vehicleid][vFuel];
+				new Float:fuel_percent = VehicleData[vehicleid][vFuel];
 
 				if(IsValidPlayerProgressBar(playerid, PROGRESS_FUEL[playerid]))
 					SetPlayerProgressBarValue(playerid, PROGRESS_FUEL[playerid], fuel_percent);
@@ -365,6 +365,19 @@ ptask PlayerUpdate[1000](playerid)
 				SetPlayerVirtualWorld(targetid, GetPlayerVirtualWorld(playerid));
 			}
 		}
+		if(CheckPlayerJob(playerid, JOB_TAXI) && PlayerData[playerid][pJobduty] && GetPlayerState(playerid) != PLAYER_STATE_DRIVER) {
+			
+			new taxi_veh = GetPVarInt(playerid, "TaxiVehicle");
+
+			if(!IsPlayerInRangeOfVehicle(playerid, taxi_veh, 30.0)) {
+				PlayerData[playerid][pJobduty] = false;
+				SetPlayerColor(playerid, COLOR_WHITE);
+				IssuePendingSalary(playerid);
+				DeletePVar(playerid, "TaxiVehicle");
+
+				SendServerMessage(playerid, "Kamu tidak lagi duty sebagai taxi driver karena terlalu jauh dari taxi");
+			}
+		}
 		if(PlayerData[playerid][pFishing] && GetPlayerAnimationIndex(playerid) != 1549 && ReturnFishPlace(playerid) != FISHPLACE_NONE)
 		{
 			ApplyAnimation(playerid, "SWORD", "SWORD_BLOCK", 4.1, 0, 0, 0, 1, 0);
@@ -399,16 +412,18 @@ ptask PlayerUpdate[1000](playerid)
 				SyncPlayerTime(playerid);
 				PlayerData[playerid][pMinute]++;
 				PlayerData[playerid][pSecond] = 0;
+				if(PlayerData[playerid][pMinute] % 15 == 0) {
+					if(PlayerData[playerid][pJobduty]) {
+						
+						PlayerData[playerid][pPendingSalary] += 5000;
+						SendServerMessage(playerid, "Kamu mendapatkan "GREEN"$50.00 "WHITE"dari jobduty (pending salary: "GREEN"$%s"WHITE")", FormatNumber(PlayerData[playerid][pPendingSalary]));
+						
+					}
+				}
 				if(PlayerData[playerid][pMinute] >= 60)
 				{
 					PlayerData[playerid][pHour]++;
 					PlayerData[playerid][pMinute] = 0;
-
-					if(PlayerData[playerid][pJobduty]) {
-
-						SendServerMessage(playerid, "Kamu mendapatkan "GREEN"$50.00 "WHITE"pada /salary dari Job duty.");
-						AddSalary(playerid, "Job Duty", 5000);
-					}
 
 					new nxtlevel = PlayerData[playerid][pLevel] + 1,
 						expamount = nxtlevel * 3;

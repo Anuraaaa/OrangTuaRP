@@ -6,7 +6,7 @@ enum E_PUMP_DATA
 {
     pumpID,
     Float:pumpPos[4],
-    pumpFuel,
+    Float:pumpFuel,
     pumpBusiness,
     Text3D:pumpLabel,
     STREAMER_TAG_OBJECT:pumpObject,
@@ -25,7 +25,7 @@ Pump_Create(bizid, Float:x, Float:y, Float:z, Float:a)
         x += 5.0 * floatsin(-a, degrees);
         y += 5.0 * floatcos(-a, degrees);
 
-        PumpData[idx][pumpFuel] = 3000;
+        PumpData[idx][pumpFuel] = 500.0;
         PumpData[idx][pumpPos][0] = x;
         PumpData[idx][pumpPos][1] = y;
         PumpData[idx][pumpPos][2] = z;
@@ -51,7 +51,7 @@ Pump_Delete(idx, bool:remove_safe = false) {
 
     mysql_tquery(sqlcon, sprintf("DELETE FROM `fuelpump` WHERE `ID` = '%d'", PumpData[idx][pumpID]));
 
-    PumpData[idx][pumpFuel] = 3000;
+    PumpData[idx][pumpFuel] = 500.0;
     PumpData[idx][pumpID]  = 0;
     PumpData[idx][pumpBusiness] = 0;
 
@@ -71,7 +71,7 @@ Pump_Sync(idx)
         DestroyDynamic3DTextLabel(PumpData[idx][pumpLabel]);
 
     new str[144];
-    format(str, sizeof(str), "{AAC4E5}[ Fuel Pump %d ]\n{FFFFFF}Fuel left: {FFFF00}%d liter\n{FFFFFF}Gunakan /refuel untuk mengisi bahan bakar.", idx, PumpData[idx][pumpFuel]);
+    format(str, sizeof(str), "{AAC4E5}[ Fuel Pump %d ]\n{FFFFFF}Fuel left: {FFFF00}%.2f liter\n{FFFFFF}Gunakan /refuel untuk mengisi bahan bakar.", idx, PumpData[idx][pumpFuel]);
     PumpData[idx][pumpLabel] = CreateDynamic3DTextLabel(str, -1, PumpData[idx][pumpPos][0],  PumpData[idx][pumpPos][1],  PumpData[idx][pumpPos][2], 10.0, _, _, 0, -1, -1, -1, 10.0);
     
     if(!IsValidDynamicObject(PumpData[idx][pumpObject]))
@@ -85,7 +85,7 @@ Pump_Sync(idx)
 Pump_Save(idx) 
 {
     new query[1212];
-    mysql_format(sqlcon, query, sizeof(query), "UPDATE `fuelpump` SET `PosX` = '%f', `PosY` = '%f', `PosZ` = '%f', `PosA` = '%f', `Fuel` = '%d', `Business` = '%d' WHERE `ID` = '%d'",
+    mysql_format(sqlcon, query, sizeof(query), "UPDATE `fuelpump` SET `PosX` = '%f', `PosY` = '%f', `PosZ` = '%f', `PosA` = '%f', `Fuel` = '%f', `Business` = '%d' WHERE `ID` = '%d'",
         PumpData[idx][pumpPos][0],
         PumpData[idx][pumpPos][1], 
         PumpData[idx][pumpPos][2], 
@@ -124,7 +124,7 @@ function Pump_Load()
                 PumpData[idx][pumpPos][1] = cache_get_field_float(i, "PosY");
                 PumpData[idx][pumpPos][2] = cache_get_field_float(i, "PosZ");
                 PumpData[idx][pumpPos][3] = cache_get_field_float(i, "PosA");
-                PumpData[idx][pumpFuel] = cache_get_field_int(i, "Fuel");
+                PumpData[idx][pumpFuel] = cache_get_field_float(i, "Fuel");
                 PumpData[idx][pumpBusiness] = cache_get_field_int(i, "Business");
 
                 Pump_Sync(idx);
@@ -166,7 +166,7 @@ hook OnBusinessRefuel(bizid) {
 
     foreach(new i : Pump) if(PumpData[i][pumpBusiness] == BizData[bizid][bizID]) {
 
-        PumpData[i][pumpFuel] = 3000;
+        PumpData[i][pumpFuel] = 500.0;
         Pump_Sync(i);
         Pump_Save(i);
     }
@@ -219,7 +219,7 @@ CMD:setpump(playerid, params[]) {
     if(!Iter_Contains(Pump, index))
         return SendErrorMessage(playerid, "Pump ID %d is doesn't exists.", index);
 
-    PumpData[index][pumpFuel] = 3000;
+    PumpData[index][pumpFuel] = 500.0;
     Pump_Sync(index);
     SendAdminAction(playerid, "Berhasil merestock pump %d.", index);
     return 1;

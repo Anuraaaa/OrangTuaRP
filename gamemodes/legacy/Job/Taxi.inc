@@ -85,6 +85,7 @@ CMD:taxi(playerid, params[])
 			SendClientMessage(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu sekarang bertugas sebaga "YELLOW"Taxi Driver "WHITE"kamu akan menerima panggilan taxi.");
 			CreateTaxi(playerid);
 			PlayerTextDrawSetString(playerid, FARETD[playerid], "Fare: ~g~$2,50");
+			SetPVarInt(playerid, "TaxiVehicle", GetPlayerVehicleID(playerid));
 		}
 		else
 		{
@@ -92,6 +93,8 @@ CMD:taxi(playerid, params[])
 			PlayerData[playerid][pJobduty] = false;
 			SetPlayerColor(playerid, COLOR_WHITE);
 			SendClientMessage(playerid, COLOR_SERVER, "(Taxi) {FFFFFF}Kamu tidak lagi bertugas sebagai {FFFF00}Taxi Driver");
+			DeletePVar(playerid, "TaxiVehicle");
+			IssuePendingSalary(playerid);
 		}
 	}
 	else if(!strcmp(type, "calls", true))

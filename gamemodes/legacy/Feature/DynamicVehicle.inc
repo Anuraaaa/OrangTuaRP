@@ -968,7 +968,7 @@ function OnVehicleLoaded() {
 				cache_get_value_name_int(z, "vehWorld", VehicleData[i][vWorld]);
 				cache_get_value_name_int(z, "vehColor1", VehicleData[i][vColor][0]);
 				cache_get_value_name_int(z, "vehColor2", VehicleData[i][vColor][1]);
-				cache_get_value_name_int(z, "vehFuel", VehicleData[i][vFuel]);
+				cache_get_value_name_float(z, "vehFuel", VehicleData[i][vFuel]);
 				cache_get_value_name_int(z, "vehInsurance", VehicleData[i][vInsurance]);
 				cache_get_value_name_int(z, "vehInsuTime", VehicleData[i][vInsuTime]);
 				cache_get_value_name(z, "vehPlate", VehicleData[i][vPlate]);
@@ -1192,7 +1192,7 @@ Vehicle_Save(vehicleid, bool:extraid = false)
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehDamage4`='%d', ", cQuery, VehicleData[vehicleid][vDamage][3]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehInterior`='%d', ", cQuery, VehicleData[vehicleid][vInterior]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehWorld`='%d', ", cQuery, VehicleData[vehicleid][vWorld]);
-		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehFuel`='%d', ", cQuery, VehicleData[vehicleid][vFuel]);
+		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehFuel`='%f', ", cQuery, VehicleData[vehicleid][vFuel]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehLocked`='%d', ", cQuery, VehicleData[vehicleid][vLocked]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehPlate`='%s', ", cQuery, VehicleData[vehicleid][vPlate]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehRental`='%d', ", cQuery, VehicleData[vehicleid][vRental]);
@@ -1352,10 +1352,7 @@ function Vehicle_TurnOnEngine(playerid) {
 	}
 	return 1;
 }
-Vehicle_GetFuel(vehicleid)
-{
-	return VehicleData[vehicleid][vFuel];
-}
+
 
 IsVehicleSupportsNeonLights(modelid){
 	
@@ -1417,7 +1414,7 @@ hook OnPlayerDisconnectEx(playerid) {
 }
 
 hook OnVehicleUpdate(playerid, vehicleid) {
-	if(VehicleData[vehicleid][vFuel] < 15 && IsEngineVehicle(vehicleid) && GetEngineStatus(vehicleid) && GetVehicleSpeed(vehicleid) > 20) {
+	if(VehicleData[vehicleid][vFuel] < 1.0 && IsEngineVehicle(vehicleid) && GetEngineStatus(vehicleid) && GetVehicleSpeed(vehicleid) > 20) {
 
 		new keys, keysa, keysb;
         GetPlayerKeys(playerid, keys, keysa, keysb);
