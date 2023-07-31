@@ -4446,7 +4446,6 @@ LoadServerMap()
 	tmpobjid = CreateDynamicObject(1256, -2848.701171, 1276.225585, 1.648955, 0.000000, 0.000000, 0.000000, -1, -1, -1, 300.00, 300.00); 
 	tmpobjid = CreateDynamicObject(1256, -2857.772216, 1300.005126, 1.648955, 0.000000, 0.000000, 180.000000, -1, -1, -1, 300.00, 300.00); 
 	
-	// Rumah Franklin Chayton
 	tmpobjid = CreateDynamicObject(18766, -2736.030761, 868.317565, 65.112922, 0.000000, 0.000000, 0.000000, 0, 0, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(tmpobjid, 0, 7088, "casinoshops1", "fakestone1_LA", 0x00000000);
 	tmpobjid = CreateDynamicObject(18766, -2727.147949, 868.317565, 67.972930, 0.000000, 0.000000, 0.000000, 0, 0, -1, 300.00, 300.00); 
@@ -4561,13 +4560,9 @@ LoadServerMap()
 	tmpobjid = CreateDynamicObject(19353, -2738.749267, 873.396484, 65.728324, 0.000000, 0.000000, 90.000000, 0, 0, -1, 300.00, 300.00); 
 	SetDynamicObjectMaterial(tmpobjid, 0, 14581, "ab_mafiasuitea", "cof_wood2", 0x00000000);
 	tmpobjid = CreateDynamicObject(19482, -2738.777587, 873.290649, 66.498069, -0.000007, -0.000000, -89.999977, 0, 0, -1, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000}Franklin Chayton", 130, "Palatino Linotype", 40, 1, 0x00000000, 0x00000000, 1);
 	tmpobjid = CreateDynamicObject(19482, -2738.777587, 873.290649, 66.138038, -0.000007, -0.000000, -89.999977, 0, 0, -1, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000}105Th Paradiso Complex", 130, "Palatino Linotype", 30, 1, 0x00000000, 0x00000000, 1);
 	tmpobjid = CreateDynamicObject(19482, -2738.777587, 873.290649, 67.058013, 0.000000, 0.000000, 270.000000, 0, 0, -1, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(tmpobjid, 0, "{000000}v", 130, "Wingdings", 80, 0, 0x00000000, 0x00000000, 1);
 	tmpobjid = CreateDynamicObject(19482, -2738.817626, 873.280639, 67.058013, 0.000000, 0.000000, 270.000000, 0, 0, -1, 300.00, 300.00); 
-	SetDynamicObjectMaterialText(tmpobjid, 0, "{ffffff}v", 130, "Wingdings", 80, 0, 0x00000000, 0x00000000, 1);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
