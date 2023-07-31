@@ -42,7 +42,7 @@ GetNearestDealership(playerid, Float:range = 4.0)
 	return index;
 }
 
-CreateDealership(playerid, price)
+CreateDealership(playerid)
 {
 	new Float:x, Float:y, Float:z;
 	if(GetPlayerPos(playerid, x, y, z))
@@ -52,7 +52,7 @@ CreateDealership(playerid, price)
 			if(!DealerData[i][dealerExists])
 			{
 				DealerData[i][dealerExists] = true;
-				DealerData[i][dealerPrice] = price;
+				DealerData[i][dealerPrice] = 0;
 				DealerData[i][dealerVault] = 0;
 				DealerData[i][dealerVIP] = 0;
 
@@ -296,14 +296,10 @@ CMD:editdealer(playerid, params[])
 
 CMD:createdealer(playerid, params[])
 {
-	new price[32];
     if (PlayerData[playerid][pAdmin] < 7)
 	    return SendErrorMessage(playerid, "You don't have permission to use this command.");
 
-	if(sscanf(params, "s[32]", price))
-		return SendSyntaxMessage(playerid, "/createdealer");
-
-	new id = CreateDealership(playerid, strcash(price));
+	new id = CreateDealership(playerid);
 	if(id == -1)
 		return SendErrorMessage(playerid, "The server has reached the limit for dealerships.");
 
