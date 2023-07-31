@@ -84,6 +84,9 @@ new const accList[][g_accList] =
     {1,19099,"PoliceCap2"},
     {1,19100,"PoliceCap3"},
     {1,19162,"PoliceHat2"},
+    {1,19064,"ChrismasHat1"},
+    {1,19065,"ChrismasHat2"},
+    {1,19066,"ChrismasHat3"},
 
 
     //Bandana
