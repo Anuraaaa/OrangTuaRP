@@ -502,10 +502,10 @@ function OnPlayerUseItem(playerid, itemid, name[])
 		if(Vehicle_GetFuel(vehicleid) >= 100)
 			return SendErrorMessage(playerid, "Kendaraan ini tidak memerlukan bahan bakar lagi.");
 
-		if(VehicleData[vehicleid][vFuel] + 15 >= 100)
-			VehicleData[vehicleid][vFuel] = 100;
+		if(VehicleData[vehicleid][vFuel] + 3.0 >= GetVehicleFuelMax(GetVehicleModel(vehicleid)))
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 		else
-			VehicleData[vehicleid][vFuel] += 15;
+			VehicleData[vehicleid][vFuel] += 3.0;
 
 		SendServerMessage(playerid, "Kamu berhasil mengisi bensin kendaraan %s.", GetVehicleName(vehicleid));
 
