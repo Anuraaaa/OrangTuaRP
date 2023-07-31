@@ -1900,9 +1900,6 @@ CMD:pay(playerid, params[])
         if(!IsPlayerInAnyVehicle(id))
         	SetPlayerToFacePlayer(id, playerid);
 
-		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "(PayLog) "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
-		}
 	}
 	else
 	{
@@ -1935,10 +1932,6 @@ CMD:pay(playerid, params[])
         if(!IsPlayerInAnyVehicle(id))
         	SetPlayerToFacePlayer(id, playerid);
 
-
-		if(strval(totalcash) > 100000) {
-			SendAdminDutyMessage(X11_YELLOW, "(PayLog) "WHITE"%s(%s) pay to %s(%s) with amount: "DARKGREEN"$%s", GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
-		}
 	}
     return 1;
 }

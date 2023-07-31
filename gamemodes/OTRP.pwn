@@ -7621,8 +7621,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new i = g_ListedVehicle[playerid][listitem];
 			
 			PlayerData[playerid][pTracking] = true;
-			SetWaypoint(playerid, pos[0], pos[1], pos[2], 4.0);
 			GetVehiclePos(i, pos[0], pos[1], pos[2]);
+			SetWaypoint(playerid, pos[0], pos[1], pos[2], 4.0);
 			SendClientMessageEx(playerid, COLOR_SERVER, "(GPS) {FFFFFF}Your {FFFF00}%s {FFFFFF}has been marked on radar (%s)", GetVehicleName(i), GetLocation(pos[0], pos[1], pos[2]));
 		}
 	}
@@ -7681,7 +7681,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		PlayerData[playerid][pTracking] = true;
 		SetWaypoint(playerid, HouseData[id][housePos][0], HouseData[id][housePos][1], HouseData[id][housePos][2], 5.0);
-		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}House ID "RED"d {FFFFFF}located at your radar.", id);
+		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(GPS) {FFFFFF}House ID "RED"%d {FFFFFF}located at your radar.", id);
 
 	}
 	if(dialogid == DIALOG_TAKEJOB2)
