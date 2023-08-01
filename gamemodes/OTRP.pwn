@@ -91,7 +91,7 @@ enum E_LOGLEVEL
 
 #include <android-check>
 #include <mobile>
-#include <mapandreas>
+#include <colandreas>
 #include <notify>
 #include <actor_plus>
 #include <LiveCam>
@@ -458,8 +458,7 @@ public OnGameModeInit()
 {
 
 	if(Database_Connect()) {
-
-		MapAndreas_Init(MAP_ANDREAS_MODE_FULL, "scriptfiles/SAFull.hmap");
+		CA_Init();
 		CreateGlobalTextDraw();
 		CreatePublicHUD();
 		DisableInteriorEnterExits();
@@ -910,20 +909,24 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 		if(PlayerData[playerid][pAdmin] >= 5)
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ + 2.0);
 			}
 			else {
-				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetPlayerPos(playerid, fX, fY, fZ + 2.0);
 			}
 				
 		}
 		else if(PlayerData[playerid][pAdmin] > 0 && PlayerData[playerid][pAduty])
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ + 2.0);
 			}
 			else {
-				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetPlayerPos(playerid, fX, fY, fZ + 2.0);
 			}
 		}
 		
