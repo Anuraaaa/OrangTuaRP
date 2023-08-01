@@ -9579,33 +9579,40 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 SetValidColor(playerid)
 {
-	if(!PlayerData[playerid][pOnDuty])
+	if (PlayerData[playerid][pAduty])
 	{
-		if(PlayerData[playerid][pJobduty])
-		{
-			if(CheckPlayerJob(playerid, JOB_MECHANIC))
-			{
-				SetPlayerColor(playerid, COLOR_LIGHTGREEN);
-			}
-			else if(CheckPlayerJob(playerid, JOB_TAXI))
-			{
-				SetPlayerColor(playerid, COLOR_YELLOW);
-			}
-		}
-		else
-		{
-			SetPlayerColor(playerid, COLOR_WHITE);
-		}
-
-		if(!IsPlayerInAnyVehicle(playerid))
-			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+		SetPlayerColor(playerid, 0xFF0000FF);
 	}
 	else
 	{
-		SetFactionColor(playerid);
+		if(!PlayerData[playerid][pOnDuty])
+		{
+			if(PlayerData[playerid][pJobduty])
+			{
+				if(CheckPlayerJob(playerid, JOB_MECHANIC))
+				{
+					SetPlayerColor(playerid, COLOR_LIGHTGREEN);
+				}
+				else if(CheckPlayerJob(playerid, JOB_TAXI))
+				{
+					SetPlayerColor(playerid, COLOR_YELLOW);
+				}
+			}
+			else
+			{
+				SetPlayerColor(playerid, COLOR_WHITE);
+			}
 
-		if(!IsPlayerInAnyVehicle(playerid))
-			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			if(!IsPlayerInAnyVehicle(playerid))
+				SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+		}
+		else
+		{
+			SetFactionColor(playerid);
+
+			if(!IsPlayerInAnyVehicle(playerid))
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
 	}
 	return 1;
 }
