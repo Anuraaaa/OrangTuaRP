@@ -255,3 +255,41 @@ task timer_OnBmUpdated[3600000]() {
 
     return 1;
 }
+
+CMD:gotobm(playerid, params[]) {
+    if(PlayerData[playerid][pAdmin] < 4) {
+        return SendErrorMessage(playerid, NO_PERMISSION);
+    }
+
+    new option[32];
+    if(sscanf(params, "s[32]", option))
+        return SendSyntaxMessage(playerid, "/gotobm [schema/schemahigh/seed/material/clip/sellweed]");
+
+    if(!strcmp(option, "schema", true)) {
+        SetPlayerPos(playerid, g_posSchematic[0], g_posSchematic[1], g_posSchematic[2]);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Schematic");
+    }
+    else if(!strcmp(option, "schemahigh", true)) {
+        SetPlayerPos(playerid, g_posSchematicHighVelocity[0], g_posSchematicHighVelocity[1], g_posSchematicHighVelocity[2]);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Schematic High Velocity");
+    }
+    else if(!strcmp(option, "seed", true)) {
+        SetPlayerPos(playerid, g_posSeed[0], g_posSeed[1], g_posSeed[2]);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Weed Seed");    
+    }
+    else if(!strcmp(option, "clip", true)) {
+        SetPlayerPos(playerid, g_posClip[0], g_posClip[1], g_posClip[2]);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Weapon Clip");    
+    }
+    else if(!strcmp(option, "material", true)) {
+        SetPlayerPos(playerid, g_posMaterial[0], g_posMaterial[1], g_posMaterial[2]);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Weapon Material");    
+    }
+    else if(!strcmp(option, "sellweed", true)) {
+        SetPlayerPos(playerid, -774.2181,2425.2349,157.1011);
+        SendAdminAction(playerid, "Anda telah diteleportasi ke Sell Weed");    
+    }
+    else SendSyntaxMessage(playerid, "/gotobm [schema/schemahigh/seed/material/clip/sellweed]");
+
+    return 1;
+}

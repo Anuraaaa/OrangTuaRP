@@ -502,9 +502,9 @@ CMD:givesalary(playerid, params[])
 	if(PlayerData[playerid][pAdmin] < 6)
 		return SendErrorMessage(playerid, NO_PERMISSION);
 
-	new targetid, amount[32];
-	if(sscanf(params, "us[32]", targetid, amount))
-		return SendSyntaxMessage(playerid, "/givesalary [playerid/PartOfName] [amount]");
+	new targetid, amount[32], reason[32];
+	if(sscanf(params, "us[32]s[32]", targetid, amount, reason))
+		return SendSyntaxMessage(playerid, "/givesalary [playerid/PartOfName] [amount] [reason]");
 
 	if(targetid == INVALID_PLAYER_ID)
 		return SendErrorMessage(playerid, "Invalid player specified!");
@@ -513,10 +513,11 @@ CMD:givesalary(playerid, params[])
 		return SendErrorMessage(playerid, "You can't give to yourself!");
 
 	if(strcash(amount) < 1)
-		return SendErrorMessage(playerid, "Invalid amount!");
+		return SendErrorMessage(playerid, "Invalid aamount of salary.");
 
-	AddSalary(targetid, "From server", strcash(amount));
+	AddSalary(targetid, reason, strcash(amount));
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has given $%s salary to %s", PlayerData[playerid][pUCP], FormatNumber(strcash(amount)), GetName(targetid));
+	SendClientMessageEx(targetid, X11_LIGHTBLUE, "(Salary): "WHITE"Kamu telah diberikan salary sebesar "GREEN"$%s "WHITE"oleh "RED"%s", FormatNumber(strcash(amount)), GetUsername(playerid));
 	return 1;
 }
 CMD:setname(playerid, params[])

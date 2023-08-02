@@ -119,7 +119,7 @@ SyncDealership(id)
 	{
 
 		new str[175];
-		format(str, sizeof(str), "[ID %d]\nName: {FFFF00}%s\n{FFFFFF}Type {FFFF00}/buyvehicle {FFFFFF}to buy vehicle", id, DealerData[id][dealerName]);
+		format(str, sizeof(str), "[ID %d]\n{FFFF00}%s\n{FFFFFF}Type {FFFF00}/buyvehicle {FFFFFF}to buy vehicle", id, DealerData[id][dealerName]);
 		UpdateDynamic3DTextLabelText(DealerData[id][dealerLabel], COLOR_SERVER, str);
 
 		Streamer_SetFloatData(STREAMER_TYPE_3D_TEXT_LABEL, DealerData[id][dealerLabel], E_STREAMER_X, DealerData[id][dealerPos][0]);

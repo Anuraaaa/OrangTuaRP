@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 new salarySweeper = 1500,
     salaryBus = 5000,
     salaryTrashmaster = 1000,
@@ -41,7 +43,6 @@ ShowMowerEconomy(playerid) {
 
 }
 
-
 ShowSweeperEconomy(playerid) {
 	return ShowPlayerDialog(playerid, DIALOG_ECONOMY_SWEEPER, DIALOG_STYLE_INPUT, "Sweeper Economy", sprintf("Masukkan salary baru untuk sidejob sweeper:\n(current: $%s)", FormatNumber(salarySweeper)), "Set", "Close");
 
@@ -69,3 +70,18 @@ CMD:seteconomy(playerid, params[]) {
     return 1;
 }
 
+
+
+hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
+	if(dialogid == DIALOG_ECONOMY) {
+
+		if(!response)
+			return 0;
+
+		if(listitem == 0) ShowSweeperEconomy(playerid);
+		if(listitem == 1) ShowBusEconomy(playerid);
+		if(listitem == 2) ShowTrashmasterEconomy(playerid);
+		if(listitem == 3) ShowMowerEconomy(playerid);
+	}
+	return Y_HOOKS_CONTINUE_RETURN_1;
+}
