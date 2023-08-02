@@ -221,6 +221,37 @@ task Timer_OnVehicleUpdate[35000]()
 	return 1;
 }
 
+task Server_MinuteUpdate[60000]() {
+	static taxi_notify, mechanic_notify;
+
+	if(++taxi_notify >= 10) {
+		
+		new count = 0;
+		foreach(new i : Player) if(CheckPlayerJob(i, JOB_TAXI) && PlayerData[i][pJobduty]) {
+			count++;
+		}
+
+		if(count) {
+			SendClientMessageToAllEx(X11_YELLOW, "(Taxi Information) "WHITE"Saat ini sedang ada "LIGHTBLUE"%d "WHITE"Taxi yang sedang bertugas! (telfon taxi pada nomor: 1222)", count);
+		}
+
+		taxi_notify = 0;
+	}
+
+	if(++mechanic_notify >= 15) {
+		new count = 0;
+		foreach(new i : Player) if(CheckPlayerJob(i, JOB_MECHANIC) && PlayerData[i][pJobduty]) {
+			count++;
+		}
+
+		if(count) {
+			SendClientMessageToAllEx(X11_GREEN, "(Mechanic Information) "WHITE"Saat ini sedang ada "LIGHTBLUE"%d "WHITE"Mechanic yang sedang bertugas! (telfon mechanic pada nomor: 132)", count);
+		}
+
+		mechanic_notify = 0;
+	}
+	return 1;
+}
 ptask Player_MinuteUpdate[60000](playerid)
 {
     if(!IsPlayerSpawned(playerid))
@@ -485,7 +516,7 @@ ptask DelayUpdate[1000](playerid)
 				{
 					AddSalary(playerid, "Faction Duty", FactionData[PlayerData[playerid][pFaction]][factionSalary][PlayerData[playerid][pFactionRank] - 1]);
 					PlayerData[playerid][pDutyTime] = 3600;
-					SendClientMessage(playerid, COLOR_SERVER, "(Faction) {FFFFFF}Faction salary has been issued to your {FFFF00}/salary");
+					notification.Show(playerid, "PAYCHECK", sprintf("~w~Faction Salary has been issued.~n~(~g~+$%s~w~)", FormatNumber(FactionData[PlayerData[playerid][pFaction]][factionSalary][PlayerData[playerid][pFactionRank] - 1])), "hud:radar_cash");
 				}
 			}
 		}
