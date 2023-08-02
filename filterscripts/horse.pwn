@@ -2,7 +2,7 @@
 #include <YSI_Data\y_iterate>
 #include <YSI_Coding\y_timers>
 #include <streamer>
-#include <mapandreas>
+#include <colandreas>
 #include <izcmd>
 
 #define FILTERSCRIPT
@@ -34,7 +34,7 @@ Horse_Create(Float:x, Float:y, Float:z, Float:a)
     {
         Iter_Add(Horse, horseid);
 
-        MapAndreas_FindZ_For2DCoord(x, y, z);
+        CA_FindZ_For2DCoord(x, y, z);
         HorseData[horseid][horseOwner] = -1;
         HorseData[horseid][horseRider] = INVALID_PLAYER_ID;
         HorseData[horseid][horsePos][0] = x;
@@ -109,7 +109,7 @@ timer AttachHorseObject[1000](playerid) {
 }
 
 public OnFilterScriptInit() {
-    MapAndreas_Init(MAP_ANDREAS_MODE_FULL, "scriptfiles/SAFull.hmap");
+    CA_Init();
 
     for(new i = 0; i < MAX_PLAYERS; i++) if(IsPlayerConnected(i)) {
         RidingHorse[i] = -1;
@@ -130,7 +130,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             GetPlayerPos(playerid, x, y, z);
             GetPlayerFacingAngle(playerid, a);
 
-            MapAndreas_FindZ_For2DCoord(x, y, z);
+            CA_FindZ_For2DCoord(x, y, z);
 
             SetPlayerPos(playerid, x + 1.0, y, z + 0.45);
             SetPlayerFacingAngle(playerid, a);
@@ -167,7 +167,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                 if(IsValidDynamicObject(HorseData[idx][horseObject]))
                     DestroyDynamicObject(HorseData[idx][horseObject]);
 
-                MapAndreas_FindZ_For2DCoord(x, y, z);
+                CA_FindZ_For2DCoord(x, y, z);
                 SetPlayerFacingAngle(playerid, HorseData[idx][horsePos][5]);
                 
                 ApplyAnimation(playerid, "BIKED", "BIKED_RIDE", 4.1, 1, 1, 1, 1, 0, 1);
@@ -207,7 +207,7 @@ public OnPlayerUpdate(playerid) {
             move[0] = forwd*floatsin(-angle, degrees);
             move[1] = forwd*floatcos(-angle, degrees);
 
-            MapAndreas_FindZ_For2DCoord(move[0], move[1], move[2]);
+            CA_FindZ_For2DCoord(move[0], move[1], move[2]);
             SetPlayerVelocity(playerid, move[0], move[1], 0);
         }
 
@@ -219,7 +219,7 @@ public OnPlayerUpdate(playerid) {
 
         new Float:x, Float:y, Float:z;
         GetPlayerPos(playerid, x, y, z);
-        MapAndreas_FindZ_For2DCoord(x, y, z);
+        CA_FindZ_For2DCoord(x, y, z);
 
         HorseData[horse_id][horseSpeed] = GetPlayerSpeed(playerid);
         HorseData[horse_id][horsePos][0] = x;

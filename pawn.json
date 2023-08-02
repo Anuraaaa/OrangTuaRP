@@ -56,7 +56,7 @@
 				"OTRP"
 			],
 			"plugins": [
-				"crashdetect", "pawnraknet", "pawn-memory", "streamer", "sscanf", "mysql", "samp_bcrypt", "samp-compat", "chrono", "mapandreas"
+				"crashdetect", "pawnraknet", "pawn-memory", "streamer", "sscanf", "mysql", "samp_bcrypt", "samp-compat", "chrono", "ColAndreas"
 			],
 			"rcon_password": "orturp",
 			"port": 7777,

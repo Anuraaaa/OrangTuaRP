@@ -10,12 +10,6 @@ new
     countNotificationLastCheck[MAX_PLAYERS]
 ;
 
-hook OnGameModeExit()
-{
-    MapAndreas_Unload();
-    return 1;
-}
-
 hook OnPlayerConnect(playerid)
 {
     countNotification[playerid] = 0;
@@ -59,12 +53,12 @@ timer Anticheat_IsVehicleDrown[1000](playerid, vehicleid)
         Float:x,
         Float:y,
         Float:z_samp, // Untuk menyimpan ketinggian berdasarkan koordinat dari SA-MP
-        Float:z_mapandreas, // Untuk menyimpan ketinggian berdasarkan koordinat dari MapAndreas
+        Float:z_mapandreas, // Untuk menyimpan ketinggian berdasarkan koordinat dari ColAndreas
         Float:vehiclehealth
     ;
 
     GetVehiclePos(vehicleid, x, y, z_samp);
-    MapAndreas_FindZ_For2DCoord(x, y, z_mapandreas);
+    CA_FindZ_For2DCoord(x, y, z_mapandreas);
     GetVehicleHealth(vehicleid, vehiclehealth);
 
     if (z_mapandreas > 0.00)

@@ -91,7 +91,7 @@ enum E_LOGLEVEL
 
 #include <android-check>
 #include <mobile>
-#include <mapandreas>
+#include <colandreas>
 #include <notify>
 #include <actor_plus>
 #include <LiveCam>
@@ -458,8 +458,7 @@ public OnGameModeInit()
 {
 
 	if(Database_Connect()) {
-
-		MapAndreas_Init(MAP_ANDREAS_MODE_FULL, "scriptfiles/SAFull.hmap");
+		CA_Init();
 		CreateGlobalTextDraw();
 		CreatePublicHUD();
 		DisableInteriorEnterExits();
@@ -910,20 +909,24 @@ public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
 		if(PlayerData[playerid][pAdmin] >= 5)
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ + 2.0);
 			}
 			else {
-				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetPlayerPos(playerid, fX, fY, fZ + 2.0);
 			}
 				
 		}
 		else if(PlayerData[playerid][pAdmin] > 0 && PlayerData[playerid][pAduty])
 		{
 			if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
-				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetVehiclePos(GetPlayerVehicleID(playerid), fX, fY, fZ + 2.0);
 			}
 			else {
-				SetPlayerPosFindZ(playerid, fX, fY, fZ);
+				CA_FindZ_For2DCoord(fX, fY, fZ);
+				SetPlayerPos(playerid, fX, fY, fZ + 2.0);
 			}
 		}
 		
@@ -9566,33 +9569,40 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 SetValidColor(playerid)
 {
-	if(!PlayerData[playerid][pOnDuty])
+	if (PlayerData[playerid][pAduty])
 	{
-		if(PlayerData[playerid][pJobduty])
-		{
-			if(CheckPlayerJob(playerid, JOB_MECHANIC))
-			{
-				SetPlayerColor(playerid, COLOR_LIGHTGREEN);
-			}
-			else if(CheckPlayerJob(playerid, JOB_TAXI))
-			{
-				SetPlayerColor(playerid, COLOR_YELLOW);
-			}
-		}
-		else
-		{
-			SetPlayerColor(playerid, COLOR_WHITE);
-		}
-
-		if(!IsPlayerInAnyVehicle(playerid))
-			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+		SetPlayerColor(playerid, 0xFF0000FF);
 	}
 	else
 	{
-		SetFactionColor(playerid);
+		if(!PlayerData[playerid][pOnDuty])
+		{
+			if(PlayerData[playerid][pJobduty])
+			{
+				if(CheckPlayerJob(playerid, JOB_MECHANIC))
+				{
+					SetPlayerColor(playerid, COLOR_LIGHTGREEN);
+				}
+				else if(CheckPlayerJob(playerid, JOB_TAXI))
+				{
+					SetPlayerColor(playerid, COLOR_YELLOW);
+				}
+			}
+			else
+			{
+				SetPlayerColor(playerid, COLOR_WHITE);
+			}
 
-		if(!IsPlayerInAnyVehicle(playerid))
-			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			if(!IsPlayerInAnyVehicle(playerid))
+				SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+		}
+		else
+		{
+			SetFactionColor(playerid);
+
+			if(!IsPlayerInAnyVehicle(playerid))
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
 	}
 	return 1;
 }
