@@ -3589,16 +3589,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SendServerMessage(playerid, "Berhasil mengubah salary sweeper menjadi $%s.", FormatNumber(salarySweeper));
 		SaveEconomyData();
 	}
-	if(dialogid == DIALOG_ECONOMY) {
-
-		if(!response)
-			return 0;
-
-		if(listitem == 0) ShowSweeperEconomy(playerid);
-		if(listitem == 1) ShowBusEconomy(playerid);
-		if(listitem == 2) ShowTrashmasterEconomy(playerid);
-		if(listitem == 3) ShowMowerEconomy(playerid);
-	}
 	if(dialogid == DIALOG_REPORTS)
 	{
 		if(!response)
