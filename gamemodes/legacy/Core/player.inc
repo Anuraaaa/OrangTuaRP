@@ -274,7 +274,7 @@ SQL_SaveCharacter(playerid)
 	    mysql_format(sqlcon, query, sizeof(query), "%s`DrivingLicense`='%d', ", query, PlayerData[playerid][pLicense][0]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`LumberLicense`='%d', ", query, PlayerData[playerid][pLicense][2]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`HaulingLicense`='%d', ", query, PlayerData[playerid][pLicense][3]);
-	    mysql_format(sqlcon, query, sizeof(query), "%s`LastLogin`='%d', ", query, gettime());
+		mysql_format(sqlcon, query, sizeof(query), "%s`LastLogout`='%d', ", query, gettime());
 		mysql_format(sqlcon, query, sizeof(query), "%s`InFlat`='%d', ", query, PlayerData[playerid][pInFlat]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`IDCard`='%d', ", query, PlayerData[playerid][pIDCard]);
 		mysql_format(sqlcon, query, sizeof(query), "%s`IDCardExpired`='%d', ", query, PlayerData[playerid][pIDCardExpired]);
@@ -477,9 +477,22 @@ function LoadCharacterData(playerid)
 
 	CallLocalFunction("OnPlayerLogin", "d", playerid);
 	ValidSpawn[playerid] = true;
+
+	print("called");
     return 1;
 }
 
+function OnForceJail(playerid) {
+
+	print("forcejail");
+	if(cache_affected_rows()) {
+		print("affect");
+		new cQuery[256];
+		mysql_format(sqlcon, cQuery, sizeof(cQuery), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+		mysql_tquery(sqlcon, cQuery, "LoadCharacterData", "d", playerid);	
+	}
+	return 1;
+}
 function OnPlayerPasswordRecovery(playerid, hashid)
 {
 	new
@@ -1867,4 +1880,29 @@ SetPlayerPositionEx(playerid, Float:x, Float:y, Float:z, time = 2000, interior =
 	if(interior != -1) SetPlayerInterior(playerid,interior);
 	if(world != -1) SetPlayerVirtualWorld(playerid,world);
 	return SetPlayerPos(playerid, x, y, z + 1);
+}
+
+
+ShowCharMenu(playerid) {
+	new string[156], Cache:execute, query[156];
+	strcat(string, "Start playing\n");
+	strcat(string, "Remove this character\n");
+
+	if(IsPlayerUsingAndroid(playerid)) {
+		mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+		execute = mysql_query(sqlcon, query);
+
+		if(cache_num_rows()) {
+			new last_logout = cache_get_field_int(0, "LastLogout");
+
+			if(last_logout != 0 && (gettime() - last_logout < (5 * 60))) {
+				strcat(string, "Force Jail\n");
+			}
+		}
+		cache_delete(execute);
+	}
+		
+
+	ShowPlayerDialog(playerid, DIALOG_CHAR_OPTION, DIALOG_STYLE_LIST, "OT - Char Menu", string, "Select", "Quit");	
+	return 1;
 }

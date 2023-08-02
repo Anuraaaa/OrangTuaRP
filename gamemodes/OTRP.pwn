@@ -8895,18 +8895,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 
 	}
-    if(dialogid == DIALOG_CHARLIST)
-    {
-		if(response)
-		{
-			if (PlayerChar[playerid][listitem][0] == EOS)
-				return ShowPlayerDialog(playerid, DIALOG_MAKECHAR, DIALOG_STYLE_INPUT, "Create Character", "Silahkan masukan nama karaktermu:\n(note) nama karakter harus nama Roleplay!", "Create", "Exit");
-
-			PlayerData[playerid][pChar] = listitem;
-
-			ShowPlayerDialog(playerid, DIALOG_CHAR_OPTION, DIALOG_STYLE_LIST, "OT - Char Menu", "Start playing\nRemove this character", "Select", "Quit");			
-		}
-	}
 	if(dialogid == DIALOG_CHAR_OPTION) {
 		if(!response)
 			return Kick(playerid);
@@ -8920,6 +8908,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			case 1: {
 				ShowPlayerDialog(playerid, DIALOG_CHAR_DELETE, DIALOG_STYLE_INPUT, "OT - Remove Character", "Berikan alasan-mu menghapus karakter yang valid:\n\nNote: Saat menekan \"Confirm\" tandanya kamu menyetujui semua wealth/aset yang hilang\nketika karakter dihapus, karakter yang dihapus tidak dapat dikembalikan dalam cara dan bentuk apapun.\nPastikan kamu memikirkan matang-matang untuk penghapusan karakter.", "Confirm", "Back");
+			}
+			case 2: {
+				new query[256];
+				mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `JailTime` = '60', `JailBy` = 'Server', `JailReason` = 'Force Jail' WHERE `Name` = '%e'", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+				mysql_tquery(sqlcon, query, "OnForceJail", "d", playerid);	
 			}
 		}
 	}
@@ -8950,7 +8943,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 
 		}
-		else ShowPlayerDialog(playerid, DIALOG_CHAR_OPTION, DIALOG_STYLE_LIST, "OT - Char Menu", "Start playing\nRemove this character", "Select", "Quit");
+		else ShowCharMenu(playerid);
 	}
 	// -----[Textdraw Login]
 	/*if(dialogid == DIALOG_MAKECHAR)
@@ -9217,7 +9210,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			PlayerData[playerid][pChar] = listitem;
 
-			ShowPlayerDialog(playerid, DIALOG_CHAR_OPTION, DIALOG_STYLE_LIST, "OT - Char Menu", "Start playing\nRemove this character", "Select", "Quit");
+			ShowCharMenu(playerid);
 		}
 		else
 			KickEx(playerid);
@@ -9645,6 +9638,7 @@ public OnPlayerFirstSpawn(playerid) {
 }
 public OnPlayerLogin(playerid) {
 
+	mysql_tquery(sqlcon, sprintf("UPDATE `characters` SET `LastLogin` = '%d' WHERE `pID` = '%d'", gettime(), PlayerData[playerid][pID]));
 	return 1;
 }
 public OnPlayerSpawn(playerid)

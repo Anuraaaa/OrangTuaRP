@@ -441,7 +441,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 function OnPlayerCrasher(playerid) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
     SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
-    KickEx(playerid);  
+    KickEx(playerid);
     return 1;
 }
 

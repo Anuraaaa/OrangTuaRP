@@ -73,7 +73,10 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         RemovePlayerAttachedObject(playerid, 9);
 
-        if(StockData[stockRock] < 250) {
+        if(StockData[stockRock] >= 250) {
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Stock batu sedang penuh! kamu tidak mendapatkan apa-apa.");
+        }
+        else {
 
             StockData[stockRock]++;
 
@@ -103,9 +106,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
             SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Kamu berhasil mengantarkan batu dengan tipe %s "WHITE"dan mendapatkan "GREEN"$%s"WHITE"!", rock_names[rock_type], FormatNumber(gaji));
 
             UpdateServerStock(SERVER_STOCK_ROCK);
-        }
-        else {
-            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Miner) "WHITE"Stock batu sedang penuh! kamu tidak mendapatkan apa-apa.");
+
         }
         DeletePVar(playerid, "HasilTambang");
 
