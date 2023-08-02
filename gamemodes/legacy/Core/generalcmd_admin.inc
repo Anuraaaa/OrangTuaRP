@@ -2316,6 +2316,8 @@ CMD:aduty(playerid, params[])
 	    SetValidColor(playerid);
 	    SetPlayerName(playerid, PlayerData[playerid][pName]);
 	    SendAdminMessage(X11_TOMATO, "* %s is no longer duty as administrator.", PlayerData[playerid][pUCP]);
+
+		TogglePlayerControllable(playerid, true);
 	}
 	return 1;
 }
