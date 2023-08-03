@@ -16,6 +16,18 @@ new WarningCode[MAX_PLAYERS][53],
     ping_warning[MAX_PLAYERS]= {0, ...},
     ac_weapon_h[MAX_PLAYERS]= {0, ...};
 
+enum {
+    MOD_OLD_VERSION = 0,
+    MOD_IMPROVED_DEAGLE,
+    MOD_EXTRAWS,
+    MOD_SOBEIT,
+    MOD_SAMPFUNCS,
+    MOD_SPRINTHOOK,
+    MOD_CLEO_MODLOADER,
+    MOD_BYPASS,
+    MOD_SILENTAIM
+}
+
 static
     hack_health[MAX_PLAYERS] = {0, ...},
     hack_armour[MAX_PLAYERS] = {0, ...},
@@ -23,8 +35,8 @@ static
     hack_airbreak[MAX_PLAYERS] = {0, ...},
     hack_vehiclehealth[MAX_PLAYERS] = {0, ...},
     hack_vehtele[MAX_PLAYERS] = {0, ...},
-    hack_fly[MAX_PLAYERS] = {0, ...}
-    ;
+    hack_fly[MAX_PLAYERS] = {0, ...},
+    UsingMods[MAX_PLAYERS][9];
 
 static GetCodeAC(code)
 {
@@ -302,6 +314,40 @@ public OnCheatDetected(playerid, ip_address[], type, code)
     return 1;
 }
 
+timer OnCheckFile[5000](playerid) {
+    if(IsPlayerSpawned(playerid) && !IsPlayerUsingAndroid(playerid)) {
+
+        new string[352];
+
+        if(IsUsingMods(playerid, MOD_SAMPFUNCS)) {
+            strcat(string, "Kamu telah terdeteksi menggunakan SAMPFUNCS\nSilahkan keluar dari server lalu hapus SAMPFUNCS sebelum kembali bermain di OT:RP");
+            ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
+            KickEx(playerid);
+            return 1;
+        }
+        if(IsUsingMods(playerid, MOD_BYPASS)) {
+            strcat(string, "Kamu telah terdeteksi menggunakan BYPASS\nSilahkan keluar dari server lalu hapus BYPASS sebelum kembali bermain di OT:RP");
+            ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
+            KickEx(playerid);
+            return 1;
+        }
+
+        if(IsUsingMods(playerid, MOD_SPRINTHOOK)) {
+            strcat(string, "Kamu telah terdeteksi menggunakan SPRINTHOOK\nSilahkan keluar dari server lalu hapus SPRINTHOOK sebelum kembali bermain di OT:RP");
+            ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
+            KickEx(playerid);
+            return 1;
+        }
+
+        if(UsingMods(playerid, MOD_CLEO_MODLOADER))
+            SendClientMessage(playerid, X11_GREY, "(SA:MP File) "WHITE"GTA Mu terdeteksi menggunakan cleo/modloader.");
+
+    }
+}
+
+hook OnPlayerFirstSpawn(playerid) {
+    defer OnCheckFile[5000](playerid);
+}
 hook OnPlayerConnect(playerid) {
 	ResetPlayerWarningCode(playerid);
 
@@ -310,6 +356,17 @@ hook OnPlayerConnect(playerid) {
     g_ArmourHack[playerid] = 0;
     speed_hack[playerid] = 0;
     airbreak_hack[playerid] = 0;
+
+    for(new i = 0; i < 9; i++) {
+        UsingMods[playerid][i] = false;
+    }
+}
+
+IsUsingMods(playerid, mods) {
+    if(UsingMods[playerid][mods]) {
+        return 1;
+    }
+    return 0;
 }
 
 /* Funcs */
@@ -467,5 +524,60 @@ public OnPlayerAirbreak(playerid) {
         SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal programs (Airbreak)");
         KickEx(playerid);  
     }
+    return 1;
+}
+
+forward OnDetectedOldversion(playerid);
+public OnDetectedOldversion(playerid)
+{
+    UsingMods[playerid][MOD_OLD_VERSION] = true;
+    return 1;
+}
+forward OnDetectedImprovedDeagle(playerid);
+public OnDetectedImprovedDeagle(playerid)
+{
+    UsingMods[playerid][MOD_IMPROVED_DEAGLE] = true;
+    return 1;
+}
+forward OnDetectedExtraWS(playerid);
+public OnDetectedExtraWS(playerid)
+{
+    UsingMods[playerid][MOD_EXTRAWS] = true;
+    return 1;
+}
+forward OnDetecteds0beit(playerid);
+public OnDetecteds0beit(playerid)
+{
+    UsingMods[playerid][MOD_SOBEIT] = true;
+    return 1;
+}
+forward OnDetectedSAMPFUNCS(playerid);
+public OnDetectedSAMPFUNCS(playerid)
+{
+    UsingMods[playerid][MOD_SAMPFUNCS] = true;
+    return 1;
+}
+forward OnDetectedSprintHook(playerid);
+public OnDetectedSprintHook(playerid)
+{
+    UsingMods[playerid][MOD_SPRINTHOOK] = true;
+    return 1;
+}
+forward OnDetectedMods(playerid);
+public OnDetectedMods(playerid)
+{
+	UsingMods[playerid][MOD_CLEO_MODLOADER] = true;
+    return 1;
+}
+forward OnDetectedbypass(playerid);
+public OnDetectedbypass(playerid)
+{
+    UsingMods[playerid][MOD_BYPASS] = true;
+    return 1;
+}
+forward OnDetectedSilentaim(playerid);
+public OnDetectedSilentaim(playerid)
+{
+    UsingMods[playerid][MOD_SILENTAIM] = true;
     return 1;
 }

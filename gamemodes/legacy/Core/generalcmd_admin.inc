@@ -2327,6 +2327,9 @@ CMD:gmx(playerid, params[])
 	if(PlayerData[playerid][pAdmin] < 7)
 		return SendServerMessage(playerid, "Ngapain Om!");
 
+	foreach(new i : Player) if(IsPlayerSpawned(i)) {
+		SQL_SaveCharacter(i);
+	}
 	SaveServerData();
 	SendRconCommand("gmx");
 	return 1;

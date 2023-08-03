@@ -477,8 +477,6 @@ function LoadCharacterData(playerid)
 
 	CallLocalFunction("OnPlayerLogin", "d", playerid);
 	ValidSpawn[playerid] = true;
-
-	print("called");
     return 1;
 }
 

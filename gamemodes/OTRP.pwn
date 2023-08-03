@@ -948,6 +948,9 @@ public OnPlayerConnect(playerid)
 	PreloadAnimations(playerid);
 	ResetFlyModeData(playerid);
 
+	for(new i = 0; i < 100; i++) {
+		SendClientMessage(playerid, -1, "");
+	}
 	if(!IsNameUsed(playerid, GetName(playerid))) {
 
 		g_RaceCheck{playerid} ++;
@@ -10904,7 +10907,7 @@ ShowPlayerStats(playerid, targetid)
 	format(str, sizeof(str), "{FFFFFF}Username: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Registration Date: [{C6E2FF}%s %s %s %i, %02d:%02d:%02d{FFFFFF}]\n",
 	PlayerData[playerid][pUCP], UcpData[playerid][ucpID], ConvertTimestamp(Timestamp:UcpData[playerid][ucpTime]));
 	strcat(cat, str);
-	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Unknown ID: [{C6E2FF}Mask_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",
+	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Mask ID: [{C6E2FF}Unknown_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",
 	PlayerData[playerid][pHour], PlayerData[playerid][pMinute], PlayerData[playerid][pSecond], PlayerData[playerid][pMaskID], PlayerData[playerid][pLastVehicleID]);
 	strcat(cat, str);
 	format(str, sizeof(str), "Health: [{FF0000}%.2f/100.0{FFFFFF}] | Armour: [{C6E2FF}%.2f/100.0{FFFFFF}] | Interior: [{C6E2FF}%d{FFFFFF}] | Virtual World: [{C6E2FF}%d{FFFFFF}]\n",

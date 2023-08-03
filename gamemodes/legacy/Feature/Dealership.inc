@@ -206,7 +206,7 @@ CMD:buyvehicle(playerid, params[])
 {
 	new id = -1;
 
-	if((id = GetNearestDealership(playerid)) != -1) {
+	if((id = GetNearestDealership(playerid, 2.0)) != -1) {
 
 		if(DealerData[id][dealerVIP] && !GetPlayerVIPLevel(playerid))
 			return SendErrorMessage(playerid, "Dealership ini diperuntukkan kepada Donater Player.");
