@@ -358,6 +358,13 @@ ptask PlayerUpdate[1000](playerid)
 			PlayerData[playerid][pHunger] = 0;
 		}
 
+		if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER) {
+			new vehicleid = GetPlayerVehicleID(playerid);
+
+			if(VehicleData[vehicleid][vFuel] > GetVehicleFuelMax(GetVehicleModel(vehicleid))) {
+				VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
+			}
+		}
 		if (GetPlayerMoney(playerid) != PlayerData[playerid][pMoney])
 		{
 		    ResetPlayerMoney(playerid);

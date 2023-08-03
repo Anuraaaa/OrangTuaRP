@@ -23,6 +23,21 @@ ShowPendingAsk(playerid) {
     return 1;
 
 }
+
+CMD:clearask(playerid, params[]) {
+    if(PlayerData[playerid][pAdmin] < 5) 
+        return SendErrorMessage(playerid, NO_PERMISSION);
+
+    if(!CountAsk()) 
+        return SendErrorMessage(playerid, "Tidak ada pending ask.");
+
+    foreach(new i : Player) if(PlayerData[i][pAsking]) {
+        PlayerData[i][pAsking] = false;
+    }
+
+    SendAdminMessage(X11_TOMATO, "AdmCmd: %s has cleared all pending asks.", GetUsername(playerid));
+    return 1;
+}
 CMD:ask(playerid, params[])
 {
 

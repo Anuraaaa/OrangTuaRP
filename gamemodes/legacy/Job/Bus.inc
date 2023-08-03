@@ -274,7 +274,7 @@ RespawnPlayerBusVehicle(playerid)
 {
 	currentBRoute[playerid] = 0;
 
-    VehicleData[PlayerData[playerid][pLastVehicleID]][vFuel] = 100;
+    VehicleData[PlayerData[playerid][pLastVehicleID]][vFuel] = GetVehicleFuelMax(GetVehicleModel(PlayerData[playerid][pLastVehicleID]));
 
 	if((IsBusVehicle(PlayerData[playerid][pLastVehicleID]) || IsBus2Vehicle(PlayerData[playerid][pLastVehicleID])) && GetVehicleDriver(PlayerData[playerid][pLastVehicleID]) == INVALID_PLAYER_ID)
 		SetVehicleToRespawn(PlayerData[playerid][pLastVehicleID]);
@@ -300,7 +300,7 @@ SetBusCheckpointRoute(playerid)
 		AddSalary(playerid, "Bus SideJob", salaryBus);
 		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}pada pending salary.", FormatNumber(salaryBus));
 		
-		VehicleData[vehicleid][vFuel] = 100;
+		VehicleData[vehicleid][vFuel] = 10.0;
 		SetVehicleToRespawn(vehicleid);
 		RepairVehicle(vehicleid);
 		DisablePlayerRaceCheckpoint(playerid);

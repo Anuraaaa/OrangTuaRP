@@ -5,7 +5,7 @@ LoadStaticVehicle()
     TrashVehicle[2] = Vehicle_Create(408, -1908.4242, -1702.2488, 22.3004, 184.5224, 26, 26, 0, false);
 	forex(i, sizeof(TrashVehicle))
 	{
-		VehicleData[TrashVehicle[i]][vFuel] = 100;
+		VehicleData[TrashVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(TrashVehicle[i], "TRASHMASTER-SIDEJOB");
 		Vehicle_SetType(TrashVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -15,7 +15,7 @@ LoadStaticVehicle()
 	MowerVehicle[3] = Vehicle_Create(572,-2288.9021,167.7834,34.8719,92.3754,1, 1, 0, false);
 	forex(i, sizeof(MowerVehicle))
 	{
-		VehicleData[MowerVehicle[i]][vFuel] = 100;
+		VehicleData[MowerVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(MowerVehicle[i], "MOWER-SIDEJOB");
 		Vehicle_SetType(MowerVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -27,7 +27,7 @@ LoadStaticVehicle()
 	RumpoVehicle[5] = Vehicle_Create(440,-1718.0669,92.5779,3.6678,224.4250,6, 6, 0, false);
 	forex(i, sizeof(RumpoVehicle))
 	{
-		VehicleData[RumpoVehicle[i]][vFuel] = 100;
+		VehicleData[RumpoVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(RumpoVehicle[i], "RUMPO-SIDEJOB");
 		Vehicle_SetType(RumpoVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -39,7 +39,7 @@ LoadStaticVehicle()
 	ForkliftVehicle[5] = Vehicle_Create(530,-1713.9181,23.0443,3.3232,225.7067,6, 6, 0, false);
 	forex(i, sizeof(ForkliftVehicle))
 	{
-		VehicleData[ForkliftVehicle[i]][vFuel] = 100;
+		VehicleData[ForkliftVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(ForkliftVehicle[i], "FORKLIFT-SIDEJOB");
 		Vehicle_SetType(ForkliftVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -48,7 +48,7 @@ LoadStaticVehicle()
 	SweeperVehicle[2] = Vehicle_Create(574,-2085.6165,-83.4752,34.8632,183.9264,1, 1, 0, false);
 	forex(i, sizeof(SweeperVehicle))
 	{
-		VehicleData[SweeperVehicle[i]][vFuel] = 100;
+		VehicleData[SweeperVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(SweeperVehicle[i], "SWEEPER-SIDEJOB");
 		Vehicle_SetType(SweeperVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -56,7 +56,7 @@ LoadStaticVehicle()
 	Bus2Vehicle[1] = Vehicle_Create(437,-2511.6414,1209.5726,37.5030,270.8899,1, 1, 0, false);
 	forex(i, sizeof(Bus2Vehicle))
 	{
-		VehicleData[BusVehicle[i]][vFuel] = 100;
+		VehicleData[BusVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(BusVehicle[i], "BUS-SIDEJOB");
 		Vehicle_SetType(BusVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -65,7 +65,7 @@ LoadStaticVehicle()
 	BusVehicle[2] = Vehicle_Create(431,-2531.9109,-605.2745,132.6496,179.2747,1, 1, 0, false);
 	forex(i, sizeof(BusVehicle))
 	{
-		VehicleData[BusVehicle[i]][vFuel] = 100;
+		VehicleData[BusVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(BusVehicle[i], "BUS-SIDEJOB");
 		Vehicle_SetType(BusVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}
@@ -76,7 +76,7 @@ LoadStaticVehicle()
 	CourierVehicle[4] = Vehicle_Create(413,-1951.2974,-1034.4664,32.2503,270.9728,6,6, 0, false);
 	forex(i, sizeof(CourierVehicle))
 	{
-		VehicleData[CourierVehicle[i]][vFuel] = 100;
+		VehicleData[CourierVehicle[i]][vFuel] = 10.0;
 		SetVehicleNumberPlate(CourierVehicle[i], "COURIER-SIDEJOB");
 		Vehicle_SetType(CourierVehicle[i], VEHICLE_TYPE_SIDEJOB);
 	}

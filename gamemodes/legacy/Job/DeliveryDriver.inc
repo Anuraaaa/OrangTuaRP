@@ -71,7 +71,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 
             SetVehicleToRespawn(PlayerData[playerid][pLastVehicleID]);
             VehicleData[PlayerData[playerid][pLastVehicleID]][vHaveCrate] = false;
-            VehicleData[PlayerData[playerid][pLastVehicleID]][vFuel] = 100;
+            VehicleData[PlayerData[playerid][pLastVehicleID]][vFuel] = 10.0;
         }
     }
 }
@@ -82,7 +82,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
         
         if(IsRumpoVehicle(PlayerData[playerid][pRumpoVehicle])) {
             SetVehicleToRespawn(PlayerData[playerid][pRumpoVehicle]);
-            VehicleData[PlayerData[playerid][pRumpoVehicle]][vFuel] = 100;
+            VehicleData[PlayerData[playerid][pRumpoVehicle]][vFuel] = 10.0;
             RepairVehicle(PlayerData[playerid][pRumpoVehicle]);
             VehicleData[PlayerData[playerid][pRumpoVehicle]][vLoadedCrate] = 0;
 

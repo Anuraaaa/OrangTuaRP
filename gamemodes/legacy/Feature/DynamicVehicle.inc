@@ -493,7 +493,7 @@ Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, 
 		VehicleData[vehicleid][vColor][1] = color2;
 		VehicleData[vehicleid][vLocked] = false;
 		VehicleData[vehicleid][vInsuranced] = false;
-		VehicleData[vehicleid][vFuel] = 100;
+		VehicleData[vehicleid][vFuel] = 10.0;
 		VehicleData[vehicleid][vHealth] = 1000.0;
 		VehicleData[vehicleid][vDeathTime] = 0;
 		VehicleData[vehicleid][vRentTime] = 0;

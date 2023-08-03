@@ -1178,6 +1178,10 @@ ResetWeapons(playerid)
 		PlayerData[playerid][pDurability][i] = 0;
 		PlayerData[playerid][pHighVelocity][i] = 0;
 	}
+
+	for (new i= 5; i < 8; i++) {
+		RemovePlayerAttachedObject(playerid, i);
+	}
 	return 1;
 }
 

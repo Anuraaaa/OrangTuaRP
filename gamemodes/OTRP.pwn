@@ -1078,7 +1078,7 @@ public OnPlayerDisconnectEx(playerid) {
 		new vehicleid = PlayerData[playerid][pTrashVehicleID];
 	
 		LoadedTrash[vehicleid] = 0;
-		VehicleData[vehicleid][vFuel] = 100;
+		VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 
 		if(IsTrashmasterVehicle(vehicleid) && GetPlayerVehicleID(playerid) == vehicleid)
 			SetVehicleToRespawn(vehicleid);
@@ -1194,7 +1194,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(OnMower[playerid] && IsMowerVehicle(vehicleid))
 		{
 			SetVehicleToRespawn(vehicleid);
-			VehicleData[vehicleid][vFuel] = 100;
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena mencoba keluar dari kendaraan!");
 			OnMower[playerid] = false;
 			MowerIndex[playerid] = 0;
@@ -1204,7 +1204,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(OnSweeping[playerid] && IsSweeperVehicle(vehicleid))
 		{
 			SetVehicleToRespawn(vehicleid);
-			VehicleData[vehicleid][vFuel] = 100;
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena mencoba keluar dari kendaraan!");
 			OnSweeping[playerid] = false;
 			SweeperIndex[playerid] = 0;
@@ -1695,17 +1695,14 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	CheckWeaponHack(playerid, weaponid);
 
-    if(GetWeapon(playerid) == weaponid && weaponid >= 22  && weaponid <= 38)
+    if(weaponid >= 22  && weaponid <= 38)
     {
 		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]) {
 			if(--PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] == 0) {
 				PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] = 0;
 				SetPlayerArmedWeapon(playerid, 0);
-				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));
-
-				return 1;		
+				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));	
 			}
 		}	
 		if(PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]]) {
@@ -9626,7 +9623,7 @@ public OnPlayerFirstSpawn(playerid) {
 
 		if(PlayerData[playerid][pMasked]) {
 
-			PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(sprintf("Mask_%d", PlayerData[playerid][pMaskID]), COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
+			PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(sprintf("Unknown_%d", PlayerData[playerid][pMaskID]), COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
 			
 			foreach(new i : Player)
 			{
@@ -10334,7 +10331,7 @@ public OnVehicleSpawn(vehicleid)
 		}
 		else if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_SIDEJOB) {
 
-			VehicleData[vehicleid][vFuel] = 100;
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
 			RepairVehicle(vehicleid);
 		}
 		else if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_FACTION) {
@@ -10907,7 +10904,7 @@ ShowPlayerStats(playerid, targetid)
 	format(str, sizeof(str), "{FFFFFF}Username: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Registration Date: [{C6E2FF}%s %s %s %i, %02d:%02d:%02d{FFFFFF}]\n",
 	PlayerData[playerid][pUCP], UcpData[playerid][ucpID], ConvertTimestamp(Timestamp:UcpData[playerid][ucpTime]));
 	strcat(cat, str);
-	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Mask ID: [{C6E2FF}Mask_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",
+	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Unknown ID: [{C6E2FF}Mask_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",
 	PlayerData[playerid][pHour], PlayerData[playerid][pMinute], PlayerData[playerid][pSecond], PlayerData[playerid][pMaskID], PlayerData[playerid][pLastVehicleID]);
 	strcat(cat, str);
 	format(str, sizeof(str), "Health: [{FF0000}%.2f/100.0{FFFFFF}] | Armour: [{C6E2FF}%.2f/100.0{FFFFFF}] | Interior: [{C6E2FF}%d{FFFFFF}] | Virtual World: [{C6E2FF}%d{FFFFFF}]\n",

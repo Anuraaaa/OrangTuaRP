@@ -49,7 +49,7 @@ hook OnPlayerConnect(playerid) {
 hook OnPlayerDisconnectEx(playerid) {
 
     if(OnMower[playerid] && IsMowerVehicle(GetPlayerVehicleID(playerid))) {
-        VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 100;
+        VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 10.0;
         SetVehicleToRespawn(GetPlayerVehicleID(playerid));
         OnMower[playerid] = false;
     }
@@ -70,7 +70,7 @@ SetMowerCheckpoint(playerid) {
 		OnMower[playerid] = false;
 		MowerIndex[playerid] = 0;
 		SetVehicleToRespawn(vid);
-		VehicleData[vid][vFuel] = 100;
+		VehicleData[vid][vFuel] = 10.0;
 		AddSalary(playerid, "Mower", salaryMower);
 		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s", FormatNumber(salaryMower));
 		DisablePlayerCheckpoint(playerid);

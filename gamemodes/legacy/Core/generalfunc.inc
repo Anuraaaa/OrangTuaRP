@@ -1223,7 +1223,7 @@ PlayerHasWeaponAttachment(playerid, weaponid)
     for (new i; i < 13; i++)
     {
         GetPlayerWeaponData(playerid, i, weapon, ammo);
-        if (weapon == weaponid && ammo) return 1;
+        if (weapon == weaponid) return 1;
     }
     return 0;
 }

@@ -371,7 +371,7 @@ function TrashDone(playerid)
 	PlayerData[playerid][pTrashmasterDelay] = 800;
 	TogglePlayerControllable(playerid, 1);
 
-	VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 100;
+	VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 10.0;
 	SetVehicleToRespawn(GetPlayerVehicleID(playerid));
 	SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}di {FFFF00}/salary", FormatNumber(cash));
 	return 1;	

@@ -438,7 +438,7 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(LSPDVehicles)) if(GetVehicleDriver(LSPDVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(LSPDVehicles[i]))
 			{
 				SetVehicleToRespawn(LSPDVehicles[i]);
-				VehicleData[LSPDVehicles[i]][vFuel] = 100;
+				VehicleData[LSPDVehicles[i]][vFuel] = 10.0;
 				SetVehicleHealth(LSPDVehicles[i], 2000.0);
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFPD faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
@@ -448,12 +448,12 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(BusVehicle)) if(GetVehicleDriver(BusVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(BusVehicle[i]))
 			{
 				SetVehicleToRespawn(BusVehicle[i]);
-				VehicleData[BusVehicle[i]][vFuel] = 100;
+				VehicleData[BusVehicle[i]][vFuel] = 10.0;
 			}
 			forex(i, sizeof(Bus2Vehicle)) if(GetVehicleDriver(BusVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(Bus2Vehicle[i]))
 			{
 				SetVehicleToRespawn(Bus2Vehicle[i]);
-				VehicleData[Bus2Vehicle[i]][vFuel] = 100;
+				VehicleData[Bus2Vehicle[i]][vFuel] = 10.0;
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Bus sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
@@ -462,7 +462,7 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(SweeperVehicle)) if(GetVehicleDriver(SweeperVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(SweeperVehicle[i]))
 			{
 				SetVehicleToRespawn(SweeperVehicle[i]);
-				VehicleData[SweeperVehicle[i]][vFuel] = 100;
+				VehicleData[SweeperVehicle[i]][vFuel] = 10.0;
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Sweeper sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
@@ -471,7 +471,7 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(TrashVehicle)) if(GetVehicleDriver(TrashVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(TrashVehicle[i]))
 			{
 				SetVehicleToRespawn(TrashVehicle[i]);
-				VehicleData[TrashVehicle[i]][vFuel] = 100;
+				VehicleData[TrashVehicle[i]][vFuel] = 10.0;
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Trashmaster sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
@@ -480,7 +480,7 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(SanNewsVehicles)) if(GetVehicleDriver(SanNewsVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(SanNewsVehicles[i]))
 			{
 				SetVehicleToRespawn(SanNewsVehicles[i]);
-				VehicleData[SanNewsVehicles[i]][vFuel] = 100;
+				VehicleData[SanNewsVehicles[i]][vFuel] = 10.0;
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFN faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
@@ -489,7 +489,7 @@ CMD:respawnveh(playerid, params[])
 			forex(i, sizeof(LSMDVehicles)) if(GetVehicleDriver(LSMDVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(LSMDVehicles[i]))
 			{
 				SetVehicleToRespawn(LSMDVehicles[i]);
-				VehicleData[LSMDVehicles[i]][vFuel] = 100;
+				VehicleData[LSMDVehicles[i]][vFuel] = 10.0;
 			}
 			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFMD faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
@@ -695,7 +695,7 @@ CMD:veh(playerid, params[])
 
 	PutPlayerInVehicle(playerid, vehicleid, 0);
 	SwitchVehicleEngine(vehicleid, true);
-	VehicleData[vehicleid][vFuel] = 100;
+	VehicleData[vehicleid][vFuel] = 10.0;
 	Vehicle_SetType(vehicleid, VEHICLE_TYPE_ADMIN);
 
 	SendServerMessage(playerid, "You have spawned a %s (ID:%d).", ReturnVehicleModelName(model[0]), vehicleid);
@@ -1511,8 +1511,8 @@ CMD:acure(playerid, params[]) {
 	PlayerData[targetid][pCough] = 0;
 	PlayerData[targetid][pFeverRate] = 0;
 	SetPlayerDrunkLevelEx(playerid, 0);
-	PlayerData[targetid][pHunger] = 30;
-	PlayerData[targetid][pThirst] = 30;
+	PlayerData[targetid][pHunger] = 100.0;
+	PlayerData[targetid][pThirst] = 100.0;
 	
 	for(new i = 0; i < 7; i++)
 	{
