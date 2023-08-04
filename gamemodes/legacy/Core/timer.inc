@@ -760,7 +760,7 @@ ptask TimerPlayerCheck[1000](playerid) {
 		}
 	}
 	if(GetPlayerPing(playerid) > 800) {
-            SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s have been kicked for high ping: (%d/800ms)", ReturnName(playerid), GetPlayerPing(playerid));
+            SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s have been kicked for high ping: (%d/800ms)", GetName(playerid), GetPlayerPing(playerid));
             SendClientMessageEx(playerid, X11_TURQUOISE_1,"Anda telah di kick karena ping melebihi matas maksimal: (%d/800ms)", GetPlayerPing(playerid));
             KickEx(playerid);
 	}

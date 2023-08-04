@@ -395,7 +395,7 @@ CMD:rac(playerid, params[]) {
 		return SendErrorMessage(playerid, NO_PERMISSION);
 
 	SendClientMessageToAllEx(X11_TOMATO, "AdmCmd: All vehicles has been respawned by %s", GetUsername(playerid));
-	foreach(new i : Vehicle) if(!GetInsideVehicle(i)) {
+	for(new i = 0; i < MAX_VEHICLES; i++) if(IsValidVehicle(i)) if(!GetInsideVehicle(i)) {
 
 		GetVehiclePos(i, VehicleData[i][vPos][0], VehicleData[i][vPos][1], VehicleData[i][vPos][2]);
 		GetVehicleZAngle(i, VehicleData[i][vPos][3]);

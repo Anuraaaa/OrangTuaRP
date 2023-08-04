@@ -1745,6 +1745,10 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 		SendErrorMessage(playerid, "Tidak bisa menaiki kendaraan lain saat bekerja Trashmaster.");
 		return true;
 	}
+	if(PlayerData[playerid][pInjured]) {
+		SetPlayerCurrentPos(playerid);
+		return 1;
+	}
 	return 1;
 }
 
