@@ -49,62 +49,60 @@ Doors_Updatelabel(id)
 {
 	if(id != -1)
 	{
-		if(IsValidDynamic3DTextLabel(drData[id][dLabelext]))
-            DestroyDynamic3DTextLabel(drData[id][dLabelext]);
-
-        if(IsValidDynamicPickup(drData[id][dPickupext]))
-            DestroyDynamicPickup(drData[id][dPickupext]);
-
-        if(IsValidDynamic3DTextLabel(drData[id][dLabelint]))
-            DestroyDynamic3DTextLabel(drData[id][dLabelint]);
-
-        if(IsValidDynamicPickup(drData[id][dPickupint]))
-            DestroyDynamicPickup(drData[id][dPickupint]);
-		
-		if(IsValidDynamicMapIcon(drData[id][dMapIconID]))
-			DestroyDynamicMapIcon(drData[id][dMapIconID]);
-		
-		if(IsValidDynamicCP(drData[id][dCP]))
-			DestroyDynamicCP(drData[id][dCP]);
-
 		new mstr[144];
 		if(drData[id][dGarage] == 1)
 		{
-			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[Y] {FFFFFF}to enter", id, drData[id][dName]);
-			drData[id][dPickupext] = CreateDynamicPickup(19130, 23, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dExtvw], drData[id][dExtint], -1, 50);
+			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[Y] {FFFFFF}to enter/exit", id, drData[id][dName]);
+		}
+		else {
+			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to enter/exit", id, drData[id][dName]);
+		}
+
+		if(IsValidDynamic3DTextLabel(drData[id][dLabelext])) {
+			Streamer_SetItemPos(STREAMER_TYPE_3D_TEXT_LABEL, drData[id][dLabelext], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]+0.35);
+		}
+		else {
 			drData[id][dLabelext] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]+0.35, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dExtvw], drData[id][dExtint]);
 		}
-		else
-		{
-			format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to enter", id, drData[id][dName]);
+
+
+        if(IsValidDynamicPickup(drData[id][dPickupext])) {
+			Streamer_SetItemPos(STREAMER_TYPE_PICKUP, drData[id][dPickupext], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]);
+		}
+		else {
 			drData[id][dPickupext] = CreateDynamicPickup(19130, 23, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dExtvw], drData[id][dExtint], -1, 50);
-			drData[id][dLabelext] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]+0.35, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dExtvw], drData[id][dExtint]);
-			drData[id][dCP] = CreateDynamicCP(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], 2.0, drData[id][dExtvw], drData[id][dExtint], -1, 3.0);
+		}
+        if(IsValidDynamic3DTextLabel(drData[id][dLabelint])) {
+			Streamer_SetItemPos(STREAMER_TYPE_3D_TEXT_LABEL, drData[id][dLabelint], drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]+0.7);
+		}
+		else {
+			drData[id][dLabelint] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]+0.7, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dIntvw], drData[id][dIntint]);
+		}
+
+
+        if(IsValidDynamicPickup(drData[id][dPickupint])) {
+			Streamer_SetItemPos(STREAMER_TYPE_PICKUP, drData[id][dPickupint], drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]);
+		}
+		else {
+			drData[id][dPickupint] = CreateDynamicPickup(19130, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
 		}
 		
-        if(drData[id][dIntposX] != 0.0 && drData[id][dIntposY] != 0.0 && drData[id][dIntposZ] != 0.0)
-        {
-			if(drData[id][dGarage] == 1)
-			{
-				format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[Y] {FFFFFF}to exit", id, drData[id][dName]);
-
-				drData[id][dLabelint] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]+0.7, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dIntvw], drData[id][dIntint]);
-				drData[id][dPickupint] = CreateDynamicPickup(19130, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
-			}
-			else
-			{
-				format(mstr,sizeof(mstr),"[Door: %d]\n{FFFFFF}%s\n{FFFFFF}Press "GOLD"[F/ENTER] {FFFFFF}to exit", id, drData[id][dName]);
-
-				drData[id][dLabelint] = CreateDynamic3DTextLabel(mstr, X11_LIGHTBLUE, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ]+0.7, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, drData[id][dIntvw], drData[id][dIntint]);
-				drData[id][dPickupint] = CreateDynamicPickup(19130, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
-			}
+		if(IsValidDynamicMapIcon(drData[id][dMapIconID])) {
+			Streamer_SetItemPos(STREAMER_TYPE_MAP_ICON, drData[id][dMapIconID], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]);
 		}
-
-		if(drData[id][dMapIcon])
-		{
-		    drData[id][dMapIconID] = CreateDynamicMapIcon(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dMapIcon], 0, .worldid = drData[id][dExtvw], .interiorid = drData[id][dExtint]);
+		else {
+			drData[id][dMapIconID] = CreateDynamicMapIcon(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dMapIcon], 0, .worldid = drData[id][dExtvw], .interiorid = drData[id][dExtint]);
+		}
+		
+		if(IsValidDynamicCP(drData[id][dCP])) {
+			Streamer_SetItemPos(STREAMER_TYPE_CP, drData[id][dCP], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]);
+			Streamer_SetFloatData(STREAMER_TYPE_CP, drData[id][dCP], E_STREAMER_SIZE, (drData[id][dGarage] ? (7.0) : (2.0)));
+		}
+		else {
+			drData[id][dCP] = CreateDynamicCP(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], (drData[id][dGarage] ? (7.0) : (2.0)), drData[id][dExtvw], drData[id][dExtint], -1, 3.0);
 		}
 	}
+	return 1;
 }
 
 /*LoadDoors()
@@ -473,9 +471,15 @@ CMD:editdoor(playerid, params[])
 	}
 	else if(!strcmp(type, "delete", true))
     {
-		DestroyDynamic3DTextLabel(drData[did][dLabelext]);
+		if(IsValidDynamic3DTextLabel(drData[did][dLabelext]))
+			DestroyDynamic3DTextLabel(drData[did][dLabelext]);
+			
 		DestroyDynamicPickup(drData[did][dPickupext]);
-		DestroyDynamic3DTextLabel(drData[did][dLabelint]);
+
+
+		if(IsValidDynamic3DTextLabel(drData[did][dLabelint]))
+			DestroyDynamic3DTextLabel(drData[did][dLabelint]);
+
 		DestroyDynamicPickup(drData[did][dPickupint]);
 		DestroyDynamicMapIcon(drData[did][dMapIconID]);
 		DestroyDynamicCP(drData[did][dCP]);

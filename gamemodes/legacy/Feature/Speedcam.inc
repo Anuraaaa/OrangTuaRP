@@ -76,12 +76,9 @@ Speed_RefreshText(speedid)
 	    new
 	        string[128];
 
-		if (IsValidDynamic3DTextLabel(SpeedData[speedid][speedText3D]))
-		    DestroyDynamic3DTextLabel(SpeedData[speedid][speedText3D]);
-
 		format(string, sizeof(string), "[ID %d]\n{FFFFFF}Speed Limit: %.0f KM/H\nVehicle: %s\nPlate: %s", speedid, SpeedData[speedid][speedLimit], ReturnVehicleModelName(SpeedData[speedid][speedVehicle]), SpeedData[speedid][speedPlate]);
 
-		SpeedData[speedid][speedText3D] = CreateDynamic3DTextLabel(string, COLOR_YELLOW, SpeedData[speedid][speedPos][0], SpeedData[speedid][speedPos][1], SpeedData[speedid][speedPos][2] + 2.5, 15.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0);
+		UpdateDynamic3DTextLabelText(SpeedData[speedid][speedText3D], X11_YELLOW, string);
 	}
 	return 1;
 }
