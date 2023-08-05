@@ -590,3 +590,19 @@ public OnDetectedSilentaim(playerid)
     UsingMods[playerid][MOD_SILENTAIM] = true;
     return 1;
 }
+
+timer AC_SetHealthBack(playerid, Float:health) {
+
+    SetPlayerHealth(playerid, health);
+}
+public OnPlayerUseVending(playerid, type) {
+
+    new Float:health;
+    AntiCheatGetHealth(playerid, health);
+
+    defer AC_SetHealthBack[3000](playerid, health);
+
+    SendAdminDutyMessage(X11_TOMATO, "AdmWarning: %s terdeteksi menggunakan vending machines.", GetName(playerid, false));
+    SendClientMessage(playerid, X11_RED, "Kamu terdeteksi melakukan abuse dengan vending machines! (notif ini akan muncul ke administrator & log server)");
+    return 1;
+}
