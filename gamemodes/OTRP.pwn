@@ -956,7 +956,6 @@ public OnPlayerConnect(playerid)
 		g_RaceCheck{playerid} ++;
 		CreatePlayerHUD(playerid);
 		LoadRemoveBuilding(playerid);
-		Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 1000, playerid);
 		LewatConnect[playerid] = true;
 	}
 	else Kick(playerid);
@@ -1255,9 +1254,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			SendAdminMessage(X11_TOMATO, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Vehicle Spam)", GetName(playerid), PlayerData[playerid][pUCP]);
 			KickEx(playerid);
 		}
-		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vLocked]) {
-			RemovePlayerFromVehicle(playerid);
-			SendErrorMessage(playerid, "Kendaraan ini masih dikunci!");
+		if(Iter_Contains(Vehicle, vehicleid) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) && VehicleData[vehicleid][vLocked]) {
+			defer KickPlayerFromVehicle[2000](playerid);
 		}
 		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vTireLock]) {
 			RemovePlayerFromVehicle(playerid);
@@ -9635,6 +9633,10 @@ public OnPlayerFirstSpawn(playerid) {
 				ShowPlayerNameTagForPlayer(i, playerid, 0);
 			}
 		}
+
+		if(!IsPlayerUsingAndroid(playerid)) {
+			Streamer_SetVisibleItems(STREAMER_TYPE_OBJECT, 1000, playerid);
+		}
 	}
 	return 1;
 }
@@ -10973,6 +10975,12 @@ Furniture_Sync(furnitureid) {
 }
 /* Main Timer */
 
+timer KickPlayerFromVehicle[2000](playerid) {
+	if(IsPlayerInAnyVehicle(playerid)) {
+		RemovePlayerFromVehicle(playerid);
+		SendErrorMessage(playerid, "Kendaraan ini masih dikunci!");
+	}
+}
 timer UnfreezeRubber[10000](playerid) {
 	ClearAnimations(playerid, 1);
 	PlayerRubbed[playerid] = false;
