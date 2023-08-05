@@ -1691,24 +1691,7 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 }
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-    if(weaponid >= 22  && weaponid <= 38)
-    {
-		new slot = g_aWeaponSlots[weaponid];
-		if(PlayerData[playerid][pAmmo][slot]) {
-			if(--PlayerData[playerid][pAmmo][slot] == 0) {
-				PlayerData[playerid][pAmmo][slot] = 0;
-				SetPlayerArmedWeapon(playerid, 0);
-				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));	
-			}
-		}	
-		if(PlayerData[playerid][pDurability][slot]) {
-			if(--PlayerData[playerid][pDurability][slot] == 0) {
-				PlayerData[playerid][pDurability][slot] = 0;
-				ResetWeapon(playerid, weaponid);
-				SendServerMessage(playerid, "Kondisi pada senjata "RED"(%s) "WHITE"telah rusak.", ReturnWeaponName(weaponid));
-			}
-		}
-	}
+	print("called");
 	return 1;
 }
 public OnPlayerCrashVehicle(playerid, vehicleid, Float:damage)

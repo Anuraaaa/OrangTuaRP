@@ -25,11 +25,11 @@ Vehicle_ShowRegistration(showto, vehicleid) {
 		have_up = true;
 	}
 	if(VehicleData[vehicleid][vBodyUpgrade]) {
-		strcat(string, ""WHITE"- "GREEN"Body");
+		strcat(string, ""WHITE"- "GREEN"Body\n");
 		have_up = true;
 	}
 	if(VehicleData[vehicleid][vOctaneSaver]) {
-		strcat(string, ""WHITE"- "GREEN"Octane Saver");
+		strcat(string, ""WHITE"- "GREEN"Octane Saver\n");
 		have_up = true;
 	}
 

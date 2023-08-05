@@ -327,9 +327,6 @@ stock static
 
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-	if(hittype != BULLET_HIT_TYPE_NONE || (fX == 0.0 && fY == 0.0))
-		return 1;
-
 	new bool:isdynamic,
 		actorid = GetNearestActorByCoord(fX, fY, fZ, isdynamic, .max_range = 1.0);
 
