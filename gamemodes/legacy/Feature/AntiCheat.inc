@@ -315,18 +315,12 @@ public OnCheatDetected(playerid, ip_address[], type, code)
 }
 
 timer OnCheckFile[5000](playerid) {
-    if(IsPlayerSpawned(playerid) && !IsPlayerUsingAndroid(playerid)) {
+    if(IsPlayerSpawned(playerid)) {
 
         new string[352];
 
         if(IsUsingMods(playerid, MOD_SAMPFUNCS)) {
             strcat(string, "Kamu telah terdeteksi menggunakan SAMPFUNCS\nSilahkan keluar dari server lalu hapus SAMPFUNCS sebelum kembali bermain di OT:RP");
-            ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
-            KickEx(playerid);
-            return 1;
-        }
-        if(IsUsingMods(playerid, MOD_BYPASS)) {
-            strcat(string, "Kamu telah terdeteksi menggunakan BYPASS\nSilahkan keluar dari server lalu hapus BYPASS sebelum kembali bermain di OT:RP");
             ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
             KickEx(playerid);
             return 1;
@@ -347,9 +341,14 @@ timer OnCheckFile[5000](playerid) {
 }
 
 hook OnPlayerFirstSpawn(playerid) {
-    defer OnCheckFile[5000](playerid);
+    if(!IsPlayerUsingAndroid(playerid)) {
+        defer OnCheckFile[5000](playerid);
+    }
 }
 hook OnPlayerConnect(playerid) {
+
+    new string[156];
+
 	ResetPlayerWarningCode(playerid);
 
     slapper_warn[playerid] = 0;
@@ -360,6 +359,11 @@ hook OnPlayerConnect(playerid) {
 
     for(new i = 0; i < 9; i++) {
         UsingMods[playerid][i] = false;
+    }
+    if(IsUsingMods(playerid, MOD_BYPASS)) {
+        strcat(string, "Kamu telah terdeteksi menggunakan BYPASS\nSilahkan keluar dari server lalu hapus BYPASS sebelum kembali bermain di OT:RP");
+        ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
+        KickEx(playerid);
     }
 }
 
