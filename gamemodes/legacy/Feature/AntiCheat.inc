@@ -333,8 +333,12 @@ timer OnCheckFile[5000](playerid) {
             return 1;
         }
 
-        if(IsUsingMods(playerid, MOD_CLEO_MODLOADER)) 
-            SendClientMessage(playerid, X11_GREY, "(SA:MP File) "WHITE"GTA Mu terdeteksi menggunakan cleo/modloader.");
+        if(IsUsingMods(playerid, MOD_BYPASS)) {
+            strcat(string, "Kamu telah terdeteksi menggunakan BYPASS\nSilahkan keluar dari server lalu hapus BYPASS sebelum kembali bermain di OT:RP");
+            ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
+            KickEx(playerid);
+            return 1;
+        }
 
     }
     return 1;
@@ -342,7 +346,9 @@ timer OnCheckFile[5000](playerid) {
 
 hook OnPlayerFirstSpawn(playerid) {
     if(!IsPlayerUsingAndroid(playerid)) {
-        defer OnCheckFile[5000](playerid);
+
+        if(IsUsingMods(playerid, MOD_CLEO_MODLOADER)) 
+            SendClientMessage(playerid, X11_GREY, "(SA:MP File) "WHITE"GTA Mu terdeteksi menggunakan cleo/modloader.");
     }
 }
 hook OnPlayerConnect(playerid) {
@@ -360,11 +366,9 @@ hook OnPlayerConnect(playerid) {
     for(new i = 0; i < 9; i++) {
         UsingMods[playerid][i] = false;
     }
-    if(IsUsingMods(playerid, MOD_BYPASS)) {
-        strcat(string, "Kamu telah terdeteksi menggunakan BYPASS\nSilahkan keluar dari server lalu hapus BYPASS sebelum kembali bermain di OT:RP");
-        ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "AntiCheat", string, "Close", "");
-        KickEx(playerid);
-    }
+
+
+
 }
 
 IsUsingMods(playerid, mods) {

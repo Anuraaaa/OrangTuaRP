@@ -53,6 +53,9 @@ function PlayerCheck(playerid, rcc)
 	SetPlayerColor(playerid, COLOR_GREY);
 	SyncPlayerTime(playerid);
 
+    if(!IsPlayerUsingAndroid(playerid)) {
+        defer OnCheckFile[5000](playerid);
+    }
 	new query[256];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banip` WHERE `IP` = '%e' LIMIT 1;", ReturnIP(playerid));
 	mysql_tquery(sqlcon, query, "OnBanIPCheck", "d", playerid);

@@ -289,7 +289,7 @@ CMD:cursor(playerid, params[])
 CMD:stuck(playerid, params[]) {
 
 	if(isnull(params)) 
-		return SendSyntaxMessage(playerid, "/stuck [vwid/intid/freeze/pos]");
+		return SendSyntaxMessage(playerid, "/stuck [vwid/intid/freeze/pos/jobveh]");
 
 	if(!strcmp(params, "vwid", true)) {
 		SendServerMessage(playerid, "Virtual world fixed.");
