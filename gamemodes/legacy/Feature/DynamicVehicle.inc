@@ -717,7 +717,7 @@ SaveVehicleComponent(vehicleid, componentid)
 Vehicle_WeaponStorage(playerid, carid)
 {
 	if(!IsValidVehicle(carid))
-		return SendErrorMessage(playerid, "Vehicle no longer valid.");
+		return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
 	if(!GetTrunkStatus(carid))
 		return SendErrorMessage(playerid, "Buka trunk terlebih dahulu!");

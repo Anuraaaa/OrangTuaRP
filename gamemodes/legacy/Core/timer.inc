@@ -201,13 +201,18 @@ task vehicle_RentalUpdate[1000]() {
 	return 1;
 }*/
 
-task Timer_OnVehicleUpdate[35000]()
+task Timer_OnVehicleUpdate[38000]()
 {
 	foreach(new i : Vehicle) if (IsValidVehicle(i) && IsEngineVehicle(i) && GetEngineStatus(i) && GetVehicleSpeed(i) > 1)
 	{
 	    if (Vehicle_GetFuel(i) > 0.0)
 	    {
-			VehicleData[i][vFuel] -= RandomFloat(0.1, 0.5);
+			if(!VehicleData[i][vOctaneSaver]) {
+				VehicleData[i][vFuel] -= RandomFloat(0.1, 0.7);
+			}
+			else {
+				VehicleData[i][vFuel] -= RandomFloat(0.1, 0.4);
+			}
 	        if(VehicleData[i][vFuel] <= 0.0)
 			{
 			    VehicleData[i][vFuel] = 0.0;

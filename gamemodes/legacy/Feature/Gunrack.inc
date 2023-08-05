@@ -68,7 +68,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 Gunrack_Show(playerid, carid)
 {
 	if(!IsValidVehicle(carid))
-		return SendErrorMessage(playerid, "Vehicle no longer valid.");
+		return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
     static
 	    string[264];

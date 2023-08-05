@@ -353,8 +353,6 @@ hook OnPlayerFirstSpawn(playerid) {
 }
 hook OnPlayerConnect(playerid) {
 
-    new string[156];
-
 	ResetPlayerWarningCode(playerid);
 
     slapper_warn[playerid] = 0;

@@ -2615,10 +2615,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if (response)
 		{
 			if(GetNearestVehicle(playerid, 5.0) != carid)
-				return SendErrorMessage(playerid, "Vehicle no longer valid.");
+				return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
 			if(!IsValidVehicle(carid))
-				return SendErrorMessage(playerid, "Vehicle no longer valid.");
+				return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 			
 			if(!GetTrunkStatus(carid))
 				return SendErrorMessage(playerid, "Buka trunk terlebih dahulu!");
@@ -7127,7 +7127,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		new vehicleid = PlayerData[playerid][pVehicle], componentid;
 		
 		if(!IsValidVehicle(vehicleid))
-			return SendErrorMessage(playerid, "Vehicle no longer valid.");
+			return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 			
 		if (!sscanf(inputtext, "i", componentid)) {
 			AddVehicleComponent(vehicleid, componentid);
@@ -7151,7 +7151,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			new paintjobid, vehicleid = PlayerData[playerid][pVehicle];
 		
 			if(!IsValidVehicle(vehicleid))
-				return SendErrorMessage(playerid, "Vehicle no longer valid!");
+				return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu)!");
 
 			if (!sscanf(inputtext, "'Paintjob ID:'i", paintjobid)) {
 				ChangeVehiclePaintjob(vehicleid, paintjobid);
@@ -7312,7 +7312,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
 				if(!IsValidVehicle(vehicleid))
-					return SendErrorMessage(playerid, "Vehicle no longer valid.");
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
 				if(GetVehicleComponentInSlot(vehicleid, CARMODTYPE_NITRO) == 1010)
 					return SendErrorMessage(playerid, "Kendaraan ini sudah terinstall nitro.");
@@ -7341,7 +7341,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					str[512];
 
 				if(!IsValidVehicle(vehicleid))
-					return SendErrorMessage(playerid, "Vehicle no longer valid.");
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
 				if(!IsFourWheelVehicle(vehicleid))
 					return SendErrorMessage(playerid, "Tidak ada modifikasi pada kendaraan ini.");
@@ -7367,11 +7367,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowPlayerDialog(playerid, DIALOG_REMOVEMOD, DIALOG_STYLE_TABLIST_HEADERS, "Uninstall Modification", str, "Remove", "Close");
 			}
 			if(listitem == 8) {
-			    if(GetComponent(playerid) < 350)
+			    if(GetComponent(playerid) < 550)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
 				if(!IsValidVehicle(vehicleid))
-					return SendErrorMessage(playerid, "Vehicle no longer valid.");	
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
 
 				if(VehicleData[vehicleid][vEngineUpgrade])
 					return SendErrorMessage(playerid, "Mesin kendaraan ini sudah ter-upgrade!");
@@ -7380,18 +7380,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
 				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 350);
+					Inventory_Remove(playerid, "Component", 550);
 
 				Vehicle_SetEngineLevel(vehicleid, 1);
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Mesin kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));	
 				ShowMechanicMenuInfo(playerid);
 			}
 			if(listitem == 9) {
-			    if(GetComponent(playerid) < 350)
+			    if(GetComponent(playerid) < 550)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
 				if(!IsValidVehicle(vehicleid))
-					return SendErrorMessage(playerid, "Vehicle no longer valid.");	
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
 
 				if(VehicleData[vehicleid][vBodyUpgrade])
 					return SendErrorMessage(playerid, "Body kendaraan ini sudah ter-upgrade!");
@@ -7400,19 +7400,39 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
 				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 350);
+					Inventory_Remove(playerid, "Component", 550);
 
 				Vehicle_SetBodyLevel(vehicleid, 1);
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Body kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
 				ShowMechanicMenuInfo(playerid);
 			}
 			if(listitem == 10) {
+			    if(GetComponent(playerid) < 450)
+			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
+
+				if(!IsValidVehicle(vehicleid))
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
+
+				if(VehicleData[vehicleid][vOctaneSaver])
+					return SendErrorMessage(playerid, "Body kendaraan ini sudah memiliki Octane Saver!");
+
+				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
+					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
+
+				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
+					Inventory_Remove(playerid, "Component", 450);
+
+				VehicleData[vehicleid][vOctaneSaver] = 1;
+				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Octane Saver kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
+				ShowMechanicMenuInfo(playerid);
+			}
+			if(listitem == 11) {
 				
 			    if(GetComponent(playerid) < 200)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
 				if(!IsValidVehicle(vehicleid))
-					return SendErrorMessage(playerid, "Vehicle no longer valid.");
+					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");
 
 				if(!IsVehicleSupportsNeonLights(GetVehicleModel(vehicleid)))	
 					return SendErrorMessage(playerid, "Kendaraan ini tidak bisa dipasangi Neon.");

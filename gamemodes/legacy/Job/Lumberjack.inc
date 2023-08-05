@@ -57,7 +57,7 @@ function CreateTimber(playerid, id, vid)
 	TreeData[id][treeCut] = false;
 
 	if(GetNearestVehicle(playerid, 5.0) != vid)
-		return SendErrorMessage(playerid, "The nearest vehicle no longer valid!");
+		return SendErrorMessage(playerid, "The nearest Kendaraan tidak lagi valid (tidak didekatmu)!");
 
 	VehicleData[vid][vWood]++;
 	SendClientMessageEx(playerid, COLOR_SERVER, "(Lumberjack) {FFFFFF}You've successfully loaded timber into the vehicle! (loaded %d/%d)", VehicleData[vid][vWood], GetMaxWood(vid));

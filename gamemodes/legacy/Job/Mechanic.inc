@@ -238,7 +238,7 @@ ShowMechanicMenuInfo(playerid) {
 		if(!GetHoodStatus(vehicleid) && !IsABike(vehicleid))
 			return ShowMessage(playerid, "Buka ~y~kap ~w~kendaraan terlebih dahulu!", 3, 1);
 
-		format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component\nTune Vehicle\t\t50 Component\nSet Paintjob\t\t30 Component\nInstall Nitro\t\t150 Component\nUninstall Modification\nUpgrade Engine\t350 Component\nUpgrade Body\t\t350 Component\nInstall Neon\t\t200 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
+		format(string, sizeof(string), "Repair Engine\t\t%d Component\nRepair Body\t\t%d Component\nRepair Tire\t\t15 Component\nChange Color\t\t30 Component\nTune Vehicle\t\t50 Component\nSet Paintjob\t\t30 Component\nInstall Nitro\t\t150 Component\nUninstall Modification\nUpgrade Engine\t550 Component\nUpgrade Body\t\t550 Component\nUpgrade Octane Saver\t\t450 Component\nInstall Neon\t\t200 Component", PlayerData[playerid][pMechPrice][0], PlayerData[playerid][pMechPrice][1]);
 		ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
 	}
 	else {
