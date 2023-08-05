@@ -344,13 +344,6 @@ timer OnCheckFile[5000](playerid) {
     return 1;
 }
 
-hook OnPlayerFirstSpawn(playerid) {
-    if(!IsPlayerUsingAndroid(playerid)) {
-
-        if(IsUsingMods(playerid, MOD_CLEO_MODLOADER)) 
-            SendClientMessage(playerid, X11_GREY, "(SA:MP File) "WHITE"GTA Mu terdeteksi menggunakan cleo/modloader.");
-    }
-}
 hook OnPlayerConnect(playerid) {
 
 	ResetPlayerWarningCode(playerid);

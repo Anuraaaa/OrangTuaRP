@@ -9713,6 +9713,9 @@ public OnPlayerSpawn(playerid)
 		SendServerMessage(playerid, "Today is {FFFF00}%s", ConvertTimestamp(Timestamp:Now()));		
 		CallLocalFunction("OnPlayerFirstSpawn", "d", playerid);
 
+        if(IsUsingMods(playerid, MOD_CLEO_MODLOADER)) 
+            SendClientMessage(playerid, X11_GREY, "(SA:MP File) "WHITE"GTA Mu terdeteksi menggunakan cleo/modloader.");
+			
 		ShowPlayerHUD(playerid);
 
 		foreach(new i : Player) if(!PlayerData[i][pTogLogin])

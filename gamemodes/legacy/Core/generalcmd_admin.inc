@@ -733,7 +733,7 @@ CMD:amm(playerid, paramsp[]) {
 	new vehicleid = INVALID_VEHICLE_ID, string[352];
 
 	if((vehicleid = GetNearestVehicle(playerid, 7.0)) != INVALID_VEHICLE_ID) {
-		format(string, sizeof(string), "Repair Engine\nRepair Body\nRepair Tire\nChange Color\nTune Vehicle\nSet Paintjob\nInstall Nitro\nUninstall Modification\nUpgrade Engine\nUpgrade Body\nInstall Neon");
+		format(string, sizeof(string), "Repair Engine\nRepair Body\nRepair Tire\nChange Color\nTune Vehicle\nSet Paintjob\nInstall Nitro\nUninstall Modification\nUpgrade Engine\nUpgrade Body\nOctane Saver\nInstall Neon");
 		ShowPlayerDialog(playerid, DIALOG_MM, DIALOG_STYLE_LIST, "Vehicle Menu", string, "Select", "Close");
 
 		PlayerData[playerid][pVehicle] = vehicleid;
