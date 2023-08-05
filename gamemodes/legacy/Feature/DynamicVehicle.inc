@@ -28,6 +28,10 @@ Vehicle_ShowRegistration(showto, vehicleid) {
 		strcat(string, ""WHITE"- "GREEN"Body");
 		have_up = true;
 	}
+	if(VehicleData[vehicleid][vOctaneSaver]) {
+		strcat(string, ""WHITE"- "GREEN"Octane Saver");
+		have_up = true;
+	}
 
 	if(!have_up)
 		strcat(string, ""WHITE"(No Upgrades)");
@@ -499,6 +503,7 @@ Vehicle_Create(modelid, Float:x, Float:y, Float:z, Float:angle, color1, color2, 
 		VehicleData[vehicleid][vRentTime] = 0;
 		VehicleData[vehicleid][vRental] = -1;
 		VehicleData[vehicleid][vHouse] = -1;
+		VehicleData[vehicleid][vOctaneSaver] = 0;
 		VehicleData[vehicleid][vWood] = 0;
 		VehicleData[vehicleid][vPizza] = 0;
 		VehicleData[vehicleid][vFactionType] = FACTION_NONE;
@@ -1072,6 +1077,7 @@ function OnVehicleLoaded() {
 				cache_get_value_name_int(z, "vehEngineUpgrade", VehicleData[i][vEngineUpgrade]);
 
 				cache_get_value_name_int(z, "vehNeon", VehicleData[i][vNeonColor]);
+				cache_get_value_name_int(z, "vehOctaneSaver", VehicleData[i][vOctaneSaver]);
 
 				mysql_tquery(sqlcon, sprintf("SELECT * FROM `crates` WHERE `Vehicle` = '%d'", VehicleData[i][vID]), "OnLoadCrate", "d", i);
 
@@ -1220,7 +1226,8 @@ Vehicle_Save(vehicleid, bool:extraid = false)
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehHighVelocity1`='%d', ", cQuery, VehicleData[vehicleid][vHighVelocity][0]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehHighVelocity2`='%d', ", cQuery, VehicleData[vehicleid][vHighVelocity][1]);
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehHighVelocity3`='%d', ", cQuery, VehicleData[vehicleid][vHighVelocity][2]);
-		
+		mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehOctaneSaver`='%d', ", cQuery, VehicleData[vehicleid][vOctaneSaver]);
+
 		if(extraid)
 			mysql_format(sqlcon, cQuery, sizeof(cQuery), "%s`vehExtraID`='%d', ", cQuery, VehicleData[vehicleid][vExtraID]);
 

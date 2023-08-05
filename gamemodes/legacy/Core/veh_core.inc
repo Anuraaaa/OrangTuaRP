@@ -73,7 +73,8 @@ enum E_VEHICLE_DATA
 	vGarageID,
 	bool:vNeonStatus,
 	vDeathTime,
-	bool:vELM
+	bool:vELM,
+	vOctaneSaver
 };
 
 enum carStorage {
