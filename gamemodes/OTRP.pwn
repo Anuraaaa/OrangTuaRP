@@ -1338,8 +1338,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				{					
 					TrashIcons[playerid][i] = CreateDynamicMapIcon(TrashData[i][TrashX], TrashData[i][TrashY], TrashData[i][TrashZ] + 0.5, 56, 0, _, _, playerid, 8000.0, MAPICON_GLOBAL);
 				}	
-
-				PlayerData[playerid][pTrashVehicleID] = GetPlayerVehicleID(playerid);		
 			}
 						
 			Trash_ShowCapacity(playerid);

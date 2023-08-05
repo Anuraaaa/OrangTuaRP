@@ -329,6 +329,43 @@ CMD:stuck(playerid, params[]) {
 
 		SQL_SaveCharacter(playerid);
 	}
+	else if(!strcmp(params, "jobveh", true)) {
+
+		if(GetPlayerInterior(playerid) != 0) {
+			return SendErrorMessage(playerid, "Kamu harus berada diluar ruangan!");
+		}
+
+		new vehicleid = INVALID_VEHICLE_ID;
+
+		if(OnTrash[playerid] && IsValidVehicle(PlayerData[playerid][pTrashVehicleID])) {
+
+			new Float:x, Float:y, Float:z;
+			GetPlayerPos(playerid, x, y, z);
+
+			vehicleid = PlayerData[playerid][pTrashVehicleID];
+			SetVehiclePos(vehicleid, x, y, z);
+			SetPlayerPos(playerid, x, y, z + 2.5);
+
+			SendServerMessage(playerid, "Kendaraan trashmaster berhasil dikembalikan.");
+
+			return 1;
+		}
+
+		if(g_CourierState[playerid] != COURIER_STATE_NOT_STARTED && IsValidVehicle(g_CourierVehicleID[playerid])) {
+			
+			new Float:x, Float:y, Float:z;
+			GetPlayerPos(playerid, x, y, z);
+
+			vehicleid = g_CourierVehicleID[playerid];
+			SetVehiclePos(vehicleid, x, y, z);
+			SetPlayerPos(playerid, x, y, z + 2.5);
+
+			SendServerMessage(playerid, "Kendaraan Courier berhasil dikembalikan.");		
+			return 1;
+		}
+
+		SendErrorMessage(playerid, "Tidak ada kendaraan yang dapat dikembalikan.");
+	}
 	return 1;
 }
 CMD:tog(playerid, params[])
