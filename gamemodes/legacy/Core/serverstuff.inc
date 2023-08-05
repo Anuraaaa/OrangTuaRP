@@ -155,6 +155,10 @@ LoadPoint()
 	CreateDynamic3DTextLabel("{FFFF00}Bank Point\n{FFFFFF}/help > Bank Commands", COLOR_WHITE,-2217.7244,278.7101,35.9590,3.0);
 	CreateDynamicPickup(1274, 23, -2217.7244,278.7101,35.9590);
 
+
+	CreateDynamicPickup(1239, 23, -1826.1199,1455.6929,7.1875, -1, -1);
+	CreateDynamic3DTextLabel("Spareparts Cargo\n{FFFFFF}Price: {009000}$15.0", COLOR_SERVER, -1826.1199,1455.6929,7.1875, 20.0);
+
 	CreateDynamicPickup(1239, 23, -1875.0437, 1419.0042, 7.1797, -1, -1);
 	CreateDynamic3DTextLabel("Electronic Cargo\n{FFFFFF}Price: {009000}$15.0", COLOR_SERVER, -1875.0437, 1419.0042, 7.1797, 20.0);
 

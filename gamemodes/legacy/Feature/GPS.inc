@@ -77,7 +77,8 @@ new const CargoLoc[][E_CARGO_LOC] = {
     {"Clothes Cargo", -1790.5422, 1429.7609, 7.1841},
     {"Electronic Cargo", -1875.0437, 1419.0042, 7.1797},
     {"Component Cargo", -1304.1875,2491.8530,87.1437},
-    {"Equipment Cargo", -1886.6575,1444.1444,7.1842}
+    {"Equipment Cargo", -1886.6575,1444.1444,7.1842},
+    {"Spareparts Cargo", -1826.1199,1455.6929,7.1875}
 };
 ShowPublicLocation(playerid)
 {
@@ -154,7 +155,7 @@ ShowBizTypeLocation(playerid, type) {
 }
 ShowBusinessLocation(playerid)
 {
-    ShowPlayerDialog(playerid, DIALOG_GPS_BUSINESS, DIALOG_STYLE_LIST, "Find Business", "Market 24/7\nFast Food\nClothes\nElectronic\nEquipment", "Select", "Close");
+    ShowPlayerDialog(playerid, DIALOG_GPS_BUSINESS, DIALOG_STYLE_LIST, "Find Business", "Market 24/7\nFast Food\nClothes\nElectronic\nEquipment\nSpareparts", "Select", "Close");
 	return 1;
 }
 ShowDealerLocation(playerid)

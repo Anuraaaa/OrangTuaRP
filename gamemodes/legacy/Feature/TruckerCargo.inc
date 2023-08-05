@@ -1,11 +1,12 @@
-new const Crate_Name[7][20] = {
+new const Crate_Name[][] = {
 	"None",
 	"Fast Food",
 	"24/7",
 	"Clothes",
 	"Electronic",
 	"Equipment",
-	"Component"
+	"Component",
+	"Spareparts"
 };
 
 enum {
@@ -15,7 +16,8 @@ enum {
 	CARGO_TYPE_CLOTHES,
 	CARGO_TYPE_ELECTRO,
 	CARGO_TYPE_EQUIPMENT,
-	CARGO_TYPE_COMPONENT
+	CARGO_TYPE_COMPONENT,
+	CARGO_TYPE_SPAREPARTS
 };
 
 enum E_CRATE_DATA

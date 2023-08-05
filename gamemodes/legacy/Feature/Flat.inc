@@ -787,7 +787,7 @@ CMD:flat(playerid, params[]) {
 
 		if((index = Flat_Exterior(playerid, 3.0)) != -1) {
 
-			if(Flat_GetCount(playerid) > 0)
+			if(Flat_GetCount(playerid) > 0 && PlayerData[playerid][pAdmin] < 6)
 				return SendErrorMessage(playerid, "Kamu hanya bisa memiliki 1 Flat.");
 
 			if(FlatData[index][flatOwner] != -1)

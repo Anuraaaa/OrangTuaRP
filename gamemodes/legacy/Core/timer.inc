@@ -208,10 +208,10 @@ task Timer_OnVehicleUpdate[35000]()
 	    if (Vehicle_GetFuel(i) > 0.0)
 	    {
 			if(!VehicleData[i][vOctaneSaver]) {
-				VehicleData[i][vFuel] -= RandomFloat(0.05, 0.7);
+				VehicleData[i][vFuel] -= RandomFloat(0.07, 0.7);
 			}
 			else {
-				VehicleData[i][vFuel] -= RandomFloat(0.01, 0.4);
+				VehicleData[i][vFuel] -= RandomFloat(0.03, 0.5);
 			}
 	        if(VehicleData[i][vFuel] <= 0.0)
 			{

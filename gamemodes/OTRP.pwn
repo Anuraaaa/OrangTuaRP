@@ -1669,21 +1669,19 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 }
 
 public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:objectid, Float:x, Float:y, Float:z) {
-
-    if(GetWeapon(playerid) == weaponid && weaponid >= 22  && weaponid <= 38)
+    if(weaponid >= 22  && weaponid <= 38)
     {
-		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]) {
-			if(--PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] == 0) {
-				PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] = 0;
+		new slot = g_aWeaponSlots[weaponid];
+		if(PlayerData[playerid][pAmmo][slot]) {
+			if(--PlayerData[playerid][pAmmo][slot] == 0) {
+				PlayerData[playerid][pAmmo][slot] = 0;
 				SetPlayerArmedWeapon(playerid, 0);
-				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));
-
-				return 1;		
+				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));	
 			}
 		}	
-		if(PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]]) {
-			if(--PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] == 0) {
-				PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] = 0;
+		if(PlayerData[playerid][pDurability][slot]) {
+			if(--PlayerData[playerid][pDurability][slot] == 0) {
+				PlayerData[playerid][pDurability][slot] = 0;
 				ResetWeapon(playerid, weaponid);
 				SendServerMessage(playerid, "Kondisi pada senjata "RED"(%s) "WHITE"telah rusak.", ReturnWeaponName(weaponid));
 			}
@@ -1691,22 +1689,21 @@ public OnPlayerShootDynamicObject(playerid, weaponid, STREAMER_TAG_OBJECT:object
 	}
 	return 1;
 }
-
 public OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
 {
-
     if(weaponid >= 22  && weaponid <= 38)
     {
-		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]]) {
-			if(--PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] == 0) {
-				PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] = 0;
+		new slot = g_aWeaponSlots[weaponid];
+		if(PlayerData[playerid][pAmmo][slot]) {
+			if(--PlayerData[playerid][pAmmo][slot] == 0) {
+				PlayerData[playerid][pAmmo][slot] = 0;
 				SetPlayerArmedWeapon(playerid, 0);
 				SendServerMessage(playerid, "Peluru pada senjata "RED"(%s) "WHITE"sudah habis.", ReturnWeaponName(weaponid));	
 			}
 		}	
-		if(PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]]) {
-			if(--PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] == 0) {
-				PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] = 0;
+		if(PlayerData[playerid][pDurability][slot]) {
+			if(--PlayerData[playerid][pDurability][slot] == 0) {
+				PlayerData[playerid][pDurability][slot] = 0;
 				ResetWeapon(playerid, weaponid);
 				SendServerMessage(playerid, "Kondisi pada senjata "RED"(%s) "WHITE"telah rusak.", ReturnWeaponName(weaponid));
 			}
@@ -5530,6 +5527,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(listitem == 2) ShowBizTypeLocation(playerid, TYPE_CLOTHES);
 			if(listitem == 3) ShowBizTypeLocation(playerid, TYPE_ELECTRO);
 			if(listitem == 4) ShowBizTypeLocation(playerid, TYPE_EQUIPMENT);
+			if(listitem == 5) ShowBizTypeLocation(playerid, TYPE_SPAREPARTS);
 		}
 	}
 	if(dialogid == DIALOG_GPS_BUSINESS_LISTED) {
@@ -7370,6 +7368,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    if(GetComponent(playerid) < 550)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
 
+				if(!Inventory_Count(playerid, "Reinforced Engine Block"))
+					return SendErrorMessage(playerid, "Kamu membutuhkan Reinforced Engine Block!");
+
 				if(!IsValidVehicle(vehicleid))
 					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
 
@@ -7379,8 +7380,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 550);
+				Inventory_Remove(playerid, "Component", 550);
+				Inventory_Remove(playerid, "Reinforced Engine Block", 1);
+
 
 				Vehicle_SetEngineLevel(vehicleid, 1);
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Mesin kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));	
@@ -7389,6 +7391,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(listitem == 9) {
 			    if(GetComponent(playerid) < 550)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
+
+				if(!Inventory_Count(playerid, "Reinforced Body Panels"))
+					return SendErrorMessage(playerid, "Kamu membutuhkan Reinforced Body Panels!");
 
 				if(!IsValidVehicle(vehicleid))
 					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
@@ -7399,8 +7404,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 550);
+
+				Inventory_Remove(playerid, "Component", 550);
+				Inventory_Remove(playerid, "Reinforced Body Panels", 1);
 
 				Vehicle_SetBodyLevel(vehicleid, 1);
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Body kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
@@ -7409,6 +7415,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(listitem == 10) {
 			    if(GetComponent(playerid) < 450)
 			        return SendErrorMessage(playerid, "Kamu tidak memiliki cukup komponen.");
+
+				if(!Inventory_Count(playerid, "Octane Saver Fluid"))
+					return SendErrorMessage(playerid, "Kamu membutuhkan Octane Saver Fluid!");
 
 				if(!IsValidVehicle(vehicleid))
 					return SendErrorMessage(playerid, "Kendaraan tidak lagi valid (tidak didekatmu).");	
@@ -7419,8 +7428,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 					return SendErrorMessage(playerid, "Hanya kendaraan player yang dapat dimodifikasi!");
 
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 450);
+				Inventory_Remove(playerid, "Component", 450);
+				Inventory_Remove(playerid, "Octane Saver Fluid", 1);
+				
 
 				VehicleData[vehicleid][vOctaneSaver] = 1;
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Mechanic) "WHITE"Octane Saver kendaraan "YELLOW"%s"WHITE" berhasil di "RED"upgrade"WHITE"!", GetVehicleName(vehicleid));
@@ -8860,6 +8870,37 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price);
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+						}
+					}
+					case 6: {
+						if(listitem == 0) {
+
+							if(Inventory_Add(playerid, "Octane Saver Fluid", 365, 1) == -1)
+								return 1;
+
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price);
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;
+						}
+						if(listitem == 1) {
+
+							if(Inventory_Add(playerid, "Reinforced Engine Block", 19917, 1) == -1)
+								return 1;
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price);
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;		
+						}
+						if(listitem == 2) {
+
+							if(Inventory_Add(playerid, "Reinforced Body Panels", 1145, 1) == -1)
+								return 1;
+
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price);
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;	
 						}
 					}
 				}
@@ -10384,6 +10425,21 @@ public OnVehicleSpawn(vehicleid)
 
 /* Main Functions */
 
+
+ReturnBizTypeToCargo(biztype) {
+	new type;
+
+	switch(biztype) {
+		case TYPE_FASTFOOD: type = CARGO_TYPE_FASTFOOD;
+		case TYPE_247: type = CARGO_TYPE_247;
+		case TYPE_CLOTHES: type = CARGO_TYPE_CLOTHES;
+		case TYPE_ELECTRO: type = CARGO_TYPE_ELECTRO;
+		case TYPE_EQUIPMENT: type = CARGO_TYPE_EQUIPMENT;
+		case TYPE_SPAREPARTS: type = CARGO_TYPE_SPAREPARTS;
+		default: type = 0;
+	}
+	return type;
+}
 IsHasWeaponParts(playerid) {
 	
 	new it_is = false;

@@ -33,7 +33,9 @@ enum e_InventoryItems
 new const g_aInventoryItems[][e_InventoryItems] =
 {
 	{"Nitrous Oxide", 1010, 10, true, true, true, INV_TYPE_GENERAL},
-	{"Spraycan", 365, 10, true, true, true, INV_TYPE_GENERAL},
+	{"Octane Saver Fluid", 365, 10, true, true, true, INV_TYPE_GENERAL},
+	{"Reinforced Engine Block", 19917, 10, true, true, true, INV_TYPE_GENERAL},
+	{"Reinforced Body Panels", 1145, 10, true, true, true, INV_TYPE_GENERAL},
 	{"GPS", 18875, 1, true, false, false, INV_TYPE_GENERAL},
 	{"Cellphone", 18867, 1, false, false, false, INV_TYPE_GENERAL},
 	{"Medkit", 1580, 15, true, true, true, INV_TYPE_GENERAL},

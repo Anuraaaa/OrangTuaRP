@@ -422,7 +422,7 @@ function LoadCharacterData(playerid)
 		format(lquery, sizeof(lquery), "Bullet%d", i + 1);
 		cache_get_value_name_int(0, lquery, PlayerData[playerid][pBullets][i]);
 	}
-	forex(i, 13)
+	for(new i = 0; i < 13; i++)
 	{
 	    new zquery[256];
 	    format(zquery, sizeof(zquery), "Gun%d", i + 1);
@@ -1249,15 +1249,6 @@ GiveWeaponToPlayer(playerid, weaponid, ammo = 100, dura = 500, highvelo = 0)
 	PlayerData[playerid][pDurability][g_aWeaponSlots[weaponid]] = dura;
 	PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]] = highvelo;
 
-	if(IsWeaponHaveRound(weaponid)) {
-		PlayerData[playerid][pWeaponRound][g_aWeaponSlots[weaponid]] = GetWeaponRound(weaponid);
-		PlayerData[playerid][pTempAmmo][g_aWeaponSlots[weaponid]] = PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] - GetWeaponRound(weaponid);
-
-		if(PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]] <= GetWeaponRound(weaponid)) {
-			PlayerData[playerid][pWeaponRound][g_aWeaponSlots[weaponid]] = PlayerData[playerid][pAmmo][g_aWeaponSlots[weaponid]];
-			PlayerData[playerid][pTempAmmo][g_aWeaponSlots[weaponid]] = 0;
-		}
-	}
 	return GivePlayerWeapon(playerid, weaponid, 999999);
 }
 

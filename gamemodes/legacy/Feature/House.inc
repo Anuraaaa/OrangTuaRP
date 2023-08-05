@@ -875,7 +875,7 @@ CMD:house(playerid, params[])
 	{
 		id = House_Nearest(playerid);
 
-		if(House_GetCount(playerid) >= CountPlayerHouseSlot(playerid))
+		if(House_GetCount(playerid) >= CountPlayerHouseSlot(playerid) && PlayerData[playerid][pAdmin] < 6)
 			return SendErrorMessage(playerid, "Kamu hanya bisa memiliki %d rumah!", CountPlayerHouseSlot(playerid));
 
 		if(id == -1)

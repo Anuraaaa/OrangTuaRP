@@ -70,7 +70,7 @@ CMD:cargo(playerid, params[])
 	}
 	else if(!strcmp(params, "bizinfo", true)) {
 
-		ShowPlayerDialog(playerid, DIALOG_BIZINFO, DIALOG_STYLE_LIST, "Business Info", "Fast Food\nMarket(24/7)\nClothes\nElectronic\nEquipment", "Select", "Close");
+		ShowPlayerDialog(playerid, DIALOG_BIZINFO, DIALOG_STYLE_LIST, "Business Info", "Fast Food\nMarket(24/7)\nClothes\nElectronic\nEquipment\nSpareparts", "Select", "Close");
 	}
 	else if(!strcmp(params, "sell", true))
 	{
@@ -119,7 +119,7 @@ CMD:cargo(playerid, params[])
 			if(PlayerData[playerid][pCrate] == -1)
 				return SendErrorMessage(playerid, "Kamu tidak sedang mengangkat Cargo!");
 
-			if(CrateData[PlayerData[playerid][pCrate]][crateType] != BizData[id][bizType])
+			if(CrateData[PlayerData[playerid][pCrate]][crateType] != ReturnBizTypeToCargo(BizData[id][bizType]))
 				return SendErrorMessage(playerid, "Tipe Cargo tidak sesuai dengan Tipe business!");
 
 			if(!BizData[id][bizReq])
@@ -177,6 +177,7 @@ CMD:cargo(playerid, params[])
 		RemovePlayerAttachedObject(playerid, 9);
 		Crate_Delete(PlayerData[playerid][pCrate]);
 		SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil menghapus cargo.");		
+		PlayerData[playerid][pCrate] = -1;
 	}
 	else if(!strcmp(params, "buy", true))
 	{
@@ -201,6 +202,19 @@ CMD:cargo(playerid, params[])
 			GiveMoney(playerid, -1500);
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Electronic Cargo seharga {00FF00}$15.0");
 		}
+		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1826.1199,1455.6929,7.1875))
+		{
+			if(GetMoney(playerid) < 1500)
+				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang.");
+
+			id = Crate_Create(playerid, CARGO_TYPE_SPAREPARTS);
+			
+			if(id == -1)
+				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
+
+			GiveMoney(playerid, -1500);
+			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Spareparts Cargo seharga {00FF00}$15.0");			
+		}	
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1790.5422, 1429.7609, 7.1841))
 		{
 			if(GetMoney(playerid) < 1500)

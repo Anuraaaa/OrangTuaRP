@@ -7,7 +7,8 @@ enum
 	TYPE_247,
 	TYPE_CLOTHES,
 	TYPE_ELECTRO,
-	TYPE_EQUIPMENT
+	TYPE_EQUIPMENT,
+	TYPE_SPAREPARTS
 };
 
 enum E_BUSINESS_DATA
@@ -168,6 +169,16 @@ SetProductName(playerid)
 	            FormatNumber(BizData[bid][bizProduct][3])
 			);
 		}
+		case 6: {
+		    format(string, sizeof(string), "Product\tPrice\n%s (Octane Saver Fluid)\t$%s\n%s (Reinforced Engine Block)\t$%s\n%s (Reinforced Body Panels)\t$%s",
+                ProductName[bid][0],
+				FormatNumber(BizData[bid][bizProduct][0]),
+				ProductName[bid][1],
+	            FormatNumber(BizData[bid][bizProduct][1]),
+	            ProductName[bid][2],
+	            FormatNumber(BizData[bid][bizProduct][2])
+			);
+		}
 	}
 	ShowPlayerDialog(playerid, DIALOG_BIZPROD, DIALOG_STYLE_TABLIST_HEADERS, "Set Product Name", string, "Select", "Close");
 	return 1;
@@ -182,7 +193,7 @@ Business_Create(playerid, type, price)
 
 	if (GetPlayerPos(playerid, x, y, z))
 	{
-		forex(i, MAX_BUSINESS)
+		for(new i = 0; i < MAX_BUSINESS; i++)
 		{
 	    	if (!BizData[i][bizExists])
 		    {
@@ -253,7 +264,16 @@ Business_Create(playerid, type, price)
 					format(ProductName[i][2], 24, "Pool Cue");
 					format(ProductName[i][3], 24, "Pack of Cigarettes");
 				}
-				forex(e, 7)
+				else if(type == 6) {
+                	BizData[i][bizInt][0] = 640.2902;
+                	BizData[i][bizInt][1] = -1568.1744;
+                	BizData[i][bizInt][2] = -20.7241;
+					BizData[i][bizInterior] = 6;
+					format(ProductName[i][0], 24, "Octane Saver Fluid");
+					format(ProductName[i][1], 24, "Reinforced Engine Block");
+					format(ProductName[i][2], 24, "Reinforced Body Panels");
+				}
+				for(new e = 0; e < 7; e++)
 				{
 					format(ProductDescription[i][e], 40, "No description");
 				}
@@ -444,6 +464,7 @@ GetBizType(type)
 	    case 3: str = "Clothes";
 	    case 4: str = "Electronic";
 		case 5: str = "Equipment";
+		case 6: str = "Spareparts";
 	}
 	return str;
 }
@@ -636,6 +657,16 @@ SetProductPrice(playerid)
 				FormatNumber(BizData[bid][bizProduct][3])
 			);
 		}
+		case 6: {
+			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+				ProductName[bid][0],
+				FormatNumber(BizData[bid][bizProduct][0]),
+				ProductName[bid][1],
+				FormatNumber(BizData[bid][bizProduct][1]),
+				ProductName[bid][2],
+				FormatNumber(BizData[bid][bizProduct][2])
+			);
+		}
 	}
 	ShowPlayerDialog(playerid, DIALOG_BIZPRICE, DIALOG_STYLE_TABLIST_HEADERS, "Set Product Price", string, "Select", "Close");
 	return 1;
@@ -715,6 +746,16 @@ ShowBusinessMenu(playerid)
 				FormatNumber(BizData[bid][bizProduct][3])
 			);
 		}
+		case 6: {
+			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+				ProductName[bid][0],
+				FormatNumber(BizData[bid][bizProduct][0]),
+				ProductName[bid][1],
+				FormatNumber(BizData[bid][bizProduct][1]),
+				ProductName[bid][2],
+				FormatNumber(BizData[bid][bizProduct][2])
+			);
+		}
 	}
 	ShowPlayerDialog(playerid, DIALOG_BIZBUY, DIALOG_STYLE_TABLIST_HEADERS, "Business Product", string, "Select", "Close");
 	return 1;
@@ -734,7 +775,7 @@ CMD:biz(playerid, params[])
 	}
 	if(!strcmp(type, "buy", true))
 	{
-	    if(Biz_GetCount(playerid) >= CountPlayerBusinessSlot(playerid))
+	    if(Biz_GetCount(playerid) >= CountPlayerBusinessSlot(playerid) && PlayerData[playerid][pAdmin] < 6)
 	        return SendErrorMessage(playerid, "Kamu hanya bisa memiliki %d Bisnis!", CountPlayerBusinessSlot(playerid));
 	        
 		forex(i, MAX_BUSINESS)if(BizData[i][bizExists])
@@ -873,10 +914,10 @@ CMD:createbiz(playerid, params[])
 	if (sscanf(params, "ds[32]", type, price))
  	{
 	 	SendSyntaxMessage(playerid, "/createbiz [type] [price]");
-    	SendClientMessage(playerid, COLOR_SERVER, "(Type){FFFFFF} 1: Fast Food | 2: 24/7 | 3: Clothes | 4: Electronic | 5: Equipment");
+    	SendClientMessage(playerid, COLOR_SERVER, "(Type){FFFFFF} 1: Fast Food | 2: 24/7 | 3: Clothes | 4: Electronic | 5: Equipment | 6: Mechanic");
     	return 1;
 	}
-	if (type < 1 || type > 5)
+	if (type < 1 || type > 6)
 	    return SendErrorMessage(playerid, "Invalid type specified. Types range from 1 to 5.");
 
 	id = Business_Create(playerid, type, strcash(price));
