@@ -591,7 +591,7 @@ public OnDetectedSilentaim(playerid)
     return 1;
 }
 
-timer AC_SetHealthBack(playerid, Float:health) {
+timer AC_SetHealthBack[3000](playerid, Float:health) {
 
     SetPlayerHealth(playerid, health);
 }
