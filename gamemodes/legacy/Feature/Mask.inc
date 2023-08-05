@@ -27,7 +27,7 @@ SetupPlayerMask(playerid)
 		if(!IsPlayerInAnyVehicle(playerid))
 			ApplyAnimation(playerid, "shop","ROB_Shifty", 4.1, 0, 0, 0, 0, 0, 1);
 
-		format(str, sizeof(str), "Unknown_#%d", PlayerData[playerid][pMaskID]);
+		format(str, sizeof(str), "Unknown_#%d\n{FF0000}HP: {FFFFFF}%.2f | {007FFF}AP: {FFFFFF}%.2f", PlayerData[playerid][pMaskID], ReturnHealth(playerid), ReturnArmour(playerid));
 
 		if(IsValidDynamic3DTextLabel(PlayerData[playerid][pMaskLabel])) {
 			DestroyDynamic3DTextLabel(PlayerData[playerid][pMaskLabel]);
@@ -41,12 +41,17 @@ SetupPlayerMask(playerid)
 		{
 			ShowPlayerNameTagForPlayer(i, playerid, 0);
 		}
-
-
 	}
 	return 1;
 }
 
+UpdateMaskLabel(playerid) {
+	if(PlayerData[playerid][pMasked] && IsValidDynamic3DTextLabel(PlayerData[playerid][pMaskLabel])) {
+		new str[128];
+		format(str, sizeof(str), "Unknown_#%d\n{FF0000}HP: {FFFFFF}%.2f | {007FFF}AP: {FFFFFF}%.2f", PlayerData[playerid][pMaskID], ReturnHealth(playerid), ReturnArmour(playerid));
+		UpdateDynamic3DTextLabelText(PlayerData[playerid][pMaskLabel], -1, str);
+	}
+}
 CMD:mask(playerid, params[])
 {
 	if(!PlayerHasItem(playerid, "Mask"))

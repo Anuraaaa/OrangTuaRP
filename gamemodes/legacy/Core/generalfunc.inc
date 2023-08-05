@@ -1491,13 +1491,18 @@ GetAvailableSeat(vehicleid, start = 1)
 	return -1;
 }
 
-ReturnHealth(playerid)
+Float:ReturnHealth(playerid)
 {
 	new Float:hp;
 	GetPlayerHealth(playerid, hp);
-	return floatround(hp);
+	return hp;
 }
 
+Float:ReturnArmour(playerid) {
+	new Float:armour;
+	GetPlayerArmour(playerid, armour);
+	return armour;
+}
 SetPlayerFace(playerid, Float:X, Float:Y)
 {
 	new Float:pX, Float:pY, Float:pZ, Float:ang;

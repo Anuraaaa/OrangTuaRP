@@ -9628,7 +9628,7 @@ public OnPlayerFirstSpawn(playerid) {
 
 		if(PlayerData[playerid][pMasked]) {
 
-			PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(sprintf("Unknown_%d", PlayerData[playerid][pMaskID]), COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
+			PlayerData[playerid][pMaskLabel] = CreateDynamic3DTextLabel(sprintf("Unknown_%d\n{FF0000}HP: {FFFFFF}%.2f | {007FFF}AP: {FFFFFF}%.2f", PlayerData[playerid][pMaskID], ReturnHealth(playerid), ReturnArmour(playerid)), COLOR_WHITE, 0.0, 0.0, 0.1, 20.0, playerid, INVALID_VEHICLE_ID, 1, -1, -1, -1, 10.0);
 			
 			foreach(new i : Player)
 			{
@@ -9955,6 +9955,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 			}
 		}
 	}
+	UpdateMaskLabel(playerid);
 	return 1;
 }
 
@@ -10082,6 +10083,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 		SetPlayerHealth(playerid, health - amount);
 	}
 	
+	UpdateMaskLabel(playerid);
 	return 1;
 }
 
