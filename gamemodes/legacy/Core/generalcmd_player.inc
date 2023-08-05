@@ -339,10 +339,17 @@ CMD:stuck(playerid, params[]) {
 
 		if(OnTrash[playerid] && IsValidVehicle(PlayerData[playerid][pTrashVehicleID])) {
 
+			if(!IsVehicleStreamedIn(vehicleid, playerid))
+				return SendErrorMessage(playerid, "Kendaraan tersebut ada didekatmu!");
+
 			new Float:x, Float:y, Float:z;
 			GetPlayerPos(playerid, x, y, z);
 
 			vehicleid = PlayerData[playerid][pTrashVehicleID];
+
+			if(IsVehicleStreamedIn(vehicleid, playerid))
+				return SendErrorMessage(playerid, "Kendaraan tersebut ada didekatmu!");
+
 			SetVehiclePos(vehicleid, x, y, z);
 			SetPlayerPos(playerid, x, y, z + 2.5);
 
@@ -357,6 +364,10 @@ CMD:stuck(playerid, params[]) {
 			GetPlayerPos(playerid, x, y, z);
 
 			vehicleid = g_CourierVehicleID[playerid];
+
+			if(IsVehicleStreamedIn(vehicleid, playerid))
+				return SendErrorMessage(playerid, "Kendaraan tersebut ada didekatmu!");
+				
 			SetVehiclePos(vehicleid, x, y, z);
 			SetPlayerPos(playerid, x, y, z + 2.5);
 
