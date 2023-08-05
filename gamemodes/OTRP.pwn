@@ -10277,9 +10277,11 @@ public OnVehicleSpawn(vehicleid)
 
 					Vehicle_Save(vehicleid);
 
+					new nearest = GetClosestPlayerToVehicle(vehicleid, false);
+
 					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 					{
-						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance.", GetVehicleName(vehicleid));
+						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance (player terdekat: %s)", GetVehicleName(vehicleid), (nearest == INVALID_PLAYER_ID) ? ("None") : (sprintf("%s", GetName(nearest))));
 						break;
 					}
 					Vehicle_Delete(vehicleid, false);
