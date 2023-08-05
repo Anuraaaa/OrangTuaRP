@@ -89057,3 +89057,359 @@ Console input: dasdas
 [06/08/2023 05:00:00] called
 [06/08/2023 05:00:18] [nick] Havoc_Redmond nick changed to vyn
 [06/08/2023 05:00:18] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.DL-R1, (C)2005-2018 SA-MP Team
+
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28] Server Plugins
+[06/08/2023 05:00:28] --------------
+[06/08/2023 05:00:28]  Loading plugin: crashdetect
+[06/08/2023 05:00:28]   CrashDetect plugin 4.20
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: pawnraknet
+[06/08/2023 05:00:28] [Pawn.RakNet] plugin v1.5.1 loading...
+[06/08/2023 05:00:28] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: pawn-memory
+[06/08/2023 05:00:28] ========================
+[06/08/2023 05:00:28] = Memory access plugin =
+[06/08/2023 05:00:28] =       Made by BigETI =
+[06/08/2023 05:00:28] = Loaded!              =
+[06/08/2023 05:00:28] ========================
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: streamer
+[06/08/2023 05:00:28] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: sscanf
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]  ===============================
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]       sscanf plugin loaded.     
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]          Version: 2.13.1
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]    (c) 2022 Alex "Y_Less" Cole  
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]  ===============================
+[06/08/2023 05:00:28] 
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: mysql
+[06/08/2023 05:00:28]  >> plugin.mysql: R41-4 successfully loaded.
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: samp_bcrypt
+[06/08/2023 05:00:28] [SampBcrypt] [info]: Version: 0.3.4
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: samp-compat
+[06/08/2023 05:00:28]   -- samp-compat for 0.3.DL-R1 initialized
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: chrono
+[06/08/2023 05:00:28]   Loaded.
+[06/08/2023 05:00:28]  Loading plugin: ColAndreas
+[06/08/2023 05:00:28] *********************
+[06/08/2023 05:00:28] ** Created By:     **
+[06/08/2023 05:00:28] ** [uL]Chris42O    **
+[06/08/2023 05:00:28] ** [uL]Slice       **
+[06/08/2023 05:00:28] ** [uL]Pottus      **
+[06/08/2023 05:00:28] *********************
+[06/08/2023 05:00:30] Loaded collision data.
+[06/08/2023 05:00:30] *********************
+[06/08/2023 05:00:30]   ColAndreas Loaded
+[06/08/2023 05:00:30]    v1.4.0
+[06/08/2023 05:00:30] *********************
+[06/08/2023 05:00:30]   Loaded.
+[06/08/2023 05:00:30]  Loaded 10 plugins.
+
+[06/08/2023 05:00:30] 
+[06/08/2023 05:00:30] Filterscripts
+[06/08/2023 05:00:30] ---------------
+[06/08/2023 05:00:30]   Loading filterscript 'AC_Black_Diamond.amx'...
+[06/08/2023 05:00:30] AC-Black Diamond
+[06/08/2023 05:00:30]   Loaded 1 filterscripts.
+
+[06/08/2023 05:00:32]  
+[06/08/2023 05:00:32]  
+[06/08/2023 05:00:32]  
+[06/08/2023 05:00:32]  ========================================== 
+[06/08/2023 05:00:32]  |                                        | 
+[06/08/2023 05:00:32]  |         YSI version 5.05.0005          | 
+[06/08/2023 05:00:32]  |         By Alex "Y_Less" Cole          | 
+[06/08/2023 05:00:32]  |                                        | 
+[06/08/2023 05:00:32]  | Unable to check the latest YSI version | 
+[06/08/2023 05:00:32]  | - please watch the forums and github:  | 
+[06/08/2023 05:00:32]  |                                        | 
+[06/08/2023 05:00:32]  |   https://git.io/5.x                   | 
+[06/08/2023 05:00:32]  |                                        | 
+[06/08/2023 05:00:32]  ========================================== 
+[06/08/2023 05:00:32]  
+[06/08/2023 05:00:32]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[06/08/2023 05:00:32]  
+[06/08/2023 05:00:32] --------------------------------------
+[06/08/2023 05:00:32]  Anticheat Nex-AC loaded!
+[06/08/2023 05:00:32]  Anticheat version: 1.9.59
+[06/08/2023 05:00:32]  Author: Nexius
+[06/08/2023 05:00:32] --------------------------------------
+
+[06/08/2023 05:00:32] [Database] Connected!
+[06/08/2023 05:00:32] Loading Map.
+[06/08/2023 05:00:32] Loaded Map.                             
+[06/08/2023 05:00:32] [MAPPING] Loaded mappings in 21ms
+[06/08/2023 05:00:32] Economy Data Loaded.
+[06/08/2023 05:00:32] Number of vehicle models: 8
+[06/08/2023 05:00:32] [ACTOR] Loaded 100 Dynamic Actor from database
+[06/08/2023 05:00:32] [ATM] Loaded 42 ATM from the database
+[06/08/2023 05:00:32] [PUMP] Loaded 7 Fuel Pump from database
+[06/08/2023 05:00:32] [BUSINESS] Loaded 11 Business from database
+[06/08/2023 05:00:32] [DEALER] Loaded 6 dealership from database
+[06/08/2023 05:00:32] [DROPITEM] Loaded 6 Dropped items from database.
+[06/08/2023 05:00:32] [DOOR] Loaded 37 door from database
+[06/08/2023 05:00:32] [FACTION] Loaded 6 faction from database
+[06/08/2023 05:00:32] [FLAT] Loaded 10 Flat from database.
+[06/08/2023 05:00:32] [GARAGE] Loaded 6 public garage from database.
+[06/08/2023 05:00:32] [HOUSE] Loaded 62 House from the Database
+[06/08/2023 05:00:32] [OBJECT] Loaded 3 Object from database
+[06/08/2023 05:00:32] [RENTAL] Loaded 2 Rental from database
+[06/08/2023 05:00:32] [SPEEDCAM] Loaded 6 Speed Camera from database
+[06/08/2023 05:00:32] [TRASH] Loaded 46 Trash from database
+[06/08/2023 05:00:32] [TREE] Loaded 71 tree from database
+[06/08/2023 05:00:32] [WORKSHOP] Loaded 1 workshop from database.
+[06/08/2023 05:00:32] [ROCK] Loaded 32 rock from database.
+[06/08/2023 05:00:32] [FACTIONGARAGE] Loaded 2 faction garage from database.
+[06/08/2023 05:00:32] [FURNITURE] Loaded 26 furniture from database.
+[06/08/2023 05:00:34] [connection] incoming connection: 127.0.0.1:53307 id: 0
+[06/08/2023 05:00:34] [join] vyn has joined the server (0:127.0.0.1)
+[06/08/2023 05:00:39] [nick] vyn nick changed to Havoc_Redmond
+[06/08/2023 05:00:43] called
+[06/08/2023 05:00:50] called
+[06/08/2023 05:00:51] called
+[06/08/2023 05:00:52] called
+[06/08/2023 05:00:53] called
+[06/08/2023 05:00:54] called
+[06/08/2023 05:00:55] called
+[06/08/2023 05:00:57] called
+[06/08/2023 05:00:58] called
+[06/08/2023 05:00:59] called
+[06/08/2023 05:01:00] called
+[06/08/2023 05:01:01] called
+[06/08/2023 05:01:37] [nick] Havoc_Redmond nick changed to vyn
+[06/08/2023 05:01:37] [CMD] vyn: /aduty
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.DL-R1, (C)2005-2018 SA-MP Team
+
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43] Server Plugins
+[06/08/2023 05:01:43] --------------
+[06/08/2023 05:01:43]  Loading plugin: crashdetect
+[06/08/2023 05:01:43]   CrashDetect plugin 4.20
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: pawnraknet
+[06/08/2023 05:01:43] [Pawn.RakNet] plugin v1.5.1 loading...
+[06/08/2023 05:01:43] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: pawn-memory
+[06/08/2023 05:01:43] ========================
+[06/08/2023 05:01:43] = Memory access plugin =
+[06/08/2023 05:01:43] =       Made by BigETI =
+[06/08/2023 05:01:43] = Loaded!              =
+[06/08/2023 05:01:43] ========================
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: streamer
+[06/08/2023 05:01:43] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: sscanf
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]  ===============================
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]       sscanf plugin loaded.     
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]          Version: 2.13.1
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]    (c) 2022 Alex "Y_Less" Cole  
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]  ===============================
+[06/08/2023 05:01:43] 
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: mysql
+[06/08/2023 05:01:43]  >> plugin.mysql: R41-4 successfully loaded.
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: samp_bcrypt
+[06/08/2023 05:01:43] [SampBcrypt] [info]: Version: 0.3.4
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: samp-compat
+[06/08/2023 05:01:43]   -- samp-compat for 0.3.DL-R1 initialized
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: chrono
+[06/08/2023 05:01:43]   Loaded.
+[06/08/2023 05:01:43]  Loading plugin: ColAndreas
+[06/08/2023 05:01:43] *********************
+[06/08/2023 05:01:43] ** Created By:     **
+[06/08/2023 05:01:43] ** [uL]Chris42O    **
+[06/08/2023 05:01:43] ** [uL]Slice       **
+[06/08/2023 05:01:43] ** [uL]Pottus      **
+[06/08/2023 05:01:43] *********************
+[06/08/2023 05:01:46] Loaded collision data.
+[06/08/2023 05:01:46] *********************
+[06/08/2023 05:01:46]   ColAndreas Loaded
+[06/08/2023 05:01:46]    v1.4.0
+[06/08/2023 05:01:46] *********************
+[06/08/2023 05:01:46]   Loaded.
+[06/08/2023 05:01:46]  Loaded 10 plugins.
+
+[06/08/2023 05:01:46] 
+[06/08/2023 05:01:46] Filterscripts
+[06/08/2023 05:01:46] ---------------
+[06/08/2023 05:01:46]   Loading filterscript 'AC_Black_Diamond.amx'...
+[06/08/2023 05:01:46] AC-Black Diamond
+[06/08/2023 05:01:46]   Loaded 1 filterscripts.
+
+[06/08/2023 05:01:47]  
+[06/08/2023 05:01:47]  
+[06/08/2023 05:01:47]  
+[06/08/2023 05:01:47]  ========================================== 
+[06/08/2023 05:01:47]  |                                        | 
+[06/08/2023 05:01:47]  |         YSI version 5.05.0005          | 
+[06/08/2023 05:01:47]  |         By Alex "Y_Less" Cole          | 
+[06/08/2023 05:01:47]  |                                        | 
+[06/08/2023 05:01:47]  | Unable to check the latest YSI version | 
+[06/08/2023 05:01:47]  | - please watch the forums and github:  | 
+[06/08/2023 05:01:47]  |                                        | 
+[06/08/2023 05:01:47]  |   https://git.io/5.x                   | 
+[06/08/2023 05:01:47]  |                                        | 
+[06/08/2023 05:01:47]  ========================================== 
+[06/08/2023 05:01:47]  
+[06/08/2023 05:01:47]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[06/08/2023 05:01:47]  
+[06/08/2023 05:01:47] --------------------------------------
+[06/08/2023 05:01:47]  Anticheat Nex-AC loaded!
+[06/08/2023 05:01:47]  Anticheat version: 1.9.59
+[06/08/2023 05:01:47]  Author: Nexius
+[06/08/2023 05:01:47] --------------------------------------
+
+[06/08/2023 05:01:47] [Database] Connected!
+[06/08/2023 05:01:47] Loading Map.
+[06/08/2023 05:01:47] Loaded Map.                             
+[06/08/2023 05:01:47] [MAPPING] Loaded mappings in 21ms
+[06/08/2023 05:01:47] Economy Data Loaded.
+[06/08/2023 05:01:47] Number of vehicle models: 8
+[06/08/2023 05:01:47] [ACTOR] Loaded 100 Dynamic Actor from database
+[06/08/2023 05:01:47] [ATM] Loaded 42 ATM from the database
+[06/08/2023 05:01:47] [PUMP] Loaded 7 Fuel Pump from database
+[06/08/2023 05:01:47] [BUSINESS] Loaded 11 Business from database
+[06/08/2023 05:01:47] [DEALER] Loaded 6 dealership from database
+[06/08/2023 05:01:47] [DROPITEM] Loaded 6 Dropped items from database.
+[06/08/2023 05:01:47] [DOOR] Loaded 37 door from database
+[06/08/2023 05:01:47] [FACTION] Loaded 6 faction from database
+[06/08/2023 05:01:47] [FLAT] Loaded 10 Flat from database.
+[06/08/2023 05:01:47] [GARAGE] Loaded 6 public garage from database.
+[06/08/2023 05:01:47] [HOUSE] Loaded 62 House from the Database
+[06/08/2023 05:01:47] [OBJECT] Loaded 3 Object from database
+[06/08/2023 05:01:47] [RENTAL] Loaded 2 Rental from database
+[06/08/2023 05:01:47] [SPEEDCAM] Loaded 6 Speed Camera from database
+[06/08/2023 05:01:47] [TRASH] Loaded 46 Trash from database
+[06/08/2023 05:01:47] [TREE] Loaded 71 tree from database
+[06/08/2023 05:01:47] [WORKSHOP] Loaded 1 workshop from database.
+[06/08/2023 05:01:47] [ROCK] Loaded 32 rock from database.
+[06/08/2023 05:01:47] [FACTIONGARAGE] Loaded 2 faction garage from database.
+[06/08/2023 05:01:47] [FURNITURE] Loaded 26 furniture from database.
+[06/08/2023 05:02:03] [connection] incoming connection: 127.0.0.1:57781 id: 0
+[06/08/2023 05:02:03] [join] vyn has joined the server (0:127.0.0.1)
+[06/08/2023 05:02:09] [nick] vyn nick changed to Havoc_Redmond
+[06/08/2023 05:02:25] [part] Havoc_Redmond has left the server (0:1)
+[06/08/2023 05:02:27] [PLAYER_VEH] Unloading player vehicleid 33.
+[06/08/2023 05:02:28] [debug] Server received interrupt signal
+[06/08/2023 05:02:28] [debug] Native backtrace:
+[06/08/2023 05:02:28] [debug] #0 77822dcc in ?? () in C:\Windows\SYSTEM32\ntdll.dll
+[06/08/2023 05:02:28] [debug] #1 75786f4f in ?? () in C:\Windows\System32\KERNELBASE.dll
+[06/08/2023 05:02:28] [debug] #2 00492d0c in ?? () in samp-server.exe
+[06/08/2023 05:02:28] [debug] #3 004a1d61 in ?? () in samp-server.exe
+[06/08/2023 05:02:28] [debug] #4 004a1d71 in ?? () in samp-server.exe
+[06/08/2023 05:02:28] --- Server Shutting Down.
+[06/08/2023 05:02:28] ** Saved server data in 1ms
+[06/08/2023 05:02:28] ** Saved server economy in 1ms
+[06/08/2023 05:02:28] ** Saved vehicle data in 1ms
+[06/08/2023 05:02:28] ** Saved player data in 1ms
+[06/08/2023 05:02:28] ** Saved tree data in 21ms.
+[06/08/2023 05:02:28] ** Saved  weed data  in 21ms.
+[06/08/2023 05:02:28] ** Saved speedcam data in 21ms
+[06/08/2023 05:02:28] ** Saved dealer data in 24ms
+[06/08/2023 05:02:28] ** Saved house data  in 51ms
+[06/08/2023 05:02:28] ** Saved business data in 58ms
+[06/08/2023 05:02:28] ** Saved tree data in 78ms
+[06/08/2023 05:02:28] ** Saved flat data in 82ms
+[06/08/2023 05:02:28] ** Saved pump data in 82ms
+[06/08/2023 05:02:28] There is 0 player when the server shutdown.
+[06/08/2023 05:02:28]  
+[06/08/2023 05:02:28] --------------------------------------
+[06/08/2023 05:02:28]  Statistics anticheat Nex-AC
+[06/08/2023 05:02:28]  Detected and prevented:
+[06/08/2023 05:02:28]   0 cheating attempts
+[06/08/2023 05:02:28]   0 hacking attempts
+[06/08/2023 05:02:28]   0 crashing attempts
+[06/08/2023 05:02:28]   0 flooding attempts
+[06/08/2023 05:02:28]   0 attacks
+[06/08/2023 05:02:28]  Total detected and punished 0 cheaters
+[06/08/2023 05:02:28] --------------------------------------
+
+[06/08/2023 05:02:28] [Pawn.RakNet] plugin unloaded
+[06/08/2023 05:02:28] ========================
+[06/08/2023 05:02:28] = Memory access plugin =
+[06/08/2023 05:02:28] =       Made by BigETI =
+[06/08/2023 05:02:28] = Unloaded!            =
+[06/08/2023 05:02:28] ========================
+[06/08/2023 05:02:28] 
+
+*** Streamer Plugin v2.9.4 by Incognito unloaded ***
+
+[06/08/2023 05:02:28] 
+[06/08/2023 05:02:28]  ===============================
+[06/08/2023 05:02:28] 
+[06/08/2023 05:02:28]      sscanf plugin unloaded.    
+[06/08/2023 05:02:28] 
+[06/08/2023 05:02:28]  ===============================
+[06/08/2023 05:02:28] 
+[06/08/2023 05:02:28] plugin.mysql: Unloading plugin...
+[06/08/2023 05:02:28] plugin.mysql: Plugin unloaded.
+[06/08/2023 05:02:28] *********************
+[06/08/2023 05:02:28] *ColAndreas Unloaded*
+[06/08/2023 05:02:28] *********************
