@@ -377,7 +377,7 @@ CMD:workshop(playerid, params[]) {
         if(!amount)
             return SendErrorMessage(playerid, "Tidak bisa memasukkan jumlah yang invalid.");
 
-        if(amount < 0 || amount > 500000)
+        if(amount < 0 || amount > 5000000)
             return SendErrorMessage(playerid, "You have input invalid amount.");
 
         if(GetMoney(playerid) < amount)
@@ -418,7 +418,7 @@ CMD:workshop(playerid, params[]) {
         if(!amount)
             return SendErrorMessage(playerid, "Tidak bisa memasukkan jumlah yang invalid.");
 
-        if(amount < 0 || amount > 500000)
+        if(amount < 0 || amount > 5000000)
             return SendErrorMessage(playerid, "You have input invalid amount.");
 
 

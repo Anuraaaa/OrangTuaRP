@@ -8112,7 +8112,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new amount = strcash(inputtext), id = PlayerData[playerid][pInBiz];
-			if(amount < 1 || amount > 50000)
+			if(amount < 1 || amount > 5000000)
 				return ShowPlayerDialog(playerid, DIALOG_BIZ_DP, DIALOG_STYLE_INPUT, "Business Deposit", "ERROR: Invalid amount!\nPlease input amount of money you want to deposit:", "Deposit", "Close");
 		
 			if(GetMoney(playerid) < amount)
@@ -8133,7 +8133,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new amount = strcash(inputtext), id = PlayerData[playerid][pInBiz];
-			if(amount < 1 || amount > 50000)
+			if(amount < 1 || amount > 5000000)
 				return ShowPlayerDialog(playerid, DIALOG_BIZ_WD, DIALOG_STYLE_INPUT, "Business Withdraw", "ERROR: Invalid amount!\nPlease input amount of vault you want to withdraw:", "Withdraw", "Close");
 		
 			if(BizData[id][bizVault] < amount)
