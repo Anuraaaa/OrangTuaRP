@@ -176,8 +176,10 @@ hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
     if(newstate == PLAYER_STATE_DRIVER && (IsBusVehicle(GetPlayerVehicleID(playerid)) || IsBus2Vehicle(GetPlayerVehicleID(playerid))))
     {
-		if(IsHungerOrThirst(playerid))
+		if(IsHungerOrThirst(playerid)) {
+			RemovePlayerFromVehicle(playerid);
 			return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+		}
 
         EnteringBusVehicle(playerid);
     }

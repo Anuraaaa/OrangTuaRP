@@ -1279,8 +1279,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				if(PlayerData[playerid][pSweeperDelay] > 0)
 					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pSweeperDelay]/60), RemovePlayerFromVehicle(playerid);
 
-				if(IsHungerOrThirst(playerid))
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
 					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
 
 				ShowPlayerDialog(playerid, DIALOG_SWEEPER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Sweeper Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
 			}
@@ -1297,8 +1299,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pMowerDelay]/60), RemovePlayerFromVehicle(playerid);
 
 
-				if(IsHungerOrThirst(playerid))
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
 					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
 
 				ShowPlayerDialog(playerid, DIALOG_MOWER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Mower Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
 			}
@@ -1313,8 +1317,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				if(PlayerData[playerid][pTrashmasterDelay] > 0)
 					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pTrashmasterDelay]/60), RemovePlayerFromVehicle(playerid);
 
-				if(IsHungerOrThirst(playerid))
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
 					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
 
 				ShowPlayerDialog(playerid, DIALOG_TRASH, DIALOG_STYLE_MSGBOX, "Trashmaster Sidejob", "Pekerjaan ini mengharuskan kamu untuk mengambil sampah dan mengirimnya ke pengelolahan sampah kota!", "Start", "Cancel");
 			}
@@ -9487,8 +9493,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(PlayerData[playerid][pLumberDelay])
 				return SendErrorMessage(playerid, "Kamu harus menunggu %d menit untuk bekerja kembali.", PlayerData[playerid][pLumberDelay]/60);
 			
-			if(IsHungerOrThirst(playerid))
+			if(IsHungerOrThirst(playerid)) {
+				RemovePlayerFromVehicle(playerid);
 				return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+			}
 
 			if(!TreeData[id][treeCutted])
 			{
@@ -9527,8 +9535,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(PlayerData[playerid][pMasked])
 				return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!");
 
-			if(IsHungerOrThirst(playerid))
+			if(IsHungerOrThirst(playerid)) {
+				RemovePlayerFromVehicle(playerid);
 				return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+			}
 
 			PlayerData[playerid][pVendor] = i;
 			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu mulai bekerja sebagai {FFFF00}Food Vendor");
