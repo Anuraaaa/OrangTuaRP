@@ -39,7 +39,7 @@ Pump_Create(bizid, Float:x, Float:y, Float:z, Float:a)
     return -1;
 }
 
-Pump_Delete(idx, bool:remove_safe = false) {
+Pump_Delete(idx) {
     if(!Iter_Contains(Pump, idx))
         return 0;
 
@@ -55,11 +55,6 @@ Pump_Delete(idx, bool:remove_safe = false) {
     PumpData[idx][pumpID]  = 0;
     PumpData[idx][pumpBusiness] = 0;
 
-    if(remove_safe) {
-        new next = idx;
-        Iter_SafeRemove(Pump, next, idx);
-    }
-    else Iter_Remove(Pump, idx);
     return 1;
 }
 Pump_Sync(idx)
@@ -158,7 +153,12 @@ Pump_GetBizID(real_id) {
 hook OnBusinessDeleted(bizid) {
 
     foreach(new i : Pump) if(PumpData[i][pumpBusiness] == BizData[bizid][bizID]) {
-        Pump_Delete(i, true);
+
+        Pump_Delete(i);
+
+        if (Iter_Contains(Pump, i)) {
+            Iter_SafeRemove(Pump, i, i);        
+        }
     }
 }
 
@@ -239,6 +239,10 @@ CMD:deletepump(playerid, params[]) {
         return SendErrorMessage(playerid, "Pump ID %d is doesn't exists.", index);
 
     Pump_Delete(index);
+    
+    if (Iter_Contains(Pump, index)) {
+        Iter_Remove(Pump, index);
+    }
     SendAdminMessage(X11_TOMATO, "AdmCmd: %s has deleted Pump ID %d.", GetUsername(playerid), index);
     return 1;
 }

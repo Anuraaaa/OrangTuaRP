@@ -1257,6 +1257,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(Iter_Contains(Vehicle, vehicleid) && (Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL) && VehicleData[vehicleid][vLocked]) {
 			defer KickPlayerFromVehicle[2000](playerid);
 		}
+		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vLocked]) {
+			RemovePlayerFromVehicle(playerid);
+			SendErrorMessage(playerid, "Kendaraan ini sedang dikunci!");
+		}
+		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL && VehicleData[vehicleid][vLocked]) {
+			RemovePlayerFromVehicle(playerid);
+			SendErrorMessage(playerid, "Kendaraan ini sedang dikunci!");
+		}
 		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vTireLock]) {
 			RemovePlayerFromVehicle(playerid);
 			SendErrorMessage(playerid, "Kendaraan ini sedang di tire-locked!");
