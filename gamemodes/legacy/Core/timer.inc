@@ -798,3 +798,24 @@ task OnSaveServerData[180000]() {
 	SaveServerData();
 	return 1;
 }
+
+task OnVehicleCheckInWater[1000]() 
+{
+	foreach(new i : Vehicle)
+	{
+		new 
+			Float:depth,
+			Float:vehdepth;
+
+		CA_IsVehicleInWater(i, depth, vehdepth);
+
+		if (vehdepth >= 2.0) {
+			if (Vehicle_GetType(i) == VEHICLE_TYPE_PLAYER || Vehicle_GetType(i) == VEHICLE_TYPE_RENTAL) {
+				Vehicle_SetState(i, VEHICLE_STATE_DEATH);
+				RespawnVehicle(i);
+				return 1;
+			}
+		}
+	}
+	return 1;
+}
