@@ -5,7 +5,7 @@ new
 	BusVehicle[3],
 	Bus2Vehicle[2],
 	SweeperVehicle[3],
-	TrashVehicle[3],
+	TrashVehicle[4],
 	MowerVehicle[4],
 	ForkliftVehicle[6],
 	RumpoVehicle[6],

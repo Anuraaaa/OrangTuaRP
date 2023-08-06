@@ -1,8 +1,10 @@
 LoadStaticVehicle()
 {
-	TrashVehicle[0] = Vehicle_Create(408, -1916.6907, -1702.9725, 22.3032, 184.3942, 26, 26, 0, false);
-    TrashVehicle[1] = Vehicle_Create(408, -1912.3484, -1702.5702, 22.2899, 183.3604, 26, 26, 0, false);
-    TrashVehicle[2] = Vehicle_Create(408, -1908.4242, -1702.2488, 22.3004, 184.5224, 26, 26, 0, false);
+	TrashVehicle[0] = Vehicle_Create(408, -1917.1807, -1710.0837, 22.2905, 274.9213, 26, 26, 0, false);
+    TrashVehicle[1] = Vehicle_Create(408, -1916.8168, -1715.0648, 22.2935, 276.2827, 26, 26, 0, false);
+    TrashVehicle[2] = Vehicle_Create(408, -1916.5526, -1720.2421, 22.3031, 277.5696, 26, 26, 0, false);
+	TrashVehicle[3] = Vehicle_Create(408, -1916.3938, -1725.0116, 22.3043, 275.3780, 26, 26, 0, false);
+
 	forex(i, sizeof(TrashVehicle))
 	{
 		VehicleData[TrashVehicle[i]][vFuel] = 10.0;
