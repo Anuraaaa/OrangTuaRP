@@ -3285,6 +3285,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(Vehicle_GetType(vehicleid) != VEHICLE_TYPE_PLAYER)
 				return SendErrorMessage(playerid, "Tidak bisa memasukan kendaraan rental!");
 
+			foreach(new c : Crate) if(CrateData[c][crateVehicle] == VehicleData[vehicleid][vID])
+			{
+				CrateData[c][crateExists] = false;
+				CrateData[c][crateVehicle] = -1;
+				CrateData[c][crateType] = 0;
+
+				new next_js = c;
+
+				Iter_SafeRemove(Crate, next_js,c);
+			}
+			
 			VehicleData[vehicleid][vGarage] = GarageData[garage_index][garageID];
 			VehicleData[vehicleid][vState] = VEHICLE_STATE_GARAGE;
 			Vehicle_Save(vehicleid);
@@ -9989,9 +10000,11 @@ public OnPlayerStreamIn(playerid, forplayerid)
 {
     if (PlayerData[playerid][pMasked]) {
 		ShowPlayerNameTagForPlayer(forplayerid, playerid, 0);
+		UpdateMaskLabel(playerid);
 	}
 	else
 	    ShowPlayerNameTagForPlayer(forplayerid, playerid, 1);
+
 	return 1;
 }
 
@@ -10347,7 +10360,7 @@ public OnVehicleSpawn(vehicleid)
 
 					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 					{
-						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance (player terdekat: %s)", GetVehicleName(vehicleid), (nearest == INVALID_PLAYER_ID) ? ("None") : (sprintf("%s", GetName(nearest))));
+						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance (terdekat: %s)", GetVehicleName(vehicleid), (nearest == INVALID_PLAYER_ID) ? ("None") : (sprintf("%s", GetName(nearest))));
 						break;
 					}
 					Vehicle_Delete(vehicleid, false);
