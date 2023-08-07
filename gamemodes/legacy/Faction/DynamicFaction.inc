@@ -463,7 +463,7 @@ CMD:setleader(playerid, params[])
 	if (sscanf(params, "ud", userid, id))
 	    return SendSyntaxMessage(playerid, "/setleader [playerid/PartOfName] [faction id] (Use -1 to unset)");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
     if ((id < -1 || id >= MAX_FACTIONS) || (id != -1 && !FactionData[id][factionExists]))
@@ -528,7 +528,7 @@ CMD:editfaction(playerid, params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendSyntaxMessage(playerid, "/editfaction [id] [name]");
-	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} name, color, type, models, locker, ranks, maxranks, salary");
+	    SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} name, color, type, models, locker, ranks, maxranks");
 		return 1;
 	}
 	if ((id < 0 || id >= MAX_FACTIONS) || !FactionData[id][factionExists])
@@ -611,10 +611,6 @@ CMD:editfaction(playerid, params[])
 	{
         PlayerData[playerid][pFactionEdit] = id;
 		ShowPlayerDialog(playerid, DIALOG_EDITLOCKER, DIALOG_STYLE_LIST, "Faction Locker", "Set Location\nLocker Weapons", "Select", "Cancel");
-	}
-	else if(!strcmp(type, "salary", true))
-	{
-		Faction_ShowSalary(playerid, id);
 	}
 	return 1;
 }
@@ -707,7 +703,7 @@ CMD:faction(playerid, params[])
 		if (sscanf(string, "u", userid))
 		    return SendSyntaxMessage(playerid, "/faction invite [playerid/PartOfName]");
 
-		if (userid == INVALID_PLAYER_ID)
+		if (!IsPlayerConnected(userid))
 		    return SendErrorMessage(playerid, "That player is disconnected.");
 
 		if (PlayerData[userid][pFaction] == PlayerData[playerid][pFaction])
@@ -814,7 +810,7 @@ CMD:faction(playerid, params[])
 		if (sscanf(string, "ud", userid, rankid))
 		    return SendSyntaxMessage(playerid, "/faction setrank [playerid/PartOfName] [rank (1-%d)]", FactionData[PlayerData[playerid][pFaction]][factionRanks]);
 
-		if (userid == INVALID_PLAYER_ID)
+		if (!IsPlayerConnected(userid))
 		    return SendErrorMessage(playerid, "That player is disconnected.");
 
 		if (PlayerData[userid][pFaction] != PlayerData[playerid][pFaction])
@@ -842,7 +838,7 @@ CMD:faction(playerid, params[])
 		if (sscanf(string, "u", userid))
 		    return SendSyntaxMessage(playerid, "/faction kick [playerid/PartOfName]");
 
-		if (userid == INVALID_PLAYER_ID)
+		if (!IsPlayerConnected(userid))
 		    return SendErrorMessage(playerid, "That player is disconnected.");
 
 		if (PlayerData[userid][pFaction] != PlayerData[playerid][pFaction])
