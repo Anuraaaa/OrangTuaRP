@@ -1836,6 +1836,10 @@ public OnPlayerEnterDynamicCP(playerid, STREAMER_TAG_CP:checkpointid)
 	return 1;
 }
 
+timer DestroyDMV_Vehicle[3000](playerid) {
+	if(IsValidVehicle(PlayerData[playerid][pVehicleDMV]))
+		DestroyVehicleEx(PlayerData[playerid][pVehicleDMV]);
+}
 public OnPlayerEnterCheckpoint(playerid)
 {
 	if(PlayerData[playerid][pOnDMV] && GetPlayerVehicleID(playerid) == PlayerData[playerid][pVehicleDMV])
@@ -1844,8 +1848,8 @@ public OnPlayerEnterCheckpoint(playerid)
 
 		if(PlayerData[playerid][pIndexDMV] == sizeof(DMVPoint))
 		{
-			if(IsValidVehicle(PlayerData[playerid][pVehicleDMV]))
-				DestroyVehicleEx(PlayerData[playerid][pVehicleDMV]);
+			
+			RemovePlayerFromVehicle(playerid);
 
 			PlayerData[playerid][pLicense][0] = true;
 			
@@ -1857,6 +1861,8 @@ public OnPlayerEnterCheckpoint(playerid)
 			PlayerData[playerid][pOnDMV] = false;
 			PlayerData[playerid][pIndexDMV] = -1;
 			PlayerData[playerid][pHaveDrivingLicense] = true;
+
+			defer DestroyDMV_Vehicle[3000](playerid);
 		}
 		else 
 		{
