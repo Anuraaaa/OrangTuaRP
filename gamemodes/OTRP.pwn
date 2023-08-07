@@ -10362,6 +10362,8 @@ public OnVehicleSpawn(vehicleid)
 				new
 					killerid = VehicleData[vehicleid][vKillerID];
 
+				new nearest = GetNearestPlayerFromCar(vehicleid);
+
 				if(killerid != INVALID_PLAYER_ID && IsPlayerConnected(killerid))
 					SendAdminMessage(X11_TOMATO, "VehicleAction: %s kemungkinan menghancurkan kendaraan %s(ID:%d) milik %s.", GetName(killerid, false), GetVehicleName(vehicleid), vehicleid, Vehicle_GetOwnerName(vehicleid));
 
@@ -10374,11 +10376,14 @@ public OnVehicleSpawn(vehicleid)
 
 					Vehicle_Save(vehicleid);
 
-					new nearest = GetClosestPlayerToVehicle(vehicleid, false);
+					
 
 					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 					{
-						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance (terdekat: %s)", GetVehicleName(vehicleid), (nearest == INVALID_PLAYER_ID) ? ("None") : (sprintf("%s", GetName(nearest))));
+						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur, kamu bisa Claim setelah 3 jam dari Insurance", GetVehicleName(vehicleid));
+						if(nearest != INVALID_PLAYER_ID) {
+							SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Player terdekat saat kendaraanmu hancur adalah "RED"%s", GetName(nearest, false));
+						}
 						break;
 					}
 					Vehicle_Delete(vehicleid, false);
@@ -10388,6 +10393,9 @@ public OnVehicleSpawn(vehicleid)
 					foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 					{
 						SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Kendaraan {00FFFF}%s {FFFFFF}milikmu telah hancur dan tidak akan dan tidak memiliki Insurance lagi.", GetVehicleName(vehicleid));
+						if(nearest != INVALID_PLAYER_ID) {
+							SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Player terdekat saat kendaraanmu hancur adalah "RED"%s", GetName(nearest, false));
+						}
 						break;
 					}
 					Vehicle_Delete(vehicleid, true);
@@ -10456,7 +10464,17 @@ public OnVehicleSpawn(vehicleid)
 
 /* Main Functions */
 
+GetNearestPlayerFromCar(vehicleid) {
+	new playerid = INVALID_PLAYER_ID;
 
+	new Float:x, Float:y, Float:z;
+	GetVehiclePos(vehicleid, x, y, z);
+	foreach(new i : Player) if(IsPlayerInRangeOfPoint(i, 25.0, x, y, z) && GetPlayerVirtualWorld(i) == GetVehicleVirtualWorld(vehicleid)) {
+		playerid = i;
+		break;
+	}
+	return playerid;
+}
 ReturnBizTypeToCargo(biztype) {
 	new type;
 
