@@ -84,7 +84,7 @@ hook OnPlayerEnterRaceCP(playerid) {
     if(SmugglerData[smugCarrier] == playerid) {
         if(IsPlayerInRangeOfPoint(playerid, 5.0, SmugglerData[smugDelivX],  SmugglerData[smugDelivY],  SmugglerData[smugDelivZ])) {
 
-            new salary = RandomEx(30000, 50000);
+            new salary = RandomEx(10000, 30000);
 
             AddSalary(playerid, "Delivering Packet (smuggler)", salary);
 
