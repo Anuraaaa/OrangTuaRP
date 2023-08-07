@@ -313,7 +313,7 @@ CMD:race(playerid, params[]) {
         if(sscanf(string, "u", targetid))
             return SendSyntaxMessage(playerid, "/race [kick] [playerid/PartOfName]");
 
-        if(targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+        if(!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
             return SendErrorMessage(playerid, "You must near this player.");    
 
         if(RaceWith[targetid] != playerid)
@@ -341,7 +341,7 @@ CMD:race(playerid, params[]) {
         if(sscanf(string, "u", targetid))
             return SendSyntaxMessage(playerid, "/race [invite] [playerid/PartOfName]");
 
-        if(targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+        if(!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
             return SendErrorMessage(playerid, "You must near this player.");
 
         if(RaceWith[targetid] != INVALID_PLAYER_ID)

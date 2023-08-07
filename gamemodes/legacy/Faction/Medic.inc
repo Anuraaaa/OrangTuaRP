@@ -306,7 +306,7 @@ CMD:inspect(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendErrorMessage(playerid, "/inspect [playerid/PartOfName]");
 
-	if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+	if (!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
 	    return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
 	DisplayHealth(playerid, targetid);
@@ -324,7 +324,7 @@ CMD:treatment(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendErrorMessage(playerid, "/treatment [playerid/PartOfName]");
 
-	if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You must be close to that player!");
 
 	PlayerData[playerid][pTargetid] = targetid;

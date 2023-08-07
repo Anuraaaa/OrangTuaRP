@@ -2403,7 +2403,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		new targetid = PlayerData[playerid][pTarget], time;
 		if(response) {
 
-			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || !IsPlayerConnected(targetid))
 				return SendErrorMessage(playerid, "The advertisement poster is no longer near you.");
 
 			Advert_Create(PlayerData[targetid][pPhoneNumber], AdvertText[targetid], PlayerData[targetid][pID], GetName(targetid, false), time);
@@ -2423,7 +2423,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			new targetid = PlayerData[playerid][pTarget];
 
-			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerNearPlayer(playerid, targetid, 10.0) || !IsPlayerConnected(targetid))
 				return SendErrorMessage(playerid, "The SFN Staff is no longer near you.");
 
 			format(AdvertText[playerid], 128, "%s", inputtext);
@@ -3460,7 +3460,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(sscanf(inputtext, "u", targetid))
 			return ShowPlayerDialog(playerid, DIALOG_HOUSE_KEY_SHARE, DIALOG_STYLE_INPUT, "House Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Rumah.", "Share", "Close");
 
-		if(targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerConnected(targetid))
 			return ShowPlayerDialog(playerid, DIALOG_HOUSE_KEY_SHARE, DIALOG_STYLE_INPUT, "House Share Key", "(error) Player tersebut tidak berada didekatmu!\nMasukkan ID/Nama player yang akan diberikan kunci Rumah.", "Share", "Close");
 	
 		if(!IsPlayerNearPlayer(playerid, targetid, 5.0))
@@ -3485,7 +3485,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(sscanf(inputtext, "u", targetid))
 			return ShowPlayerDialog(playerid, DIALOG_FLAT_KEY_SHARE, DIALOG_STYLE_INPUT, "Flat Share Key", "Masukkan ID/Nama player yang akan diberikan kunci Flat.", "Share", "Close");
 
-		if(targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerConnected(targetid))
 			return ShowPlayerDialog(playerid, DIALOG_FLAT_KEY_SHARE, DIALOG_STYLE_INPUT, "Flat Share Key", "(error) Player tersebut tidak berada didekatmu!\nMasukkan ID/Nama player yang akan diberikan kunci Flat.", "Share", "Close");
 	
 		if(!IsPlayerNearPlayer(playerid, targetid, 5.0))
@@ -5598,7 +5598,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			new dollars, cents, totalcash[25], cash[32], targetid = PlayerData[playerid][pTarget];
 
-			if(targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerConnected(targetid))
 				return SendErrorMessage(playerid, "Transfer target is no longer valid (disconnected)"), cmd_atm(playerid, "");
 
 			if(sscanf(inputtext, "s[32]", cash))
@@ -5850,7 +5850,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					new targetid = GetNumberOwner(ContactData[playerid][id][contactNumber]);
 
-					if(targetid == INVALID_PLAYER_ID)
+					if(!IsPlayerConnected(targetid))
 						return SendErrorMessage(playerid, "Nomor tersebut tidak dapat diakses!");
 
 					if(PlayerData[targetid][pPhoneOff])
@@ -6004,7 +6004,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			targetid = GetNumberOwner(number);
 
-			if(targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerConnected(targetid))
 				return ShowPlayerDialog(playerid, DIALOG_SHARE_LOCATION, DIALOG_STYLE_INPUT, "Share Location", "(error) Nomor tersebut tidak dapat diakses saat ini\nMasukkan nomor ponsel yang akan kamu bagikan lokasimu saat ini:", "Share", "Close");
 		
 			if(PlayerData[targetid][pPhoneOff])
@@ -6192,7 +6192,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			new targetid = PlayerData[playerid][pTargetid];
 
-			if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
 				return SendErrorMessage(playerid, "You must close to that player!");
 
 			if(listitem == 0)

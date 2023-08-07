@@ -118,7 +118,7 @@ CMD:postad(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/postad [playerid/PartOfName]");
 
-	if(!IsPlayerNearPlayer(playerid, targetid, 9.0) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerNearPlayer(playerid, targetid, 9.0) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	if(!PlayerHasItem(targetid, "Cellphone"))

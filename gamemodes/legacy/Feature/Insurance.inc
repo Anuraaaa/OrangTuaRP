@@ -87,7 +87,7 @@ CMD:forceinsurance(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/forceinsurance [playerid/PartOfName]");
 	    
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "Invalid player ID!");
 	    
 	PlayerData[playerid][pTarget] = targetid;

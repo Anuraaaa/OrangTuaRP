@@ -942,7 +942,7 @@ CMD:health(playerid, params[])
 		DisplayHealth(playerid, playerid);
 		return 1;
 	}
-	if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+	if (!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
 	    return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 	    
 	DisplayHealth(targetid, playerid);
@@ -1146,7 +1146,7 @@ CMD:accept(playerid, params[])
 	else if(!strcmp(params, "frisk", true))
 	{
 		new targetid = PlayerData[playerid][pFrisked];
-		if(targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerConnected(targetid))
 			return SendErrorMessage(playerid, "No one ask you for a frisk!");
 
 		ShowInventory(targetid, playerid);
@@ -1392,7 +1392,7 @@ CMD:hangup(playerid, params[])
 {
 	new targetid = PlayerData[playerid][pCallLine];
 
-	if (targetid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "There are no calls to hangup.");
 
 	if (PlayerData[playerid][pIncomingCall])
@@ -1499,7 +1499,7 @@ CMD:drag(playerid, params[])
 	if(sscanf(params, "u", targetid)) 
 		return SendSyntaxMessage(playerid, "/drag [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	if(!IsPlayerNearPlayer(playerid, targetid, 5.0))
@@ -1575,7 +1575,7 @@ CMD:pm(playerid, params[])
 	if(sscanf(params, "us[128]", targetid, msg))
 	    return SendSyntaxMessage(playerid, "/pm [playerid/PartOfName] [message]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "Invalid player!");
 	    
 	if (strlen(msg) > 128)
@@ -1658,7 +1658,7 @@ CMD:weapon(playerid, params[])
 		    ShowWeapon(playerid, playerid);
 		    return 1;
 		}
-		if(targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerConnected(targetid))
 			return SendErrorMessage(playerid, "You're not close to that player!");
 			
 		if(!IsPlayerNearPlayer(playerid, targetid, 7.0))
@@ -1695,7 +1695,7 @@ CMD:weapon(playerid, params[])
 		if (!weaponid)
 		    return SendErrorMessage(playerid, "You are not holding any weapon to pass.");
 
-		if(targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerConnected(targetid))
 			return SendErrorMessage(playerid, "You're not close to that player!");
 
 		if(!IsPlayerNearPlayer(playerid, targetid, 7.0))
@@ -1992,7 +1992,7 @@ CMD:frisk(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/frisk [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	if(!IsPlayerNearPlayer(playerid, targetid, 5.0))
@@ -2347,7 +2347,7 @@ CMD:v(playerid, params[])
 			Vehicle_ShowRegistration(playerid, vehicleid);
 			return 1;
 		}
-		if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
 			return SendErrorMessage(playerid, "You have specified invalid player.");
 
 		
@@ -2373,7 +2373,7 @@ CMD:v(playerid, params[])
 		if(sscanf(string, "u", targetid)) 
 			return SendSyntaxMessage(playerid, "/v(vehicle) [give] [playerid/PartOfName]");
 
-		if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+		if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
 			return SendErrorMessage(playerid, "You have specified invalid player.");
 
 		if(Vehicle_Count(targetid) >= CountPlayerVehicleSlot(targetid))

@@ -159,7 +159,7 @@ CMD:damages(playerid, params[]) {
     if(sscanf(params, "u", targetid))
         return Damage_Show(playerid, playerid);
 
-    if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+    if (!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     Damage_Show(playerid, targetid);
@@ -175,7 +175,7 @@ CMD:adamages(playerid, params[]) {
     if(sscanf(params, "u", targetid))
         return SendSyntaxMessage(playerid, "/adamages [playerid/PartOfName]");
 
-    if (targetid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(targetid))
         return SendErrorMessage(playerid, "That player is disconnected.");
 
     Damage_Show(targetid, playerid);

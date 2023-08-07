@@ -792,7 +792,7 @@ CMD:faction(playerid, params[])
 		if(sscanf(string, "ud", targetid, badge))
 			return SendSyntaxMessage(playerid, "/faction [playerid/PartOfName] [setbadge] [new badge]");
 
-		if(targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+		if(!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
 			return SendErrorMessage(playerid, "You must near this player.");
 
 		PlayerData[targetid][pFactionBadge] = badge;

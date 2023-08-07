@@ -775,7 +775,7 @@ CMD:spec(playerid, params[]) {
 		return SendSyntaxMessage(playerid, "/spec [playerid/PartOfName]");
 	}
 
-	if (targetid == INVALID_PLAYER_ID || targetid == playerid) {
+	if (!IsPlayerConnected(targetid) || targetid == playerid) {
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 	}
 

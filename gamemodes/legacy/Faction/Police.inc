@@ -185,7 +185,7 @@ CMD:grant(playerid, params[]) {
         if(sscanf(string, "u", targetid))
             return SendSyntaxMessage(playerid, "/grant [lumberjack] [playerid/PartOfName]");
 
-        if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+        if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
             return SendErrorMessage(playerid, "You have specified invalid player.");
 
         if(targetid == playerid)
@@ -202,7 +202,7 @@ CMD:grant(playerid, params[]) {
         if(sscanf(string, "u", targetid))
             return SendSyntaxMessage(playerid, "/grant [hauling] [playerid/PartOfName]");
 
-        if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+        if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
             return SendErrorMessage(playerid, "You have specified invalid player.");
 
         if(targetid == playerid)
@@ -357,7 +357,7 @@ CMD:su(playerid, params[]) {
     if(sscanf(params, "us[64]", targetid, description))
         return SendSyntaxMessage(playerid, "/su [playerid/PartOfName] [charge/description]");
 
-    if(targetid == INVALID_PLAYER_ID)
+    if(!IsPlayerConnected(targetid))
         return SendErrorMessage(playerid, "You have specified invalid player.");
 
     if(strlen(description) > 64)

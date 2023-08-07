@@ -27,7 +27,7 @@ CMD:damage(playerid, params[])
     if(sscanf(params, "u", targetid))
         return DisplayTemporaryDamages(playerid, playerid);
 
-    if (targetid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, targetid, 5.0))
+    if (!IsPlayerConnected(targetid) || !IsPlayerNearPlayer(playerid, targetid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
         
     DisplayTemporaryDamages(playerid, targetid);

@@ -60,7 +60,7 @@ CMD:getip(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/getip [playerid/PartOfName]");
 
-	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 
@@ -130,7 +130,7 @@ CMD:resetweap(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/resetweap [playerid/PartOfName]");
 
-	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	ResetWeapons(targetid);
@@ -293,7 +293,7 @@ CMD:checkvehicle(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/checkvehicle [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	mysql_tquery(sqlcon, sprintf("SELECT * FROM `vehicle` WHERE `vehExtraID` = '%d' ORDER BY `vehID` ASC", PlayerData[targetid][pID]), "Vehicle_AdminShowList", "dd", playerid, targetid);
@@ -327,7 +327,7 @@ CMD:clearitems(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/clearitems [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has cleared %s's inventory.", PlayerData[playerid][pUCP], ReturnName(targetid));
@@ -506,7 +506,7 @@ CMD:givesalary(playerid, params[])
 	if(sscanf(params, "us[32]s[32]", targetid, amount, reason))
 		return SendSyntaxMessage(playerid, "/givesalary [playerid/PartOfName] [amount] [reason]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "Invalid player specified!");
 
 	if(targetid == playerid && PlayerData[playerid][pAdmin] < 7)
@@ -1185,7 +1185,7 @@ CMD:aweapon(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/aweapon [playerid/PartOfName]");
 	    
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You've specified an You have specified invalid player!");
 	    
 	ShowWeapon(playerid, targetid);
@@ -1201,7 +1201,7 @@ CMD:afrisk(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/afrisk [playerid/PartOfName]");
 	    
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You've specified an You have specified invalid player!");
 	    
 	ShowInventory(playerid, targetid);
@@ -1342,7 +1342,7 @@ CMD:checkstats(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/checkstats [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "Invalid player specified!");
 
 	ShowPlayerStats(targetid, playerid);
@@ -1384,7 +1384,7 @@ CMD:setadmin(playerid, params[])
 	if(sscanf(params, "ud", targetid, rank))
 	    return SendSyntaxMessage(playerid, "/setadmin [playerid/PartOfName] [rank]");
 	    
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You've specified an invalid player!");
 	    
 	UcpData[targetid][ucpAdmin] = rank;
@@ -1417,7 +1417,7 @@ CMD:unjail(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/unjail [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	if(PlayerData[targetid][pJailTime] < 1)
@@ -1502,7 +1502,7 @@ CMD:acure(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/acure [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "Invalid Player specified!");
 
 	SetPlayerHealth(targetid, 100.0);
@@ -1532,7 +1532,7 @@ CMD:arevive(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/arevive [playerid]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You have specified invalid player!");
 	    
 	if(!PlayerData[targetid][pInjured])
@@ -1572,7 +1572,7 @@ CMD:goto(playerid, params[])
 	if(sscanf(params, "u", targetid))
 	    return SendSyntaxMessage(playerid, "/goto [playerid]");
 	    
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "You have specified invalid player!");
 	    
 	if(!PlayerData[targetid][pSpawned])
@@ -1695,7 +1695,7 @@ CMD:ban(playerid, params[])
 	if(sscanf(params, "ds[32]", targetid, reason))
 		return SendSyntaxMessage(playerid, "/ban [playerid/PartOfName] [reason]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified an You have specified invalid player!");
 
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: Account %s has been banned by %s", PlayerData[targetid][pUCP], PlayerData[playerid][pUCP]);
@@ -1778,7 +1778,7 @@ CMD:sendvehto(playerid, params[]) {
 	if(!IsValidVehicle(vehicleid))
 		return SendErrorMessage(playerid, "You have specified invalid vehicle.");
 
-	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	new Float:x, Float:y, Float:z;
@@ -1802,7 +1802,7 @@ CMD:send(playerid, params[]) {
 	if(sscanf(params, "us[24]", targetid, place))
 		return SendSyntaxMessage(playerid, "/send [playerid/PartOfName] [location]"), SendClientMessage(playerid, -1, "Location: sfpd, hospital, jobcenter, bank, sweeper, bus(1/2), mower, mc, miner"), SendClientMessage(playerid, -1, "Location: trashmaster, ch, ff, dmv, component, news, insurance, newspawn");
 
-	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	if(!strcmp(place, "sfpd", true)) {
@@ -2001,7 +2001,7 @@ CMD:sendtoveh(playerid, params[]) {
 	if (sscanf(params, "ud", targetid, vehicleid))
 	    return SendSyntaxMessage(playerid, "/sendtoveh [playerid/PartOfName] [vehicleid]");
 
-	if(!IsPlayerConnected(targetid) || targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid) || !IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	if(!IsValidVehicle(vehicleid))
@@ -2026,7 +2026,7 @@ CMD:sendto(playerid, params[])
 	if (sscanf(params, "uu", userid, targetid))
 	    return SendSyntaxMessage(playerid, "/sendto [playerid/PartOfName] [playerid/PartOfName]");
 
-	if (userid == INVALID_PLAYER_ID || targetid == INVALID_PLAYER_ID)
+	if (userid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "The specified user(s) are not connected.");
 
 	SendPlayerToPlayer(userid, targetid);
@@ -2216,7 +2216,7 @@ CMD:finecoin(playerid, params[]) {
 	if(sscanf(params, "ud", targetid, amount))
 		return SendSyntaxMessage(playerid, "/finecoin [playerid/PartOfName] [amount]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	PlayerData[targetid][pCoin] -= amount;
@@ -2241,7 +2241,7 @@ CMD:givecoin(playerid, params[]) {
 	if(sscanf(params, "ud", targetid, amount))
 		return SendSyntaxMessage(playerid, "/givecoin [playerid/PartOfName] [amount]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	PlayerData[targetid][pCoin] += amount;
@@ -2258,7 +2258,7 @@ CMD:givecash(playerid, params[])
 	if(sscanf(params, "us[32]", targetid, amount))
 		return SendSyntaxMessage(playerid, "/givecash [playerid/PartOfName] [amount]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has give $%s cash to %s", PlayerData[playerid][pUCP], FormatNumber(strcash(amount)), GetName(targetid));

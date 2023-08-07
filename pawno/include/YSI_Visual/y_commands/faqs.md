@@ -60,7 +60,7 @@ CMD:arrest(playerid, params[])
 	if (!IsPlayerCop(playerid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "You are not a cop!");
 	new targetid;
-	if (sscanf(params, "u", targetid) || targetid == INVALID_PLAYER_ID)
+	if (sscanf(params, "u", targetid) || !IsPlayerConnected(targetid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "Could not find the target!");
 	// Put them in jail.
 	SetPlayerPos(targetid, 1084.3, 2250.6, 503.4);
@@ -90,7 +90,7 @@ CMD:arrest(playerid, params[])
 	if (!gCalledFromClick && !IsPlayerCop(playerid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "You are not a cop!");
 	new targetid;
-	if (sscanf(params, "u", targetid) || targetid == INVALID_PLAYER_ID)
+	if (sscanf(params, "u", targetid) || !IsPlayerConnected(targetid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "Could not find the target!");
 	// Put them in jail.
 	SetPlayerPos(targetid, 1084.3, 2250.6, 503.4);
@@ -124,7 +124,7 @@ static Group:gGroupDetective;
 YCMD:arrest(playerid, params[], help)
 {
 	new targetid;
-	if (sscanf(params, "u", targetid) || targetid == INVALID_PLAYER_ID)
+	if (sscanf(params, "u", targetid) || !IsPlayerConnected(targetid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "Could not find the target!");
 	// Put them in jail.
 	SetPlayerPos(targetid, 1084.3, 2250.6, 503.4);
@@ -177,7 +177,7 @@ DoArrest(playerid, targetid)
 YCMD:arrest(playerid, params[], help)
 {
 	new targetid;
-	if (sscanf(params, "u", targetid) || targetid == INVALID_PLAYER_ID)
+	if (sscanf(params, "u", targetid) || !IsPlayerConnected(targetid))
 		return SendClientMessage(playerid, COLOUR_FAILURE, "Could not find the target!");
 	DoArrest(playerid, targetid);
 	return 1;

@@ -172,7 +172,7 @@ CMD:sms(playerid, params[])
 
     new targetid = GetNumberOwner(number);
 
-    if(targetid == INVALID_PLAYER_ID)
+    if(!IsPlayerConnected(targetid))
         return SendErrorMessage(playerid, "Nomor ini sedang tidak aktif.");
 
     if(PlayerData[targetid][pPhoneOff])

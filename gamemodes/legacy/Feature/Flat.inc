@@ -826,7 +826,7 @@ CMD:flat(playerid, params[]) {
 			if(sscanf(string, "u", targetid))
 				return SendSyntaxMessage(playerid, "/flat [give] [playerid/PartOfName]");
 
-			if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || targetid == INVALID_PLAYER_ID)
+			if(!IsPlayerNearPlayer(playerid, targetid, 5.0) || !IsPlayerConnected(targetid))
 				return SendErrorMessage(playerid, "You have specified invalid player!");
 
 			if(Flat_GetCount(targetid) >= 1)

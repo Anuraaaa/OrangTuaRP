@@ -118,7 +118,7 @@ CMD:checkwarn(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/checkwarn [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	ShowPlayerWarning(targetid, playerid);
@@ -159,7 +159,7 @@ CMD:warn(playerid, params[])
 	if(sscanf(params, "us[32]", targetid, reason))
 		return SendSyntaxMessage(playerid, "/warn [playerid/PartOfName] [warning reason]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 
 	if(strlen(reason) > 32)
@@ -179,7 +179,7 @@ CMD:jail(playerid, params[])
 	if(sscanf(params, "uds[128]", targetid, minutes, reason))
 	    return SendSyntaxMessage(playerid, "/jail [playerid/PartOfName] [time in minute] [reason]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "Invalid player ID!");
 
     if (PlayerData[targetid][pAdmin] > PlayerData[playerid][pAdmin])

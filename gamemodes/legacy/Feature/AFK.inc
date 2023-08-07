@@ -63,7 +63,7 @@ CMD:isafk(playerid, params[])
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/isafk [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "Invalid player specified!");
 
 	SendClientMessageEx(playerid, COLOR_SERVER, "(AFK) {FFFFFF}Player {00FFFF}%s {FFFFFF}is %s", GetName(targetid), (PlayerData[targetid][pAFK]) ? ("{FFFFFF}AFK") : ("{FF0000}not {FFFFFF}AFK"));

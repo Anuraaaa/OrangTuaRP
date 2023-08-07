@@ -58,7 +58,7 @@ CMD:asalary(playerid, params[]) {
 	if(sscanf(params, "u", targetid))
 		return SendSyntaxMessage(playerid, "/asalary [playerid/PartOfName]");
 
-	if(targetid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(targetid))
 		return SendErrorMessage(playerid, "You have specified invalid player.");
 
 	ShowPlayerSalary(playerid, targetid);
