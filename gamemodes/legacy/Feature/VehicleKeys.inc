@@ -26,7 +26,7 @@ CMD:sharekey(playerid, params[])
 	if(userid == playerid)  // Ketika target id nya adalah player id dia , output error
 		return SendErrorMessage(playerid, "You can't give or share your own vehicle to yourself!");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0)) // Ketika target tidak deket atau invalid, output error
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0)) // Ketika target tidak deket atau invalid, output error
 		return SendErrorMessage(playerid, "The player is disconnected or not near you.");
 
 	if(!IsPlayerInAnyVehicle(playerid)) // Ketika player tidak di dalam kendaraan, output error.
@@ -79,7 +79,7 @@ CMD:removekey(playerid, params[])
 	if(userid == playerid) 
 		return SendErrorMessage(playerid, "You can't remove your own vehicle key from yourself!");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0)) 
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0)) 
 		return SendErrorMessage(playerid, "The player is disconnected or not near you.");
 
 	if(!IsPlayerInAnyVehicle(playerid))

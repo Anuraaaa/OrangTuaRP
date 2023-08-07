@@ -8284,7 +8284,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if (sscanf(inputtext, "u", userid))
 			    return ShowPlayerDialog(playerid, DIALOG_GIVEITEM, DIALOG_STYLE_INPUT, "Give Item", "Please enter the name or the ID of the player:", "Submit", "Cancel");
 
-			if (userid == INVALID_PLAYER_ID)
+			if (!IsPlayerConnected(userid))
 			    return ShowPlayerDialog(playerid, DIALOG_GIVEITEM, DIALOG_STYLE_INPUT, "Give Item", "ERROR: Invalid player specified.\n\nPlease enter the name or the ID of the player:", "Submit", "Cancel");
 
 		    if (!IsPlayerNearPlayer(playerid, userid, 6.0))

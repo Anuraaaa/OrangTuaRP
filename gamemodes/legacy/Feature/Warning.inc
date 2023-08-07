@@ -189,6 +189,7 @@ CMD:jail(playerid, params[])
 	    return SendErrorMessage(playerid, "Invalid specified minute!");
 	    
 	JailUser(playerid, targetid, minutes, reason);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /jail %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 

@@ -94,7 +94,7 @@ CMD:ans(playerid, params[])
 	if (sscanf(params, "us[128]", userid, text))
 		return SendSyntaxMessage(playerid, "/ans [playerid/PartOfName] [answer]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	if(!PlayerData[userid][pAsking])

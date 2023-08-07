@@ -49,7 +49,7 @@ CMD:cuff(playerid, params[])
     if (sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/cuff [playerid/name]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
         return SendErrorMessage(playerid, "That player is disconnected.");
 
     if (!IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -109,7 +109,7 @@ CMD:uncuff(playerid, params[])
     if (sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/uncuff [playerid/name]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
         return SendErrorMessage(playerid, "That player is disconnected.");
 
     if (!IsPlayerNearPlayer(playerid, userid, 5.0))
@@ -149,7 +149,7 @@ CMD:arrest(playerid, params[])
     if (sscanf(params, "ud", userid, time))
         return SendSyntaxMessage(playerid, "/arrest [playerid/PartOfName] [minutes]");
 
-    if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if (!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "The player is disconnected or not near you.");
 
   /*  if(userid == playerid)
@@ -328,7 +328,7 @@ CMD:take(playerid, params[])
     if(sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/take [playerid/PartOfName]");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if(ReturnWeaponCount(userid) > 0)

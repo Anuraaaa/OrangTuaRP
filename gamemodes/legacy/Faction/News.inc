@@ -114,7 +114,7 @@ CMD:inviteguest(playerid, params[])
     if(!PlayerData[playerid][pBroadcast])
         return SendErrorMessage(playerid, "You must be broadcasting to use this command.");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if(userid == playerid)
@@ -147,7 +147,7 @@ CMD:removemic(playerid, params[]) {
     if(sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/removemic [playerid/PartOfName]");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if(!PlayerData[userid][pMicrophone])
@@ -175,7 +175,7 @@ CMD:givemic(playerid, params[]) {
     if(sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/givemic [playerid/PartOfName]");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if(PlayerData[userid][pMicrophone])
@@ -206,7 +206,7 @@ CMD:removeguest(playerid, params[])
     if(!PlayerData[playerid][pBroadcast])
         return SendErrorMessage(playerid, "You must be broadcasting to use this command.");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if(userid == playerid)

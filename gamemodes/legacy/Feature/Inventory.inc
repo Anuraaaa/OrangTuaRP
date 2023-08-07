@@ -991,7 +991,7 @@ CMD:setitem(playerid, params[])
 	if (sscanf(params, "uds[32]", userid, amount, item))
 	    return SendSyntaxMessage(playerid, "/setitem [playerid/PartOfName] [amount] [item name]");
 
-	if(userid == INVALID_PLAYER_ID)
+	if(!IsPlayerConnected(userid))
 		return SendErrorMessage(playerid, "You have specified invalid player!");
 		
 	for (new i = 0; i < sizeof(g_aInventoryItems); i ++) if (!strcmp(g_aInventoryItems[i][e_InventoryItem], item, true))

@@ -103,7 +103,7 @@ CMD:ticket(playerid, params[])
     if (sscanf(params, "us[64]", userid, reason))
         return SendSyntaxMessage(playerid, "/ticket [playerid/PartOfName] [reason]");
 
-    if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if (!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     if (userid == playerid)

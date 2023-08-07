@@ -520,6 +520,7 @@ ptask DelayUpdate[1000](playerid)
 {
 	if(IsPlayerSpawned(playerid))
 	{
+		/*
 		if(GetFactionType(playerid) != FACTION_NONE && PlayerData[playerid][pOnDuty] && !PlayerData[playerid][pAFK])
 		{
 			if(PlayerData[playerid][pDutyTime]) {
@@ -531,7 +532,7 @@ ptask DelayUpdate[1000](playerid)
 					notification.Show(playerid, "PAYCHECK", sprintf("~w~Faction Salary has been issued.~n~(~g~+$%s~w~)", FormatNumber(FactionData[PlayerData[playerid][pFaction]][factionSalary][PlayerData[playerid][pFactionRank] - 1])), "hud:radar_cash");
 				}
 			}
-		}
+		}*/
 		if(reportDelay[playerid] > 0) {
 			reportDelay[playerid]--;
 		}

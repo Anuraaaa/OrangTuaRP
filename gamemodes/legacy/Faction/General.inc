@@ -1,7 +1,4 @@
 new
-	SanNewsVehicles[11],
-	LSMDVehicles[10],
-	LSPDVehicles[38],
 	BusVehicle[3],
 	Bus2Vehicle[2],
 	SweeperVehicle[3],
@@ -478,7 +475,7 @@ CMD:showbadge(playerid, params[])
     if(sscanf(params, "u", userid))
         return SendSyntaxMessage(playerid, "/showbadge [playerid]");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
         return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     SendClientMessageEx(userid, X11_WHITE,"====== [ Badge of {%06x}%s "WHITE"] ======", FactionData[PlayerData[playerid][pFaction]][factionColor] >>> 8, FactionData[PlayerData[playerid][pFaction]][factionName]);
@@ -616,7 +613,7 @@ CMD:detain(playerid, params[])
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/detain [playerid/name]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "That player is disconnected.");
 
     if (userid == playerid)

@@ -81,6 +81,7 @@ CMD:getip(playerid, params[]) {
 	SendClientMessageEx(playerid, X11_ORANGE, "Country: "RED"%s.", country);
 	SendClientMessageEx(playerid, X11_ORANGE, "City: "RED"%s.", city);
 	SendClientMessageEx(playerid, X11_ORANGE, "ISP: "RED"%s.", isp);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /getip %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -117,6 +118,7 @@ CMD:banip(playerid, params[]) {
             KickEx(i);
         }
     }    
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /banip %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -150,6 +152,7 @@ CMD:unbanip(playerid, params[]) {
 	new query[144];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banip` WHERE `IP` = '%e';", ip);
 	mysql_tquery(sqlcon, query, "OnUnbanIP", "ds", playerid, ip);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /unbanip %s", ReturnDate(), GetUsername(playerid), params);
 
 	return 1;
 }
@@ -346,7 +349,7 @@ CMD:aslap(playerid, params[])
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/aslap [playerid/name]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	static
@@ -417,7 +420,7 @@ CMD:respawnveh(playerid, params[])
 		return SendErrorMessage(playerid, NO_PERMISSION);
 
 	if(isnull(params))
-		return SendSyntaxMessage(playerid, "/respawnveh [vehicle id OR stock vehicle]"), SendClientMessage(playerid, COLOR_YELLOW, "stock Vehicle: {FFFFFF}sfpd, sfmd, sfn, sweeper, bus, trashmaster");
+		return SendSyntaxMessage(playerid, "/respawnveh [vehicle id OR stock vehicle]"), SendClientMessage(playerid, COLOR_YELLOW, "stock Vehicle: {FFFFFF}sidejob");
 
 	if(IsNumeric(params))
 	{
@@ -433,66 +436,17 @@ CMD:respawnveh(playerid, params[])
 	}
 	else
 	{
-		if(!strcmp(params, "sfpd", true))
+		if(!strcmp(params, "sidejob", true))
 		{
-			forex(i, sizeof(LSPDVehicles)) if(GetVehicleDriver(LSPDVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(LSPDVehicles[i]))
+			for(new i = 0; i < MAX_VEHICLES; i++) if(IsValidVehicle(i) && GetVehicleDriver(i) == INVALID_PLAYER_ID)
 			{
-				SetVehicleToRespawn(LSPDVehicles[i]);
-				VehicleData[LSPDVehicles[i]][vFuel] = 10.0;
-				SetVehicleHealth(LSPDVehicles[i], 2000.0);
+				SetVehicleToRespawn(i);
+				VehicleData[i][vFuel] = 10.0;
+				RepairVehicle(i);
 			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFPD faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
+			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: All Sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
 		}
-		else if(!strcmp(params, "bus", true))
-		{
-			forex(i, sizeof(BusVehicle)) if(GetVehicleDriver(BusVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(BusVehicle[i]))
-			{
-				SetVehicleToRespawn(BusVehicle[i]);
-				VehicleData[BusVehicle[i]][vFuel] = 10.0;
-			}
-			forex(i, sizeof(Bus2Vehicle)) if(GetVehicleDriver(BusVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(Bus2Vehicle[i]))
-			{
-				SetVehicleToRespawn(Bus2Vehicle[i]);
-				VehicleData[Bus2Vehicle[i]][vFuel] = 10.0;
-			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Bus sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
-		}
-		else if(!strcmp(params, "sweeper", true))
-		{
-			forex(i, sizeof(SweeperVehicle)) if(GetVehicleDriver(SweeperVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(SweeperVehicle[i]))
-			{
-				SetVehicleToRespawn(SweeperVehicle[i]);
-				VehicleData[SweeperVehicle[i]][vFuel] = 10.0;
-			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Sweeper sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
-		}
-		else if(!strcmp(params, "trashmaster", true))
-		{
-			forex(i, sizeof(TrashVehicle)) if(GetVehicleDriver(TrashVehicle[i]) == INVALID_PLAYER_ID && IsValidVehicle(TrashVehicle[i]))
-			{
-				SetVehicleToRespawn(TrashVehicle[i]);
-				VehicleData[TrashVehicle[i]][vFuel] = 10.0;
-			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all Trashmaster sidejob vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
-		}
-		else if(!strcmp(params, "sfn", true))
-		{
-			forex(i, sizeof(SanNewsVehicles)) if(GetVehicleDriver(SanNewsVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(SanNewsVehicles[i]))
-			{
-				SetVehicleToRespawn(SanNewsVehicles[i]);
-				VehicleData[SanNewsVehicles[i]][vFuel] = 10.0;
-			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFN faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
-		}
-		else if(!strcmp(params, "sfmd", true))
-		{
-			forex(i, sizeof(LSMDVehicles)) if(GetVehicleDriver(LSMDVehicles[i]) == INVALID_PLAYER_ID && IsValidVehicle(LSMDVehicles[i]))
-			{
-				SetVehicleToRespawn(LSMDVehicles[i]);
-				VehicleData[LSMDVehicles[i]][vFuel] = 10.0;
-			}
-			SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: all SFMD faction vehicle has been respawned by %s", PlayerData[playerid][pUCP]);
-		}
+
 	}
 	return 1;
 }
@@ -532,7 +486,7 @@ CMD:setname(playerid, params[])
 	if (sscanf(params, "us[24]", userid, newname))
 	    return SendSyntaxMessage(playerid, "/setname [playerid/PartOfName] [new name]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 		return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	if (!IsRoleplayName(newname))
@@ -592,7 +546,7 @@ CMD:givewep(playerid, params[])
 	if (sscanf(params, "udI(100)I(0)", userid, weaponid, ammo, highvelo))
 	    return SendSyntaxMessage(playerid, "/givewep [playerid/PartOfName] [weaponid] [ammo] [high velocity (0/1)]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You cannot give weapons to disconnected players.");
 
 	if (weaponid <= 0 || weaponid > 46 || (weaponid >= 19 && weaponid <= 21))
@@ -613,7 +567,7 @@ CMD:spec(playerid, params[])
 	if (sscanf(params, "u", userid))
 		return SendSyntaxMessage(playerid, "/spec(tate) [playerid/PartOfName] - Type \"/unspec\" to stop spectating.");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	    
@@ -760,7 +714,7 @@ CMD:editplayer(playerid, params[])
 	 	SendClientMessage(playerid, COLOR_YELLOW, "(Names){FFFFFF} gender, bank, origin, level, birthdate, lumberlic, job(1/2)");
 		return 1;
 	}
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	if (!strcmp(type, "gender", true))
@@ -986,7 +940,7 @@ CMD:setint(playerid, params[])
 	if (sscanf(params, "ud", userid, interior))
 		return SendSyntaxMessage(playerid, "/setint [playerid/PartOfName] [interior]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	SetPlayerInterior(userid, interior);
@@ -1008,7 +962,7 @@ CMD:setvw(playerid, params[])
 	if (sscanf(params, "ud", userid, world))
 		return SendSyntaxMessage(playerid, "/setvw [playerid/PartOfName] [world]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	SetPlayerVirtualWorld(userid, world);
@@ -1029,7 +983,7 @@ CMD:freeze(playerid, params[])
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/freeze [playerid/PartOfName]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	TogglePlayerControllable(userid, 0);
@@ -1048,7 +1002,7 @@ CMD:unfreeze(playerid, params[])
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/unfreeze [playerid/PartOfName]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 
@@ -1483,7 +1437,7 @@ CMD:setskin(playerid, params[])
 	if (sscanf(params, "ud", userid, skinid))
 	    return SendSyntaxMessage(playerid, "/setskin [playerid/PartOfName] [skin id]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
 	 return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	if (skinid < 0 || skinid > 311)
@@ -1544,6 +1498,7 @@ CMD:arevive(playerid, params[])
 	ClearAnimations(targetid, 1);
 	SendServerMessage(playerid, "You've healing %s", GetName(targetid));
 	ApplyAnimation(targetid, "PED", "GETUP_FRONT", 4.0, 0, 1, 1, 0, 0);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /arevive %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -1628,7 +1583,7 @@ CMD:get(playerid, params[])
 	if (sscanf(params, "u", userid))
 	    return SendSyntaxMessage(playerid, "/get [playerid/PartOfName]");
 
-    if (userid == INVALID_PLAYER_ID)
+    if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	if (!PlayerData[playerid][pSpawned])
@@ -1668,6 +1623,7 @@ CMD:unban(playerid, params[])
 	new query[156];
 	mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `banneds` WHERE `Username` = '%e'", name);
 	mysql_tquery(sqlcon, query, "OnUnbanUsername", "ds", playerid, name);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /unban %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;	
 }
 
@@ -1683,6 +1639,7 @@ CMD:oban(playerid, params[])
 	new characterQuery[178];
 	mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `playerucp` WHERE `UCP` = '%e' LIMIT 1", name);
 	mysql_tquery(sqlcon, characterQuery, "OnUCPBanned", "dss", playerid, name, reason);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /oban %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -1719,6 +1676,8 @@ CMD:ban(playerid, params[])
 	ShowPlayerDialog(targetid, DIALOG_NONE, DIALOG_STYLE_MSGBOX, "Banned Alert - Username Ban", string, "Close", "");	
 
 	KickEx(targetid);
+
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /ban %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -1755,7 +1714,7 @@ CMD:apm(playerid, params[])
 	if (sscanf(params, "us[128]", userid, text))
 		return SendSyntaxMessage(playerid, "/apm [playerid/PartOfName] [message]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	SendClientMessageEx(userid, COLOR_LIGHTRED, "PM From Admin: {FFFFFF}%s", text);
@@ -2026,7 +1985,7 @@ CMD:sendto(playerid, params[])
 	if (sscanf(params, "uu", userid, targetid))
 	    return SendSyntaxMessage(playerid, "/sendto [playerid/PartOfName] [playerid/PartOfName]");
 
-	if (userid == INVALID_PLAYER_ID || !IsPlayerConnected(targetid))
+	if (!IsPlayerConnected(userid) || !IsPlayerConnected(targetid))
 	    return SendErrorMessage(playerid, "The specified user(s) are not connected.");
 
 	SendPlayerToPlayer(userid, targetid);
@@ -2115,11 +2074,12 @@ CMD:setarmor(playerid, params[])
 	if (sscanf(params, "uf", userid, amount))
 		return SendSyntaxMessage(playerid, "/setarmor [playerid/PartOfName] [amount]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	SetPlayerArmour(userid, amount);
 	SendServerMessage(playerid, "You have set %s's armour to %.2f.", GetName(userid), amount);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /setarmor %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -2135,11 +2095,12 @@ CMD:sethp(playerid, params[])
 	if (sscanf(params, "uf", userid, amount))
 		return SendSyntaxMessage(playerid, "/sethp [playerid/PartOfName] [amount]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	SetPlayerHealth(userid, amount);
 	SendServerMessage(playerid, "You have set %s's health to %.2f.", GetName(userid), amount);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /sethp %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -2173,7 +2134,7 @@ CMD:kick(playerid, params[])
 	if (sscanf(params, "us[128]", userid, reason))
 	    return SendSyntaxMessage(playerid, "/kick [playerid/PartOfName] [reason]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
     if (PlayerData[userid][pAdmin] > PlayerData[playerid][pAdmin])
@@ -2181,6 +2142,7 @@ CMD:kick(playerid, params[])
 
 	SendClientMessageToAllEx(COLOR_LIGHTRED, "AdmCmd: %s has been kicked by %s reason: %s.", GetName(userid), PlayerData[playerid][pUCP], reason);
 	KickEx(userid);
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /kick %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 
@@ -2196,7 +2158,7 @@ CMD:setcash(playerid, params[])
 	if (sscanf(params, "us[32]", userid, amount))
 		return SendSyntaxMessage(playerid, "/setcash [playerid/PartOfName] [amount]");
 
-	if (userid == INVALID_PLAYER_ID)
+	if (!IsPlayerConnected(userid))
 	    return SendErrorMessage(playerid, "You have specified an invalid player.");
 
 	ResetPlayerMoney(userid);
@@ -2204,6 +2166,7 @@ CMD:setcash(playerid, params[])
 	GiveMoney(userid, strcash(amount), "Sets by admin");
 	
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has set %s cash to $%s", PlayerData[playerid][pUCP], ReturnName(userid), FormatNumber(strcash(amount)));
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /setcash %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;	
 }
 
@@ -2263,6 +2226,7 @@ CMD:givecash(playerid, params[])
 
 	SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has give $%s cash to %s", PlayerData[playerid][pUCP], FormatNumber(strcash(amount)), GetName(targetid));
 	GiveMoney(targetid, strcash(amount), sprintf("Given from %s", GetUsername(playerid)));
+	Log_Write("Logs/adm_cmd_log.txt", "[%s] %s: /givecash %s", ReturnDate(), GetUsername(playerid), params);
 	return 1;
 }
 

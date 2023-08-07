@@ -253,7 +253,7 @@ CMD:showidcard(playerid, params[])
     if(sscanf(params, "u", userid)) 
 		return SendSyntaxMessage(playerid, "/showidcard [playerid/PartOfName]");
 
-    if(userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0)) 
+    if(!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0)) 
 		return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
     SendClientMessageEx(playerid, COLOR_WHITE, "Kamu memperlihatkan ID Card mu kepada %s.", ReturnName(userid));
@@ -661,7 +661,7 @@ CMD:licenses(playerid, params[])
 		return 1;
 	}
 
-	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 5.0))
+	if (!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 5.0))
 	    return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
 	SendClientMessage(userid, COLOR_GREY, "-----------------------------------------------------------");
@@ -2183,7 +2183,7 @@ CMD:w(playerid, params[])
     if (sscanf(params, "us[128]", userid, text))
 	    return SendSyntaxMessage(playerid, "/(w)hisper [playerid/PartOfName] [text]");
 
-	if (userid == INVALID_PLAYER_ID || !IsPlayerNearPlayer(playerid, userid, 3.0))
+	if (!IsPlayerConnected(userid) || !IsPlayerNearPlayer(playerid, userid, 3.0))
 	    return SendErrorMessage(playerid, "That player is disconnected or not near you.");
 
 	if (userid == playerid)
