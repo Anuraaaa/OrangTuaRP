@@ -674,7 +674,7 @@ ProxDetector(playerid, Float:max_range, color, string[], Float:max_ratio = 1.6)
     {
         if(IsPlayerNearPlayer(i, playerid, max_range) && i != playerid)
         {
-            if(PlayerData[i][pAdmin] >= 2 && PlayerData[i][pSpectator] != INVALID_PLAYER_ID) 
+            if(PlayerData[i][pAdmin] >= 1 && PlayerData[i][pSpectator] != INVALID_PLAYER_ID) 
             {
                 SendClientMessageEx(i, X11_TOMATO_1, "(chat) {C0C0C0}%s", string);
             }
