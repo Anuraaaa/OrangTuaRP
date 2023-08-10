@@ -20,6 +20,7 @@
 #define COLOR_RED 				0xFF0000FF
 #define COLOR_LIGHTORANGE   	0xF7A763FF
 #define COLOR_JOB				0xC6E2FFFF
+#define COLOR_DEFAULT     		0xFFFFFFFF
 
 #define DATABASE_ADDRESS 			"103.55.39.44"
 #define DATABASE_USERNAME 			"independ_otrpuser"
@@ -133,3 +134,5 @@
 #define SOUND_FIREALARM_END     (3402)
 
 #define GetVehicleModelTopSpeed(%0)				Vehicle_TopSpeed[((%0)-400)]
+#define IsValidSkin(%0) 	(311 >= (%0) > 0)
+#define IsOdd(%0)  			((%0)&1)
