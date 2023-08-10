@@ -38,31 +38,98 @@ static
     hack_fly[MAX_PLAYERS] = {0, ...},
     UsingMods[MAX_PLAYERS][9];
 
+hook OnGameModeInit()
+{
+	// EnableAntiCheat(4, 0); //disable teleport into/between vehicle
+	// EnableAntiCheat(5, 0); //disable teleport vehicle to player
+	// EnableAntiCheat(6, 0); //disable teleport pickup
+	// EnableAntiCheat(9, 0); //disable speedhack onfoot
+	// EnableAntiCheat(11, 0); //disable health hack on foot
+	// EnableAntiCheat(12, 0); //disable health hack in vehicle
+	// EnableAntiCheat(13, 0); //disable armour hack
+	EnableAntiCheat(23, 0); //disable tunning hack
+	// EnableAntiCheat(26, 0); //disable rapid fire
+	// EnableAntiCheat(27, 0); //disable fakespawn
+	// EnableAntiCheat(29, 0); //disable pro aim
+	EnableAntiCheat(31, 0); //disable carshot
+	// EnableAntiCheat(34, 0); //disable afk ghost hack
+	EnableAntiCheat(35, 0); //disable full aim
+	EnableAntiCheat(37, 0); //disable reconnect
+	EnableAntiCheat(38, 0); //disable high ping
+	EnableAntiCheat(39, 0); //disable dialog hack
+	EnableAntiCheat(40, 0); //disbale sandbox
+	EnableAntiCheat(41, 0); //disable protection invalid version
+	EnableAntiCheat(42, 0); //disable rcon hack
+	EnableAntiCheat(43, 0); //disable tunning crasher
+	EnableAntiCheat(45, 0); //disable dialog crasher
+	EnableAntiCheat(46, 0); //disable attached object crasher
+	EnableAntiCheat(47, 0); //disable weapon crasher
+	EnableAntiCheat(48, 0); //disable protection from connection flood in one slot
+	EnableAntiCheat(49, 0); //disable anti callback  functions flood
+	EnableAntiCheat(50, 0); //disable anti flood by seat changing
+	EnableAntiCheat(51, 0); //disable anti DOS
+}
+
 static GetCodeAC(code)
 {
-    new str[128];
+    new string[128];
     switch(code)
     {
-        case 0: str =  "Onfoot airbreak";
-        case 1: str =  "Vehicle airbreak";
-        case 2: str =  "Onfoot teleport";
-        case 3: str =  "Vehicle teleport";
-        case 7: str =  "Onfoot Flyhack";
-        case 8: str =  "Vehicle Flyhack";
-        case 9: str =  "Onfoot speedhack";
-        case 10: str =  "Vehicle speedhack";
-        case 11: str = "Health Hack";
-        case 12: str = "Health Hack";
-        case 13: str = "Armour Hack";
-        case 15: str =  "Weapon hack";
-        case 16: str =  "Ammo hack";
-        case 17: str =  "Infinite ammo";
-        case 26: str =  "Rapid fire";
-        case 29: str =  "Aimhack";
-        case 35: str =  "Full aiming";
-        default: format(str, sizeof(str), "Code %d", code);
+		case 0: string = "AirBreak: On Foot";
+		case 1: string = "AirBreak: Inside Vehicle";
+		case 2: string = "Teleport Hack: On Foot";
+		case 3: string = "Teleport Hack: Inside Vehicle";
+		case 4: string = "Teleport Hack: Into/Between Vehicle";
+		case 5: string = "Teleport Hack: Vehicle to Player";
+		case 6: string = "Teleport Hack: Pickups";
+		case 7: string = "FlyHack: On Foot";
+		case 8: string = "FlyHack: Inside Vehicle";
+		case 9: string = "SpeedHack: On Foot";
+		case 10: string = "SpeedHack: Inside Vehicle";
+		case 11: string = "Health Hack: Inside Vehicle";
+		case 12: string = "Health Hack: On Foot";
+		case 13: string = "Armour Hack";
+		case 14: string = "Money Hack";
+		case 15: string = "Weapon Hack";
+		case 16: string = "Ammo Hack: Spawning";
+		case 17: string = "Ammo Hack: Infinite";
+		case 18: string = "Special Actions Hack";
+		case 19: string = "GodMode from a bullets: On Foot";
+		case 20: string = "GodMode from a bullets: Inside Vehicle";
+		case 21: string = "Invisible Hack";
+		case 22: string = "Lagcomp-Spoof";
+		case 23: string = "Tuning Hack";
+		case 24: string = "Parkour Mod";
+		case 25: string = "Quick Turn";
+		case 26: string = "Rapid Fire";
+		case 27: string = "Fake Spawn";
+		case 28: string = "Fake Kill";
+		case 29: string = "Aimbot";
+		case 30: string = "CJ Run";
+		case 31: string = "Car Shot";
+		case 32: string = "Car Jacking";
+		case 33: string = "UnFreeze";
+		case 34: string = "AFK Ghost";
+		case 35: string = "Full Aiming";
+		case 36: string = "Fake NPC";
+		case 37: string = "Reconnect";
+		case 38: string = "High Ping";
+		case 39: string = "Dialog Hack";
+		case 40: string = "Protection from Sandbox";
+		case 41: string = "Protection from Invalid Version";
+		case 42: string = "Rcon Hack";
+		case 43: string = "Tuning Crasher";
+		case 44: string = "Invalid Seat Crasher";
+		case 45: string = "Dialog Crasher";
+		case 46: string = "Attached Object Crasher";
+		case 47: string = "Weapon Crasher";
+		case 48: string = "Protection from connection flood in one slot";
+		case 49: string = "Callback functions flood";
+		case 50: string = "Flood by seat changing";
+		case 51: string = "DoS";
+        case 52: string = "NOPs";
     }
-    return str;
+    return string;
 }
 
 AC_PlayerHasWeapon(playerid, weaponid)
@@ -103,9 +170,101 @@ public OnPlayerTeleport(playerid, Float:distance) {
 forward OnCheatDetected(playerid, ip_address[], type, code);
 public OnCheatDetected(playerid, ip_address[], type, code)
 {
+    if (!IsPlayerConnected(playerid))
+        return 0;
 
-    if(type) {
-        return 1;
+    switch(code)
+    {
+        case 2..6:
+        {
+            if(Entrance_Nearest(playerid) != -1 || Business_Nearest(playerid) != -1 || House_Nearest(playerid) != -1 || ATM_Nearest(playerid) != -1) return 0;
+        }
+        case 9..12: {
+
+			if (HackAttempt[playerid] == 4) {
+
+				BlockIpAddress(ReturnIP(playerid), 180000);
+				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+			}
+        }
+	// 	case 15:
+	// 	{
+	// 		if(HackAttempt[playerid] >= 3) {
+
+	// 			SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s has been banned.", ReturnUsername(playerid));
+	// 			SendClientMessageToAllEx(X11_TOMATO_1, "Reason: Cheat (Weapon [%s] Hack).", ReturnWeaponName(GetPlayerWeapon(playerid)));
+
+	// 			BanCharacter_Add("WSRP-AntiCheat", ReturnUsername(playerid), GetAntiCheatName(code));
+	// 			KickEx(playerid);
+	// 		}
+	// 	}
+        case 13..15: {
+
+        	HackAttempt[playerid] = 0;
+			BlockIpAddress(ReturnIP(playerid), 180000);
+
+			SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+			KickEx(playerid);
+        }
+		case 16..17:
+		{
+			if (!GetPVarInt(playerid, "IsAtEvent")) {
+
+				HackAttempt[playerid] = 0;
+				BlockIpAddress(ReturnIP(playerid), 30000);
+
+				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+				KickEx(playerid);
+			}
+		}
+		case 18: {
+
+			if (HackAttempt[playerid] == 4) {
+
+				BlockIpAddress(ReturnIP(playerid), 120000);
+				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+			}
+		}
+		case 21..35: {
+
+			if (HackAttempt[playerid] == 4) {
+
+				BlockIpAddress(ReturnIP(playerid), 120000);
+				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+			}  
+		}
+		case 44: {
+
+        	HackAttempt[playerid] = 0;
+			BlockIpAddress(ReturnIP(playerid), 180000);
+
+			SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+			KickEx(playerid);
+		}
+    }
+    if(HackAttempt[playerid] < 5)
+    {
+        HackAttempt[playerid] ++;
+			
+		foreach (new i : Player) {
+
+			if (PlayerData[i][pAdmin] > 0 && PlayerData[i][pToggleAnticheat]) {
+
+	        	SendClientMessageEx(i, X11_YELLOW, "AdmWarn: %s (%s) is possible detected "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
+				SendCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s [%s] is possible detected %s", ReturnDate(), ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code)));
+			}
+		}
+        if(HackAttempt[playerid] == 5) {
+
+            SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s has been kicked.", ReturnUsername(playerid));
+			SendClientMessageToAllEx(X11_TOMATO_1, "Reason: Possible %s.", GetAntiCheatName(code));
+
+			HackAttempt[playerid] = 0;
+
+			SendCheat_DCChannel(Str_Format("[%s]\nBotCmd: %s has been kicked.\nReason: Possible %s", ReturnDate(), ReturnUsername(playerid), GetAntiCheatName(code)));
+	        KickEx(playerid);
+        }
+		Log_Write(Str_Format("logs/players/cheat/%s(%s).txt", ReturnUsername(playerid), ReturnUCPName(playerid)), "CHEATLOG: [%s] %s (%s) is possible %s", ReturnDate(), ReturnNameNoMask(playerid), ReturnIP(playerid), GetAntiCheatName(code));
     }
 
     switch(code)
@@ -387,7 +546,7 @@ Float:AC_GetPlayerSpeed(playerid)
 
 ptask OnCheckAntiCheat[1000](playerid) {
 
-    if(IsPlayerSpawned(playerid)) {
+    if(IsPlayerSpawned(playerid)) {            
 
         new
             ac_weapon[13],
