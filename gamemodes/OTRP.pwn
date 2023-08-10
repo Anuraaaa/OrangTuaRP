@@ -98,6 +98,7 @@ enum E_LOGLEVEL
 #include <progress2>
 #include <PreviewModelDialog2>
 #include <OPA>
+#include <easyDialog>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
@@ -1443,7 +1444,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		Aksesoris_Sync(playerid);
 
 	}
-	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1)
+	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && (!GetPVarInt(playerid, "IsAtEvent")))
 	{
 		if(PlayerData[playerid][pInjured])
 		{
@@ -9751,8 +9752,8 @@ public OnPlayerSpawn(playerid)
 
 	if(!LewatClass[playerid])
 		return Kick(playerid);
-		
-	if(!PlayerData[playerid][pSpawned])
+
+	if(!PlayerData[playerid][pSpawned] && (!GetPVarInt(playerid, "IsAtEvent")))
 	{	
 		if(IsPlayerUsingAndroid(playerid)) 
 			defer OnAutoAimCheck[2000](playerid);
@@ -9819,7 +9820,7 @@ public OnPlayerSpawn(playerid)
 			SetPlayerHealth(playerid, 100);
 		}
 	}
-	if(PlayerData[playerid][pJailTime] > 0)
+	if(PlayerData[playerid][pJailTime] > 0 && (!GetPVarInt(playerid, "IsAtEvent")))
 	{
 	    if (PlayerData[playerid][pArrest])
 	        SetPlayerArrest(playerid);
@@ -9840,7 +9841,7 @@ public OnPlayerSpawn(playerid)
 	}
     else
 	{
-		if(PlayerData[playerid][pDead])
+		if(PlayerData[playerid][pDead] && (!GetPVarInt(playerid, "IsAtEvent")))
 		{
 			PlayerData[playerid][pInjured] = false;
 			PlayerData[playerid][pDead] = false;
@@ -9866,7 +9867,7 @@ public OnPlayerSpawn(playerid)
 
 			DragCheck(playerid);
 		}
-		else
+		else if (!PlayerData[playerid][pDead] && (!GetPVarInt(playerid, "IsAtEvent")))
 		{
 			SetValidColor(playerid);
 			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
@@ -10200,7 +10201,9 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 
-
+	if (GetPVarInt(playerid, "IsAtEvent") > 0)
+		return 0;
+		
 	if(gettime() < chat_floodProtect[playerid] && !PlayerData[playerid][pAdmin]) {
 		ShowMessage(playerid, "~r~ERROR: ~w~Dilarang spam text chat!", 3, 1);
 		return 0;
