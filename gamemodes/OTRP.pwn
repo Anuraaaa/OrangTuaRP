@@ -541,11 +541,6 @@ public OnPlayerRequestSpawn(playerid)
     return 1;
 }
 
-public OnPlayerFinishedDownloading(playerid, virtualworld) 
-{
-	return 1;
-}
-
 public OnPlayerRequestClass(playerid, classid) {
 
 	if(!PlayerData[playerid][pLogged])
