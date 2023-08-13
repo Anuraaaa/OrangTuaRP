@@ -28,7 +28,7 @@
 #define DATABASE_PASSWORD 			"BG6tW@VPc7xYy2Z"
 
 #define SERVER_NAME 			"Orang Tua Roleplay"
-#define SERVER_VERSION 			"v13.15.9"
+#define SERVER_VERSION 			"v13.16.10"
 
 #if !defined BCRYPT_HASH_LENGTH
 	#define BCRYPT_HASH_LENGTH 250

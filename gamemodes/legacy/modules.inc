@@ -86,7 +86,7 @@
 #include ".\legacy\Feature\FactionVault"
 #include ".\legacy\Feature\Vote"
 #include ".\legacy\Feature\FlyMode"
-// #include ".\legacy\Feature\Spectate"
+#include ".\legacy\Feature\Spectate"
 #include ".\legacy\Feature\ELM"
 #include ".\legacy\Feature\SealProperty"
 // #include ".\legacy\Feature\Event"

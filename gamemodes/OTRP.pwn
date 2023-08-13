@@ -15,10 +15,18 @@
 					╚═╝░░╚═╝░╚════╝░╚══════╝╚══════╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░
 
 
-Un-noted changelog:
+------------------------ World of Space Roleplay ------------------------
+* Developed by Anwar Fauzan (Anuraaaa), Arif Hudaya (LuminouZ307)
+* Script Version: v13.16.10
+* Developed Since: 2023
+* Server Owner: Puur, Sam Simarmata
 
-- Fix /damages tidak clear ketika di operate
-- Menambahkan SA-PD command "/seal" untuk seal property (biz/house/flat)
+------------------------------ Credits ------------------------------
+* Kalcor (Kye) for SA:MP.
+* Y_Less for YSI, sscanf, etc.
+* BlueG, maddinat0r for MySQL.
+* Southclaw for ProgressBar, etc.
+* Incognito, Zeex, and other contributors.
 
 */
 
