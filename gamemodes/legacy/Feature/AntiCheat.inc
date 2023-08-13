@@ -10,11 +10,9 @@ new WarningCode[MAX_PLAYERS][53],
     tele_warn[MAX_PLAYERS]= {0, ...},
     slapper_warn[MAX_PLAYERS]= {0, ...},
     engine_hack_warn[MAX_PLAYERS]= {0, ...},
-    g_ArmourHack[MAX_PLAYERS]= {0, ...},
     speed_hack[MAX_PLAYERS]= {0, ...},
     airbreak_hack[MAX_PLAYERS]= {0, ...},
-    ping_warning[MAX_PLAYERS]= {0, ...},
-    ac_weapon_h[MAX_PLAYERS]= {0, ...};
+    ping_warning[MAX_PLAYERS]= {0, ...};
 
 enum {
     MOD_OLD_VERSION = 0,
@@ -40,38 +38,38 @@ static
 
 hook OnGameModeInit()
 {
-	// EnableAntiCheat(4, 0); //disable teleport into/between vehicle
-	// EnableAntiCheat(5, 0); //disable teleport vehicle to player
-	// EnableAntiCheat(6, 0); //disable teleport pickup
-	// EnableAntiCheat(9, 0); //disable speedhack onfoot
-	// EnableAntiCheat(11, 0); //disable health hack on foot
-	// EnableAntiCheat(12, 0); //disable health hack in vehicle
-	// EnableAntiCheat(13, 0); //disable armour hack
-	EnableAntiCheat(23, 0); //disable tunning hack
-	// EnableAntiCheat(26, 0); //disable rapid fire
-	// EnableAntiCheat(27, 0); //disable fakespawn
-	// EnableAntiCheat(29, 0); //disable pro aim
-	EnableAntiCheat(31, 0); //disable carshot
-	// EnableAntiCheat(34, 0); //disable afk ghost hack
-	EnableAntiCheat(35, 0); //disable full aim
-	EnableAntiCheat(37, 0); //disable reconnect
-	EnableAntiCheat(38, 0); //disable high ping
-	EnableAntiCheat(39, 0); //disable dialog hack
-	EnableAntiCheat(40, 0); //disbale sandbox
-	EnableAntiCheat(41, 0); //disable protection invalid version
-	EnableAntiCheat(42, 0); //disable rcon hack
-	EnableAntiCheat(43, 0); //disable tunning crasher
-	EnableAntiCheat(45, 0); //disable dialog crasher
-	EnableAntiCheat(46, 0); //disable attached object crasher
-	EnableAntiCheat(47, 0); //disable weapon crasher
-	EnableAntiCheat(48, 0); //disable protection from connection flood in one slot
-	EnableAntiCheat(49, 0); //disable anti callback  functions flood
-	EnableAntiCheat(50, 0); //disable anti flood by seat changing
-	EnableAntiCheat(51, 0); //disable anti DOS
+    EnableAntiCheat(4, 0); // disable Teleport Hack: Into/Between Vehicle
+    EnableAntiCheat(5, 0); // disable Teleport Hack: Vehicle to Player
+    EnableAntiCheat(6, 0); // disable Teleport Hack: Pickups
+    EnableAntiCheat(9, 0); // disable SpeedHack: On Foot
+    EnableAntiCheat(23, 0); // disable Tunning Hack
+    EnableAntiCheat(24, 0); // disable Parkour Mod
+    // EnableAntiCheat(26, 0); // disable Rapid Fire
+    EnableAntiCheat(27, 0); // disable Fake Spawn
+    // EnableAntiCheat(29, 0); // disable Aimbot
+    EnableAntiCheat(31, 0); // disable Car Shot
+    EnableAntiCheat(33, 0); // disable Unfreeze
+    EnableAntiCheat(34, 0); // disable AFK Ghost
+    EnableAntiCheat(35, 0); // disable Full Aiming
+    EnableAntiCheat(36, 0); // disable Fake NPC
+    EnableAntiCheat(37, 0); // disable Reconnect
+    EnableAntiCheat(38, 0); // disable High Ping
+    EnableAntiCheat(39, 0); // disable Dialog Hack
+    EnableAntiCheat(40, 0); // disable Protection from sandbox
+    EnableAntiCheat(41, 0); // disable Protection from invalid version
+    EnableAntiCheat(42, 0); // disable Rcon Hack
+    EnableAntiCheat(43, 0); // disable Tuning Crasher
+    EnableAntiCheat(45, 0); // disable Dialog Crasher
+    EnableAntiCheat(46, 0); // disable Attached Object Crasher
+    EnableAntiCheat(47, 0); // disable Weapon Crasher
+    EnableAntiCheat(48, 0); // disable Protection from connection flood in one slot
+    EnableAntiCheat(49, 0); // disable Callback functions flood
+    EnableAntiCheat(50, 0); // disable DoS
+    EnableAntiCheat(51, 0); // disable NOPs
 }
 
 static GetCodeAC(code)
-{
+{    
     new string[128];
     switch(code)
     {
@@ -172,100 +170,6 @@ public OnCheatDetected(playerid, ip_address[], type, code)
 {
     if (!IsPlayerConnected(playerid))
         return 0;
-
-    switch(code)
-    {
-        case 2..6:
-        {
-            if(Entrance_Nearest(playerid) != -1 || Business_Nearest(playerid) != -1 || House_Nearest(playerid) != -1 || ATM_Nearest(playerid) != -1) return 0;
-        }
-        case 9..12: {
-
-			if (HackAttempt[playerid] == 4) {
-
-				BlockIpAddress(ReturnIP(playerid), 180000);
-				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-			}
-        }
-	// 	case 15:
-	// 	{
-	// 		if(HackAttempt[playerid] >= 3) {
-
-	// 			SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s has been banned.", ReturnUsername(playerid));
-	// 			SendClientMessageToAllEx(X11_TOMATO_1, "Reason: Cheat (Weapon [%s] Hack).", ReturnWeaponName(GetPlayerWeapon(playerid)));
-
-	// 			BanCharacter_Add("WSRP-AntiCheat", ReturnUsername(playerid), GetAntiCheatName(code));
-	// 			KickEx(playerid);
-	// 		}
-	// 	}
-        case 13..15: {
-
-        	HackAttempt[playerid] = 0;
-			BlockIpAddress(ReturnIP(playerid), 180000);
-
-			SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-			KickEx(playerid);
-        }
-		case 16..17:
-		{
-			if (!GetPVarInt(playerid, "IsAtEvent")) {
-
-				HackAttempt[playerid] = 0;
-				BlockIpAddress(ReturnIP(playerid), 30000);
-
-				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-				KickEx(playerid);
-			}
-		}
-		case 18: {
-
-			if (HackAttempt[playerid] == 4) {
-
-				BlockIpAddress(ReturnIP(playerid), 120000);
-				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-			}
-		}
-		case 21..35: {
-
-			if (HackAttempt[playerid] == 4) {
-
-				BlockIpAddress(ReturnIP(playerid), 120000);
-				SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-			}  
-		}
-		case 44: {
-
-        	HackAttempt[playerid] = 0;
-			BlockIpAddress(ReturnIP(playerid), 180000);
-
-			SendAdminMessage(COLOR_YELLOW, "AdmWarn: Issued silent ban to %s's (%s) due "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-			KickEx(playerid);
-		}
-    }
-    if(HackAttempt[playerid] < 5)
-    {
-        HackAttempt[playerid] ++;
-			
-		foreach (new i : Player) {
-
-			if (PlayerData[i][pAdmin] > 0 && PlayerData[i][pToggleAnticheat]) {
-
-	        	SendClientMessageEx(i, X11_YELLOW, "AdmWarn: %s (%s) is possible detected "RED"%s", ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-				SendCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s [%s] is possible detected %s", ReturnDate(), ReturnUsername(playerid), ReturnIP(playerid), GetAntiCheatName(code)));
-			}
-		}
-        if(HackAttempt[playerid] == 5) {
-
-            SendClientMessageToAllEx(X11_TOMATO_1, "BotCmd: %s has been kicked.", ReturnUsername(playerid));
-			SendClientMessageToAllEx(X11_TOMATO_1, "Reason: Possible %s.", GetAntiCheatName(code));
-
-			HackAttempt[playerid] = 0;
-
-			SendCheat_DCChannel(Str_Format("[%s]\nBotCmd: %s has been kicked.\nReason: Possible %s", ReturnDate(), ReturnUsername(playerid), GetAntiCheatName(code)));
-	        KickEx(playerid);
-        }
-		Log_Write(Str_Format("logs/players/cheat/%s(%s).txt", ReturnUsername(playerid), ReturnUCPName(playerid)), "CHEATLOG: [%s] %s (%s) is possible %s", ReturnDate(), ReturnNameNoMask(playerid), ReturnIP(playerid), GetAntiCheatName(code));
-    }
 
     switch(code)
     {
@@ -385,8 +289,17 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
         }
         
-        //Vehicle speed hack
+        //Vehicle health hack
         case 11: {
+            new Float:health;
+            new vehicleid = GetPlayerVehicleID(playerid);
+
+            if (vehicleid == INVALID_VEHICLE_ID) {
+                return 0;
+            }
+
+            AntiCheatGetVehicleHealth(vehicleid, health);
+            SetVehicleHealth(vehicleid, health);
             if(++hack_vehiclehealth[playerid] == 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
@@ -409,6 +322,23 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 return 1;
             }
             SendAdminMessage(X11_TOMATO, "Anticheat: %s possible health hack.", GetName(playerid));
+        }
+        //Armour Hack
+        case 13: {
+            new Float:armour;
+            AntiCheatGetArmour(playerid, armour);
+            SetPlayerArmour(playerid, armour);
+
+            if(++hack_armour[playerid] == 3)
+            {
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+
+                hack_armour[playerid] = 0;
+
+                KickEx(playerid);
+                return 1;
+            }
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible armour hack.", GetName(playerid));
         }
         //Weapon hack
         case 15: {
@@ -436,23 +366,6 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
             KickEx(playerid);
         }
-        //Vehicle health hack
-        case 13: {
-            new Float:armour;
-            AntiCheatGetArmour(playerid, armour);
-            SetPlayerArmour(playerid, armour);
-
-            if(++hack_armour[playerid] == 3)
-            {
-                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-
-                hack_armour[playerid] = 0;
-
-                KickEx(playerid);
-                return 1;
-            }
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible armour hack.", GetName(playerid));
-        }
         //Rapid fire hack
         case 26: {
 
@@ -469,7 +382,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             KickEx(playerid);
         }
     }
-    SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s (%s) type: %d code %d", GetName(playerid), ReturnIP(playerid), type, code);
+    SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s (%s) possible %s", GetName(playerid), ReturnIP(playerid), GetCodeAC(code));
     return 1;
 }
 
@@ -509,16 +422,42 @@ hook OnPlayerConnect(playerid) {
 
     slapper_warn[playerid] = 0;
     engine_hack_warn[playerid] = 0;
-    g_ArmourHack[playerid] = 0;
     speed_hack[playerid] = 0;
     airbreak_hack[playerid] = 0;
+    hack_health[playerid] = 0;
+    hack_armour[playerid] = 0;
+    hack_teleport[playerid] = 0;
+    hack_airbreak[playerid] = 0;
+    hack_vehiclehealth[playerid] = 0;
+    hack_vehtele[playerid] = 0;
+    hack_fly[playerid] = 0;
+
 
     for(new i = 0; i < 9; i++) {
         UsingMods[playerid][i] = false;
     }
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+
+	ResetPlayerWarningCode(playerid);
+
+    slapper_warn[playerid] = 0;
+    engine_hack_warn[playerid] = 0;
+    speed_hack[playerid] = 0;
+    airbreak_hack[playerid] = 0;
+    hack_health[playerid] = 0;
+    hack_armour[playerid] = 0;
+    hack_teleport[playerid] = 0;
+    hack_airbreak[playerid] = 0;
+    hack_vehiclehealth[playerid] = 0;
+    hack_vehtele[playerid] = 0;
+    hack_fly[playerid] = 0;
 
 
-
+    for(new i = 0; i < 9; i++) {
+        UsingMods[playerid][i] = false;
+    }
 }
 
 IsUsingMods(playerid, mods) {
@@ -548,28 +487,6 @@ ptask OnCheckAntiCheat[1000](playerid) {
 
     if(IsPlayerSpawned(playerid)) {            
 
-        new
-            ac_weapon[13],
-            ac_ammo[13]
-            ;
-
-        for(new i = 0; i < 12; i++) {
-            GetPlayerWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
-
-            if(ac_weapon[i] && PlayerData[playerid][pGuns][g_aWeaponSlots[ac_weapon[i]]] != ac_weapon[i]) {
-                SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack", GetName(playerid));
-                ResetWeapon(playerid, ac_weapon[i]);
-                ac_weapon_h[playerid]++;
-
-                if(ac_weapon_h[playerid] > 3) {
-                    SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack (has been kicked)", GetName(playerid));
-                    ResetWeapons(playerid);
-                    ac_weapon_h[playerid] = 0;
-                    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Weapon Hack)");
-                    KickEx(playerid);
-                }
-            }
-        }
         if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 		    new Float: ghX, Float: ghY, Float: ghZ;
@@ -658,21 +575,6 @@ function OnPlayerCrasher(playerid) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
     SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
     KickEx(playerid);
-    return 1;
-}
-
-function CheckWeaponHack(playerid, weaponid) {
-    if(weaponid != PlayerData[playerid][pWeapon] && !PlayerData[playerid][pAdmin])
-    {
-        PlayerData[playerid][pWeapon] = weaponid;
-
-        if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != weaponid && !PlayerData[playerid][pKicked])
-        {
-            SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
-            ResetWeapons(playerid);
-            KickEx(playerid);
-        }
-    }
     return 1;
 }
 
