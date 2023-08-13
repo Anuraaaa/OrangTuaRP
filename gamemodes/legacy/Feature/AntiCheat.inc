@@ -45,6 +45,8 @@ hook OnGameModeInit()
     EnableAntiCheat(5, 0); // disable Teleport Hack: Vehicle to Player
     EnableAntiCheat(6, 0); // disable Teleport Hack: Pickups
     EnableAntiCheat(9, 0); // disable SpeedHack: On Foot
+    EnableAntiCheat(16, 0); // disable Ammo Hack: Spawning
+    EnableAntiCheat(17, 0); // disable Ammo Hack: Infinite
     EnableAntiCheat(23, 0); // disable Tunning Hack
     EnableAntiCheat(24, 0); // disable Parkour Mod
     // EnableAntiCheat(26, 0); // disable Rapid Fire
@@ -356,33 +358,6 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible weapon hack.", GetName(playerid));
         }
-
-        //Ammo hack
-        case 16: {
-            defer AC_SetWeaponBack[1000](playerid);
-
-            if (++ac_ammo_h[playerid] >= 3) {
-
-                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-                ac_ammo_h[playerid] = 0;
-                KickEx(playerid);
-            }
-            SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible add ammo hack.", GetName(playerid));
-        }
-
-        //Ammo hack infinite
-        case 17: {
-            defer AC_SetWeaponBack[1000](playerid);
-
-            if (++ac_ammo_inf_h[playerid] >= 3) {
-
-                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-                ac_ammo_inf_h[playerid] = 0;
-                KickEx(playerid);
-            }
-            SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible infinite ammo hack.", GetName(playerid)); 
-        }
-
         case 18: {
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
@@ -688,12 +663,14 @@ timer AC_SetWeaponBack[1000](playerid) {
         ac_ammo[13];
 
     for (new i = 0; i < 12; i++) {
+
         AntiCheatGetWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
 
-        ResetWeapon(playerid, ac_weapon[i]);
-        PlayerData[playerid][pGuns][i] = ac_weapon[i];
-        PlayerData[playerid][pAmmo][i] = ac_ammo[i];
-        SetWeapons(playerid);
+        if (PlayerData[playerid][pGuns][i] != ac_weapon[i]) {
+            
+            ResetWeapon(playerid, ac_weapon[i]);
+            SetWeapons(playerid);
+        }
     }
 }
 
