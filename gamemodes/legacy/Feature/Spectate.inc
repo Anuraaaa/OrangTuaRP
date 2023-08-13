@@ -211,11 +211,6 @@ SpectateTextdraws(playerid) {
 	PlayerTextDrawUseBox(playerid, spectateTD[playerid][14], 0);
 	PlayerTextDrawSetProportional(playerid, spectateTD[playerid][14], 1);
 	PlayerTextDrawSetSelectable(playerid, spectateTD[playerid][14], 0);
-
-	
-	for (new i = 0; i < 15; i++) {
-		PlayerTextDrawHide(playerid, spectateTD[playerid][i]);
-	}
 }
 
 hook OnPlayerConnect(playerid) {
@@ -232,15 +227,22 @@ hook OnPlayerDisconnect(playerid, reason) {
 	for (new i = 0; i < 15; i++) {
 		PlayerTextDrawDestroy(playerid, spectateTD[playerid][i]);
 	}
-
-	SpectateTextdraws(playerid);	
 } 
 
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
 	if (newstate == PLAYER_STATE_SPECTATING) {
-		for (new i = 0; i < 15; i++) {
-			PlayerTextDrawShow(playerid, spectateTD[playerid][i]);
+		if (oldstate == PLAYER_STATE_ONFOOT) {
+
+			for (new i = 0; i < 15; i++) {
+				PlayerTextDrawShow(playerid, spectateTD[playerid][i]);
+			}
+		}
+		else if (oldstate == PLAYER_STATE_DRIVER || oldstate == PLAYER_STATE_PASSENGER) {
+			
+			for (new i = 0; i < 15; i++) {
+				PlayerTextDrawShow(playerid, spectateTD[playerid][i]);
+			}
 		}
 	}
 	else if (oldstate == PLAYER_STATE_SPECTATING) {
