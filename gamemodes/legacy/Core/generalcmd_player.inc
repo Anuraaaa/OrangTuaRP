@@ -693,24 +693,61 @@ CMD:id(playerid, params[])
 
 	new count;
 
-	foreach (new i : Player)
-	{
-	    if (strfind(GetName(i), params, true) != -1)
-	    {
-			new version_ret[64];
-			if(IsPlayerUsingAndroid(i)) {
-				version_ret = "Mobile";
+	if (!isnumeric(params)) {
+		foreach (new i : Player)
+		{
+			if (strfind(GetName(i), params, true) != -1)
+			{
+				new version_ret[64];
+				if(IsPlayerUsingAndroid(i)) {
+					version_ret = "Mobile";
+				}
+				else {
+					GetPlayerVersion(i, version_ret, 64);
+				}
+				if (PlayerData[playerid][pAdmin] > 0) {
+
+					SendClientMessageEx(playerid, -1, "[ID:%d] "WHITE"%s (%s) | Level: %d | "LIGHTBLUE"Ping: "WHITE"%dms", i, GetName(i, false), PlayerData[i][pUCP], PlayerData[i][pLevel], GetPlayerPing(i));		
+					SendClientMessageEx(playerid, -1, "... | "LIGHTBLUE"Online Time: "WHITE"%s | "LIGHTBLUE"Packetloss: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", GetDuration(PlayerData[i][pOnlineTime]), NetStats_PacketLossPercent(i), version_ret);		
+				}
+				else {
+
+					SendClientMessageEx(playerid, -1, "[ID:%d] "WHITE"%s | Level: %d | "LIGHTBLUE"Ping: "WHITE"%dms | "LIGHTBLUE"Online: "WHITE"%s | "LIGHTBLUE"PL: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", i, GetName(i, false), PlayerData[i][pLevel], GetPlayerPing(i));		
+					SendClientMessageEx(playerid, -1, "... |"LIGHTBLUE"Online Time: "WHITE"%s | "LIGHTBLUE"Packetloss: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", GetDuration(PlayerData[i][pOnlineTime]), NetStats_PacketLossPercent(i), version_ret);		
+				}
+				count++;
 			}
-			else {
-				GetPlayerVersion(i, version_ret, 64);
-			}
-	        SendClientMessageEx(playerid, -1, "- [ID:%d] "WHITE"%s | "LIGHTBLUE"Ping: "WHITE"%dms | "LIGHTBLUE"Packetloss: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", i, GetName(i, false), GetPlayerPing(i), NetStats_PacketLossPercent(i), version_ret);
-	        count++;
+		}
+		if (!count)
+			return SendErrorMessage(playerid, "No users matched the search criteria: \"%s\".", params);
+
+	}
+	else {
+		new 
+			targetid = strval(params);
+		
+		if (!IsPlayerConnected(targetid))
+			return SendErrorMessage(playerid, "The specified player is not connected");
+
+		new version_ret[64];
+
+		if(IsPlayerUsingAndroid(targetid)) {
+			version_ret = "Mobile";
+		}
+		else {
+			GetPlayerVersion(targetid, version_ret, 64);
+		}
+		if (PlayerData[playerid][pAdmin] > 0) {
+
+			SendClientMessageEx(playerid, -1, "[ID:%d] "WHITE"%s (%s) | Level: %d | "LIGHTBLUE"Ping: "WHITE"%dms", targetid, GetName(targetid, false), PlayerData[targetid][pUCP], PlayerData[targetid][pLevel], GetPlayerPing(targetid));		
+			SendClientMessageEx(playerid, -1, "... | "LIGHTBLUE"Online Time: "WHITE"%s | "LIGHTBLUE"Packetloss: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", GetDuration(PlayerData[targetid][pOnlineTime]), NetStats_PacketLossPercent(targetid), version_ret);		
+		}
+		else {
+
+			SendClientMessageEx(playerid, -1, "[ID:%d] "WHITE"%s | Level: %d | "LIGHTBLUE"Ping: "WHITE"%dms | "LIGHTBLUE"Online: "WHITE"%s | "LIGHTBLUE"PL: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", targetid, GetName(targetid, false), PlayerData[targetid][pLevel], GetPlayerPing(targetid));		
+			SendClientMessageEx(playerid, -1, "... |"LIGHTBLUE"Online Time: "WHITE"%s | "LIGHTBLUE"Packetloss: "WHITE"%.2f | "LIGHTBLUE"Client: "WHITE"%s", GetDuration(PlayerData[targetid][pOnlineTime]), NetStats_PacketLossPercent(targetid), version_ret);		
 		}
 	}
-	if (!count)
-	    return SendErrorMessage(playerid, "No users matched the search criteria: \"%s\".", params);
-
 	return 1;
 }
 

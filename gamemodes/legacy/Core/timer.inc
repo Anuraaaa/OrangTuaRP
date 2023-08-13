@@ -345,6 +345,7 @@ ptask PlayerUpdate[1000](playerid)
 {
 	if(IsPlayerSpawned(playerid))
 	{
+		PlayerData[playerid][pOnlineTime]++;
 		UpdateHBE(playerid);
 		AFKCheck(playerid);
 		UpdateTime(playerid);

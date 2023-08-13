@@ -365,6 +365,7 @@ enum E_PLAYER_DATA
 	pBoxTimer,
 	pShowBox,
 	pPlayingHours,
+	pOnlineTime,
 	pFactionBadge,
 	pMineDelay,
 	Float:pLastPos[3],
