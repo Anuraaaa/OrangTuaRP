@@ -196,7 +196,7 @@ CMD:sellfish(playerid, params[])
 		new total_price = floatround(count * fishPrice),
 			real_price;
 
-		real_price = 13 * total_price;
+		real_price = 15 * total_price;
 
 		SetPVarInt(playerid, "FishPrice", real_price);
 

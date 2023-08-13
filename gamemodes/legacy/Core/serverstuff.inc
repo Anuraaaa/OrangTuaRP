@@ -115,7 +115,7 @@ LoadPoint()
 	CreateDynamic3DTextLabel("{FFFF00}[Fishing Factory]\n{FFFFFF}/buybait", -1, 1331.9070,1575.5684,3001.0859, 10.0);
 
 	CreateDynamicPickup(1239, 23, 1333.7576,1582.0439,3001.0859, -1);
-	CreateDynamic3DTextLabel("{FFFF00}[Fishing Factory]\n{FFFFFF}/sellfish", -1, 1333.7576,1582.0439,3001.0859, 10.0);
+	LabelData[labelFish] = CreateDynamic3DTextLabel(sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n{FFFFFF}/sellfish untuk menjual ikan", FormatNumber(fishPrice)), -1, 1333.7576,1582.0439,3001.0859, 10.0);
 
 	CreateDynamicPickup(1239, 23, -1993.0046,-2388.0107,30.6250, -1);
 	CreateDynamic3DTextLabel("{FFFF00}[Timber Storage]\n{FFFFFF}Type {FFFF00}/selltimber {FFFFFF}to sell all Timber", -1, -1993.0046,-2388.0107,30.6250, 10.0);

@@ -23,7 +23,8 @@ new StockData[E_SERVER_STOCK];
 
 enum E_SERVER_LABEL {
 	Text3D:labelComponent,
-	Text3D:labelRock
+	Text3D:labelRock,
+	Text3D:labelFish
 };
 new LabelData[E_SERVER_LABEL];
 
