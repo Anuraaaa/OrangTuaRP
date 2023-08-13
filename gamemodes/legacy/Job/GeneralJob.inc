@@ -87,13 +87,22 @@ CMD:takejob(playerid, params[])
 			return SendErrorMessage(playerid, "ID Card milikmu tidak valid, kamu harus memperpanjangnya terlebih dahulu.");
 			
 
+		new string[352], count = 0;
+		for(new i = 0; i < 8; i++) {
+
+			if(i == JOB_SMUGGLER || i == JOB_NONE)
+				continue;
+			
+			strcat(string, sprintf("%s\n", GetJobName(i)));
+			ListedItems[playerid][count++] = i;
+		}
 		if(job == 1) {
 
 
 			if(PlayerData[playerid][pJob] != JOB_NONE)
 				return SendErrorMessage(playerid, "Silahkan keluar dari pekerjaanmu dahulu!");
 
-			ShowPlayerDialog(playerid, DIALOG_TAKEJOB, DIALOG_STYLE_LIST, "Job Center", "Trucker\nTaxi Driver\nMechanic\nLumberjack\nMiner", "Select", "Close");
+			ShowPlayerDialog(playerid, DIALOG_TAKEJOB, DIALOG_STYLE_LIST, "Job Center", string, "Select", "Close");
 		}
 		else if(job == 2) {
 
@@ -102,7 +111,7 @@ CMD:takejob(playerid, params[])
 			if(PlayerData[playerid][pJob2] != JOB_NONE)
 				return SendErrorMessage(playerid, "Silahkan keluar dari pekerjaanmu dahulu!");
 
-			ShowPlayerDialog(playerid, DIALOG_TAKEJOB2, DIALOG_STYLE_LIST, "Job Center", "Trucker\nTaxi Driver\nMechanic\nLumberjack\nMiner", "Select", "Close");
+			ShowPlayerDialog(playerid, DIALOG_TAKEJOB2, DIALOG_STYLE_LIST, "Job Center", string, "Select", "Close");
 		}
 		else SendSyntaxMessage(playerid, "/takejob [slot (1/2)]");
 	}

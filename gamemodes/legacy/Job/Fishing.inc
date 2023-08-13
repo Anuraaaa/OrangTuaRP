@@ -200,8 +200,8 @@ CMD:sellfish(playerid, params[])
 
 		SetPVarInt(playerid, "FishPrice", real_price);
 
-		format(str, sizeof(str), ""WHITE"Harga ikan: %.1f/lbs\nTotal berat ikan: "YELLOW"%.2flbs\n"WHITE"Total harga: "GREEN"$%s\n\n"WHITE"INFO: Kamu harus menunggu 30 menit untuk memancing kembali setelah menjual ikan.",
-			fishPrice, count, FormatNumber(real_price));
+		format(str, sizeof(str), ""WHITE"Harga ikan: $%s/lbs\nTotal berat ikan: "YELLOW"%.2flbs\n"WHITE"Total harga: "GREEN"$%s\n\n"WHITE"INFO: Kamu harus menunggu 30 menit untuk memancing kembali setelah menjual ikan.",
+			FormatNumber(fishPrice), count, FormatNumber(real_price));
 
 		ShowPlayerDialog(playerid, DIALOG_SELLFISH, DIALOG_STYLE_MSGBOX, "Sell Fish", str, "Confirm", "Cancel");
 	}
