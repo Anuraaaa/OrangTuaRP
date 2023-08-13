@@ -688,7 +688,7 @@ CMD:id(playerid, params[])
 	if (isnull(params))
 	    return SendSyntaxMessage(playerid, "/id [playerid/name]");
 
-	if (strlen(params) < 3)
+	if (strlen(params) < 3 && !isnumeric(params))
 		return SendErrorMessage(playerid, "You must specify at least 3 characters.");
 
 	new count;
