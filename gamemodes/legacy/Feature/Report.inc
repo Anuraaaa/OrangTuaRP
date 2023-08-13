@@ -145,3 +145,10 @@ hook OnPlayerDisconnectEx(playerid) {
 		}
 	}
 }
+
+task OnReminderReports[(1000 * 60) * 10]() {
+
+	if (Iter_Count(Report)) {
+		SendAdminMessage(X11_TOMATO, "AdmWarn: There's an active reports, please check it on /reports.");
+	}
+}
