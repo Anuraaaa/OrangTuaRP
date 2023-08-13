@@ -36,3 +36,4 @@ samp.ban
 #
 
 *.sublime-workspace
+plugins/sscanf.so
