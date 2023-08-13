@@ -15,10 +15,18 @@
 					╚═╝░░╚═╝░╚════╝░╚══════╝╚══════╝╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░
 
 
-Un-noted changelog:
+------------------------ World of Space Roleplay ------------------------
+* Developed by Anwar Fauzan (Anuraaaa), Arif Hudaya (LuminouZ307)
+* Script Version: v13.16.10
+* Developed Since: 2023
+* Server Owner: Puur, Sam Simarmata
 
-- Fix /damages tidak clear ketika di operate
-- Menambahkan SA-PD command "/seal" untuk seal property (biz/house/flat)
+------------------------------ Credits ------------------------------
+* Kalcor (Kye) for SA:MP.
+* Y_Less for YSI, sscanf, etc.
+* BlueG, maddinat0r for MySQL.
+* Southclaw for ProgressBar, etc.
+* Incognito, Zeex, and other contributors.
 
 */
 
@@ -28,10 +36,10 @@ Un-noted changelog:
 #define YSI_NO_HEAP_MALLOC
 #define YSI_NO_OPTIMISATION_MESSAGE
 
-#define DEBUG
 #define NO_SUSPICION_LOGS
 
 #include <a_samp>
+#define DEBUG
 
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 199 + 1
@@ -98,6 +106,7 @@ enum E_LOGLEVEL
 #include <progress2>
 #include <PreviewModelDialog2>
 #include <OPA>
+#include <easyDialog>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
@@ -364,6 +373,7 @@ enum E_PLAYER_DATA
 	pBoxTimer,
 	pShowBox,
 	pPlayingHours,
+	pOnlineTime,
 	pFactionBadge,
 	pMineDelay,
 	Float:pLastPos[3],
@@ -1443,7 +1453,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		Aksesoris_Sync(playerid);
 
 	}
-	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1)
+	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && (!GetPVarInt(playerid, "IsAtEvent")))
 	{
 		if(PlayerData[playerid][pInjured])
 		{
@@ -2205,10 +2215,6 @@ public OnPlayerUpdate(playerid)
 {
 	if(IsPlayerSpawned(playerid)) {
 		
-		if(GetPlayerWeapon(playerid)) {
-			CheckWeaponHack(playerid, GetPlayerWeapon(playerid));
-		}
-
 		if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
 		{
 			new keys,ud,lr;
@@ -9751,8 +9757,8 @@ public OnPlayerSpawn(playerid)
 
 	if(!LewatClass[playerid])
 		return Kick(playerid);
-		
-	if(!PlayerData[playerid][pSpawned])
+
+	if(!PlayerData[playerid][pSpawned] && (!GetPVarInt(playerid, "IsAtEvent")))
 	{	
 		if(IsPlayerUsingAndroid(playerid)) 
 			defer OnAutoAimCheck[2000](playerid);
@@ -9819,7 +9825,7 @@ public OnPlayerSpawn(playerid)
 			SetPlayerHealth(playerid, 100);
 		}
 	}
-	if(PlayerData[playerid][pJailTime] > 0)
+	if(PlayerData[playerid][pJailTime] > 0 && (!GetPVarInt(playerid, "IsAtEvent")))
 	{
 	    if (PlayerData[playerid][pArrest])
 	        SetPlayerArrest(playerid);
@@ -9840,7 +9846,7 @@ public OnPlayerSpawn(playerid)
 	}
     else
 	{
-		if(PlayerData[playerid][pDead])
+		if(PlayerData[playerid][pDead] && (!GetPVarInt(playerid, "IsAtEvent")))
 		{
 			PlayerData[playerid][pInjured] = false;
 			PlayerData[playerid][pDead] = false;
@@ -9866,7 +9872,7 @@ public OnPlayerSpawn(playerid)
 
 			DragCheck(playerid);
 		}
-		else
+		else if (!PlayerData[playerid][pDead] && (!GetPVarInt(playerid, "IsAtEvent")))
 		{
 			SetValidColor(playerid);
 			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
@@ -10200,7 +10206,9 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 
-
+	if (GetPVarInt(playerid, "IsAtEvent") > 0)
+		return 0;
+		
 	if(gettime() < chat_floodProtect[playerid] && !PlayerData[playerid][pAdmin]) {
 		ShowMessage(playerid, "~r~ERROR: ~w~Dilarang spam text chat!", 3, 1);
 		return 0;

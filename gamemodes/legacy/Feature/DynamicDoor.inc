@@ -86,14 +86,7 @@ Doors_Updatelabel(id)
 		else {
 			drData[id][dPickupint] = CreateDynamicPickup(19130, 23, drData[id][dIntposX], drData[id][dIntposY], drData[id][dIntposZ], drData[id][dIntvw], drData[id][dIntint], -1, 50);
 		}
-		
-		if(IsValidDynamicMapIcon(drData[id][dMapIconID])) {
-			Streamer_SetItemPos(STREAMER_TYPE_MAP_ICON, drData[id][dMapIconID], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]);
-		}
-		else {
-			drData[id][dMapIconID] = CreateDynamicMapIcon(drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ], drData[id][dMapIcon], 0, .worldid = drData[id][dExtvw], .interiorid = drData[id][dExtint]);
-		}
-		
+				
 		if(IsValidDynamicCP(drData[id][dCP])) {
 			Streamer_SetItemPos(STREAMER_TYPE_CP, drData[id][dCP], drData[id][dExtposX], drData[id][dExtposY], drData[id][dExtposZ]);
 			Streamer_SetFloatData(STREAMER_TYPE_CP, drData[id][dCP], E_STREAMER_SIZE, (drData[id][dGarage] ? (7.0) : (2.0)));

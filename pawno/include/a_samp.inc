@@ -423,6 +423,4 @@ forward OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:
 
 forward OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ);
 
-#define SendMessage(%0,%1) \
-	SendClientMessageEx(%0, COLOR_YELLOW, "»{FFFFFF} "%1)
 // --------------------------------------------------

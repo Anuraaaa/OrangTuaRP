@@ -612,6 +612,10 @@ CMD:editfaction(playerid, params[])
         PlayerData[playerid][pFactionEdit] = id;
 		ShowPlayerDialog(playerid, DIALOG_EDITLOCKER, DIALOG_STYLE_LIST, "Faction Locker", "Set Location\nLocker Weapons", "Select", "Cancel");
 	}
+	else if(!strcmp(type, "salary", true))
+	{
+		Faction_ShowSalary(playerid, id);
+	}	
 	return 1;
 }
 

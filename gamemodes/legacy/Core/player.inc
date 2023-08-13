@@ -984,6 +984,7 @@ ResetPlayerStatistics(playerid)
 	PlayerData[playerid][pCarryingPizza] = false;
 	OnTrash[playerid] = 0;
 	FactoryIcons[playerid] = -1;
+	PlayerData[playerid][pOnlineTime] = 0;
 		
 	Trash_InitPlayer(playerid);
 	

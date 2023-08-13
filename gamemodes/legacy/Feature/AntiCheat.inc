@@ -10,11 +10,12 @@ new WarningCode[MAX_PLAYERS][53],
     tele_warn[MAX_PLAYERS]= {0, ...},
     slapper_warn[MAX_PLAYERS]= {0, ...},
     engine_hack_warn[MAX_PLAYERS]= {0, ...},
-    g_ArmourHack[MAX_PLAYERS]= {0, ...},
     speed_hack[MAX_PLAYERS]= {0, ...},
     airbreak_hack[MAX_PLAYERS]= {0, ...},
     ping_warning[MAX_PLAYERS]= {0, ...},
-    ac_weapon_h[MAX_PLAYERS]= {0, ...};
+    ac_weapon_h[MAX_PLAYERS]= {0, ...},
+    ac_ammo_h[MAX_PLAYERS]= {0, ...},
+    ac_ammo_inf_h[MAX_PLAYERS]= {0, ...};
 
 enum {
     MOD_OLD_VERSION = 0,
@@ -38,31 +39,98 @@ static
     hack_fly[MAX_PLAYERS] = {0, ...},
     UsingMods[MAX_PLAYERS][9];
 
-static GetCodeAC(code)
+hook OnGameModeInit()
 {
-    new str[128];
+    EnableAntiCheat(4, 0); // disable Teleport Hack: Into/Between Vehicle
+    EnableAntiCheat(5, 0); // disable Teleport Hack: Vehicle to Player
+    EnableAntiCheat(6, 0); // disable Teleport Hack: Pickups
+    EnableAntiCheat(9, 0); // disable SpeedHack: On Foot
+    EnableAntiCheat(23, 0); // disable Tunning Hack
+    EnableAntiCheat(24, 0); // disable Parkour Mod
+    // EnableAntiCheat(26, 0); // disable Rapid Fire
+    EnableAntiCheat(27, 0); // disable Fake Spawn
+    // EnableAntiCheat(29, 0); // disable Aimbot
+    EnableAntiCheat(31, 0); // disable Car Shot
+    EnableAntiCheat(33, 0); // disable Unfreeze
+    EnableAntiCheat(34, 0); // disable AFK Ghost
+    EnableAntiCheat(35, 0); // disable Full Aiming
+    EnableAntiCheat(36, 0); // disable Fake NPC
+    EnableAntiCheat(37, 0); // disable Reconnect
+    EnableAntiCheat(38, 0); // disable High Ping
+    EnableAntiCheat(39, 0); // disable Dialog Hack
+    EnableAntiCheat(40, 0); // disable Protection from sandbox
+    EnableAntiCheat(41, 0); // disable Protection from invalid version
+    EnableAntiCheat(42, 0); // disable Rcon Hack
+    EnableAntiCheat(43, 0); // disable Tuning Crasher
+    EnableAntiCheat(45, 0); // disable Dialog Crasher
+    EnableAntiCheat(46, 0); // disable Attached Object Crasher
+    EnableAntiCheat(47, 0); // disable Weapon Crasher
+    EnableAntiCheat(48, 0); // disable Protection from connection flood in one slot
+    EnableAntiCheat(49, 0); // disable Callback functions flood
+    EnableAntiCheat(50, 0); // disable DoS
+    EnableAntiCheat(51, 0); // disable NOPs
+}
+
+static GetCodeAC(code)
+{    
+    new string[128];
     switch(code)
     {
-        case 0: str =  "Onfoot airbreak";
-        case 1: str =  "Vehicle airbreak";
-        case 2: str =  "Onfoot teleport";
-        case 3: str =  "Vehicle teleport";
-        case 7: str =  "Onfoot Flyhack";
-        case 8: str =  "Vehicle Flyhack";
-        case 9: str =  "Onfoot speedhack";
-        case 10: str =  "Vehicle speedhack";
-        case 11: str = "Health Hack";
-        case 12: str = "Health Hack";
-        case 13: str = "Armour Hack";
-        case 15: str =  "Weapon hack";
-        case 16: str =  "Ammo hack";
-        case 17: str =  "Infinite ammo";
-        case 26: str =  "Rapid fire";
-        case 29: str =  "Aimhack";
-        case 35: str =  "Full aiming";
-        default: format(str, sizeof(str), "Code %d", code);
+		case 0: string = "AirBreak: On Foot";
+		case 1: string = "AirBreak: Inside Vehicle";
+		case 2: string = "Teleport Hack: On Foot";
+		case 3: string = "Teleport Hack: Inside Vehicle";
+		case 4: string = "Teleport Hack: Into/Between Vehicle";
+		case 5: string = "Teleport Hack: Vehicle to Player";
+		case 6: string = "Teleport Hack: Pickups";
+		case 7: string = "FlyHack: On Foot";
+		case 8: string = "FlyHack: Inside Vehicle";
+		case 9: string = "SpeedHack: On Foot";
+		case 10: string = "SpeedHack: Inside Vehicle";
+		case 11: string = "Health Hack: Inside Vehicle";
+		case 12: string = "Health Hack: On Foot";
+		case 13: string = "Armour Hack";
+		case 14: string = "Money Hack";
+		case 15: string = "Weapon Hack";
+		case 16: string = "Ammo Hack: Spawning";
+		case 17: string = "Ammo Hack: Infinite";
+		case 18: string = "Special Actions Hack";
+		case 19: string = "GodMode from a bullets: On Foot";
+		case 20: string = "GodMode from a bullets: Inside Vehicle";
+		case 21: string = "Invisible Hack";
+		case 22: string = "Lagcomp-Spoof";
+		case 23: string = "Tuning Hack";
+		case 24: string = "Parkour Mod";
+		case 25: string = "Quick Turn";
+		case 26: string = "Rapid Fire";
+		case 27: string = "Fake Spawn";
+		case 28: string = "Fake Kill";
+		case 29: string = "Aimbot";
+		case 30: string = "CJ Run";
+		case 31: string = "Car Shot";
+		case 32: string = "Car Jacking";
+		case 33: string = "UnFreeze";
+		case 34: string = "AFK Ghost";
+		case 35: string = "Full Aiming";
+		case 36: string = "Fake NPC";
+		case 37: string = "Reconnect";
+		case 38: string = "High Ping";
+		case 39: string = "Dialog Hack";
+		case 40: string = "Protection from Sandbox";
+		case 41: string = "Protection from Invalid Version";
+		case 42: string = "Rcon Hack";
+		case 43: string = "Tuning Crasher";
+		case 44: string = "Invalid Seat Crasher";
+		case 45: string = "Dialog Crasher";
+		case 46: string = "Attached Object Crasher";
+		case 47: string = "Weapon Crasher";
+		case 48: string = "Protection from connection flood in one slot";
+		case 49: string = "Callback functions flood";
+		case 50: string = "Flood by seat changing";
+		case 51: string = "DoS";
+        case 52: string = "NOPs";
     }
-    return str;
+    return string;
 }
 
 AC_PlayerHasWeapon(playerid, weaponid)
@@ -103,16 +171,14 @@ public OnPlayerTeleport(playerid, Float:distance) {
 forward OnCheatDetected(playerid, ip_address[], type, code);
 public OnCheatDetected(playerid, ip_address[], type, code)
 {
-
-    if(type) {
-        return 1;
-    }
+    if (!IsPlayerConnected(playerid))
+        return 0;
 
     switch(code)
     {
         //Onfoot airbreak
         case 0: {
-            if(++hack_airbreak[playerid] == 3)
+            if(++hack_airbreak[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -125,7 +191,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         }
         //Vehicle airbreak
         case 1: {
-            if(++hack_airbreak[playerid] == 3)
+            if(++hack_airbreak[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -150,7 +216,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
 
             if(!IsPlayerPaused(playerid))
             {
-                if(++hack_teleport[playerid] == 3)
+                if(++hack_teleport[playerid] >= 3)
                 {
                     SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -166,7 +232,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         //Vehicle teleport hack
         case 3: 
         {
-            if(++hack_vehtele[playerid] == 3) 
+            if(++hack_vehtele[playerid] >= 3) 
             {
                 SendAdminMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
@@ -192,7 +258,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         
         //Flyhack on foot
         case 7: {
-            if(++hack_fly[playerid] == 3)
+            if(++hack_fly[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -205,7 +271,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         }    
         //Flyhack in vehicle
         case 8: {
-            if(++hack_fly[playerid] == 3)
+            if(++hack_fly[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -218,7 +284,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         }
         //Speedhack in vehicle
         case 10: {
-            if(++speed_hack[playerid] > 5) {
+            if(++speed_hack[playerid] >= 5) {
                 SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
                 speed_hack[playerid] = 0;   
@@ -226,9 +292,18 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
         }
         
-        //Vehicle speed hack
+        //Vehicle health hack
         case 11: {
-            if(++hack_vehiclehealth[playerid] == 3)
+            new Float:health;
+            new vehicleid = GetPlayerVehicleID(playerid);
+
+            if (vehicleid == INVALID_VEHICLE_ID) {
+                return 0;
+            }
+
+            AntiCheatGetVehicleHealth(vehicleid, health);
+            defer AC_SetVehicleHealthBack[1000](vehicleid, health);
+            if(++hack_vehiclehealth[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
                 hack_vehiclehealth[playerid] = 0;
@@ -241,8 +316,9 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         case 12: {
             new Float:health;
             AntiCheatGetHealth(playerid, health);
-            SetPlayerHealth(playerid, health);
-            if(++hack_health[playerid] == 3)
+            defer AC_SetHealthBack[1000](playerid, health);
+
+            if(++hack_health[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
                 hack_health[playerid] = 0;
@@ -251,39 +327,13 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
             SendAdminMessage(X11_TOMATO, "Anticheat: %s possible health hack.", GetName(playerid));
         }
-        //Weapon hack
-        case 15: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible weapon hack.", GetName(playerid));
-            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-            KickEx(playerid);
-        }
-
-        //Ammo hack
-        case 16: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible add ammo hack.", GetName(playerid));
-            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-            KickEx(playerid);
-        }
-
-        //Ammo hack infinite
-        case 17: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible infinite ammo hack.", GetName(playerid)); 
-            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-            KickEx(playerid);
-        }
-
-        case 18: {
-            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", GetName(playerid));
-            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
-            KickEx(playerid);
-        }
-        //Vehicle health hack
+        //Armour Hack
         case 13: {
             new Float:armour;
             AntiCheatGetArmour(playerid, armour);
-            SetPlayerArmour(playerid, armour);
+            defer AC_SetArmorBack[1000](playerid, armour);
 
-            if(++hack_armour[playerid] == 3)
+            if(++hack_armour[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
 
@@ -293,6 +343,50 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 return 1;
             }
             SendAdminMessage(X11_TOMATO, "Anticheat: %s possible armour hack.", GetName(playerid));
+        }
+        //Weapon hack
+        case 15: {
+            defer AC_SetWeaponBack[1000](playerid);
+
+            if (++ac_weapon_h[playerid] >= 3) {
+
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+                ac_weapon_h[playerid] = 0;
+                KickEx(playerid);
+            }
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible weapon hack.", GetName(playerid));
+        }
+
+        //Ammo hack
+        case 16: {
+            defer AC_SetWeaponBack[1000](playerid);
+
+            if (++ac_ammo_h[playerid] >= 3) {
+
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+                ac_ammo_h[playerid] = 0;
+                KickEx(playerid);
+            }
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible add ammo hack.", GetName(playerid));
+        }
+
+        //Ammo hack infinite
+        case 17: {
+            defer AC_SetWeaponBack[1000](playerid);
+
+            if (++ac_ammo_inf_h[playerid] >= 3) {
+
+                SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+                ac_ammo_inf_h[playerid] = 0;
+                KickEx(playerid);
+            }
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s possible infinite ammo hack.", GetName(playerid)); 
+        }
+
+        case 18: {
+            SendAdminMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", GetName(playerid));
+            SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            KickEx(playerid);
         }
         //Rapid fire hack
         case 26: {
@@ -310,7 +404,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             KickEx(playerid);
         }
     }
-    SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s (%s) type: %d code %d", GetName(playerid), ReturnIP(playerid), type, code);
+    SendAdminMessage(X11_TOMATO, "Anticheat: %s (%s) possible %s", GetName(playerid), ReturnIP(playerid), GetCodeAC(code));
     return 1;
 }
 
@@ -350,16 +444,47 @@ hook OnPlayerConnect(playerid) {
 
     slapper_warn[playerid] = 0;
     engine_hack_warn[playerid] = 0;
-    g_ArmourHack[playerid] = 0;
     speed_hack[playerid] = 0;
     airbreak_hack[playerid] = 0;
+    hack_health[playerid] = 0;
+    hack_armour[playerid] = 0;
+    hack_teleport[playerid] = 0;
+    hack_airbreak[playerid] = 0;
+    hack_vehiclehealth[playerid] = 0;
+    hack_vehtele[playerid] = 0;
+    hack_fly[playerid] = 0;
+    ac_weapon_h[playerid] = 0;
+    ac_ammo_h[playerid] = 0;
+    ac_ammo_inf_h[playerid] = 0;
 
     for(new i = 0; i < 9; i++) {
         UsingMods[playerid][i] = false;
     }
+}
+
+hook OnPlayerDisconnect(playerid, reason) {
+
+	ResetPlayerWarningCode(playerid);
+
+    slapper_warn[playerid] = 0;
+    engine_hack_warn[playerid] = 0;
+    speed_hack[playerid] = 0;
+    airbreak_hack[playerid] = 0;
+    hack_health[playerid] = 0;
+    hack_armour[playerid] = 0;
+    hack_teleport[playerid] = 0;
+    hack_airbreak[playerid] = 0;
+    hack_vehiclehealth[playerid] = 0;
+    hack_vehtele[playerid] = 0;
+    hack_fly[playerid] = 0;
+    ac_weapon_h[playerid] = 0;
+    ac_ammo_h[playerid] = 0;
+    ac_ammo_inf_h[playerid] = 0;
 
 
-
+    for(new i = 0; i < 9; i++) {
+        UsingMods[playerid][i] = false;
+    }
 }
 
 IsUsingMods(playerid, mods) {
@@ -387,30 +512,8 @@ Float:AC_GetPlayerSpeed(playerid)
 
 ptask OnCheckAntiCheat[1000](playerid) {
 
-    if(IsPlayerSpawned(playerid)) {
+    if(IsPlayerSpawned(playerid)) {            
 
-        new
-            ac_weapon[13],
-            ac_ammo[13]
-            ;
-
-        for(new i = 0; i < 12; i++) {
-            GetPlayerWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
-
-            if(ac_weapon[i] && PlayerData[playerid][pGuns][g_aWeaponSlots[ac_weapon[i]]] != ac_weapon[i]) {
-                SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack", GetName(playerid));
-                ResetWeapon(playerid, ac_weapon[i]);
-                ac_weapon_h[playerid]++;
-
-                if(ac_weapon_h[playerid] > 3) {
-                    SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack (has been kicked)", GetName(playerid));
-                    ResetWeapons(playerid);
-                    ac_weapon_h[playerid] = 0;
-                    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Weapon Hack)");
-                    KickEx(playerid);
-                }
-            }
-        }
         if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 		    new Float: ghX, Float: ghY, Float: ghZ;
@@ -502,21 +605,6 @@ function OnPlayerCrasher(playerid) {
     return 1;
 }
 
-function CheckWeaponHack(playerid, weaponid) {
-    if(weaponid != PlayerData[playerid][pWeapon] && !PlayerData[playerid][pAdmin])
-    {
-        PlayerData[playerid][pWeapon] = weaponid;
-
-        if(PlayerData[playerid][pWeapon] >= 1 && PlayerData[playerid][pWeapon] <= 45 && PlayerData[playerid][pWeapon] != 40 && PlayerData[playerid][pWeapon] != 2 && PlayerData[playerid][pGuns][g_aWeaponSlots[PlayerData[playerid][pWeapon]]] != weaponid && !PlayerData[playerid][pKicked])
-        {
-            SendAdminMessage(COLOR_LIGHTRED, "AntiCheat: Cheat detected on {FFFF00}%s (%s) {FF6347}(Weapon hack %s)", GetName(playerid), PlayerData[playerid][pUCP], ReturnWeaponName(PlayerData[playerid][pWeapon]));
-            ResetWeapons(playerid);
-            KickEx(playerid);
-        }
-    }
-    return 1;
-}
-
 public OnPlayerAirbreak(playerid) {
 
     if(++airbreak_hack[playerid] >= 5) {
@@ -582,18 +670,41 @@ public OnDetectedSilentaim(playerid)
     return 1;
 }
 
-timer AC_SetHealthBack[3000](playerid, Float:health) {
-
-    SetPlayerHealth(playerid, health);
-}
 public OnPlayerUseVending(playerid, type) {
 
     new Float:health;
     AntiCheatGetHealth(playerid, health);
+    defer AC_SetHealthBack[1000](playerid, health);
 
-    defer AC_SetHealthBack[3000](playerid, health);
-
-    SendAdminDutyMessage(X11_TOMATO, "AdmWarning: %s terdeteksi menggunakan vending machines.", GetName(playerid, false));
+    SendAdminMessage(X11_TOMATO, "AdmWarning: %s terdeteksi menggunakan vending machines.", GetName(playerid, false));
     SendClientMessage(playerid, X11_RED, "Kamu terdeteksi melakukan abuse dengan vending machines! (notif ini akan muncul ke administrator & log server)");
     return 1;
+}
+
+timer AC_SetWeaponBack[1000](playerid) {
+
+    new
+        ac_weapon[13],
+        ac_ammo[13];
+
+    for (new i = 0; i < 12; i++) {
+        AntiCheatGetWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
+
+        ResetWeapon(playerid, ac_weapon[i]);
+        PlayerData[playerid][pGuns][i] = ac_weapon[i];
+        PlayerData[playerid][pAmmo][i] = ac_ammo[i];
+        SetWeapons(playerid);
+    }
+}
+
+timer AC_SetHealthBack[1000](playerid, Float:health) {
+    SetPlayerHealth(playerid, health);
+}
+
+timer AC_SetArmorBack[1000](playerid, Float:armour) {    
+    SetPlayerArmour(playerid, armour);
+}
+
+timer AC_SetVehicleHealthBack[1000](vehicleid, Float:health) {
+    SetVehicleHealth(vehicleid, health);
 }

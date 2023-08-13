@@ -89773,3 +89773,148 @@ v0.3.DL-R1, (C)2005-2018 SA-MP Team
 [07/08/2023 21:12:08] [ROCK] Loaded 32 rock from database.
 [07/08/2023 21:12:08] [FACTIONGARAGE] Loaded 2 faction garage from database.
 [07/08/2023 21:12:08] [FURNITURE] Loaded 26 furniture from database.
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[13/08/2023 21:24:31] 
+[13/08/2023 21:24:31] Server Plugins
+[13/08/2023 21:24:31] --------------
+[13/08/2023 21:24:31]  Loading plugin: crashdetect
+[13/08/2023 21:24:31]   CrashDetect plugin 4.20
+[13/08/2023 21:24:31]   Loaded.
+[13/08/2023 21:24:31]  Loading plugin: pawnraknet
+[13/08/2023 21:24:31] [Pawn.RakNet] plugin v1.5.1 loading...
+[13/08/2023 21:24:32] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: pawn-memory
+[13/08/2023 21:24:32] ========================
+[13/08/2023 21:24:32] = Memory access plugin =
+[13/08/2023 21:24:32] =       Made by BigETI =
+[13/08/2023 21:24:32] = Loaded!              =
+[13/08/2023 21:24:32] ========================
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: streamer
+[13/08/2023 21:24:32] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: sscanf
+[13/08/2023 21:24:32] 
+
+[13/08/2023 21:24:32]  ===============================
+
+[13/08/2023 21:24:32]       sscanf plugin loaded.     
+
+[13/08/2023 21:24:32]          Version:  2.8.3        
+
+[13/08/2023 21:24:32]   (c) 2018 Alex "Y_Less" Cole  
+
+[13/08/2023 21:24:32]  ===============================
+
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: mysql
+[13/08/2023 21:24:32]  >> plugin.mysql: R41-4 successfully loaded.
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: samp_bcrypt
+[13/08/2023 21:24:32] [SampBcrypt] [info]: Version: 0.3.4
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: samp-compat
+[13/08/2023 21:24:32]   -- samp-compat for 0.3.7-R2 initialized
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: chrono
+[13/08/2023 21:24:32]   Loaded.
+[13/08/2023 21:24:32]  Loading plugin: ColAndreas
+[13/08/2023 21:24:32] *********************
+[13/08/2023 21:24:32] ** Created By:     **
+[13/08/2023 21:24:32] ** [uL]Chris42O    **
+[13/08/2023 21:24:32] ** [uL]Slice       **
+[13/08/2023 21:24:32] ** [uL]Pottus      **
+[13/08/2023 21:24:32] *********************
+[13/08/2023 21:24:40] Loaded collision data.
+[13/08/2023 21:24:40] *********************
+[13/08/2023 21:24:40]   ColAndreas Loaded
+[13/08/2023 21:24:40]    v1.4.0
+[13/08/2023 21:24:40] *********************
+[13/08/2023 21:24:40]   Loaded.
+[13/08/2023 21:24:40]  Loaded 10 plugins.
+
+[13/08/2023 21:24:40] 
+[13/08/2023 21:24:40] Filterscripts
+[13/08/2023 21:24:40] ---------------
+[13/08/2023 21:24:40]   Loaded 0 filterscripts.
+
+[13/08/2023 21:24:44]  
+[13/08/2023 21:24:44]  
+[13/08/2023 21:24:44]  
+[13/08/2023 21:24:44]  ========================================== 
+[13/08/2023 21:24:44]  |                                        | 
+[13/08/2023 21:24:44]  |         YSI version 5.05.0005          | 
+[13/08/2023 21:24:44]  |         By Alex "Y_Less" Cole          | 
+[13/08/2023 21:24:44]  |                                        | 
+[13/08/2023 21:24:44]  | Unable to check the latest YSI version | 
+[13/08/2023 21:24:44]  | - please watch the forums and github:  | 
+[13/08/2023 21:24:44]  |                                        | 
+[13/08/2023 21:24:44]  |   https://git.io/5.x                   | 
+[13/08/2023 21:24:44]  |                                        | 
+[13/08/2023 21:24:44]  ========================================== 
+[13/08/2023 21:24:44]  
+[13/08/2023 21:24:44]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[13/08/2023 21:24:44]  
+[13/08/2023 21:24:44] --------------------------------------
+[13/08/2023 21:24:44]  Anticheat Nex-AC loaded!
+[13/08/2023 21:24:44]  Anticheat version: 1.9.59
+[13/08/2023 21:24:44]  Author: Nexius
+[13/08/2023 21:24:44] --------------------------------------
+
+[13/08/2023 21:24:44] [Database] Connected!
+[13/08/2023 21:24:44] Loading Map.
+[13/08/2023 21:24:44] Loaded Map.                             
+[13/08/2023 21:24:44] [MAPPING] Loaded mappings in 44ms
+[13/08/2023 21:24:44] Economy Data Loaded.
+[13/08/2023 21:24:44] Number of vehicle models: 8
+[13/08/2023 21:24:44] [ACTOR] Loaded 100 Dynamic Actor from database
+[13/08/2023 21:24:44] [ATM] Loaded 43 ATM from the database
+[13/08/2023 21:24:44] [PUMP] Loaded 11 Fuel Pump from database
+[13/08/2023 21:24:44] [BUSINESS] Loaded 12 Business from database
+[13/08/2023 21:24:44] [DEALER] Loaded 7 dealership from database
+[13/08/2023 21:24:44] [DROPITEM] Loaded 3 Dropped items from database.
+[13/08/2023 21:24:44] [DOOR] Loaded 37 door from database
+[13/08/2023 21:24:44] [FACTION] Loaded 6 faction from database
+[13/08/2023 21:24:44] [FLAT] Loaded 50 Flat from database.
+[13/08/2023 21:24:44] [GARAGE] Loaded 14 public garage from database.
+[13/08/2023 21:24:45] [HOUSE] Loaded 65 House from the Database
+[13/08/2023 21:24:45] [OBJECT] Loaded 3 Object from database
+[13/08/2023 21:24:45] [RENTAL] Loaded 2 Rental from database
+[13/08/2023 21:24:45] [SPEEDCAM] Loaded 6 Speed Camera from database
+[13/08/2023 21:24:45] [SPRAYTAG] Loaded 11 spraytags from database
+[13/08/2023 21:24:45] [TRASH] Loaded 46 Trash from database
+[13/08/2023 21:24:45] [TREE] Loaded 71 tree from database
+[13/08/2023 21:24:45] [WORKSHOP] Loaded 1 workshop from database.
+[13/08/2023 21:24:45] [ROCK] Loaded 32 rock from database.
+[13/08/2023 21:24:45] [FACTIONGARAGE] Loaded 4 faction garage from database.
+[13/08/2023 21:24:45] [FURNITURE] Loaded 166 furniture from database.
+[13/08/2023 21:25:00] [connection] incoming connection: 127.0.0.1:50302 id: 0
+[13/08/2023 21:25:00] [join] Anura has joined the server (0:127.0.0.1)
+[13/08/2023 21:25:13] [nick] Anura nick changed to Marcelio_Hawkins
+[13/08/2023 21:25:18] [CMD] Marcelio Hawkins: /arevive 0
+[13/08/2023 21:25:21] [part] Marcelio_Hawkins has left the server (0:1)
+[13/08/2023 21:25:23] [PLAYER_VEH] Unloading player vehicleid 34.
