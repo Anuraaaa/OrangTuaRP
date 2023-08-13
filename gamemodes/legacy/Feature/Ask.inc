@@ -162,6 +162,6 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 task OnReminderAsks[(1000 * 60) * 10]() {
 
 	if (CountAsk() > 0) {
-		SendAdminMessage(X11_TOMATO, "AdmWarn: There's an active asks, please check it on /asks.");
+		SendAdminMessage(X11_TOMATO, "AdmWarn: There's an %d active asks, please check it on /asks.", CountAsk());
 	}
 }
