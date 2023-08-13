@@ -28,10 +28,10 @@ Un-noted changelog:
 #define YSI_NO_HEAP_MALLOC
 #define YSI_NO_OPTIMISATION_MESSAGE
 
-#define DEBUG
 #define NO_SUSPICION_LOGS
 
 #include <a_samp>
+#define DEBUG
 
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 199 + 1
@@ -539,6 +539,11 @@ public OnPlayerRequestSpawn(playerid)
         return 0;
     }
     return 1;
+}
+
+public OnPlayerFinishedDownloading(playerid, virtualworld) 
+{
+	return 1;
 }
 
 public OnPlayerRequestClass(playerid, classid) {
@@ -2206,10 +2211,6 @@ public OnPlayerUpdate(playerid)
 {
 	if(IsPlayerSpawned(playerid)) {
 		
-		if(GetPlayerWeapon(playerid)) {
-			CheckWeaponHack(playerid, GetPlayerWeapon(playerid));
-		}
-
 		if(noclipdata[playerid][cameramode] == CAMERA_MODE_FLY && PlayerData[playerid][pAdmin])
 		{
 			new keys,ud,lr;
