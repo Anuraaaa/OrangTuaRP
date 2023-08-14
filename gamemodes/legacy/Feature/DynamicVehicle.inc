@@ -710,6 +710,7 @@ SaveVehicleComponent(vehicleid, componentid)
 				VehicleData[vehicleid][vMod][16] = componentid;
 			}
 		}
+		Vehicle_Save(vehicleid);
 	}
 	return 1;
 }
