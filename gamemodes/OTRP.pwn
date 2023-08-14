@@ -10072,36 +10072,15 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 			}
 		}
 	}
-	UpdateMaskLabel(playerid);
-	return 1;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
-{
-	if (PlayerData[playerid][pBandage])
-	{
-	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your bandage is no longer in effect as you took damage.");
-
-        PlayerData[playerid][pBandage] = false;
-		KillTimer(PlayerData[playerid][pAidTimer]);
-	}
-	if (PlayerData[playerid][pFirstAid])
-	{
-	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your medkit is no longer in effect as you took damage.");
-
-        PlayerData[playerid][pFirstAid] = false;
-		KillTimer(PlayerData[playerid][pAidTimer]);
-	}
-
     new Float:health,
 		Float:armour;
 
-	GetPlayerHealth(playerid, health);
-	GetPlayerArmour(playerid, armour);
-	if(issuerid != INVALID_PLAYER_ID)
+	GetPlayerHealth(damagedid, health);
+	GetPlayerArmour(damagedid, armour);
+	if(damagedid != INVALID_PLAYER_ID)
 	{
-		if(weaponid == 25 && HasRubberBullet[issuerid]) {
-			SetPlayerHealth(playerid, health);
+		if(weaponid == 25 && HasRubberBullet[playerid]) {
+			SetPlayerHealth(damagedid, health);
 			return 1;
 		}
 
@@ -10130,7 +10109,7 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			{
 			    new Float: p_x, Float: p_y, Float: p_z;
 			    GetPlayerPos(playerid, p_x, p_y, p_z);
-			    new Float: dist = GetPlayerDistanceFromPoint(playerid, p_x, p_y, p_z);
+			    new Float: dist = GetPlayerDistanceFromPoint(damagedid, p_x, p_y, p_z);
 
 			    if (dist < 5.0)
 					damage = RandomFloat(30.0, 35.0), velodamage = RandomFloat(1.0, 7.0);
@@ -10158,46 +10137,66 @@ public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
         if(armour > 0.0 && weaponid >= 22 && weaponid <= 38)
 		{
 		    if(armour - damage <= 5.0)
-				SetPlayerArmour(playerid, 0.0);
+				SetPlayerArmour(damagedid, 0.0);
 	 		else 
 			{
-			 	if(PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]) 
+			 	if(PlayerData[damagedid][pHighVelocity][g_aWeaponSlots[weaponid]]) 
 				{
 						
 					new Float:final_damage = damage + velodamage;
-					SetPlayerArmour(playerid, armour - final_damage);
+					SetPlayerArmour(damagedid, armour - final_damage);
 				}
 				else 
 				{
-					SetPlayerArmour(playerid, armour - damage);
+					SetPlayerArmour(damagedid, armour - damage);
 				}
 			}
 		}
 		else
 		{
  			if(weaponid >= 22 && weaponid <= 38) {
-				if(PlayerData[playerid][pHighVelocity][g_aWeaponSlots[weaponid]]) {
+				if(PlayerData[damagedid][pHighVelocity][g_aWeaponSlots[weaponid]]) {
 
 					new Float:final_damage = damage + velodamage;
 
-					SetPlayerHealth(playerid, health - final_damage);
+					SetPlayerHealth(damagedid, health - final_damage);
 				}
 				else {
-					SetPlayerHealth(playerid, health - damage);
+					SetPlayerHealth(damagedid, health - damage);
 				}
 			}
 			else {
-				SetPlayerHealth(playerid, health - damage);
+				SetPlayerHealth(damagedid, health - damage);
 			}
 
 			if(armour)
-			    SetPlayerArmour(playerid, armour);
+			    SetPlayerArmour(damagedid, armour);
 		}
-		CallLocalFunction("OnPlayerDamage", "ddfdd", playerid, issuerid, damage, weaponid, bodypart);
+		CallLocalFunction("OnPlayerDamage", "ddfdd", damagedid, playerid, damage, weaponid, bodypart);
 		
 	}
 	else {
-		SetPlayerHealth(playerid, health - amount);
+		SetPlayerHealth(damagedid, health - amount);
+	}
+	UpdateMaskLabel(damagedid);
+	return 1;
+}
+
+public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
+{
+	if (PlayerData[playerid][pBandage])
+	{
+	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your bandage is no longer in effect as you took damage.");
+
+        PlayerData[playerid][pBandage] = false;
+		KillTimer(PlayerData[playerid][pAidTimer]);
+	}
+	if (PlayerData[playerid][pFirstAid])
+	{
+	    SendClientMessage(playerid, COLOR_LIGHTRED, "(Warning){FFFFFF} Your medkit is no longer in effect as you took damage.");
+
+        PlayerData[playerid][pFirstAid] = false;
+		KillTimer(PlayerData[playerid][pAidTimer]);
 	}
 	
 	UpdateMaskLabel(playerid);
