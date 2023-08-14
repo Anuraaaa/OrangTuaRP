@@ -1,6 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
 #define MAX_FISH 10
+new FISH_RATE = 10;
 
 new FishNames[11][11] =
 {
@@ -43,6 +44,10 @@ enum {
 hook OnGameModeInit() {
 	fishPier = CreateDynamicPolygon(arr_fishPier);
 	fishSea = CreateDynamicPolygon(arr_fishSea);
+
+	FISH_RATE = RandomEx(10, 18);
+	fishPrice = RandomEx(10, 25);
+	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n"WHITE"Rate: %s\n/sellfish untuk menjual ikan", FormatNumber(fishPrice), FormatNumber(FISH_RATE)));
 }
 
 ReturnFishPlace(playerid)
@@ -184,7 +189,7 @@ CMD:sellfish(playerid, params[])
 		return SendErrorMessage(playerid, "You don't have any fish!");
 		
 	if(PlayerData[playerid][pFishDelay] > 0 && PlayerData[playerid][pAdmin] < 7)
-		return SendErrorMessage(playerid, "Please wait %d minute to sold your fishes.", PlayerData[playerid][pFishDelay]/60);
+		return SendErrorMessage(playerid, "Please wait %d minute to sell your fishes.", PlayerData[playerid][pFishDelay]/60);
 
 	new str[356], Float:count = 0.0;
     for(new i = 0; i < MAX_FISH; i++) if(FishWeight[playerid][i] > 0.0) {
@@ -193,10 +198,11 @@ CMD:sellfish(playerid, params[])
 
 	if(count > 0.0) {
 
-		new total_price = floatround(count * fishPrice),
+		new fishes = floatround(count);
+		new total_price = fishes * fishPrice,
 			real_price;
 
-		real_price = 15 * total_price;
+		real_price = FISH_RATE * total_price;
 
 		SetPVarInt(playerid, "FishPrice", real_price);
 
