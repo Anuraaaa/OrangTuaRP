@@ -11149,7 +11149,7 @@ task OnServerDataUpdate[1800000]() {
 	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n"WHITE"Rate: %s\n/sellfish untuk menjual ikan", FormatNumber(fishPrice), FormatNumber(FISH_RATE)));
 	woodPrice = RandomEx(2500, 5000);
 
-	FARMER_RATE = RandomEx(1000, 2500);
+	FARMER_RATE = RandomEx(1500, 3000);
 	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 	return 1;
 }

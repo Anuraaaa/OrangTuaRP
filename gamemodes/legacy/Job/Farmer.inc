@@ -254,6 +254,9 @@ CMD:plant(playerid, params[])
     if(!IsPlayerInFieldArea(playerid))
         return SendErrorMessage(playerid, "Kamu tidak berada di ladang farmer.");
 
+    if(IsHungerOrThirst(playerid))
+        return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+
     if(Plant_GetNearest(playerid) != -1)
         return SendErrorMessage(playerid, "Tidak dapat menanam terlalu dekat dengan tanaman lain.");
 
@@ -261,7 +264,7 @@ CMD:plant(playerid, params[])
         return SendErrorMessage(playerid, "Tidak dapat melakukan ini sekarang.");
 
 	if(!IsPlayerInDynamicArea(playerid, digArea[playerid]))
-		return SendErrorMessage(playerid, "You are not in range your digged hole!");
+		return SendErrorMessage(playerid, "Kamu tidak berada pada area yang kamu gali.");
 
     if(Inventory_Count(playerid, "Plant Seed") < 1)
         return SendErrorMessage(playerid, "You don't have any plant seeds left.");
@@ -295,6 +298,9 @@ CMD:harvest(playerid, params[])
     if(!IsPlayerInFieldArea(playerid))
         return SendErrorMessage(playerid, "Kamu tidak berada di ladang farmer.");
 
+    if(IsHungerOrThirst(playerid))
+        return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
         return SendErrorMessage(playerid, "Tidak dapat melakukan ini sekarang.");
       
@@ -324,6 +330,7 @@ CMD:harvest(playerid, params[])
     StartPlayerLoadingBar(playerid, 100, "Harvesting....", 30, "Plant_Harvest");
     SetPlayerFace(playerid, PlantData[Plant_GetNearest(playerid)][plantPos][0],  PlantData[Plant_GetNearest(playerid)][plantPos][1]);
     ApplyAnimation(playerid, "COP_AMBIENT", "Copbrowse_loop", 4.1, 1, 0, 0, 1, 0, 1);
+    SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s begins to harvesting a plant", ReturnName(playerid));
     return 1;
 }
 
@@ -334,6 +341,9 @@ CMD:dig(playerid, params[])
         
     if(!IsPlayerInFieldArea(playerid))
         return SendErrorMessage(playerid, "Kamu tidak berada di ladang farmer.");
+
+    if(IsHungerOrThirst(playerid))
+        return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
 
     if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT)
         return SendErrorMessage(playerid, "Tidak dapat melakukan ini sekarang.");
@@ -424,10 +434,15 @@ hook OnGameModeInit()
 	CreateDynamicPickup(1239, 23, -347.8450,-1045.6550,59.8125, -1);
 	LabelData[labelFarmer] = CreateDynamic3DTextLabel(sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)), X11_YELLOW, -347.8450,-1045.6550,59.8125, 10.0);
 	
-	FARMER_RATE = RandomEx(1000, 2500);
+	FARMER_RATE = RandomEx(1500, 3000);
 	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 }
 
+hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
+    if(IsPlayerInFieldArea(playerid) && CheckPlayerJob(playerid, JOB_FARMER)) {
+        SendClientMessage(playerid, X11_LIGHTBLUE, "(Farmer) "WHITE"Kamu memasuki area ladang, gunakan "YELLOW"/dig "WHITE"untuk menggali tanah.");
+    }
+}
 task Plant_updateProgress[15000]()
 {
     foreach(new i : Plant)
@@ -499,6 +514,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             SetPlayerAttachedObject(playerid, 9, 18676, 6, -1.12999, 0.01600, -0.86800, 0.00000, 53.19995, 0.00000, 1.00000, 1.00000, 1.00000);
             StartPlayerLoadingBar(playerid, 150, "Watering....", 30, "Plant_Watering");
             SetPlayerFace(playerid, PlantData[idx][plantPos][0], PlantData[idx][plantPos][1]);
+            SendNearbyMessage(playerid, 15.0, X11_PLUM, "** %s takes can of water and starts to watering the plant", ReturnName(playerid));
         }
     }
     return 1;
