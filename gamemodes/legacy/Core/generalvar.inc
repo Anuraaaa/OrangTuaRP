@@ -1,7 +1,7 @@
 
 new bool:InHospital[MAX_PLAYERS];
 
-new Float:fishPrice = 3.0,
+new fishPrice = 10,
 	woodPrice = 5000;
 
 new vehiclecallsign[MAX_VEHICLES];
@@ -24,7 +24,8 @@ new StockData[E_SERVER_STOCK];
 enum E_SERVER_LABEL {
 	Text3D:labelComponent,
 	Text3D:labelRock,
-	Text3D:labelFish
+	Text3D:labelFish,
+	Text3D:labelFarmer
 };
 new LabelData[E_SERVER_LABEL];
 

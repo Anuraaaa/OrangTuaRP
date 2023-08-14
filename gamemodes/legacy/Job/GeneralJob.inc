@@ -12,7 +12,8 @@ new const Job_Type[][jobtype] =
 	{"Mechanic", 		JOB_MECHANIC},
 	{"Lumberjack",		JOB_LUMBERJACK},
 	{"Miner",			JOB_MINER},
-	{"Smuggler", 		JOB_SMUGGLER}
+	{"Smuggler", 		JOB_SMUGGLER},
+	{"Farmer", 			JOB_FARMER}
 };
 GetJobName(job)
 {

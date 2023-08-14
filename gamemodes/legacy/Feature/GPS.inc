@@ -29,7 +29,8 @@ new const JobLocName[][62] =
     "Delivery Driver",
     "Delivery Driver Unloading Point",
     "Miner",
-    "Box Courier"
+    "Box Courier",
+    "Farmer Point"
 };
 
 new Float:JobPoint[][] = 
@@ -43,7 +44,8 @@ new Float:JobPoint[][] =
     {-1702.7526,33.5595,3.5547},//Delivery Driver
     {-2750.7354,203.6906,7.0267},//Delivery Driver Unloading Point
     {-1298.1036,2501.2539,86.9291},//Miner
-    {-1941.6987,-1040.1519,32.1719}//Box Courier
+    {-1941.6987,-1040.1519,32.1719},//Box Courier
+    {-347.8450,-1045.6550,59.8125}//Farmer Point
 };
 
 new Float:PublicPoint[][] = 

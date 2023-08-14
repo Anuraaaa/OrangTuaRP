@@ -32,6 +32,8 @@ enum e_InventoryItems
 
 new const g_aInventoryItems[][e_InventoryItems] =
 {
+    {"Plant Seed", 1577, 100, true, true, true, INV_TYPE_GENERAL},
+    {"Plant", 2203, 100, true, true, true, INV_TYPE_GENERAL},
 	{"Nitrous Oxide", 1010, 10, true, true, true, INV_TYPE_GENERAL},
 	{"Octane Saver Fluid", 365, 10, true, true, true, INV_TYPE_GENERAL},
 	{"Reinforced Engine Block", 19917, 10, true, true, true, INV_TYPE_GENERAL},

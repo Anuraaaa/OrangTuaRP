@@ -6453,7 +6453,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		cmd_help(playerid, "");
 	}
-	if(dialogid == DIALOG_HELP_JOB)//list, place, buy, sell, remove
+	if(dialogid == DIALOG_HELP_JOB)
 	{
 		new string[1412];
 		if(response)
@@ -6530,6 +6530,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				strcat(string, "/deliverbox - untuk mengantarkan paket kedepan pintu rumah.\n");
 				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Box Courier", string, "Back", "");
 			}
+			if(listitem == 12) {
+				strcat(string, "/plant - untuk menanam tanaman.\n");
+				strcat(string, "/harvest - untuk memanen tanaman.\n");
+				strcat(string, "/dig - untuk menggali tanah.");
+				strcat(string, "/sellplant - untuk menjual tanaman.");
+				ShowPlayerDialog(playerid, DIALOG_HELP_RETURN, DIALOG_STYLE_MSGBOX, "Farmer", string, "Back", "");	
+			}
 		}
 	}
 	if(dialogid == DIALOG_HELP)
@@ -6554,7 +6561,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			if(listitem == 2)
 			{
-				ShowPlayerDialog(playerid, DIALOG_HELP_JOB, DIALOG_STYLE_LIST, "Job Commands", "Bus (Sidejob)\nSweeper (Sidejob)\nTrashmaster (Sidejob)\nTrucker\nMechanic\nTaxi\nLumberjack\nMower (Sidejob)\nDelivery Driver (Sidejob)\nMiner\nSmuggler\nBox Courier(Sidejob)", "Select", "Close");
+				ShowPlayerDialog(playerid, DIALOG_HELP_JOB, DIALOG_STYLE_LIST, "Job Commands", "Bus (Sidejob)\nSweeper (Sidejob)\nTrashmaster (Sidejob)\nTrucker\nMechanic\nTaxi\nLumberjack\nMower (Sidejob)\nDelivery Driver (Sidejob)\nMiner\nSmuggler\nBox Courier(Sidejob)\nFarmer", "Select", "Close");
 			}
 			if(listitem == 3)
 			{
@@ -11138,9 +11145,13 @@ timer OnAutoAimCheck[2000](playerid) {
 	return 1;
 }
 task OnServerDataUpdate[1800000]() {
-	fishPrice = RandomEx(25, 70);
-	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n{FFFFFF}/sellfish untuk menjual ikan", FormatNumber(fishPrice)));
+	fishPrice = RandomEx(10, 25);
+	FISH_RATE = RandomEx(10, 18);
+	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n"WHITE"Rate: %s\n/sellfish untuk menjual ikan", FormatNumber(fishPrice), FormatNumber(FISH_RATE)));
 	woodPrice = RandomEx(2500, 5000);
+
+	FARMER_RATE = RandomEx(1000, 2500);
+	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 	return 1;
 }
 
