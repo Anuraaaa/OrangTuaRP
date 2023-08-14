@@ -89,6 +89,7 @@
 #include ".\legacy\Feature\Spectate"
 #include ".\legacy\Feature\ELM"
 #include ".\legacy\Feature\SealProperty"
+#include ".\legacy\Feature\Zona"
 // #include ".\legacy\Feature\Event"
 /* Job Modules */
 #include ".\legacy\Job\Smuggler"
