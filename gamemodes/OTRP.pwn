@@ -17,7 +17,7 @@
 
 ------------------------ World of Space Roleplay ------------------------
 * Developed by Anwar Fauzan (Anuraaaa), Arif Hudaya (LuminouZ307)
-* Script Version: v13.17.10
+* Script Version: v13.17.15
 * Developed Since: 2023
 * Server Owner: Puur, Sam Simarmata
 
