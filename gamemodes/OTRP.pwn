@@ -7748,7 +7748,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-			PlayerData[playerid][pJobSelect] = listitem + 1;
+			
+			PlayerData[playerid][pJobSelect] = ListedItems[playerid][listitem];
 
 			new str[256];
 			format(str, sizeof(str), "{FFFFFF}Tekan {00FF00}Confirm {FFFFFF}untuk mengambil job {FFFF00}%s", GetJobName(PlayerData[playerid][pJobSelect]));
@@ -7759,7 +7760,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-			PlayerData[playerid][pJobSelect] = listitem + 1;
+			PlayerData[playerid][pJobSelect] = ListedItems[playerid][listitem];
 
 			new str[256];
 			format(str, sizeof(str), "{FFFFFF}Tekan {00FF00}Confirm {FFFFFF}untuk mengambil job {FFFF00}%s", GetJobName(PlayerData[playerid][pJobSelect]));
@@ -11137,7 +11138,7 @@ timer OnAutoAimCheck[2000](playerid) {
 	return 1;
 }
 task OnServerDataUpdate[1800000]() {
-	fishPrice = RandomEx(250, 450);
+	fishPrice = RandomEx(25, 70);
 	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n{FFFFFF}/sellfish untuk menjual ikan", FormatNumber(fishPrice)));
 	woodPrice = RandomEx(2500, 5000);
 	return 1;

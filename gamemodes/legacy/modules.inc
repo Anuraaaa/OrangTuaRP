@@ -108,7 +108,7 @@
 #include ".\legacy\Job\Miner"
 #include ".\legacy\Job\Hauling"
 #include ".\legacy\Job\BoxCourier"
-
+#include ".\legacy\Job\Farmer"
 /* Other Important Modules */
 #include ".\legacy\Core\player"
 #include ".\legacy\Core\generalcmd_player"
