@@ -894,7 +894,7 @@ task OnFlatAsellCheck[3600000]() {
 			mysql_tquery(sqlcon, sprintf("INSERT INTO `flat_queue` (`Username`, `FlatID`) VALUES('%s','%d')", FlatData[i][flatOwnerName], i));
 			FlatData[i][flatLastLogin] = 0;
 
-			for(new j = 0; j < MAX_FLAT_STORAGE; i++) if(FlatStorage[i][j][fItemExists]) {
+			for(new j = 0; j < MAX_FLAT_STORAGE; j++) if(FlatStorage[i][j][fItemExists]) {
 				FlatStorage[i][j][fItemExists] = false;
 				FlatStorage[i][j][fItemModel] = 0;
 				FlatStorage[i][j][fItemQuantity] = 0;
