@@ -2303,7 +2303,7 @@ public OnPlayerUpdate(playerid)
 				GetPlayerWeaponData(playerid, i, weaponid, ammo);
 				index = weaponid - 22;
 
-				if((weaponid && PlayerData[playerid][pGuns][g_aWeaponSlots[weaponid]] == weaponid ) && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)         
+				if(weaponid && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)         
 				//if (weaponid && ammo && !WeaponSettings[playerid][index][Hidden] && IsWeaponWearable(weaponid) && EditingWeapon[playerid] != weaponid)
 				{
 					objectslot = GetWeaponObjectSlot(weaponid);
