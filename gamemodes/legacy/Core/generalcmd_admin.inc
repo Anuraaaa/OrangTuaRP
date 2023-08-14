@@ -728,7 +728,7 @@ CMD:editplayer(playerid, params[])
 	}
 	else if(!strcmp(type, "job1", true)) 
 	{
-	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_SMUGGLER)
+	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_FARMER)
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [job1]");
 
 		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Job 1) "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
@@ -736,7 +736,7 @@ CMD:editplayer(playerid, params[])
 	}
 	else if(!strcmp(type, "job2", true)) 
 	{
-	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_SMUGGLER)
+	    if (isnull(amount) || strval(amount) < JOB_NONE || strval(amount) > JOB_FARMER)
 	        return SendSyntaxMessage(playerid, "/editplayer [playerid/PartOfName] [job2]");
 
 		SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Job 2) "WHITE"You have changed "YELLOW"%s's "WHITE"job to "CYAN"%s", GetName(userid, false), GetJobName(strval(amount)));
