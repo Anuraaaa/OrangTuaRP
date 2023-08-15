@@ -47,10 +47,10 @@ enum E_PLANT_DATA
 	plantProgress,
 	Float:plantPos[3],
 	STREAMER_TAG_OBJECT:plantObject,
-	STREAMER_TAG_AREA:plantArea,
 	bool:plantWatered,
 	bool:plantHarvested,
 	plantStatus,
+    Float:plant_realZ
 };
 new
     PlantData[MAX_PLANT][E_PLANT_DATA],
@@ -90,6 +90,7 @@ Plant_Create(Float:x, Float:y, Float:z)
 		PlantData[pid][plantPos][2] = z;
 		PlantData[pid][plantHarvested] = false;
 		PlantData[pid][plantStatus] = PLANT_STATUS_NEEDWATER;
+        PlantData[pid][plant_realZ] = z;
 		Plant_Sync(pid, PLANT_SPAWN);
 		return pid;
 	}
@@ -107,9 +108,6 @@ Plant_Sync(idx, type)
 		{
 			if(!IsValidDynamicObject(PlantData[idx][plantObject]))
 				PlantData[idx][plantObject] = CreateDynamicObject(19473, PlantData[idx][plantPos][0], PlantData[idx][plantPos][1], PlantData[idx][plantPos][2] - 2.5, 0.0, 0.0, 0.0, -1, -1);
-
-			if(!IsValidDynamicArea(PlantData[idx][plantArea]))
-				PlantData[idx][plantArea] = CreateDynamicSphere(PlantData[idx][plantPos][0], PlantData[idx][plantPos][1], PlantData[idx][plantPos][2], 1.5);
 
 		}
 		case PLANT_GROW:
@@ -142,10 +140,12 @@ bool:IsPlayerInFieldArea(playerid)
 
 Plant_GetNearest(playerid)
 {
-	foreach(new i : Plant) if(IsPlayerInDynamicArea(playerid, PlantData[i][plantArea]))
-		return i;
-
-	return -1;
+    new idx = -1;
+	foreach(new i : Plant) if(IsPlayerInRangeOfPoint(playerid, 3.5, PlantData[i][plantPos][0], PlantData[i][plantPos][1], PlantData[i][plant_realZ])) {
+        idx = i;
+        break;
+    }
+	return idx;
 }
 
 Plant_Reset(idx)
@@ -159,9 +159,6 @@ Plant_Destroy(idx)
 {
 	if(!Iter_Contains(Plant, idx))
 		return 0;
-
-	if(IsValidDynamicArea(PlantData[idx][plantArea]))
-		DestroyDynamicArea(PlantData[idx][plantArea]);
 
 	if(IsValidDynamicObject(PlantData[idx][plantObject]))
 		DestroyDynamicObject(PlantData[idx][plantObject]);
@@ -208,6 +205,7 @@ function Plant_Plant(playerid)
 {
 	new idx, Float:x, Float:y, Float:z;
 	GetPlayerPos(playerid, x,y,z);
+    ClearAnimations(playerid, 1);
 	idx = Plant_Create(x,y,z);
 
 	if(!IsPlayerInDynamicArea(playerid, digArea[playerid]))
@@ -219,7 +217,6 @@ function Plant_Plant(playerid)
 	if(IsValidDynamicArea(digArea[playerid]))
 		DestroyDynamicArea(digArea[playerid]);
 
-	ClearAnimations(playerid, 1);
 	IsPlanting[playerid] = false;
 	Inventory_Remove(playerid, "Plant Seed", 1);
 	Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
