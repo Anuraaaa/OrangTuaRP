@@ -592,7 +592,7 @@ CMD:spec(playerid, params[])
 	SendServerMessage(playerid, "You are now spectating "YELLOW"%s (ID: %d).", GetName(userid), userid);
 	PlayerData[playerid][pSpectator] = userid;
 
-	if(PlayerData[playerid][pAdmin] <= PlayerData[userid][pAdmin] && PlayerData[userid][pAdmin] > 6)
+	if(PlayerData[playerid][pAdmin] <= 6 && PlayerData[userid][pAdmin] > 6)
 		SendClientMessageEx(userid, X11_GREY, "You are being spectated by "YELLOW"%s"GREY".", GetUsername(playerid));
 	return 1;
 }
