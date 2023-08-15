@@ -429,7 +429,7 @@ UnloadPlayerVehicle(playerid) {
 		new Float:health;
 		GetVehicleHealth(vehicleid, health);
 
-		if(IsVehicleUpsideDown(vehicleid) && health <= 800.0) {
+		if(IsVehicleUpsideDown(vehicleid) && health <= 800.0 && IsDoorVehicle(vehicleid)) {
 			SendAdminMessage(X11_TOMATO, "VehWarn: %s kemungkinan disconnect dari server ketika kendaraan %s miliknya terbalik.", GetName(playerid, false), GetVehicleName(vehicleid));
 		}
 		defer Vehicle_SafeUnload[2000](vehicleid);
