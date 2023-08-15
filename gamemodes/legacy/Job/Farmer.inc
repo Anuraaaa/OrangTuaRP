@@ -481,6 +481,10 @@ hook OnPlayerDisconnectEx(playerid) {
     if(IsValidDynamicArea(digArea[playerid])) {
         DestroyDynamicArea(digArea[playerid]);
     }
+
+    IsHarvesting[playerid] = false;
+    IsWatering[playerid] = false;
+    IsPlanting[playerid] = false;
 }
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
