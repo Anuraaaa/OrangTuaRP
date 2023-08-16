@@ -32,7 +32,7 @@
 
 /* Includes */
 
-#define CGEN_MEMORY 50000
+#define CGEN_MEMORY 60000
 #define YSI_NO_HEAP_MALLOC
 #define YSI_NO_OPTIMISATION_MESSAGE
 
