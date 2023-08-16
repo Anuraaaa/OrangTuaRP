@@ -678,7 +678,7 @@ CMD:event(playerid, params[])
 
 		Dialog_Show(playerid, EventMode, DIALOG_STYLE_LIST,
 			"Event Mode",
-			""GREEN"Race\n\
+			""GREEN"Race (maintenance)\n\
 			"CYAN1"Dearby (maintenace)\n\
 			"BLUE"Team Deathmatch\n\
 			"RED"Deathmatch\n\
@@ -837,6 +837,7 @@ Dialog:EventMode(playerid, response, listitem, inputtext[])
 		return 1;
 
 	switch (listitem) {
+		case 0: SendErrorMessage(playerid, "Mode tidak tersedia saat ini!");
 		case 1: SendErrorMessage(playerid, "Mode tidak tersedia saat ini!");
 		default: {
 
@@ -4226,7 +4227,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 				}
 				if (Iter_Count(RacesCP<id>) < 20) {
 
-					format (str, sizeof(str), "%s\nCP:-\t<< New checkpoint >>\tSan ANdreas", str);
+					format (str, sizeof(str), "%s\nCP:-\t<< New checkpoint >>\tSan Andreas", str);
 				}
 				Dialog_Show(playerid, Race_CreateCP, DIALOG_STYLE_TABLIST_HEADERS, "Create Race Map", str, "Move", "Save");
 
