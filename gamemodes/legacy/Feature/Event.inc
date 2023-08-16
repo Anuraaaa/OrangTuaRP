@@ -2540,6 +2540,46 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			evTeam[playerid] = 0;
+			tdm_EventData[eventEntry]--;		
+			if (tdm_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					evTeam[i] = 0;
+					TDM_DisplayTD(i, false);
+					TDM_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, PlayerData[i][pMoney]);
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, tdm_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
+
 			TDM_DisplayTD(playerid, false);
 			TDM_ToggleAntiCheat(playerid, false);
 
@@ -2654,6 +2694,44 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			dm_EventData[eventExp][playerid] = 0;
+			dm_EventData[eventEntry]--;		
+			if (dm_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 4)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					dm_EventData[eventExp][i] = 0;
+					DM_ToggleAntiCheat(playerid,false);
+					DM_DisplayTD(i, false);
+
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, dm_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(dm_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
 			DM_DisplayTD(playerid, false);
 			DM_ToggleAntiCheat(playerid, false);
 
@@ -2896,6 +2974,45 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			evTeam[playerid] = 0;
+			zombie_EventData[eventAlive] --; 
+			if (zombie_EventData[eventAlive] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 6)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					evTeam[i] = 0;
+					Zombie_DisplayTD(i, false);
+					Zombie_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, zombie_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(zombie_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
 			Zombie_DisplayTD(playerid, false);
 			Zombie_ToggleAntiCheat(playerid, false);
 
