@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum
 {
 	FACTION_NONE = 0,
@@ -37,6 +39,13 @@ enum factionData
 };
 new FactionData[MAX_FACTIONS][factionData];
 new FactionRanks[MAX_FACTIONS][15][32];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `factions`", "Faction_Load", "");		
+	}
+}
 
 GetInitials(const string[])
 {

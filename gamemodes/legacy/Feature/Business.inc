@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 forward OnBusinessDeleted(bizid);
 forward OnBusinessRefuel(bizid);
 
@@ -48,6 +50,26 @@ enum E_BUSINESS_DATA
 
 new BizData[MAX_BUSINESS][E_BUSINESS_DATA];
 new ProductName[MAX_BUSINESS][8][24], ProductDescription[MAX_BUSINESS][8][42];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `business`", "Business_Load");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+		for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists]) {
+			Business_Save(i);
+		}
+		printf("** Saved business data in %dms", GetTickCount() - time);
+	}
+}
 
 ShowNumberIndex(playerid)
 {

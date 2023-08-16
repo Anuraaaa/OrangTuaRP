@@ -1,5 +1,6 @@
 /* Important Modules */
 
+#include ".\legacy\Core\database"
 #include ".\legacy\Core\generalfunc"
 #include ".\legacy\Core\area"
 #include ".\legacy\Core\streamerconfig"

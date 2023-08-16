@@ -185,6 +185,27 @@ CMD:destroytree(playerid, params[])
 	return 1;	
 }
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `tree`", "Tree_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+		
+		new time = GetTickCount();
+
+		forex(i, MAX_TREE) if(TreeData[i][treeExists])
+		{
+			Tree_Save(i);
+		}
+		printf("** Saved tree data in %dms.", GetTickCount() - time);		
+	}
+}
+
 hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 
 	for(new i = 0; i < MAX_TREE; i++) if(TreeData[i][treeExists]) {

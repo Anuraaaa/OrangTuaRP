@@ -314,6 +314,23 @@ function OnFactionGarage(playerid, garage_id) {
     }
     return 1;
 }
+
+hook OnGameModeInit() {
+
+    if (IsSQLConnected()) {
+        Iter_Init(FactionGarages);
+		mysql_tquery(sqlcon, "SELECT * FROM `factiongarage`", "FactionGarage_Load", "");
+		mysql_tquery(sqlcon, "UPDATE `factiongaragevehs` SET `Spawned` = '0'");
+    }
+}
+
+hook OnGameModeExit() {
+
+    if (IsSQLConnected()) {
+        Iter_Clear(FactionGarages);
+    }
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
  	if (newkeys & KEY_CROUCH && GetPlayerState(playerid) == PLAYER_STATE_DRIVER)

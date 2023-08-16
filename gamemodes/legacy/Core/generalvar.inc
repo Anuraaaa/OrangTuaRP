@@ -782,7 +782,6 @@ enum
 	EDIT_ROADBLOCK,
 };
 
-new MySQL:sqlcon;
 new g_RaceCheck[MAX_PLAYERS char];
 new PlayerChar[MAX_PLAYERS][MAX_CHARS][MAX_PLAYER_NAME + 1];
 new PlayerLevel[MAX_PLAYERS][MAX_CHARS];

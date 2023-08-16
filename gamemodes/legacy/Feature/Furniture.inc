@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum furnitureData {
 	furnitureID,
 	furnitureProperty,
@@ -324,6 +326,21 @@ new const g_aFurnitureData[][e_FurnitureData] = {
 	{9, "Light", 18075}
 
 };
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		Iter_Init(Furniture);
+		mysql_tquery(sqlcon, "SELECT * FROM `furniture`", "OnLoadFurniture", "");
+	}
+}
+
+hook OnGameModeExit() {
+	
+	if (IsSQLConnected()) {
+		Iter_Clear(Furniture);
+	}
+}
 
 function OnLoadFurniture()
 {

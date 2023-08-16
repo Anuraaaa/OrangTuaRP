@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 new NearestItems[MAX_PLAYERS][MAX_LISTED_ITEMS];
 enum droppedItems
 {
@@ -16,6 +18,14 @@ enum droppedItems
 };
 
 new DroppedItems[MAX_DROPPED_ITEMS][droppedItems];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `dropped`", "Dropped_Load", "");
+	}
+}
+
 
 Item_Delete(itemid)
 {

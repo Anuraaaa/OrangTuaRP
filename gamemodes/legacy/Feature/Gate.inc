@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum e_gateData {
 	gateID,
 	gateExists,
@@ -18,6 +20,13 @@ enum e_gateData {
 };
 
 new GateData[MAX_GATES][e_gateData];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `gates`", "Gate_Load", "");
+	}
+}
 
 Gate_Nearest(playerid)
 {

@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum objectData {
 	mobjID,
 	mobjExists,
@@ -9,6 +11,13 @@ enum objectData {
 	mobjObject
 };
 new ObjectData[MAX_MAPOBJECTS][objectData];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `object`", "Object_Load");
+	}	
+}
 
 function Object_Load()
 {

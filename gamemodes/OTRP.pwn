@@ -466,8 +466,7 @@ main()
 
 public OnGameModeInit()
 {
-
-	if(Database_Connect()) {
+	if (IsSQLConnected()) {
 		CA_Init();
 		CreateGlobalTextDraw();
 		CreatePublicHUD();
@@ -489,38 +488,7 @@ public OnGameModeInit()
 		SetGameModeText("OTRP "SERVER_VERSION"");
 		SendRconCommand(sprintf("hostname %s", SERVER_NAME));
 
-		Iter_Init(House);
 		//Iter_Init(PlayerVehicle);
-		Iter_Init(Furniture);
-		Iter_Init(DynamicActor);
-		Iter_Init(SprayTag);
-		/* Load from Database */
-		mysql_tquery(sqlcon, "SELECT * FROM `911calls`", "Emergency_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `actors`", "Actor_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `atm`", "ATM_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `fuelpump`", "Pump_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `business`", "Business_Load");
-		mysql_tquery(sqlcon, "SELECT * FROM `dealer`", "SQL_LoadDealership", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `dropped`", "Dropped_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `doors`", "Doors_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `factions`", "Faction_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `flat`", "Flat_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `gates`", "Gate_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `garage`", "Garage_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `houses`", "House_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `object`", "Object_Load");
-		mysql_tquery(sqlcon, "SELECT * FROM `rental`", "Rental_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `speedcameras`", "Speed_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `tags`", "Tag_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `trash`", "Trash_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `tree`", "Tree_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `weed`", "Weed_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `workshop`", "Workshop_Load");
-		mysql_tquery(sqlcon, "SELECT * FROM `rock`", "Rock_Load", "");
-		mysql_tquery(sqlcon, "SELECT * FROM `factiongarage`", "FactionGarage_Load", "");
-		mysql_tquery(sqlcon, "UPDATE `factiongaragevehs` SET `Spawned` = '0'");
-		mysql_tquery(sqlcon, "SELECT * FROM `furniture`", "OnLoadFurniture", "");
-		/* Load from Files */
 
 		LoadServerData();
 		LoadEconomyData();
@@ -530,7 +498,7 @@ public OnGameModeInit()
 		for (new i; i < sizeof(ColorList); i++) {
 			format(color_string, sizeof(color_string), "%s{%06x}%03d %s", color_string, ColorList[i] >>> 8, i, ((i+1) % 16 == 0) ? ("\n") : (""));
 		}
-	}
+	} 
 	return 1;
 }
 
@@ -877,6 +845,7 @@ public OnGameModeExit()
 	SaveServerStatistics();
 
 	mysql_close(sqlcon);
+	sqlConnected = false;
 	return 1;
 }
 
@@ -10782,52 +10751,6 @@ SaveServerStatistics() {
 	}
 
 	printf("** Saved player data in %dms", GetTickCount() - time);
-
-	forex(i, MAX_TREE) if(TreeData[i][treeExists])
-	{
-		Tree_Save(i);
-	}
-	printf("** Saved tree data in %dms.", GetTickCount() - time);
-
-	for(new i = 0; i < MAX_WEED; i ++) if(WeedData[i][weedExists]) {
-		Weed_Save(i);
-	}
-	printf("** Saved  weed data  in %dms.", GetTickCount() - time);
-
-	for(new i = 0; i < MAX_SPEEDCAM; i++) if(SpeedData[i][speedExists]) {
-		Speed_Save(i);
-	}
-	printf("** Saved speedcam data in %dms", GetTickCount() - time);
-
-	for(new i = 0; i < MAX_DEALER; i++) if(DealerData[i][dealerExists]) {
-		SQL_SaveDealership(i);
-	}
-	printf("** Saved dealer data in %dms", GetTickCount() - time);
-
-	foreach(new i : House) {
-		House_Save(i);
-	}
-	printf("** Saved house data  in %dms", GetTickCount() - time);
-
-	for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists]) {
-		Business_Save(i);
-	}
-	printf("** Saved business data in %dms", GetTickCount() - time);
-
-	for(new i =  0; i <  MAX_TREE; i++) if(TreeData[i][treeExists]) {
-		Tree_Save(i);
-	}
-	printf("** Saved tree data in %dms", GetTickCount() - time);
-
-	foreach(new i :  Flat) {
-		Flat_Save(i);
-	}
-	printf("** Saved flat data in %dms", GetTickCount() - time);
-
-	foreach(new i : Pump) {
-		Pump_Save(i);
-	}
-	printf("** Saved pump data in %dms", GetTickCount() - time);
 
 	return printf("There is %d player when the server shutdown.", Iter_Count(Player));
 }
