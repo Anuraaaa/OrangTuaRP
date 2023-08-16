@@ -231,7 +231,7 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
-	if (newstate == PLAYER_STATE_SPECTATING && !IsAtEvent(playerid) && !FlyMode[playerid]) {
+	if (newstate == PLAYER_STATE_SPECTATING && GetPVarInt(playerid, "IsAtEvent") == 0 && !FlyMode[playerid]) {
 		if (oldstate == PLAYER_STATE_ONFOOT) {
 
 			for (new i = 0; i < 15; i++) {

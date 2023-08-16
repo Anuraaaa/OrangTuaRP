@@ -1049,7 +1049,7 @@ public OnPlayerDisconnectEx(playerid) {
 		}
 	}
 
-    foreach(new id : Player) if(PlayerData[id][pSpectator] == playerid && GetPlayerState(id) == PLAYER_STATE_SPECTATING && !IsAtEvent(id))
+    foreach(new id : Player) if(PlayerData[id][pSpectator] == playerid && GetPlayerState(id) == PLAYER_STATE_SPECTATING)
     {
 		SendServerMessage(id, "User %s(%s) is disconnected from server.", GetName(playerid, false), GetUsername(playerid));
         cmd_unspec(id, "\0");
@@ -1422,7 +1422,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		Aksesoris_Sync(playerid);
 
 	}
-	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && !IsAtEvent(playerid))
+	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && GetPVarInt(playerid, "IsAtEvent") < 1)
 	{
 		if(PlayerData[playerid][pInjured])
 		{
@@ -9735,7 +9735,7 @@ public OnPlayerSpawn(playerid)
 	if(!LewatClass[playerid])
 		return Kick(playerid);
 
-	if(!PlayerData[playerid][pSpawned] && !IsAtEvent(playerid))
+	if(!PlayerData[playerid][pSpawned] && GetPVarInt(playerid, "IsAtEvent") < 1)
 	{	
 		if(IsPlayerUsingAndroid(playerid)) 
 			defer OnAutoAimCheck[2000](playerid);
@@ -9802,7 +9802,7 @@ public OnPlayerSpawn(playerid)
 			SetPlayerHealth(playerid, 100);
 		}
 	}
-	if(PlayerData[playerid][pJailTime] > 0 && !IsAtEvent(playerid))
+	if(PlayerData[playerid][pJailTime] > 0 && GetPVarInt(playerid, "IsAtEvent") < 1)
 	{
 	    if (PlayerData[playerid][pArrest])
 	        SetPlayerArrest(playerid);
@@ -9823,7 +9823,7 @@ public OnPlayerSpawn(playerid)
 	}
     else
 	{
-		if(PlayerData[playerid][pDead] && !IsAtEvent(playerid))
+		if(PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") < 1)
 		{
 			PlayerData[playerid][pInjured] = false;
 			PlayerData[playerid][pDead] = false;
@@ -9849,7 +9849,7 @@ public OnPlayerSpawn(playerid)
 
 			DragCheck(playerid);
 		}
-		else if (!PlayerData[playerid][pDead] && !IsAtEvent(playerid))
+		else if (!PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") < 1)
 		{
 			SetValidColor(playerid);
 			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
@@ -10182,7 +10182,7 @@ public OnPlayerText(playerid, text[])
 		return 0;
 	}
 
-	if (IsAtEvent(playerid))
+	if (GetPVarInt(playerid, "IsAtEvent") > 0)
 		return 0;
 		
 	if(gettime() < chat_floodProtect[playerid] && !PlayerData[playerid][pAdmin]) {

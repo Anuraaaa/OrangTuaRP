@@ -415,7 +415,7 @@ CMD:event(playerid, params[])
 			if ((tdm_EventData[eventEntry] >= tdm_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -496,7 +496,7 @@ CMD:event(playerid, params[])
 			if ((dm_EventData[eventEntry] >= dm_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -545,7 +545,7 @@ CMD:event(playerid, params[])
 			if ((parachute_EventData[eventEntry] >= parachute_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -595,7 +595,7 @@ CMD:event(playerid, params[])
 			if ((zombie_EventData[eventEntry] >= zombie_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -701,7 +701,7 @@ CMD:event(playerid, params[])
 		{
 			format(str, sizeof(str), "Options\tValue\nEvent Slot\t%d participants\nEvent Price\t$%s ($%s if won)\nEvent Vehicles Model\t%d (%s)\nEvent Position\t%.1f\nEvent Time\t%d minutes\n%s\nTeleport to checkpoint\nAnnounce Event\nForce End",
 				race_EventData[evLimit],
-				FormatNumber(race_EventData[evPrice]), FormatNumber(race_EventData[evPrice]+100),
+				FormatNumber(race_EventData[evPrice]), FormatNumber(race_EventData[evPrice]+1000000),
 				race_EventData[evModel], ReturnVehicleModelName(race_EventData[evModel]),
 				race_EventData[evPos][0],
 				(race_EventData[evTime] / 60),
@@ -767,7 +767,7 @@ CMD:event(playerid, params[])
 				dm_EventData[eventLimit],
 				dm_EventData[eventMaxScore],
 				FormatNumber(dm_EventData[eventPrice]),
-				FormatNumber(dm_EventData[eventPrice]+100),
+				FormatNumber(dm_EventData[eventPrice]+10000),
 				GetPlayerDistanceFromPoint(playerid, dm_EventData[eventPosX], dm_EventData[eventPosY], dm_EventData[eventPosZ]),
 				ReturnWeaponName(dm_EventData[eventWeapons][0]), ReturnWeaponName(dm_EventData[eventWeapons][1]), ReturnWeaponName(dm_EventData[eventWeapons][2]),
 				dm_EventData[eventAmmo][0], dm_EventData[eventAmmo][1], dm_EventData[eventAmmo][2]				
@@ -790,8 +790,8 @@ CMD:event(playerid, params[])
 				parachute_EventData[eventLimit],
 				FormatNumber(parachute_EventData[eventPrice]),
 				FormatNumber(parachute_EventData[eventWinnerPrice]),
-				FormatNumber(parachute_EventData[eventWinnerPrice]-25),
-				FormatNumber(parachute_EventData[eventWinnerPrice]-50),
+				FormatNumber(parachute_EventData[eventWinnerPrice]-2500),
+				FormatNumber(parachute_EventData[eventWinnerPrice]-5000),
 				arrFlyData[parachute_EventData[eventSelectPos]],
 				GetPlayerDistanceFromPoint(playerid, parachute_EventData[eventLandingX], parachute_EventData[eventLandingY], parachute_EventData[eventLandingZ])
 			);
@@ -815,7 +815,7 @@ CMD:event(playerid, params[])
 
 				zombie_EventData[eventLimit],
 				zombie_EventData[eventAlive],
-				FormatNumber(zombie_EventData[eventPrice]), FormatNumber(zombie_EventData[eventPrice]+100),
+				FormatNumber(zombie_EventData[eventPrice]), FormatNumber(zombie_EventData[eventPrice]+10000),
 				zombie_EventData[eventTimer],
 				GetPlayerDistanceFromPoint(playerid, zombie_EventData[eventPosX][0], zombie_EventData[eventPosY][0], zombie_EventData[eventPosZ][0]),
 				GetPlayerDistanceFromPoint(playerid, zombie_EventData[eventPosX][1], zombie_EventData[eventPosY][1], zombie_EventData[eventPosZ][1]),
@@ -987,7 +987,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					evRaceCP[i] = -1;
 					if (IsValidVehicle(evCar[i]))
@@ -1278,7 +1278,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					evTeam[i] = 0;
 					TDM_DisplayTD(i, false);
@@ -1410,7 +1410,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					dm_EventData[eventExp][i] = 0;
 					DM_ToggleAntiCheat(playerid,false);
@@ -1525,7 +1525,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					Parachute_ToggleAntiCheat(playerid, false);
 
@@ -1547,6 +1547,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					ResetPlayerMoney(i);
 					GivePlayerMoney(i, GetMoney(i));
 					ResetPlayerWeapons(i);
+					DisablePlayerRaceCheckpoint(i);
 					SetWeapons(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
@@ -1681,7 +1682,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					evTeam[i] = 0;
 					Zombie_DisplayTD(i, false);
@@ -1949,15 +1950,6 @@ Event_ForceEnd(all = 1)
 	return 1;
 }
 
-IsAtEvent(playerid)
-{
-	if (GetPVarInt(playerid, "IsAtEvent") > 0) {
-
-		return (GetPVarInt(playerid, "IsAtEvent") > 0);
-	}
-	return 0;
-}
-
 function Event_RespawnPlayer(playerid) {
 
 	TogglePlayerSpectating(playerid, 0);
@@ -2118,10 +2110,10 @@ task Dearby_EventTimer[1000]()
 				ResetPlayerMoney(i);
 				GivePlayerMoney(i, PlayerData[i][pMoney]);
 
-				GiveMoney(i, dearby_EventData[evPrice] / 50);
+				GiveMoney(i, dearby_EventData[evPrice]);
 				SetWeapons(i);
 
-				SendClientMessageEx(i, COLOR_SERVER, "EVENT: "YELLOW"Tidak ada pemenang, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah mengikuti mode ini.", FormatNumber(dearby_EventData[evPrice] / 50));
+				SendClientMessageEx(i, COLOR_SERVER, "EVENT: "YELLOW"Tidak ada pemenang, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah mengikuti mode ini.", FormatNumber(dearby_EventData[evPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
 			Event_ForceEnd();
@@ -2131,7 +2123,7 @@ task Dearby_EventTimer[1000]()
 
 ptask Dearby_EventCountdown[1000](playerid) 
 {
-	if (IsAtEvent(playerid) && (EventType == 2))
+	if (GetPVarInt(playerid, "IsAtEvent") > 0 && (EventType == 2))
 	{
 		if (dearby_EventData[evCountdown][playerid] > 0)
 		{
@@ -2183,11 +2175,11 @@ ptask Dearby_EventCountdown[1000](playerid)
 				ResetPlayerMoney(playerid);
 				GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
 
-				GiveMoney(playerid, dearby_EventData[evPrice] / 50);
+				GiveMoney(playerid, dearby_EventData[evPrice]);
 				SetWeapons(playerid);
 
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been eliminated. (Blow up engine)", GetName(playerid));
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"Kamu tereliminasi karena kendaraan mu sudah berasap, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah berpartisipasi dalam event ini.", FormatNumber(dearby_EventData[evPrice] / 50));
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"Kamu tereliminasi (blow up engine), kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah berpartisipasi dalam event ini.", FormatNumber(dearby_EventData[evPrice]));
 
 				SetCameraBehindPlayer(playerid);
 				SetPVarInt(playerid, "IsAtEvent", -1);
@@ -2409,6 +2401,8 @@ hook OnPlayerConnect(playerid) {
     PlayerTextDrawSetProportional(playerid, ZombieTD[playerid][3], 1);
     PlayerTextDrawSetSelectable(playerid, ZombieTD[playerid][3], 0);
 
+	DeletePVar(playerid, "IsAtEvent");
+	DeletePVar(playerid, "EditRaceCP");
 
 	return 1;
 }
@@ -2418,7 +2412,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
 		TogglePlayerSpectating(playerid, 1);
-		SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+		SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 		evRaceCP[playerid] = -1;
 		if (IsValidVehicle(evCar[playerid]))
@@ -2491,7 +2485,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 							}
 
 							TogglePlayerSpectating(id, 1);
-							SetTimerEx("Event_Respawnplayer", 4000, false, "d", id);
+							SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
 
 							evTeam[id] = 0;
 							TDM_DisplayTD(id, false);
@@ -2542,7 +2536,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			evTeam[playerid] = 0;
 			TDM_DisplayTD(playerid, false);
@@ -2596,7 +2590,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			if (dm_EventData[eventExp][killerid] >= dm_EventData[eventMaxScore]) {
 
 				dm_EventData[eventWinner] = killerid;
-				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", GetName(dm_EventData[eventWinner]), FormatNumber(dm_EventData[eventPrice]+100));
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", GetName(dm_EventData[eventWinner]), FormatNumber(dm_EventData[eventPrice]+10000));
 			
 				foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == EventType && EventType == 4) {
 
@@ -2605,10 +2599,10 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 						GiveMoney(id, dm_EventData[eventPrice]);
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
 					}
-					else GiveMoney(id, dm_EventData[eventPrice]+100);
+					else GiveMoney(id, dm_EventData[eventPrice]+10000);
 				
 					TogglePlayerSpectating(id, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", id);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
 
 					dm_EventData[eventExp][id] = 0;
 					DM_DisplayTD(id, false);
@@ -2656,7 +2650,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "ORANGE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			dm_EventData[eventExp][playerid] = 0;
 			DM_DisplayTD(playerid, false);
@@ -2694,7 +2688,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been eliminated due killing a participant", GetName(killerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			Parachute_ToggleAntiCheat(playerid, false);
 
@@ -2716,6 +2710,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			ResetPlayerMoney(playerid);
 			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
 			ResetPlayerWeapons(playerid);
+			DisablePlayerRaceCheckpoint(playerid);
 			SetWeapons(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
@@ -2724,7 +2719,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			Parachute_ToggleAntiCheat(playerid, false);
 
@@ -2747,6 +2742,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
 			ResetPlayerWeapons(playerid);
 			SetWeapons(playerid);
+			DisablePlayerRaceCheckpoint(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
 		parachute_EventData[eventEntry] --;
@@ -2755,7 +2751,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				Parachute_ToggleAntiCheat(playerid, false);
 
@@ -2778,6 +2774,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 				GivePlayerMoney(i, GetMoney(i));
 				ResetPlayerWeapons(i);
 				SetWeapons(i);
+				DisablePlayerRaceCheckpoint(i);
 
 				GiveMoney(i, parachute_EventData[eventPrice]),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
@@ -2837,11 +2834,17 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
                 foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
 
-                    if (evTeam[id] == zombie_EventData[eventWinner]) GiveMoney(id, zombie_EventData[eventPrice]+100);
-                    else GiveMoney(id, zombie_EventData[eventPrice]);
+                    if (evTeam[id] == zombie_EventData[eventWinner]) {
+						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
+					}
+                    else {
+						GiveMoney(id, zombie_EventData[eventPrice]);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
+					}
                     
 					TogglePlayerSpectating(id, 1);
-					SetTimerEx("Event_Respawnplayer", 4000, false, "d", id);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
 
 					evTeam[id] = 0;
 					Zombie_DisplayTD(id, false);
@@ -2889,7 +2892,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			evTeam[playerid] = 0;
 			Zombie_DisplayTD(playerid, false);
@@ -2922,7 +2925,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
 hook OnPlayerSpawn(playerid) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
+	if (GetPVarInt(playerid, "IsAtEvent") == 1 && EventType == 1) {
 
 		evRaceCP[playerid] = -1;
 		race_EventData[evEntry]--;
@@ -2932,7 +2935,7 @@ hook OnPlayerSpawn(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 1)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				evRaceCP[i] = -1;
 				if (IsValidVehicle(evCar[i]))
@@ -2993,7 +2996,7 @@ hook OnPlayerSpawn(playerid) {
 		DisablePlayerRaceCheckpoint(playerid);
 		SetPVarInt(playerid, "IsAtEvent", -1);
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 3 && EventType == 3) {
 
 		TDM_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -3012,7 +3015,7 @@ hook OnPlayerSpawn(playerid) {
 
 		SetTimerEx("TDM_Spawning", 5000, false, "d", playerid);
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 4 && EventType == 4) {
 
 		DM_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -3031,7 +3034,7 @@ hook OnPlayerSpawn(playerid) {
 
 		SetTimerEx("DM_Spawning", 5000, false, "d", playerid);
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
 		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 
@@ -3051,7 +3054,7 @@ hook OnPlayerSpawn(playerid) {
 
 		parachute_EventData[eventEntry] --;
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 6 && EventType == 6) {
 
 		Zombie_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -3104,6 +3107,8 @@ hook OnPlayerSpawn(playerid) {
 		ResetPlayerWeapons(playerid);
 		SetWeapons(playerid);
 		DisableRemoteVehicleCollisions(playerid, 0);
+		DisablePlayerRaceCheckpoint(playerid);
+		SetPVarInt(playerid, "IsAtEvent", 0);
 	}
 }
 
@@ -3143,7 +3148,7 @@ hook OnPlayerText(playerid, text[]) {
 
 		foreach (new id : Player) {
 
-			if (IsAtEvent(id) && GetPVarInt(playerid, "IsAtEvent") == GetPVarInt(id, "IsAtEvent")) {
+			if (GetPVarInt(id, "IsAtEvent") > 0 && GetPVarInt(playerid, "IsAtEvent") == GetPVarInt(id, "IsAtEvent")) {
 
 				SendClientMessageEx(id, GetPlayerColor(playerid), "%s: "WHITE"%s", GetName(playerid), text);
 			}
@@ -3155,7 +3160,7 @@ hook OnPlayerText(playerid, text[]) {
 
 		foreach (new id : Player) {
 
-		if (IsAtEvent(id) && GetPVarInt(id, "IsAtEvent") == 5) {
+		if (GetPVarInt(id, "IsAtEvent") > 0 && GetPVarInt(id, "IsAtEvent") == 5) {
 
 				SendClientMessage(id, GetPlayerColor(playerid), sprintf("%s: "WHITE"%s", GetName(playerid), text));
 			}
@@ -3187,7 +3192,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 1)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				evRaceCP[i] = -1;
 				if (IsValidVehicle(evCar[i]))
@@ -3232,7 +3237,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			Vehicle_Delete(evCar[playerid], false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
     }
 	else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
 
@@ -3251,7 +3256,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				evTeam[i] = 0;
 				TDM_DisplayTD(i, false);
@@ -3284,7 +3289,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			}
 			Event_ForceEnd();			
 		}
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
@@ -3300,7 +3305,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 4)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				dm_EventData[eventExp][i] = 0;
 				DM_ToggleAntiCheat(playerid,false);
@@ -3335,7 +3340,7 @@ hook OnPlayerDisconnectEx(playerid) {
 		DM_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has leave from event. (Disconnected/FC)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
 
@@ -3348,7 +3353,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				Parachute_ToggleAntiCheat(playerid, false);
 
@@ -3371,6 +3376,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				GivePlayerMoney(i, GetMoney(i));
 				ResetPlayerWeapons(i);
 				SetWeapons(i);
+				DisablePlayerRaceCheckpoint(i);
 
 				GiveMoney(i, parachute_EventData[eventPrice]),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
@@ -3379,7 +3385,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			Event_ForceEnd();			
 		}
 
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
 	}
     else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
@@ -3394,7 +3400,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 6)
 			{
 				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", i);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 				evTeam[i] = 0;
 				Zombie_DisplayTD(i, false);
@@ -3435,7 +3441,7 @@ hook OnPlayerDisconnectEx(playerid) {
 		Zombie_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
     }
 	else {
 		if (GetPVarInt(playerid, "EditRaceCP") > 0)
@@ -3802,7 +3808,7 @@ ptask DM_EventCountdown[1000](playerid) {
 
 hook OnPlayerEnterRaceCP(playerid) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
+	if (GetPVarInt(playerid, "IsAtEvent") == 1 && EventType == 1) {
 
 		evRaceCP[playerid] ++;
 
@@ -3821,30 +3827,30 @@ hook OnPlayerEnterRaceCP(playerid) {
 
 					case 1: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 100),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"1st | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 100));
+						GiveMoney(playerid, race_EventData[evPrice]+1000000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"1st | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000000));
 					}
 					case 2: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 50),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"2nd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 50));
+						GiveMoney(playerid, race_EventData[evPrice]+5000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"2nd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+5000));
 					}
 					case 3: {
 
 						race_EventData[evTime] = 30;
 
-						GiveMoney(playerid, race_EventData[evPrice] + 30),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"3rd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 30));
+						GiveMoney(playerid, race_EventData[evPrice]+3000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"3rd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+3000));
 					}
 					case 4: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 20),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"4th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 20));
+						GiveMoney(playerid, race_EventData[evPrice]+2000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"4th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+2000));
 					}
 					case 5: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 10),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"5th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 10));
+						GiveMoney(playerid, race_EventData[evPrice]+1000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"5th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000));
 					}
 					default: {
 
@@ -3853,7 +3859,7 @@ hook OnPlayerEnterRaceCP(playerid) {
 					}
 				}
 				TogglePlayerSpectating(playerid, 1);
-				SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 				evRaceCP[playerid] = -1;
 				if (IsValidVehicle(evCar[playerid]))
@@ -3889,7 +3895,7 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 		}
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
 		parachute_EventData[eventWinner] ++;
 
@@ -3910,14 +3916,14 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 			case 2: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-25);
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-25));
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-2500);
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-2500));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%dnd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			case 3: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-50);
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-50));
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-5000);
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-5000));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%drd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			default: {
@@ -3928,7 +3934,7 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 		}
 		TogglePlayerSpectating(playerid, 1);
-		SetTimerEx("Event_Respawnplayer", 4000, false, "d", playerid);
+		SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 		Parachute_ToggleAntiCheat(playerid, false);
 
@@ -4013,8 +4019,8 @@ Dialog:Parachute_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
 
 		parachute_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4024,8 +4030,8 @@ Dialog:Parachute_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
 
 		parachute_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4048,8 +4054,8 @@ Dialog:Parachute_EvWinnerPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < parachute_EventData[eventPrice] || strval(totalamount) > parachute_EventData[eventPrice]))
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($%s-300)", FormatNumber(parachute_EventData[eventPrice]), FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > parachute_EventData[eventPrice]))
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$%s)", FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		parachute_EventData[eventWinnerPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4059,8 +4065,8 @@ Dialog:Parachute_EvWinnerPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < parachute_EventData[eventPrice] || strval(totalamount) > parachute_EventData[eventPrice]))
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($%s-300)", FormatNumber(parachute_EventData[eventPrice]), FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > parachute_EventData[eventPrice]))
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$%s)", FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		parachute_EventData[eventWinnerPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4159,32 +4165,41 @@ task Parachute_EventTimerCheck[1000]()
 
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
-	if (IsAtEvent(playerid) && (oldstate == PLAYER_STATE_DRIVER)) {
+	if ((GetPVarInt(playerid, "IsAtEvent") > 0) && (oldstate == PLAYER_STATE_DRIVER)) {
 
 		if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
-			DisableRemoteVehicleCollisions(playerid, 0);
-			DisablePlayerRaceCheckpoint(playerid);
-
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
 
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			evRaceCP[playerid] = -1;
 			if (IsValidVehicle(evCar[playerid]))
 				Vehicle_Delete(evCar[playerid], false);
 
-			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
-
 			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetPVarInt(playerid, "IsAtEvent", -1);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-			if (PlayerData[playerid][pOnDuty])
+			if (PlayerData[playerid][pOnDuty]) {
+
 				SetFactionColor(playerid);
-
-			evRaceCP[playerid] = -1;
-			race_EventData[evEntry] --;
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
 			GivePlayerMoney(playerid, GetMoney(playerid));
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			DisableRemoteVehicleCollisions(playerid, 0);
+			DisablePlayerRaceCheckpoint(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
 	}
 }
@@ -5476,8 +5491,14 @@ task Zombie_EventTimer[60000]()
 
                 foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
 
-                    if (evTeam[id] == zombie_EventData[eventWinner]) GiveMoney(id, zombie_EventData[eventPrice]+100);
-                    else GiveMoney(id, zombie_EventData[eventPrice]);
+                    if (evTeam[id] == zombie_EventData[eventWinner]) {
+						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
+					}
+                    else {
+						GiveMoney(id, zombie_EventData[eventPrice]);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
+					}
                     
                     TogglePlayerSpectating(id, 1);
         			SetTimerEx("Event_RespawnPlayer", 3000, false, "d", id);

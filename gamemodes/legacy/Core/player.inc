@@ -203,7 +203,7 @@ SetupPlayerData(playerid)
 SQL_SavePlayerPos(playerid) {
 	if(IsPlayerSpawned(playerid)) {
 
-		if (!IsAtEvent(playerid)) {
+		if (GetPVarInt(playerid, "IsAtEvent") < 1) {
 
 			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 		}
@@ -233,7 +233,7 @@ SQL_SaveCharacter(playerid)
 	new query[3612];
 	if(IsPlayerSpawned(playerid))
 	{
-		if (!IsAtEvent(playerid)) {
+		if (GetPVarInt(playerid, "IsAtEvent") < 1) {
 
 			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 		}
