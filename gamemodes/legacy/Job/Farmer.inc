@@ -118,7 +118,7 @@ Plant_Sync(idx, type)
 				Streamer_GetFloatData(STREAMER_TYPE_OBJECT, PlantData[idx][plantObject], E_STREAMER_Z, z);
 				
 				PlantData[idx][plantPos][2] = z + 0.057;
-				MoveDynamicObject(PlantData[idx][plantObject], PlantData[idx][plantPos][0], PlantData[idx][plantPos][1], PlantData[idx][plantPos][2], 3.0, 0.0, 0.0, 0.0);
+                Streamer_SetFloatData(STREAMER_TYPE_OBJECT, PlantData[idx][plantObject], E_STREAMER_Z, PlantData[idx][plantPos][2]);
 			}
 		}
 	}
@@ -186,6 +186,8 @@ function Plant_Watering(playerid)
 function Plant_Harvest(playerid)
 {
 	new idx = Plant_GetNearest(playerid);
+    ClearAnimations(playerid, 1);
+    IsHarvesting[playerid] = false;
 
 	if(!Iter_Contains(Plant, idx))
 	{
@@ -193,9 +195,7 @@ function Plant_Harvest(playerid)
 		IsHarvesting[playerid] = false;
 		return 0;
 	}
-	IsHarvesting[playerid] = false;
 	Inventory_Add(playerid, "Plant", 2203, 1);
-	ClearAnimations(playerid, 1);
 	Plant_Destroy(idx);
 	ShowMessage(playerid, "~g~Plant ~w~was added to your inventory (+1)", 2000, 1);
 	return 1;
@@ -207,7 +207,8 @@ function Plant_Plant(playerid)
 	GetPlayerPos(playerid, x,y,z);
     ClearAnimations(playerid, 1);
 	idx = Plant_Create(x,y,z);
-
+    IsPlanting[playerid] = false;
+    
 	if(!IsPlayerInDynamicArea(playerid, digArea[playerid]))
 		return SendErrorMessage(playerid, "Kamu tidak berada pada area yang kamu gali.");
 
@@ -217,7 +218,6 @@ function Plant_Plant(playerid)
 	if(IsValidDynamicArea(digArea[playerid]))
 		DestroyDynamicArea(digArea[playerid]);
 
-	IsPlanting[playerid] = false;
 	Inventory_Remove(playerid, "Plant Seed", 1);
 	Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 	return 1;
