@@ -2410,46 +2410,46 @@ hook OnPlayerConnect(playerid) {
 
 hook OnPlayerDeath(playerid, killerid, reason) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
+	if (killerid != INVALID_PLAYER_ID) {
 
-		TogglePlayerSpectating(playerid, 1);
-		SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+		if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
-		evRaceCP[playerid] = -1;
-		if (IsValidVehicle(evCar[playerid]))
-			Vehicle_Delete(evCar[playerid], false);
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
-		SetPlayerColor(playerid, COLOR_DEFAULT);
-		SetCameraBehindPlayer(playerid);
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+			evRaceCP[playerid] = -1;
+			if (IsValidVehicle(evCar[playerid]))
+				Vehicle_Delete(evCar[playerid], false);
 
-		if (PlayerData[playerid][pOnDuty]) {
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-			SetFactionColor(playerid);
-			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
+
+			ResetPlayerMoney(playerid);
+			GivePlayerMoney(playerid, GetMoney(playerid));
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			DisableRemoteVehicleCollisions(playerid, 0);
+			DisablePlayerRaceCheckpoint(playerid);
+
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
+			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 3 || GetPVarInt(killerid, "IsAtEvent") == 3) {
 
-		ResetPlayerMoney(playerid);
-		GivePlayerMoney(playerid, GetMoney(playerid));
-		ResetPlayerWeapons(playerid);
-		SetWeapons(playerid);
-		DisableRemoteVehicleCollisions(playerid, 0);
-		DisablePlayerRaceCheckpoint(playerid);
-
-		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 3 || GetPVarInt(killerid, "IsAtEvent") == 3) {
-
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
-
-		if (killerid != INVALID_PLAYER_ID) {
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
 
 			if (EventType == 3) {
 
@@ -2531,87 +2531,10 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 				}
 			}
 		}
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 4 || GetPVarInt(killerid, "IsAtEvent") == 4) {
 
-			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
-			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
-
-			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
-
-			evTeam[playerid] = 0;
-			tdm_EventData[eventEntry]--;		
-			if (tdm_EventData[eventEntry] == 1) {
-
-				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
-				{
-					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
-
-					evTeam[i] = 0;
-					TDM_DisplayTD(i, false);
-					TDM_ToggleAntiCheat(i, false);
-
-					SetPlayerTeam(i,0);
-					SetPlayerColor(i, COLOR_DEFAULT);
-					SetCameraBehindPlayer(i);
-					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
-					SetPlayerHealth(i, PlayerData[i][pHealth]);
-					SetPlayerArmour(i, PlayerData[i][pArmor]);
-					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
-					SetPlayerInterior(i, PlayerData[i][pInterior]);
-					SetPlayerSkin(i, PlayerData[i][pSkin]);
-
-					if (PlayerData[i][pOnDuty]) {
-
-						SetFactionColor(i);
-						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
-					}
-
-					ResetPlayerMoney(i);
-					GivePlayerMoney(i, PlayerData[i][pMoney]);
-					ResetPlayerWeapons(i);
-					SetWeapons(i);
-
-					GiveMoney(i, tdm_EventData[eventPrice]),
-					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
-					SetPVarInt(i, "IsAtEvent", -1);
-				}
-				Event_ForceEnd();			
-			}
-
-			TDM_DisplayTD(playerid, false);
-			TDM_ToggleAntiCheat(playerid, false);
-
-			SetPlayerTeam(playerid,0);
-			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetCameraBehindPlayer(playerid);
-			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
-
-			if (PlayerData[playerid][pOnDuty]) {
-
-				SetFactionColor(playerid);
-				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
-			}
-
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ClearAnimations(playerid);
 			ResetPlayerWeapons(playerid);
-			SetWeapons(playerid);
-			SetPVarInt(playerid, "IsAtEvent", -1);
-		}
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 4 || GetPVarInt(killerid, "IsAtEvent") == 4) {
-
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
-
-		if (killerid != INVALID_PLAYER_ID) {
 
 			dm_EventData[eventExp][killerid] ++;
 
@@ -2685,7 +2608,219 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 				SetPlayerVirtualWorld(playerid, 0);
 			}
 		}
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
+
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been eliminated due killing a participant", GetName(killerid));
+
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			Parachute_ToggleAntiCheat(playerid, false);
+
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
+
+			ResetPlayerMoney(playerid);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			DisablePlayerRaceCheckpoint(playerid);
+			SetWeapons(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
+		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 6 || GetPVarInt(killerid, "IsAtEvent") == 6) {
+
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
+
+			switch (GetPlayerTeam(killerid)) {
+
+				case 1: {
+
+					static Float:armorData[MAX_PLAYERS];
+					GetPlayerArmour(playerid, armorData[killerid]);
+
+					if (armorData[killerid] < 90) {
+
+						GameTextForPlayer(killerid, "~g~Immune +15", 3000, 3);
+						SetPlayerArmour(killerid, (armorData[killerid]+15));
+					}
+					else {
+
+						GameTextForPlayer(killerid, "~g~Killer!", 3000, 3);
+					}
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has killed "RED"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
+				}
+				case 2: {
+
+					evTeam[playerid] = 2;
+					zombie_EventData[eventAlive] --;
+
+					foreach (new id : Player) if (IsPlayerSpawned(id) && GetPVarInt(id, "IsAtEvent") == 6) {
+						
+						Zombie_UpdateTD(id);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "GREEN"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
+					}
+					SetPlayerTeam(playerid, evTeam[playerid]);
+					SetPlayerColor(playerid, RemoveAlpha(X11_RED));
+
+					GameTextForPlayer(playerid, "~r~Infected!", 3000, 3);
+					GameTextForPlayer(killerid, "~g~Injected!", 3000, 3);
+				}
+			}
+			if (!zombie_EventData[eventAlive]) {
+
+				static getTeam[][] = { ""GREEN"Human", ""RED"Zombie" };
+				zombie_EventData[eventWinner] = evTeam[killerid];
+
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: %s "YELLOW"is won!", getTeam[zombie_EventData[eventWinner]-1]);
+
+				foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
+
+					if (evTeam[id] == zombie_EventData[eventWinner]) {
+						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
+					}
+					else {
+						GiveMoney(id, zombie_EventData[eventPrice]);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
+					}
+					
+					TogglePlayerSpectating(id, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
+
+					evTeam[id] = 0;
+					Zombie_DisplayTD(id, false);
+					Zombie_ToggleAntiCheat(id, false);
+
+					SetPlayerTeam(id,0);
+					SetPlayerColor(id, COLOR_DEFAULT);
+					SetCameraBehindPlayer(id);
+					SetPlayerPositionEx(id, PlayerData[id][pPos][0], PlayerData[id][pPos][1], PlayerData[id][pPos][2]);
+					SetPlayerHealth(id, PlayerData[id][pHealth]);
+					SetPlayerArmour(id, PlayerData[id][pArmor]);
+					SetPlayerVirtualWorld(id, PlayerData[id][pWorld]);
+					SetPlayerInterior(id, PlayerData[id][pInterior]);
+					SetPlayerSkin(id, PlayerData[id][pSkin]);
+
+					if (PlayerData[id][pOnDuty]) {
+
+						SetFactionColor(id);
+						SetPlayerSkin(id, PlayerData[id][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(id);
+					GivePlayerMoney(id, PlayerData[id][pMoney]);
+					ResetPlayerWeapons(id);
+					SetWeapons(id);
+					SetPVarInt(id, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();
+			}
+			else {
+
+				if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
+
+					SetSpawnInfo(playerid, evTeam[playerid], PlayerData[playerid][pSkin], zombie_EventData[eventPosX][evTeam[playerid]-1], zombie_EventData[eventPosY][evTeam[playerid]-1], zombie_EventData[eventPosZ][evTeam[playerid]-1], zombie_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
+					TogglePlayerSpectating(playerid, 1);
+
+					SetPlayerVirtualWorld(playerid, (playerid+evTeam[playerid]));
+					SetTimerEx("Event_RespawnPlayer", 3000, false, "d", playerid);
+				}
+			}
+		}
+	}
+	else {
+		
+		if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+
+			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
+
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			evTeam[playerid] = 0;
+			tdm_EventData[eventEntry]--;		
+			if (tdm_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					evTeam[i] = 0;
+					TDM_DisplayTD(i, false);
+					TDM_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, PlayerData[i][pMoney]);
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, tdm_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
+
+			TDM_DisplayTD(playerid, false);
+			TDM_ToggleAntiCheat(playerid, false);
+
+			SetPlayerTeam(playerid,0);
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
+
+			ResetPlayerMoney(playerid);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
+		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
 			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "ORANGE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
@@ -2756,44 +2891,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetWeapons(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 5) {
-
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
-
-		if (killerid != INVALID_PLAYER_ID) {
-
-			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been eliminated due killing a participant", GetName(killerid));
-
-			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
-
-			Parachute_ToggleAntiCheat(playerid, false);
-
-			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetCameraBehindPlayer(playerid);
-			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
-
-			if (PlayerData[playerid][pOnDuty]) {
-
-				SetFactionColor(playerid);
-				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
-			}
-
-			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
-			ResetPlayerWeapons(playerid);
-			DisablePlayerRaceCheckpoint(playerid);
-			SetWeapons(playerid);
-			SetPVarInt(playerid, "IsAtEvent", -1);
-		}
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
 
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
 
@@ -2801,6 +2899,43 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			Parachute_ToggleAntiCheat(playerid, false);
+			parachute_EventData[eventEntry] --;
+			if (parachute_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					Parachute_ToggleAntiCheat(playerid, false);
+
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+					DisablePlayerRaceCheckpoint(i);
+
+					GiveMoney(i, parachute_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
 
 			SetPlayerColor(playerid, COLOR_DEFAULT);
 			SetCameraBehindPlayer(playerid);
@@ -2824,148 +2959,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			DisablePlayerRaceCheckpoint(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-		parachute_EventData[eventEntry] --;
-		if (parachute_EventData[eventEntry] == 1) {
-
-			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
-			{
-				TogglePlayerSpectating(i, 1);
-				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
-
-				Parachute_ToggleAntiCheat(playerid, false);
-
-				SetPlayerColor(i, COLOR_DEFAULT);
-				SetCameraBehindPlayer(i);
-				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
-				SetPlayerHealth(i, PlayerData[i][pHealth]);
-				SetPlayerArmour(i, PlayerData[i][pArmor]);
-				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
-				SetPlayerInterior(i, PlayerData[i][pInterior]);
-				SetPlayerSkin(i, PlayerData[i][pSkin]);
-
-				if (PlayerData[i][pOnDuty]) {
-
-					SetFactionColor(i);
-					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
-				}
-
-				ResetPlayerMoney(i);
-				GivePlayerMoney(i, GetMoney(i));
-				ResetPlayerWeapons(i);
-				SetWeapons(i);
-				DisablePlayerRaceCheckpoint(i);
-
-				GiveMoney(i, parachute_EventData[eventPrice]),
-				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
-				SetPVarInt(i, "IsAtEvent", -1);
-			}
-			Event_ForceEnd();			
-		}
-	}
-    if (GetPVarInt(playerid, "IsAtEvent") == 6 || GetPVarInt(killerid, "IsAtEvent") == 6) {
-
-        ClearAnimations(playerid);
-        ResetPlayerWeapons(playerid);
-
-        if (killerid != INVALID_PLAYER_ID) {
-
-            switch (GetPlayerTeam(killerid)) {
-
-                case 1: {
-
-                    static Float:armorData[MAX_PLAYERS];
-                    GetPlayerArmour(playerid, armorData[killerid]);
-
-                    if (armorData[killerid] < 90) {
-
-                        GameTextForPlayer(killerid, "~g~Immune +15", 3000, 3);
-                        SetPlayerArmour(killerid, (armorData[killerid]+15));
-                    }
-                    else {
-
-                        GameTextForPlayer(killerid, "~g~Killer!", 3000, 3);
-                    }
-                    SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has killed "RED"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
-                }
-                case 2: {
-
-                    evTeam[playerid] = 2;
-                    zombie_EventData[eventAlive] --;
-
-                    foreach (new id : Player) if (IsPlayerSpawned(id) && GetPVarInt(id, "IsAtEvent") == 6) {
-                        
-                        Zombie_UpdateTD(id);
-                        SendClientMessageEx(id, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "GREEN"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
-                    }
-                    SetPlayerTeam(playerid, evTeam[playerid]);
-					SetPlayerColor(playerid, RemoveAlpha(X11_RED));
-
-                    GameTextForPlayer(playerid, "~r~Infected!", 3000, 3);
-                    GameTextForPlayer(killerid, "~g~Injected!", 3000, 3);
-                }
-            }
-            if (!zombie_EventData[eventAlive]) {
-
-				static getTeam[][] = { ""GREEN"Human", ""RED"Zombie" };
-				zombie_EventData[eventWinner] = evTeam[killerid];
-
-                SendEventMessage(EventType, COLOR_SERVER, "EVENT: %s "YELLOW"is won!", getTeam[zombie_EventData[eventWinner]-1]);
-
-                foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
-
-                    if (evTeam[id] == zombie_EventData[eventWinner]) {
-						GiveMoney(id, zombie_EventData[eventPrice]+10000);
-						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
-					}
-                    else {
-						GiveMoney(id, zombie_EventData[eventPrice]);
-						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
-					}
-                    
-					TogglePlayerSpectating(id, 1);
-					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
-
-					evTeam[id] = 0;
-					Zombie_DisplayTD(id, false);
-					Zombie_ToggleAntiCheat(id, false);
-
-					SetPlayerTeam(id,0);
-					SetPlayerColor(id, COLOR_DEFAULT);
-					SetCameraBehindPlayer(id);
-					SetPlayerPositionEx(id, PlayerData[id][pPos][0], PlayerData[id][pPos][1], PlayerData[id][pPos][2]);
-					SetPlayerHealth(id, PlayerData[id][pHealth]);
-					SetPlayerArmour(id, PlayerData[id][pArmor]);
-					SetPlayerVirtualWorld(id, PlayerData[id][pWorld]);
-					SetPlayerInterior(id, PlayerData[id][pInterior]);
-					SetPlayerSkin(id, PlayerData[id][pSkin]);
-
-					if (PlayerData[id][pOnDuty]) {
-
-						SetFactionColor(id);
-						SetPlayerSkin(id, PlayerData[id][pFactionSkin]);
-					}
-
-					ResetPlayerMoney(id);
-					GivePlayerMoney(id, PlayerData[id][pMoney]);
-					ResetPlayerWeapons(id);
-					SetWeapons(id);
-					SetPVarInt(id, "IsAtEvent", -1);
-                }
-                Event_ForceEnd();
-            }
-            else {
-
-				if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
-
-					SetSpawnInfo(playerid, evTeam[playerid], PlayerData[playerid][pSkin], zombie_EventData[eventPosX][evTeam[playerid]-1], zombie_EventData[eventPosY][evTeam[playerid]-1], zombie_EventData[eventPosZ][evTeam[playerid]-1], zombie_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
-					TogglePlayerSpectating(playerid, 1);
-
-                    SetPlayerVirtualWorld(playerid, (playerid+evTeam[playerid]));
-					SetTimerEx("Event_RespawnPlayer", 3000, false, "d", playerid);
-				}
-            }
-        }
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
 			GameTextForPlayer(playerid, "~r~Disqualified!", 4000, 3);
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
@@ -3038,7 +3032,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetWeapons(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-    }
+	}
 }
 
 hook OnPlayerSpawn(playerid) {
