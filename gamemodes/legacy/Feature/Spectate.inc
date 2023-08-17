@@ -44,7 +44,7 @@ SpectateTextdraws(playerid) {
     PlayerTextDrawSetProportional(playerid, spectateTD[playerid][2], 1);
     PlayerTextDrawSetSelectable(playerid, spectateTD[playerid][2], 0);
 
-    spectateTD[playerid][3] = CreatePlayerTextDraw(playerid, 266.000000, 360.000000, "~y~~h~Health: ~r~~h~100%");
+    spectateTD[playerid][3] = CreatePlayerTextDraw(playerid, 266.000000, 360.000000, "~y~~h~Health: ~r~~h~100.00");
     PlayerTextDrawFont(playerid, spectateTD[playerid][3], 1);
     PlayerTextDrawLetterSize(playerid, spectateTD[playerid][3], 0.224996, 1.450000);
     PlayerTextDrawTextSize(playerid, spectateTD[playerid][3], 440.000000, 134.000000);
@@ -58,7 +58,7 @@ SpectateTextdraws(playerid) {
     PlayerTextDrawSetProportional(playerid, spectateTD[playerid][3], 1);
     PlayerTextDrawSetSelectable(playerid, spectateTD[playerid][3], 0);
 
-    spectateTD[playerid][4] = CreatePlayerTextDraw(playerid, 365.000000, 360.000000, "~y~~h~Armour: ~w~~h~100%");
+    spectateTD[playerid][4] = CreatePlayerTextDraw(playerid, 365.000000, 360.000000, "~y~~h~Armour: ~w~~h~100.00");
     PlayerTextDrawFont(playerid, spectateTD[playerid][4], 1);
     PlayerTextDrawLetterSize(playerid, spectateTD[playerid][4], 0.224996, 1.449998);
     PlayerTextDrawTextSize(playerid, spectateTD[playerid][4], 440.000000, 134.000000);
@@ -234,25 +234,29 @@ ptask OnSpectateUpdate[1000](playerid) {
 			new 
 				targetid = PlayerData[playerid][pSpectator],
 				Float:health,
-				Float:armour,
-				vehicleid = GetPlayerVehicleID(targetid);
+				Float:armour;
 
+            GetPlayerHealth(targetid, health);
+            GetPlayerArmour(targetid, armour);
+            
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][1], sprintf("~y~~h~%s ~r~~h~(%d)", GetName(targetid), targetid));
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][2], sprintf("~y~~h~Cash ~g~$%s", FormatNumber(GetMoney(targetid))));
 
-			PlayerTextDrawSetString(playerid, spectateTD[playerid][3], sprintf("~y~~h~Health: ~r~~h~%.0f%", GetPlayerHealth(targetid, health)));
-			PlayerTextDrawSetString(playerid, spectateTD[playerid][4], sprintf("~y~~h~Armour: ~w~~h~%.0f%", GetPlayerArmour(targetid, armour)));
+			PlayerTextDrawSetString(playerid, spectateTD[playerid][3], sprintf("~y~~h~Health: ~r~~h~%.2f", health));
+			PlayerTextDrawSetString(playerid, spectateTD[playerid][4], sprintf("~y~~h~Armour: ~w~~h~%.2f", armour));
 
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][5], sprintf("~y~~h~Interior: ~y~%d", GetPlayerInterior(targetid)));
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][6], sprintf("~y~~h~Virtual World: ~y~%d", GetPlayerVirtualWorld(targetid)));
 
-			PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Weapon: ~r~%s", ReturnWeaponName(GetPlayerWeapon(targetid))));
 
-			if (GetPlayerWeapon(targetid) == 0)
-				PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Ammo: ~r~-"));
+			if (GetPlayerWeapon(targetid) == 0) {
 
+    			PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Weapon: ~r~%s", ReturnWeaponName(GetPlayerWeapon(targetid))));
+				PlayerTextDrawSetString(playerid, spectateTD[playerid][8], sprintf("~y~~h~Ammo: ~r~-"));
+            }
 			else if (GetPlayerWeapon(targetid) != 0) {
 
+    			PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Weapon: ~r~%s", ReturnWeaponName(GetPlayerWeapon(targetid))));
 				for (new i = 0; i < 13; i++) {
 
 					if (PlayerData[targetid][pGuns][i] == GetPlayerWeapon(targetid)) {
@@ -282,14 +286,18 @@ ptask OnSpectateUpdate[1000](playerid) {
 			else if (GetPlayerFPS(targetid) > 60)
 				PlayerTextDrawSetString(playerid, spectateTD[playerid][10], sprintf("~y~~h~FPS: ~g~~h~%d", GetPlayerFPS(targetid)));
 
-			if (vehicleid == INVALID_VEHICLE_ID) {
+			if (GetPlayerState(targetid) == PLAYER_STATE_DRIVER) {
+				new 				
+                    vehicleid = GetPlayerVehicleID(targetid),
+                    Float:vhealth;
+
+                GetVehicleHealth(vehicleid, vhealth);    
+				PlayerTextDrawSetString(playerid, spectateTD[playerid][11], sprintf("~y~~h~Vehicle Health: ~b~~h~%.2f", vhealth));
+				PlayerTextDrawSetString(playerid, spectateTD[playerid][12], sprintf("~y~~h~Vehicle Speed: ~y~%dkm/h", floatround(GetVehicleSpeed(vehicleid))));
+			}
+			else {
 				PlayerTextDrawSetString(playerid, spectateTD[playerid][11], sprintf("~y~~h~Vehicle Health: ~b~~h~-"));
 				PlayerTextDrawSetString(playerid, spectateTD[playerid][12], sprintf("~y~~h~Vehicle Speed: ~y~-"));
-			}
-			else if (vehicleid != INVALID_VEHICLE_ID) {
-				new Float:vhealth;
-				PlayerTextDrawSetString(playerid, spectateTD[playerid][11], sprintf("~y~~h~Vehicle Health: ~b~~h~%.2f", GetVehicleHealth(vehicleid, vhealth)));
-				PlayerTextDrawSetString(playerid, spectateTD[playerid][12], sprintf("~y~~h~Vehicle Speed: ~y~%d", floatround(GetVehicleSpeed(vehicleid))));
 			}
 		}
 		else if (GetPlayerState(playerid) != PLAYER_STATE_SPECTATING) {
