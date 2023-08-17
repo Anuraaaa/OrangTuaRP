@@ -1422,7 +1422,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		Aksesoris_Sync(playerid);
 
 	}
-	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && GetPVarInt(playerid, "IsAtEvent") < 1)
+	if (newstate == PLAYER_STATE_WASTED && PlayerData[playerid][pJailTime] < 1 && GetPVarInt(playerid, "IsAtEvent") == 0)
 	{
 		if(PlayerData[playerid][pInjured])
 		{
@@ -9735,7 +9735,7 @@ public OnPlayerSpawn(playerid)
 	if(!LewatClass[playerid])
 		return Kick(playerid);
 
-	if(!PlayerData[playerid][pSpawned] && GetPVarInt(playerid, "IsAtEvent") < 1)
+	if(!PlayerData[playerid][pSpawned] && GetPVarInt(playerid, "IsAtEvent") == 0)
 	{	
 		if(IsPlayerUsingAndroid(playerid)) 
 			defer OnAutoAimCheck[2000](playerid);
@@ -9802,7 +9802,7 @@ public OnPlayerSpawn(playerid)
 			SetPlayerHealth(playerid, 100);
 		}
 	}
-	if(PlayerData[playerid][pJailTime] > 0 && GetPVarInt(playerid, "IsAtEvent") < 1)
+	if(PlayerData[playerid][pJailTime] > 0 && GetPVarInt(playerid, "IsAtEvent") == 0)
 	{
 	    if (PlayerData[playerid][pArrest])
 	        SetPlayerArrest(playerid);
@@ -9823,7 +9823,7 @@ public OnPlayerSpawn(playerid)
 	}
     else
 	{
-		if(PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") < 1)
+		if(PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") == 0)
 		{
 			PlayerData[playerid][pInjured] = false;
 			PlayerData[playerid][pDead] = false;
@@ -9849,7 +9849,7 @@ public OnPlayerSpawn(playerid)
 
 			DragCheck(playerid);
 		}
-		else if (!PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") < 1)
+		else if (!PlayerData[playerid][pDead] && GetPVarInt(playerid, "IsAtEvent") == 0)
 		{
 			SetValidColor(playerid);
 			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);

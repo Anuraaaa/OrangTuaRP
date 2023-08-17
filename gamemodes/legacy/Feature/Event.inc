@@ -3148,23 +3148,29 @@ hook OnPlayerSpawn(playerid) {
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-
-		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+		Parachute_ToggleAntiCheat(playerid, false);
 
 		SetCameraBehindPlayer(playerid);
-		Parachute_ToggleAntiCheat(playerid, false);
-		
+		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+		if (PlayerData[playerid][pOnDuty]) {
+
+			SetFactionColor(playerid);
+			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
+
+		ResetPlayerMoney(playerid);
+		GivePlayerMoney(playerid, GetMoney(playerid));
 		ResetPlayerWeapons(playerid);
 		SetWeapons(playerid);
-
+		DisableRemoteVehicleCollisions(playerid, 0);
 		DisablePlayerRaceCheckpoint(playerid);
-
-		parachute_EventData[eventEntry] --;
+		SetPVarInt(playerid, "IsAtEvent", 0);
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 6 && EventType == 6) {
 
