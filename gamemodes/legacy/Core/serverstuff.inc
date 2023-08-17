@@ -202,7 +202,7 @@ UpdateServerStock(SERVER_STOCK) {
 SaveServerData()
 {
 	new coordsString[128];
-	format(coordsString, sizeof(coordsString), "%s,%s,%d,%d,%d,%d", MotdData[motdPlayer], MotdData[motdAdmin], GovData[govVault], GovData[govTax], StockData[stockComponent], StockData[stockRock]);
+	format(coordsString, sizeof(coordsString), "%s,%s,%d,%d,%d,%d,%d", MotdData[motdPlayer], MotdData[motdAdmin], GovData[govVault], GovData[govTax], StockData[stockComponent], StockData[stockRock], GovData[govTax]);
 	new File: file2 = fopen("server.ini", io_write);
 	fwrite(file2, coordsString);
 	fclose(file2);
@@ -224,6 +224,8 @@ LoadServerData()
 		GovData[govTax] = strval(arrCoords[3]);
 		StockData[stockComponent] = strval(arrCoords[4]);
 		StockData[stockRock] = strval(arrCoords[5]);
+		GovData[govTax] = strval(arrCoords[6]);
+		
 		fclose(file);
 
 		UpdateServerStock(SERVER_STOCK_COMPONENT);

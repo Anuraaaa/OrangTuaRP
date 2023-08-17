@@ -8,8 +8,30 @@ CMD:paytax(playerid, params[]) {
     if(!IsPlayerInRangeOfPoint(playerid, 5.0, 361.8309,173.6048,1008.3828))
         return SendErrorMessage(playerid, "Kamu tidak berada di tax office atau paytax point.");
 
-    ShowPlayerDialog(playerid, DIALOG_PAYTAX, DIALOG_STYLE_LIST, "Tax Menu", "Flat\nHouse", "Select", "Close");
+    ShowPlayerDialog(playerid, DIALOG_PAYTAX, DIALOG_STYLE_LIST, "Tax Menu", "Flat\nHouse\nBusiness", "Select", "Close");
     return 1;
+}
+
+ShowBizTax(playerid) {
+
+    if(!Biz_GetCount(playerid))
+        return SendErrorMessage(playerid, "Kamu tidak memiliki bisnis.");
+
+    new string[512],count = 0;
+    for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && Biz_IsOwner(playerid, i)) {
+
+        new price = 0;
+
+        price = BizData[i][bizPrice] * 5/100;
+
+        format(string, sizeof(string), "%sFlat ID: %d ($%s) %s: %s [%s"WHITE"]\n", string, i, FormatNumber(price), (BizData[i][bizTaxState] == TAX_STATE_COOLDOWN) ? ("Pay in") : ("Due date"), ConvertTimestamp(Timestamp:BizData[i][bizTaxDate]), (BizData[i][bizTaxState] == TAX_STATE_COOLDOWN) ? (""DARKRED"can't be paid") : (""DARKGREEN"can be paid"));
+        g_ListedProp[playerid][count++] = i;
+    }
+    if(count)
+        ShowPlayerDialog(playerid, DIALOG_PAYTAX_BIZ, DIALOG_STYLE_LIST, "Tax of Business", string, "Pay", "Close");
+
+    return 1;
+
 }
 
 ShowFlatTax(playerid) {
@@ -59,6 +81,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             switch(listitem) {
                 case 0: ShowFlatTax(playerid);
                 case 1: ShowHouseTax(playerid);
+                case 2: ShowBizTax(playerid);
             }
         }   
     }
@@ -88,6 +111,34 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
             SaveEconomyData();
 
             House_Save(id);
+        }
+    }
+    if(dialogid == DIALOG_PAYTAX_BIZ) {
+        if(response) {
+            new id = -1, price = 0;
+
+            id = g_ListedProp[playerid][listitem], price = 0;
+
+            if(BizData[id][bizTaxState] == TAX_STATE_COOLDOWN)
+                return SendErrorMessage(playerid, "Sekarang belum waktunya membayar pajak untuk business ini.");
+
+
+            price = BizData[id][bizPrice] * 5/100;
+
+            if(GetMoney(playerid) < price)
+                return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang untuk membayar pajak.");
+
+            GiveMoney(playerid, -price, "Bayar pajak");
+            BizData[id][bizTaxDate] = gettime() + (14 * 86400);
+            BizData[id][bizTaxState] = TAX_STATE_COOLDOWN;
+            BizData[id][bizTaxPaid] = true;
+
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Kamu berhasil membayar pajak untuk bisnis-mu dengan harga "GREEN"$%s", FormatNumber(price));
+            SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Tax) "WHITE"Terimakasih telah membayar pajak! bayar lagi dalam 14 hari.");
+            serverVault += price;
+            SaveEconomyData();
+
+            Flat_Save(id);
         }
     }
     if(dialogid == DIALOG_PAYTAX_FLAT) {
@@ -187,7 +238,7 @@ task flat_OnTaxUpdate[10000]() {
     }
     return 1;
 }
-
+/*
 CMD:taxinited(playerid, params[]) {
     foreach(new index : Flat) {
 		FlatData[index][flatTaxDate] = gettime() + (14 * 86400);
@@ -203,5 +254,7 @@ CMD:taxinited(playerid, params[]) {
 
         House_Save(i);
     }
+
+    
     return 1;
-}
+}*/

@@ -36,6 +36,9 @@ enum E_BUSINESS_DATA
 	bizDiesel,
 	bizLastLogin,
 	bizSealed,
+	bizTaxPaid,
+	bizTaxState,
+	bizTaxDate,
 	bool:bizReq,
 	Float:bizFuelPos[3],
 	STREAMER_TAG_PICKUP:bizFuelPickup,
@@ -93,16 +96,23 @@ Business_IsOpen(id) {
 }
 ShowBizStats(playerid)
 {
-	new id = PlayerData[playerid][pInBiz];
+	new id = PlayerData[playerid][pInBiz], price;
+
 	if(id == -1)
 		return 0;
 
 	new str[512];
+
+	price = BizData[id][bizPrice] * 5/100;
+
 	strcat(str, "Name\tInfo\n");
 	strcat(str, sprintf("Business Name:\t%s\n", BizData[id][bizName]));
 	strcat(str, sprintf("Business Type:\t%s\n", GetBizType(BizData[id][bizType])));
 	strcat(str, sprintf("Available stock:\t%d left\n", BizData[id][bizStock]));
 	strcat(str, sprintf("Cash Vault:\t$%s\t", FormatNumber(BizData[id][bizVault])));
+	strcat(str, sprintf("Harga Pajak: $%s\n", FormatNumber(price)));
+	strcat(str, sprintf("Status: %s\n", (BizData[id][bizTaxState] == TAX_STATE_COOLDOWN) ? ("belum bisa dibayar") : ("sudah bisa dibayar")));
+	strcat(str, sprintf("%s: %s\n", (BizData[id][bizTaxState] == TAX_STATE_COOLDOWN) ? ("Bayar dalam") : ("Jatuh tempo"), ConvertTimestamp(Timestamp:BizData[id][bizTaxDate])));
 	ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "Business Stats", str, "Close", "");
 	return 1;
 }
@@ -230,6 +240,9 @@ Business_Create(playerid, type, price)
     	        BizData[i][bizExt][1] = y;
     	        BizData[i][bizExt][2] = z;
 				BizData[i][bizSealed] = 0;
+				BizData[i][bizTaxDate] = gettime() + (14 * 86400);
+				BizData[i][bizTaxState] = TAX_STATE_COOLDOWN;
+				BizData[i][bizTaxPaid] = true;
 
 				if (type == 1)
 				{
@@ -384,6 +397,10 @@ function Business_Load()
 			cache_get_value_name_int(i, "bizLocked", BizData[i][bizLocked]);
 			cache_get_value_name_int(i, "bizDiesel", BizData[i][bizDiesel]);
 			cache_get_value_name_int(i, "bizLastLogin", BizData[i][bizLastLogin]);
+			cache_get_value_name_int(i, "TaxDate", BizData[i][bizTaxDate]);
+			cache_get_value_name_int(i, "TaxPaid", BizData[i][bizTaxPaid]);
+			cache_get_value_name_int(i, "TaxState", BizData[i][bizTaxState]);
+
 			Business_Spawn(i);
 
 			BizData[i][bizReq] = true;
@@ -432,7 +449,7 @@ Business_Save(bizid)
 	new
 	    query[2098];
 
-	mysql_format(sqlcon, query, sizeof(query), "UPDATE `business` SET `bizName` = '%s', `bizOwner` = '%d', `bizExtX` = '%f', `bizExtY` = '%f', `bizExtZ` = '%f', `bizIntX` = '%f', `bizIntY` = '%f', `bizIntZ` = '%f', `bizDeliverX` = '%f', `bizDeliverY` = '%f', `bizDeliverZ` = '%f', `bizCargo` = '%d', `bizDiesel` = '%d', `bizLocked` = '%d'",
+	mysql_format(sqlcon, query, sizeof(query), "UPDATE `business` SET `bizName` = '%s', `bizOwner` = '%d', `bizExtX` = '%f', `bizExtY` = '%f', `bizExtZ` = '%f', `bizIntX` = '%f', `bizIntY` = '%f', `bizIntZ` = '%f', `bizDeliverX` = '%f', `bizDeliverY` = '%f', `bizDeliverZ` = '%f', `bizCargo` = '%d', `bizDiesel` = '%d', `bizLocked` = '%d', `TaxPaid` = '%d', `TaxDate` = '%d', `TaxState` = '%d'",
 		BizData[bizid][bizName],
 		BizData[bizid][bizOwner],
 		BizData[bizid][bizExt][0],
@@ -446,7 +463,10 @@ Business_Save(bizid)
 		BizData[bizid][bizDeliver][2],
 		BizData[bizid][bizCargo],
 		BizData[bizid][bizDiesel],
-		BizData[bizid][bizLocked]
+		BizData[bizid][bizLocked],
+		BizData[bizid][bizTaxPaid],
+		BizData[bizid][bizTaxDate],
+		BizData[bizid][bizTaxState]
 	);
 	forex(i, 8)
 	{
@@ -817,6 +837,10 @@ CMD:biz(playerid, params[])
                 Business_Refresh(i);
                 Business_Save(i);
 
+				BizData[i][bizTaxDate] = gettime() + (14 * 86400);
+				BizData[i][bizTaxState] = TAX_STATE_COOLDOWN;
+				BizData[i][bizTaxPaid] = true;
+
 				notification.Show(playerid, "Property Info", "Property (Business) purchased successfully!", "hud:radar_propertyG");
 			}
 		}
@@ -1047,9 +1071,11 @@ CMD:editbiz(playerid, params[])
 function OnBusinessQueue(playerid) {
 	if(cache_num_rows()) {
 		for(new i = 0; i < cache_num_rows(); i++) {
-			new biz_id;
+			new biz_id, message[144];
+
+			cache_get_value_name(i, "Message", message);
 			cache_get_value_name_int(i, "bizID", biz_id);
-			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Business) "WHITE"Bisnismu "YELLOW"(ID:%d) "WHITE"secara otomatis dijual oleh server karena tidak login selama 10 hari.", biz_id);
+			SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Business) "WHITE"%s", biz_id, message);
 
 		}
 	}
@@ -1062,7 +1088,9 @@ task OnBusinessAsellCheck[3600000]() {
 		if(BizData[i][bizLastLogin] < gettime()) {
 			SendAdminMessage(X11_TOMATO, "BusinessWarn: Business %d (%s) has been automatically aselled by the system.", i, BizData[i][bizName]);
 
-			mysql_tquery(sqlcon, sprintf("INSERT INTO `business_queue` (`Username`, `bizID`, `Date`) VALUES('%s','%d','%d')", BizData[i][bizOwnerName], i, gettime()));
+			new msge[128];
+			format(msge, 128, "Bisnis mu (ID:%d) telah otomatis dijual karena tidak login selama 10 hari.", i);
+			mysql_tquery(sqlcon, sprintf("INSERT INTO `business_queue` (`Username`, `bizID`, `Message`) VALUES('%s','%d','%d')", BizData[i][bizOwnerName], i, msge));
 			BizData[i][bizLastLogin] = 0;
 
 			BizData[i][bizSealed] = 0;
@@ -1075,3 +1103,38 @@ task OnBusinessAsellCheck[3600000]() {
 	}
 	return 1;
 }//a
+
+task biz_OnTaxUpdate[10000]() {
+
+    for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && BizData[i][bizTaxDate] != 0 && BizData[i][bizOwner] != -1) {
+        if(BizData[i][bizTaxDate] <= gettime()) {
+            if(BizData[i][bizTaxState] == TAX_STATE_COOLDOWN) {
+                BizData[i][bizTaxState] = TAX_STATE_DEADLINE;
+                BizData[i][bizTaxDate] = gettime() + (3 * 86400);
+                BizData[i][bizTaxPaid] = false;
+            }
+            else {
+                // SendAdminMessage(X11_TOMATO, "FlatWarn: Flat ID %d telah di asell karena tidak membayar pajak.", i);
+
+                foreach(new id : Player) if(BizData[i][bizOwner] == PlayerData[id][pID] && IsPlayerSpawned(id)) {
+                    SendClientMessageEx(id, X11_LIGHTBLUE, "(Tax) "WHITE"Bisnismu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
+                    break;
+                }
+
+                new string[256], msge[128];
+                format(msge, 128, "Bisnis mu (ID:%d) telah otomatis dijual oleh pemerintah karena tidak membayar pajak.", i);
+
+                mysql_format(sqlcon, string, 256, "INSERT INTO `business_queue` (`Username`, `bizID`, `Message`) VALUES('%e','%d','%e')", BizData[i][bizOwnerName], i, msge);
+                mysql_tquery(sqlcon,string);
+                BizData[i][bizLastLogin] = 0;
+            
+                BizData[i][bizOwner] = -1;
+                format(BizData[i][bizOwnerName], MAX_PLAYER_NAME, "No Owner");
+
+                Business_Save(i);
+                Business_Refresh(i);
+            }
+        }
+    }
+    return 1;
+}

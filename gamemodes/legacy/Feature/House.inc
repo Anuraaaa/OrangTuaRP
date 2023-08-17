@@ -1,5 +1,3 @@
-#include <YSI_Coding\y_hooks>
-
 #define         	House_GetType(%0)			house_type[%0]
 
 enum hData
@@ -66,29 +64,6 @@ new house_type[][] = {
 	"Medium",
 	"High"
 };
-
-hook OnGameModeInit() {
-
-	if (IsSQLConnected()) {
-		Iter_Init(House);
-		mysql_tquery(sqlcon, "SELECT * FROM `houses`", "House_Load", "");
-	}	
-}
-
-hook OnGameModeExit() {
-
-	if (IsSQLConnected()) {
-
-		new time = GetTickCount();
-
-		foreach(new i : House) {
-			House_Save(i);
-		}
-		printf("** Saved house data  in %dms", GetTickCount() - time);
-
-		Iter_Clear(House);
-	}
-}
 
 House_WeaponStorage(playerid, houseid)
 {
