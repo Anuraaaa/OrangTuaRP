@@ -9895,6 +9895,9 @@ public OnClientCheckResponse(playerid, actionid, memaddr, retndata)
 
 public OnPlayerShootRightLeg(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][5]++;
 		if(PlayerData[targetid][pDamages][5] > 0)
@@ -9911,6 +9914,9 @@ public OnPlayerShootRightLeg(playerid, targetid, Float:amount, weaponid)
 
 public OnPlayerShootLeftLeg(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][6]++;
 		if(PlayerData[targetid][pDamages][6] > 0)
@@ -9926,6 +9932,9 @@ public OnPlayerShootLeftLeg(playerid, targetid, Float:amount, weaponid)
 }
 public OnPlayerShootHead(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][0]++;
 		SetTimerEx("HidePlayerBox", 500, false, "dd", targetid, _:ShowPlayerBox(targetid, 0xFF000066));
@@ -9942,6 +9951,9 @@ public OnPlayerShootHead(playerid, targetid, Float:amount, weaponid)
 }
 public OnPlayerShootGroin(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][3]++;
 		if(PlayerData[targetid][pDamages][4] > 0)
@@ -9957,6 +9969,9 @@ public OnPlayerShootGroin(playerid, targetid, Float:amount, weaponid)
 }
 public OnPlayerShootTorso(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][1]++;
 		if(PlayerData[targetid][pDamages][1] > 0)
@@ -9973,6 +9988,9 @@ public OnPlayerShootTorso(playerid, targetid, Float:amount, weaponid)
 
 public OnPlayerShootLeftArm(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][3]++;
 		if(PlayerData[targetid][pDamages][3] > 0)
@@ -9989,6 +10007,9 @@ public OnPlayerShootLeftArm(playerid, targetid, Float:amount, weaponid)
 
 public OnPlayerShootRightArm(playerid, targetid, Float:amount, weaponid)
 {
+	if (GetPVarInt(targetid, "IsAtEvent") > 0)
+		return 1;
+
 	if(weaponid >= 22 && weaponid <= 38) {
 		PlayerData[targetid][pBullets][2]++;
 		if(PlayerData[targetid][pDamages][2] > 0)
@@ -10017,7 +10038,7 @@ public OnPlayerStreamIn(playerid, forplayerid)
 
 public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 {
-	if(GetFactionType(playerid) == FACTION_POLICE) {
+	if(GetFactionType(playerid) == FACTION_POLICE && GetPVarInt(playerid, "IsAtEvent") == 0) {
 		if(HasRubberBullet[playerid] && weaponid == 25 && !IsPlayerInAnyVehicle(damagedid) && !IsPlayerInAnyVehicle(playerid))
 		{
 			if(PlayerData[damagedid][pInjured])
@@ -10048,6 +10069,9 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	GetPlayerArmour(damagedid, armour);
 	if(damagedid != INVALID_PLAYER_ID)
 	{
+		if (GetPVarInt(playerid, "IsAtEvent") > 0)
+			return 1;
+
 		if(weaponid == 25 && HasRubberBullet[playerid]) {
 			SetPlayerHealth(damagedid, health);
 			return 1;
@@ -10147,7 +10171,8 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
 	else {
 		SetPlayerHealth(damagedid, health - amount);
 	}
-	UpdateMaskLabel(damagedid);
+	if (GetPVarInt(playerid, "IsAtEvent") == 0)
+		UpdateMaskLabel(damagedid);
 	return 1;
 }
 

@@ -282,6 +282,9 @@ CMD:event(playerid, params[])
 		if (OnMower[playerid] || OnSweeping[playerid] || IsPlayerWorkInBus(playerid))
 			return SendErrorMessage(playerid, "Harap selesaikan sidejobmu terlebih dahulu!");
 
+		if (PlayerData[playerid][pMasked])
+			return SendErrorMessage(playerid, "Harap melepas mask mu terlebih dahulu!");
+
 		if (PlayerData[playerid][pOnDMV])
 			return SendErrorMessage(playerid, "Harap selesaikan driving testmu terlebih dahulu!");
 
