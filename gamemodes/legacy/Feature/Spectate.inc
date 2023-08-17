@@ -225,7 +225,7 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 	}
 }
 
-ptask OnSpectateUpdate[1000](playerid) {
+ptask OnSpectateUpdate[200](playerid) {
 	
 	if (IsPlayerConnected(playerid)) {
 
