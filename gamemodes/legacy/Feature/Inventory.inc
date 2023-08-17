@@ -73,7 +73,7 @@ new const g_aInventoryItems[][e_InventoryItems] =
 	{"AK-47 Material", 3052, 20, true, true, true, INV_TYPE_WEAPONPART},
 	{"Axe", 19631, 1, true, true, true, INV_TYPE_GENERAL},
 	{"Fish Rod", 18632, 1, true, true, true, INV_TYPE_GENERAL},
-	{"Bait", 19566, 25, true, true, true, INV_TYPE_GENERAL},
+	{"Bait", 19566, 50, true, true, true, INV_TYPE_GENERAL},
 	{"Fuel Can", 1650, 3, true, true, true, INV_TYPE_GENERAL},
 	{"Acetaminophen", 2709, 10, true, false, false, INV_TYPE_GENERAL},
 	{"Promethazine", 2709, 10, true, false, false, INV_TYPE_GENERAL},
