@@ -249,7 +249,7 @@ ptask OnSpectateUpdate[1000](playerid) {
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Weapon: ~r~%s", ReturnWeaponName(GetPlayerWeapon(targetid))));
 
 			if (GetPlayerWeapon(targetid) == 0)
-				PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Ammo: ~r~-", ReturnWeaponName(GetPlayerWeapon(targetid))));
+				PlayerTextDrawSetString(playerid, spectateTD[playerid][7], sprintf("~y~~h~Ammo: ~r~-"));
 
 			else if (GetPlayerWeapon(targetid) != 0) {
 
