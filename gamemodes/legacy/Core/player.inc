@@ -1,3 +1,27 @@
+CheckFindUCP(playerid) {
+	new str[256];
+	mysql_format(sqlcon, str, sizeof(str), "SELECT `UCP` FROM `characters` WHERE `Name` = '%e' LIMIT 1", GetName(playerid));
+	mysql_tquery(sqlcon, str, "OnCheckFindUCP", "d", playerid);
+	return 1;
+}
+
+function OnCheckFindUCP(playerid) {
+
+	if (cache_num_rows()) {
+		new
+			name[MAX_PLAYER_NAME + 1];
+
+		cache_get_value_name(0, "UCP", name);
+
+		if (strcmp(name, PlayerData[playerid][pUCP]))
+		{
+			SetPlayerName(playerid, name);
+		}
+	}
+	CheckAccount(playerid);
+	return 1;
+}
+
 CheckAccount(playerid)
 {
 	new query[156];
@@ -78,7 +102,7 @@ function OnBanIPCheck(playerid) {
 
 		KickEx(playerid);
 	}
-	else CheckAccount(playerid);
+	else CheckFindUCP(playerid);
 
 	return 1;
 }
@@ -178,10 +202,13 @@ SetupPlayerData(playerid)
 
 SQL_SavePlayerPos(playerid) {
 	if(IsPlayerSpawned(playerid)) {
+
+		if (GetPVarInt(playerid, "IsAtEvent") == 0) {
+
+			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		}
 		GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
 		GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 
 		new query[1012];
 		mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `PosX` = '%.4f', `PosY` = '%.4f', `PosZ` = '%.4f', `Health` = '%.4f', `Armor` = '%.4f'",
@@ -206,10 +233,12 @@ SQL_SaveCharacter(playerid)
 	new query[3612];
 	if(IsPlayerSpawned(playerid))
 	{
+		if (GetPVarInt(playerid, "IsAtEvent") == 0) {
+
+			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		}
 		GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
 		GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 
 		mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET ");
 		mysql_format(sqlcon, query, sizeof(query), "%s`PosX`='%f', ", query, PlayerData[playerid][pPos][0]);

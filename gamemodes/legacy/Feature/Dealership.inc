@@ -386,6 +386,26 @@ function OnDealerVehicleAdd(id, index) {
 	DealerVehicle[id][index][dealer_veh_id] = cache_insert_id();
 }
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `dealer`", "SQL_LoadDealership", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+		for(new i = 0; i < MAX_DEALER; i++) if(DealerData[i][dealerExists]) {
+			SQL_SaveDealership(i);
+		}
+		printf("** Saved dealer data in %dms", GetTickCount() - time);
+	}
+}
+
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	if(dialogid == DIALOG_DEALER_BUY) {
 		if(response) {

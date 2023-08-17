@@ -484,6 +484,13 @@ CMD:trash(playerid, params[])
 	return 1;
 }
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `trash`", "Trash_Load", "");
+	}
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if((newkeys & KEY_NO) && HasTrash[playerid])
 	{

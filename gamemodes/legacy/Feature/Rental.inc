@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum e_rental
 {
 	rentID,
@@ -12,6 +14,13 @@ enum e_rental
 };
 
 new RentData[MAX_RENTAL][e_rental];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `rental`", "Rental_Load", "");
+	}
+}
 
 Rental_Create(playerid, veh1, veh2)
 {

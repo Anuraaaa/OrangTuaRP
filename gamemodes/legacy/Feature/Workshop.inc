@@ -20,6 +20,21 @@ new
     WorkshopData[MAX_WORKSHOP][E_WORKSHOP_DATA],
     Iterator:Workshop<MAX_WORKSHOP>;
 
+hook OnGameModeInit() {
+
+    if (IsSQLConnected()) {
+        Iter_Init(Workshop);
+		mysql_tquery(sqlcon, "SELECT * FROM `workshop`", "Workshop_Load");
+    }
+}
+
+hook OnGameModeExit() {
+
+    if (IsSQLConnected()) {
+        Iter_Clear(Workshop);
+    }
+}
+
 
 Workshop_Create(Float:x, Float:y, Float:z, price) {
 

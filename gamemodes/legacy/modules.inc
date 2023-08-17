@@ -1,5 +1,6 @@
 /* Important Modules */
 
+#include ".\legacy\Core\database"
 #include ".\legacy\Core\generalfunc"
 #include ".\legacy\Core\area"
 #include ".\legacy\Core\streamerconfig"
@@ -90,7 +91,6 @@
 #include ".\legacy\Feature\ELM"
 #include ".\legacy\Feature\SealProperty"
 #include ".\legacy\Feature\Zona"
-// #include ".\legacy\Feature\Event"
 /* Job Modules */
 #include ".\legacy\Job\Smuggler"
 #include ".\legacy\Job\Trucker"
@@ -110,6 +110,10 @@
 #include ".\legacy\Job\Hauling"
 #include ".\legacy\Job\BoxCourier"
 #include ".\legacy\Job\Farmer"
+
+/* Event */
+#include ".\legacy\Feature\Event"
+
 /* Other Important Modules */
 #include ".\legacy\Core\player"
 #include ".\legacy\Core\generalcmd_player"

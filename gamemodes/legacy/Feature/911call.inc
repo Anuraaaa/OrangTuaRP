@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 new ServiceIndex[MAX_PLAYERS];
 new ServiceRequest[MAX_PLAYERS];
 new ServiceType[MAX_PLAYERS];
@@ -25,6 +27,13 @@ enum emergency_data
 	emgTime,
 };
 new EmergencyData[MAX_EMERGENCY][emergency_data];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `911calls`", "Emergency_Load", "");
+	}
+}
 
 ShowEmergencyDetails(playerid, id)
 {

@@ -235,7 +235,7 @@ new Iterator:evMap<MAX_EVENT_MAP>;*/
 new EventCreated,
 	EventStarted,
 	EventType,
-	EventHost;
+	EventHost[24];
 
 new evTeam[MAX_PLAYERS] = {0 , ...},
 	evRaceCP[MAX_PLAYERS] = {-1 , ...},
@@ -247,12 +247,10 @@ hook OnGameModeInit()
 	EventStarted = 0;
 
 	EventType = 0;
-	EventHost = INVALID_PLAYER_ID;
+	format(EventHost, sizeof(EventHost), "null");
 
 	Iter_Init(RacesMap);
 	// mysql_tquery(sqlcon, "SELECT * FROM `racemap`", "Race_Event_Load", "");
-
-	return 1;
 }
 
 hook OnGameModeExit()
@@ -269,44 +267,29 @@ hook OnGameModeExit()
 	}
 	SelectedRaceMap = -1;
 	SelectedRaceMapEx = -1;
-
-	return 1;
-}
-
-
-CMD:eventmode(playerid, params[])
-{
-	if(PlayerData[playerid][pAdmin] < 5)
-		return SendErrorMessage(playerid, "You don't have permission to use this command!");
-
-	if(EventCreated)
-		return SendErrorMessage(playerid, "There is an event has created!");
-
-	if(EventStarted)
-		return SendErrorMessage(playerid, "Event is already started, wait until event is ended!");
-
-	Dialog_Show(playerid, EventMode, DIALOG_STYLE_LIST,
-		"Event Mode",
-		""GREEN"Race (fixing bug)\n\
-		"CYAN1"Dearby (fixing bug)\n\
-		"BLUE"Team Deathmatch\n\
-		"RED"Deathmatch\n\
-		"PURPLE"Parachute\n\
-		{009000}Zombie Survival",
-		"Set", "Close"
-	);
-	return 1;
 }
 
 CMD:event(playerid, params[])
 {
 	if (!strcmp(params, "join", true))
 	{
-		if (!EventCreated || EventStarted)
-			return SendErrorMessage(playerid, "Tidak ada event yang sedang berlangsung atau event telah dimulai!");
+		if (!EventCreated)
+			return SendErrorMessage(playerid, "Tidak ada event yang sedang berlangsung!");
+
+		if (EventStarted)
+			return SendErrorMessage(playerid, "Event telah dimulai!");
+
+		if (OnMower[playerid] || OnSweeping[playerid] || IsPlayerWorkInBus(playerid))
+			return SendErrorMessage(playerid, "Harap selesaikan sidejobmu terlebih dahulu!");
+
+		if (PlayerData[playerid][pMasked])
+			return SendErrorMessage(playerid, "Harap melepas mask mu terlebih dahulu!");
+
+		if (PlayerData[playerid][pOnDMV])
+			return SendErrorMessage(playerid, "Harap selesaikan driving testmu terlebih dahulu!");
 
 		if (PlayerData[playerid][pAduty])
-			return SendErrorMessage(playerid, "Harap matikan AOD terlebih dahulu sebelum bergabung kedalam event!");
+			return SendErrorMessage(playerid, "Harap matikan admin duty terlebih dahulu sebelum bergabung kedalam event!");
 
 		if (PlayerData[playerid][pMaskOn])
 			return SendErrorMessage(playerid, "Harap lepaskan masker milikmu terlebih dahulu sebelum bergabung kedalam event!");
@@ -358,9 +341,9 @@ CMD:event(playerid, params[])
 			SetPlayerPositionEx(playerid, race_EventData[evPos][0], race_EventData[evPos][1], race_EventData[evPos][2]);
 			SetPlayerFacingAngle(playerid, race_EventData[evPos][3]);
 
-			evCar[playerid] = AddStaticVehicle(race_EventData[evModel], race_EventData[evPos][0], race_EventData[evPos][1], race_EventData[evPos][2], race_EventData[evPos][3], rand, rand);
-			
-			SetVehicleNumberPlate(evCar[playerid], "STATIC");
+			evCar[playerid] = Vehicle_Create(race_EventData[evModel], race_EventData[evPos][0], race_EventData[evPos][1], race_EventData[evPos][2], race_EventData[evPos][3], rand, rand);
+			Vehicle_SetType(evCar[playerid], VEHICLE_TYPE_EVENT);
+			SetVehicleNumberPlate(evCar[playerid], "EVENT");
 
 			SetPlayerVirtualWorld(playerid, race_EventData[evEntry] + 20);
 			SetVehicleVirtualWorld(evCar[playerid], GetPlayerVirtualWorld(playerid));
@@ -410,10 +393,10 @@ CMD:event(playerid, params[])
 			SetPlayerPositionEx(playerid, dearby_EventData[evPos][0], dearby_EventData[evPos][1], dearby_EventData[evPos][2]);
 			SetPlayerFacingAngle(playerid, dearby_EventData[evPos][3]);
 
-			evCar[playerid] = AddStaticVehicle(dearby_EventData[evModel], dearby_EventData[evPos][0], dearby_EventData[evPos][1], dearby_EventData[evPos][2], dearby_EventData[evPos][3], rand, rand);
+			evCar[playerid] = Vehicle_Create(race_EventData[evModel], race_EventData[evPos][0], race_EventData[evPos][1], race_EventData[evPos][2], race_EventData[evPos][3], rand, rand);
+			Vehicle_SetType(evCar[playerid], VEHICLE_TYPE_EVENT);
+			SetVehicleNumberPlate(evCar[playerid], "EVENT");
 			
-			SetVehicleNumberPlate(evCar[playerid], "STATIC");
-
 			SetPlayerVirtualWorld(playerid, dearby_EventData[evEntry] + 20);
 			SetVehicleVirtualWorld(evCar[playerid], GetPlayerVirtualWorld(playerid));
 
@@ -435,7 +418,7 @@ CMD:event(playerid, params[])
 			if ((tdm_EventData[eventEntry] >= tdm_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -516,7 +499,7 @@ CMD:event(playerid, params[])
 			if ((dm_EventData[eventEntry] >= dm_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -565,7 +548,7 @@ CMD:event(playerid, params[])
 			if ((parachute_EventData[eventEntry] >= parachute_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -615,7 +598,7 @@ CMD:event(playerid, params[])
 			if ((zombie_EventData[eventEntry] >= zombie_EventData[eventLimit]) && !PlayerVIP[playerid][vipLevel])
 				return SendErrorMessage(playerid, "Event saat ini telah penuh!");
 
-			if (IsAtEvent(playerid))
+			if (GetPVarInt(playerid, "IsAtEvent") > 0)
 				return SendErrorMessage(playerid, "Kamu sudah masuk kedalam event saat ini!");
 
 			if (PlayerData[playerid][pTazer])
@@ -685,13 +668,35 @@ CMD:event(playerid, params[])
 			Zombie_ToggleAntiCheat(playerid);				
 		}
 	}
-	else if (!strcmp(params, "info", true))
+	else if (!strcmp(params, "mode", true))
 	{
-		if (PlayerData[playerid][pAdmin] < 5)
+		if (PlayerData[playerid][pAdmin] < 6)
 			return SendErrorMessage(playerid, "You don't have permission to use this command!");
 
-		if ((playerid != EventHost) && PlayerData[playerid][pAdmin] < 8)
-			return SendErrorMessage(playerid, "Event telah dimulai oleh "RED"%s", PlayerData[EventHost][pUCP]);
+		if(EventCreated)
+			return SendErrorMessage(playerid, "There is an event has created!");
+
+		if(EventStarted)
+			return SendErrorMessage(playerid, "Event is already started, wait until event is ended!");
+
+		Dialog_Show(playerid, EventMode, DIALOG_STYLE_LIST,
+			"Event Mode",
+			""GREEN"Race (maintenance)\n\
+			"CYAN1"Dearby (maintenace)\n\
+			"BLUE"Team Deathmatch\n\
+			"RED"Deathmatch\n\
+			"PURPLE"Parachute\n\
+			{009000}Zombie Survival",
+			"Set", "Close"
+		);
+	}
+	else if (!strcmp(params, "info", true))
+	{
+		if (PlayerData[playerid][pAdmin] < 6)
+			return SendErrorMessage(playerid, "You don't have permission to use this command!");
+
+		if ((strcmp(EventHost, PlayerData[playerid][pUCP], true)) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Event telah dimulai oleh "RED"%s", EventHost);
 
 		static str[1024];
 
@@ -699,7 +704,7 @@ CMD:event(playerid, params[])
 		{
 			format(str, sizeof(str), "Options\tValue\nEvent Slot\t%d participants\nEvent Price\t$%s ($%s if won)\nEvent Vehicles Model\t%d (%s)\nEvent Position\t%.1f\nEvent Time\t%d minutes\n%s\nTeleport to checkpoint\nAnnounce Event\nForce End",
 				race_EventData[evLimit],
-				FormatNumber(race_EventData[evPrice]), FormatNumber(race_EventData[evPrice]+100),
+				FormatNumber(race_EventData[evPrice]), FormatNumber(race_EventData[evPrice]+1000000),
 				race_EventData[evModel], ReturnVehicleModelName(race_EventData[evModel]),
 				race_EventData[evPos][0],
 				(race_EventData[evTime] / 60),
@@ -765,7 +770,7 @@ CMD:event(playerid, params[])
 				dm_EventData[eventLimit],
 				dm_EventData[eventMaxScore],
 				FormatNumber(dm_EventData[eventPrice]),
-				FormatNumber(dm_EventData[eventPrice]+100),
+				FormatNumber(dm_EventData[eventPrice]+10000),
 				GetPlayerDistanceFromPoint(playerid, dm_EventData[eventPosX], dm_EventData[eventPosY], dm_EventData[eventPosZ]),
 				ReturnWeaponName(dm_EventData[eventWeapons][0]), ReturnWeaponName(dm_EventData[eventWeapons][1]), ReturnWeaponName(dm_EventData[eventWeapons][2]),
 				dm_EventData[eventAmmo][0], dm_EventData[eventAmmo][1], dm_EventData[eventAmmo][2]				
@@ -788,8 +793,8 @@ CMD:event(playerid, params[])
 				parachute_EventData[eventLimit],
 				FormatNumber(parachute_EventData[eventPrice]),
 				FormatNumber(parachute_EventData[eventWinnerPrice]),
-				FormatNumber(parachute_EventData[eventWinnerPrice]-25),
-				FormatNumber(parachute_EventData[eventWinnerPrice]-50),
+				FormatNumber(parachute_EventData[eventWinnerPrice]-2500),
+				FormatNumber(parachute_EventData[eventWinnerPrice]-5000),
 				arrFlyData[parachute_EventData[eventSelectPos]],
 				GetPlayerDistanceFromPoint(playerid, parachute_EventData[eventLandingX], parachute_EventData[eventLandingY], parachute_EventData[eventLandingZ])
 			);
@@ -813,7 +818,7 @@ CMD:event(playerid, params[])
 
 				zombie_EventData[eventLimit],
 				zombie_EventData[eventAlive],
-				FormatNumber(zombie_EventData[eventPrice]), FormatNumber(zombie_EventData[eventPrice]+100),
+				FormatNumber(zombie_EventData[eventPrice]), FormatNumber(zombie_EventData[eventPrice]+10000),
 				zombie_EventData[eventTimer],
 				GetPlayerDistanceFromPoint(playerid, zombie_EventData[eventPosX][0], zombie_EventData[eventPosY][0], zombie_EventData[eventPosZ][0]),
 				GetPlayerDistanceFromPoint(playerid, zombie_EventData[eventPosX][1], zombie_EventData[eventPosY][1], zombie_EventData[eventPosZ][1]),
@@ -822,7 +827,7 @@ CMD:event(playerid, params[])
 			);
 			Dialog_Show(playerid, EventInfo, DIALOG_STYLE_TABLIST_HEADERS, sprintf("Event Info: %s Mode", ReturnEventMode(EventType)), str, "Select", "Close");
 		}
-		else SendErrorMessage(playerid, "Kamu tidak memilih event mode yang dituju, gunakan '/eventmode'.");
+		else SendErrorMessage(playerid, "Kamu tidak memilih event mode yang dituju, gunakan '/event mode'.");
 	}
 	else cmd_event(playerid, "join");
 
@@ -840,7 +845,7 @@ Dialog:EventMode(playerid, response, listitem, inputtext[])
 		default: {
 
 			EventType = listitem + 1;
-			EventHost = playerid;
+			format(EventHost, sizeof(EventHost), PlayerData[playerid][pUCP]);
 
 			SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "WHITE"Kamu telah memilih mode "GREEN"'%s'", inputtext);
 		}
@@ -971,7 +976,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu waktu pada event ini!"), cmd_event(playerid, "info");
 
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -985,35 +990,39 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 			
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
-					SetPlayerColor(i, COLOR_DEFAULT);
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
-					if (PlayerData[i][pOnDuty])
-						SetFactionColor(i);
-
+					evRaceCP[i] = -1;
 					if (IsValidVehicle(evCar[i]))
-						DestroyVehicle(evCar[i]), evCar[i] = INVALID_VEHICLE_ID;
+						Vehicle_Delete(evCar[i], false);
 
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
 					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
-
 					SetPlayerHealth(i, PlayerData[i][pHealth]);
 					SetPlayerArmour(i, PlayerData[i][pArmor]);
-
 					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
 					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
 
-					SetCameraBehindPlayer(i);
-					DisableRemoteVehicleCollisions(i, 0);
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
 
 					ResetPlayerMoney(i);
-					GivePlayerMoney(i, PlayerData[i][pMoney]);
-
+					GivePlayerMoney(i, GetMoney(i));
 					ResetPlayerWeapons(i);
+					SetWeapons(i);
+					DisableRemoteVehicleCollisions(i, 0);
 					DisablePlayerRaceCheckpoint(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
-				Event_ForceEnd();
+				Event_ForceEnd();			
 			}
 		}
 	}
@@ -1078,7 +1087,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu model kendaraan event ini!"), cmd_event(playerid, "info");
 			
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -1115,7 +1124,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 						SetFactionColor(i);
 
 					if (IsValidVehicle(evCar[i]))
-						DestroyVehicle(evCar[i]), evCar[i] = INVALID_VEHICLE_ID;
+						Vehicle_Delete(evCar[i], false);
 
 					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
 
@@ -1258,7 +1267,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu equipment partisipan mode ini!"), cmd_event(playerid, "info");
 
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -1269,46 +1278,41 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 			{
 				if (!EventStarted)
 					return SendErrorMessage(playerid, "Tidak ada event yang sedang berlangsung!"), cmd_event(playerid, "info");				
-			
+
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_RespawnPlayer", 3500, false, "d", i);
-
-					SetPlayerColor(i, COLOR_DEFAULT);
-					SetPlayerTeam(i,0);
-
-					if (PlayerData[i][pOnDuty])
-						SetFactionColor(i);
-
-					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
-
-					SetPlayerHealth(i, PlayerData[i][pHealth]);
-					SetPlayerArmour(i, PlayerData[i][pArmor]);
-
-					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
-					SetPlayerInterior(i, PlayerData[i][pInterior]);
-
-					SetPlayerSkin(i, PlayerData[i][pSkin]);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					evTeam[i] = 0;
-					EventStarted = 0;
-
 					TDM_DisplayTD(i, false);
-
-					SetCameraBehindPlayer(i);
 					TDM_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
 
 					ResetPlayerMoney(i);
 					GivePlayerMoney(i, PlayerData[i][pMoney]);
-
 					ResetPlayerWeapons(i);
 					SetWeapons(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
-				Event_ForceEnd(0);
+				Event_ForceEnd();			
 			}
 		}
 	}
@@ -1395,7 +1399,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu equipment partisipan mode ini!"), cmd_event(playerid, "info");
 
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -1413,22 +1417,33 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					dm_EventData[eventExp][i] = 0;
-					EventStarted = 0;
+					DM_ToggleAntiCheat(playerid,false);
+					DM_DisplayTD(i, false);
 
 					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
 
-					if (PlayerData[i][pOnDuty])
+					if (PlayerData[i][pOnDuty]) {
+
 						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
 
 					ResetPlayerMoney(i);
 					GivePlayerMoney(i, GetMoney(i));
-
-					DM_DisplayTD(i, false);
-					SetPVarInt(i, "IsAtEvent", -1);
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
+					SetPVarInt(i, "IsAtEvent", -1);
 				}
-				Event_ForceEnd(0);
+				Event_ForceEnd();			
 			}
 		}
 	}
@@ -1499,7 +1514,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu posisi awal mode ini!"), cmd_event(playerid, "info");
 
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -1514,22 +1529,35 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_RespawnPlayer", 3000, false, "d", i);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					Parachute_ToggleAntiCheat(playerid, false);
 
 					SetPlayerColor(i, COLOR_DEFAULT);
-					SetPVarInt(i, "IsAtEvent", -1);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
 
-					if (PlayerData[i][pOnDuty])
+					if (PlayerData[i][pOnDuty]) {
+
 						SetFactionColor(i);
-
-					EventStarted = 0;
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
 
 					ResetPlayerMoney(i);
 					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					DisablePlayerRaceCheckpoint(i);
+					SetWeapons(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
+					SetPVarInt(i, "IsAtEvent", -1);
 				}
-				Event_ForceEnd(0);
+				Event_ForceEnd();			
 			}
 		}
 	}
@@ -1643,7 +1671,7 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 					return SendErrorMessage(playerid, "Harap atur terlebih dahulu equipment partisipan mode ini!"), cmd_event(playerid, "info");
 
 				if (EventCreated)
-					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", PlayerData[EventHost][pUCP]), cmd_event(playerid, "info");
+					return SendErrorMessage(playerid, "This event is already announced by "RED"%s", EventHost), cmd_event(playerid, "info");
 
 				EventCreated = 1;
 
@@ -1658,41 +1686,37 @@ Dialog:EventInfo(playerid, response, listitem, inputtext[])
 				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == EventType)
 				{
 					TogglePlayerSpectating(i, 1);
-					SetTimerEx("Event_RespawnPlayer", 3500, false, "d", i);
-
-					SetPlayerColor(i, COLOR_DEFAULT);
-					SetPlayerTeam(i,0);
-
-					if (PlayerData[i][pOnDuty])
-						SetFactionColor(i);
-
-					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
-
-					SetPlayerHealth(i, PlayerData[i][pHealth]);
-					SetPlayerArmour(i, PlayerData[i][pArmor]);
-
-					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
-					SetPlayerInterior(i, PlayerData[i][pInterior]);
-
-					SetPlayerSkin(i, PlayerData[i][pSkin]);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
 
 					evTeam[i] = 0;
-
 					Zombie_DisplayTD(i, false);
-
-					SetCameraBehindPlayer(i);
 					Zombie_ToggleAntiCheat(i, false);
 
-					ResetPlayerMoney(i);
-					GivePlayerMoney(i, PlayerData[i][pMoney]);
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
 
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
 					ResetPlayerWeapons(i);
 					SetWeapons(i);
 
 					SendClientMessage(i, COLOR_SERVER, "EVENT: "YELLOW"An Admin has force-ended this event mode!");
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
-				Event_ForceEnd(0);
+				Event_ForceEnd();			
 			}
 		}
 	}
@@ -1925,18 +1949,9 @@ Event_ForceEnd(all = 1)
     PlayerHighestEXP = 0;
 
 	EventType = 0;
-	EventHost = INVALID_PLAYER_ID;
+	format(EventHost, sizeof(EventHost), "null");
 
 	return 1;
-}
-
-IsAtEvent(playerid)
-{
-	if (GetPVarInt(playerid, "IsAtEvent") > 0) {
-
-		return (GetPVarInt(playerid, "IsAtEvent") > 0);
-	}
-	return 0;
 }
 
 function Event_RespawnPlayer(playerid) {
@@ -1964,7 +1979,7 @@ Dialog:Dearby_EventLimit(playerid, response, listitem, inputtext[])
 		if (!IsNumeric(inputtext))
 			return SendErrorMessage(playerid, "Hanya karakter angka yang diperbolehkan!"), dialog_EventInfo(playerid, 1, 0, "\1");
 	
-		if ((input < 10 || input > 50) && PlayerData[playerid][pAdmin] < 8)
+		if ((input < 10 || input > 50) && PlayerData[playerid][pAdmin] < 7)
 			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (10-50)"), dialog_EventInfo(playerid, 1, 0, "\1");
 
 		dearby_EventData[evLimit] = input;
@@ -1989,8 +2004,8 @@ Dialog:Dearby_EventPrice(playerid, response, listitem, inputtext[])
 			sscanf(inputtext, "p<.>dd", dollar, cent);
 			format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-			if ((strval(totalamount) < 50 || strval(totalamount) > 400) && PlayerData[playerid][pAdmin] < 8)
-				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.50-$4.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
+			if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
 
 			dearby_EventData[evPrice] = strval(totalamount);
 			cmd_event(playerid, "info");
@@ -2000,8 +2015,8 @@ Dialog:Dearby_EventPrice(playerid, response, listitem, inputtext[])
 			sscanf(inputtext, "d", dollar);
 			format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-			if ((strval(totalamount) < 50 || strval(totalamount) > 400) && PlayerData[playerid][pAdmin] < 8)
-				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.50-$4.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
+			if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
 
 			dearby_EventData[evPrice] = strval(totalamount);
 			cmd_event(playerid, "info");
@@ -2041,7 +2056,7 @@ Dialog:Dearby_EventTime(playerid, response, listitem, inputtext[])
 		if (!IsNumeric(inputtext))
 			return SendErrorMessage(playerid, "Hanya karakter angka yang diperbolehkan!"), dialog_EventInfo(playerid, 1, 4, "\1");
 	
-		if ((input < 5 || input > 20) && PlayerData[playerid][pAdmin] < 8)
+		if ((input < 5 || input > 20) && PlayerData[playerid][pAdmin] < 7)
 			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (5-20 [menit])"), dialog_EventInfo(playerid, 1, 4, "\1");
 
 		dearby_EventData[evTime] = (input * 60);
@@ -2083,7 +2098,7 @@ task Dearby_EventTimer[1000]()
 					SetFactionColor(i);
 
 				if (IsValidVehicle(evCar[i]))
-					DestroyVehicle(evCar[i]), evCar[i] = INVALID_VEHICLE_ID;
+					Vehicle_Delete(evCar[i], false);
 
 				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
 
@@ -2099,11 +2114,11 @@ task Dearby_EventTimer[1000]()
 				ResetPlayerMoney(i);
 				GivePlayerMoney(i, PlayerData[i][pMoney]);
 
-				GiveMoney(i, dearby_EventData[evPrice] / 50);
+				GiveMoney(i, dearby_EventData[evPrice]);
 				SetWeapons(i);
 
-				SendClientMessageEx(i, COLOR_SERVER, "EVENT: "YELLOW"Tidak ada pemenang, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah mengikuti mode ini.", FormatNumber(dearby_EventData[evPrice] / 50));
-				DeletePVar(i, "IsAtEvent");
+				SendClientMessageEx(i, COLOR_SERVER, "EVENT: "YELLOW"Tidak ada pemenang, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah mengikuti mode ini.", FormatNumber(dearby_EventData[evPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
 			}
 			Event_ForceEnd();
 		}
@@ -2112,7 +2127,7 @@ task Dearby_EventTimer[1000]()
 
 ptask Dearby_EventCountdown[1000](playerid) 
 {
-	if (IsAtEvent(playerid) && (EventType == 2))
+	if (GetPVarInt(playerid, "IsAtEvent") > 0 && (EventType == 2))
 	{
 		if (dearby_EventData[evCountdown][playerid] > 0)
 		{
@@ -2151,7 +2166,7 @@ ptask Dearby_EventCountdown[1000](playerid)
 					SetFactionColor(playerid);
 
 				if (IsValidVehicle(evCar[playerid]))
-					DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
+					Vehicle_Delete(evCar[playerid], false);
 
 				SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 
@@ -2164,14 +2179,14 @@ ptask Dearby_EventCountdown[1000](playerid)
 				ResetPlayerMoney(playerid);
 				GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
 
-				GiveMoney(playerid, dearby_EventData[evPrice] / 50);
+				GiveMoney(playerid, dearby_EventData[evPrice]);
 				SetWeapons(playerid);
 
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been eliminated. (Blow up engine)", GetName(playerid));
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"Kamu tereliminasi karena kendaraan mu sudah berasap, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah berpartisipasi dalam event ini.", FormatNumber(dearby_EventData[evPrice] / 50));
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"Kamu tereliminasi (blow up engine), kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah berpartisipasi dalam event ini.", FormatNumber(dearby_EventData[evPrice]));
 
 				SetCameraBehindPlayer(playerid);
-				DeletePVar(playerid, "IsAtEvent");
+				SetPVarInt(playerid, "IsAtEvent", -1);
 			}
 		}
 	}
@@ -2390,142 +2405,139 @@ hook OnPlayerConnect(playerid) {
     PlayerTextDrawSetProportional(playerid, ZombieTD[playerid][3], 1);
     PlayerTextDrawSetSelectable(playerid, ZombieTD[playerid][3], 0);
 
+	DeletePVar(playerid, "IsAtEvent");
+	DeletePVar(playerid, "EditRaceCP");
 
 	return 1;
 }
 
 hook OnPlayerDeath(playerid, killerid, reason) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
+	if (killerid != INVALID_PLAYER_ID) {
 
-        ClearAnimations(playerid);
-        ResetPlayerWeapons(playerid);
-
-		if (IsValidVehicle(evCar[playerid]))
-			DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
-
-		TogglePlayerSpectating(playerid, 1);
-		SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
-
-		SetPlayerColor(playerid, COLOR_DEFAULT);
-		SetPVarInt(playerid, "IsAtEvent", -1);
-
-		if (PlayerData[playerid][pOnDuty])
-			SetFactionColor(playerid);
-
-		evRaceCP[playerid] = -1;
-        race_EventData[evEntry] --;
-
-		ResetPlayerMoney(playerid);
-		GivePlayerMoney(playerid, GetMoney(playerid));
-
-		DisableRemoteVehicleCollisions(playerid, 0);
-		DisablePlayerRaceCheckpoint(playerid);
-
-		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 3 || GetPVarInt(killerid, "IsAtEvent") == 3) {
-
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
-
-		if (killerid != INVALID_PLAYER_ID) {
-
-			switch (EventType) { // Terlanjur di switch, harusnya enggak perlu.
-
-				case 3: { // Abaikan aja case ketiga, karna TDM itu event tipe ketiga.
-
-					tdm_EventData[eventTeamScore][evTeam[killerid]-1] ++;
-
-					switch (evTeam[killerid]) {
-
-						case 1: SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "BLUE"%s "YELLOW"with %s. Team A Score: {33aa33}%d", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)), tdm_EventData[eventTeamScore][0]);
-						case 2: SendEventMessage(EventType, COLOR_SERVER, "EVENT: "BLUE"%s "YELLOW"has killed "RED"%s "YELLOW"with %s. Team B Score: {33aa33}%d", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)), tdm_EventData[eventTeamScore][1]);
-					}
-					TDM_UpdateTD(evTeam[killerid]);
-					GameTextForPlayer(killerid, "~g~Perfect!", 3500, 3);
-
-					if (tdm_EventData[eventTeamScore][evTeam[killerid]-1] >= tdm_EventData[eventMaxScore]) {
-
-						static getTeam[][] = { ""RED"Team A", ""BLUE"Team B" };
-						tdm_EventData[eventWinner] = evTeam[killerid];
-
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"Event telah selesai dan dimenangkan oleh %s", getTeam[tdm_EventData[eventWinner]-1]);
-					
-						foreach (new id : Player) {
-
-							if (EventType == 3 && GetPVarInt(id, "IsAtEvent") == EventType && tdm_EventData[eventWinner] > 0) {
-
-								if (evTeam[id] == tdm_EventData[eventWinner]) {
-
-									GiveMoney(id, tdm_EventData[eventPrice]*2);
-									SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Tim kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {33aa33}$%s!", FormatNumber(tdm_EventData[eventPrice]*2));
-								}
-								else {
-
-									GiveMoney(id, tdm_EventData[eventPrice]);
-									SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {33aa33}$%s", FormatNumber(tdm_EventData[eventPrice]));
-								}
-								TogglePlayerSpectating(id, 1);
-								SetTimerEx("Event_RespawnPlayer", 3500, false, "d", id);
-
-								SetPlayerColor(id, COLOR_DEFAULT);
-								SetPlayerTeam(id,0);
-
-								if (PlayerData[id][pOnDuty])
-									SetFactionColor(id);
-
-								ResetPlayerMoney(id);
-								GivePlayerMoney(id, GetMoney(id));
-
-								TDM_DisplayTD(id, false);
-								SetPVarInt(id, "IsAtEvent", -1);
-							}
-						}
-						Event_ForceEnd();
-					}
-					else {
-
-						if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
-
-							SetSpawnInfo(playerid, evTeam[playerid], tdm_EventData[eventSkin][evTeam[playerid]-1], tdm_EventData[eventPosX][evTeam[playerid]-1], tdm_EventData[eventPosY][evTeam[playerid]-1], tdm_EventData[eventPosZ][evTeam[playerid]-1], tdm_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
-							GameTextForPlayer(playerid, "~y~Nice Try!", 3500, 3);
-
-							TogglePlayerSpectating(playerid, 1);
-							SetTimerEx("Event_RespawnPlayer", 3500, false, "d", playerid);
-						}
-						SetPlayerVirtualWorld(playerid, 0);
-					}
-				} // Gak perlu buat case baru.
-			}
-		}
-		else {
-
-			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
-			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
+		if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 3500, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			evRaceCP[playerid] = -1;
+			if (IsValidVehicle(evCar[playerid]))
+				Vehicle_Delete(evCar[playerid], false);
 
 			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetPlayerTeam(playerid,0);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-			if (PlayerData[playerid][pOnDuty])
+			if (PlayerData[playerid][pOnDuty]) {
+
 				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
 			GivePlayerMoney(playerid, GetMoney(playerid));
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			DisableRemoteVehicleCollisions(playerid, 0);
+			DisablePlayerRaceCheckpoint(playerid);
 
-			TDM_DisplayTD(playerid, false);
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 4 || GetPVarInt(killerid, "IsAtEvent") == 4) {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 3 || GetPVarInt(killerid, "IsAtEvent") == 3) {
 
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
 
-		if (killerid != INVALID_PLAYER_ID) {
+			if (EventType == 3) {
+
+				tdm_EventData[eventTeamScore][evTeam[killerid]-1] ++;
+
+				switch (evTeam[killerid]) {
+
+					case 1: SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "BLUE"%s "YELLOW"with %s. Team A Score: {33aa33}%d", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)), tdm_EventData[eventTeamScore][0]);
+					case 2: SendEventMessage(EventType, COLOR_SERVER, "EVENT: "BLUE"%s "YELLOW"has killed "RED"%s "YELLOW"with %s. Team B Score: {33aa33}%d", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)), tdm_EventData[eventTeamScore][1]);
+				}
+				TDM_UpdateTD(evTeam[killerid]);
+				GameTextForPlayer(killerid, "~g~Perfect!", 3500, 3);
+
+				if (tdm_EventData[eventTeamScore][evTeam[killerid]-1] >= tdm_EventData[eventMaxScore]) {
+
+					static getTeam[][] = { ""RED"Team A", ""BLUE"Team B" };
+					tdm_EventData[eventWinner] = evTeam[killerid];
+
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"Event telah selesai dan dimenangkan oleh %s", getTeam[tdm_EventData[eventWinner]-1]);
+				
+					foreach (new id : Player) {
+
+						if (EventType == 3 && GetPVarInt(id, "IsAtEvent") == EventType && tdm_EventData[eventWinner] > 0) {
+
+							if (evTeam[id] == tdm_EventData[eventWinner]) {
+
+								GiveMoney(id, tdm_EventData[eventPrice]*2);
+								SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Tim kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {33aa33}$%s!", FormatNumber(tdm_EventData[eventPrice]*2));
+							}
+							else {
+
+								GiveMoney(id, tdm_EventData[eventPrice]);
+								SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {33aa33}$%s", FormatNumber(tdm_EventData[eventPrice]));
+							}
+
+							TogglePlayerSpectating(id, 1);
+							SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
+
+							evTeam[id] = 0;
+							TDM_DisplayTD(id, false);
+							TDM_ToggleAntiCheat(id, false);
+
+							SetPlayerTeam(id,0);
+							SetPlayerColor(id, COLOR_DEFAULT);
+							SetCameraBehindPlayer(id);
+							SetPlayerPositionEx(id, PlayerData[id][pPos][0], PlayerData[id][pPos][1], PlayerData[id][pPos][2]);
+							SetPlayerHealth(id, PlayerData[id][pHealth]);
+							SetPlayerArmour(id, PlayerData[id][pArmor]);
+							SetPlayerVirtualWorld(id, PlayerData[id][pWorld]);
+							SetPlayerInterior(id, PlayerData[id][pInterior]);
+							SetPlayerSkin(id, PlayerData[id][pSkin]);
+
+							if (PlayerData[id][pOnDuty]) {
+
+								SetFactionColor(id);
+								SetPlayerSkin(id, PlayerData[id][pFactionSkin]);
+							}
+
+							ResetPlayerMoney(id);
+							GivePlayerMoney(id, PlayerData[id][pMoney]);
+							ResetPlayerWeapons(id);
+							SetWeapons(id);
+							SetPVarInt(id, "IsAtEvent", -1);
+						}
+					}
+					Event_ForceEnd();
+				}
+				else {
+
+					if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
+
+						SetSpawnInfo(playerid, evTeam[playerid], tdm_EventData[eventSkin][evTeam[playerid]-1], tdm_EventData[eventPosX][evTeam[playerid]-1], tdm_EventData[eventPosY][evTeam[playerid]-1], tdm_EventData[eventPosZ][evTeam[playerid]-1], tdm_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
+						GameTextForPlayer(playerid, "~y~Nice Try!", 3500, 3);
+
+						TogglePlayerSpectating(playerid, 1);
+						SetTimerEx("Event_RespawnPlayer", 3500, false, "d", playerid);
+					}
+					SetPlayerVirtualWorld(playerid, 0);
+				}
+			}
+		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 4 || GetPVarInt(killerid, "IsAtEvent") == 4) {
+
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
 
 			dm_EventData[eventExp][killerid] ++;
 
@@ -2545,7 +2557,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			if (dm_EventData[eventExp][killerid] >= dm_EventData[eventMaxScore]) {
 
 				dm_EventData[eventWinner] = killerid;
-				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", GetName(dm_EventData[eventWinner]), FormatNumber(dm_EventData[eventPrice]+100));
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", GetName(dm_EventData[eventWinner]), FormatNumber(dm_EventData[eventPrice]+10000));
 			
 				foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == EventType && EventType == 4) {
 
@@ -2554,21 +2566,34 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 						GiveMoney(id, dm_EventData[eventPrice]);
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
 					}
-					else GiveMoney(id, dm_EventData[eventPrice]+100);
+					else GiveMoney(id, dm_EventData[eventPrice]+10000);
 				
 					TogglePlayerSpectating(id, 1);
 					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
 
 					dm_EventData[eventExp][id] = 0;
-					SetPlayerColor(id, COLOR_DEFAULT);
+					DM_DisplayTD(id, false);
+					DM_ToggleAntiCheat(id, false);
 
-					if (PlayerData[id][pOnDuty])
+					SetPlayerColor(id, COLOR_DEFAULT);
+					SetCameraBehindPlayer(id);
+					SetPlayerPositionEx(id, PlayerData[id][pPos][0], PlayerData[id][pPos][1], PlayerData[id][pPos][2]);
+					SetPlayerHealth(id, PlayerData[id][pHealth]);
+					SetPlayerArmour(id, PlayerData[id][pArmor]);
+					SetPlayerVirtualWorld(id, PlayerData[id][pWorld]);
+					SetPlayerInterior(id, PlayerData[id][pInterior]);
+					SetPlayerSkin(id, PlayerData[id][pSkin]);
+
+					if (PlayerData[id][pOnDuty]) {
+
 						SetFactionColor(id);
+						SetPlayerSkin(id, PlayerData[id][pFactionSkin]);
+					}
 
 					ResetPlayerMoney(id);
-					GivePlayerMoney(id, GetMoney(id));
-
-					DM_DisplayTD(id, false);
+					GivePlayerMoney(id, PlayerData[id][pMoney]);
+					ResetPlayerWeapons(id);
+					SetWeapons(id);
 					SetPVarInt(id, "IsAtEvent", -1);
 				}
 				Event_ForceEnd();
@@ -2586,7 +2611,219 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 				SetPlayerVirtualWorld(playerid, 0);
 			}
 		}
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
+
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been eliminated due killing a participant", GetName(killerid));
+
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			Parachute_ToggleAntiCheat(playerid, false);
+
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
+
+			ResetPlayerMoney(playerid);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			DisablePlayerRaceCheckpoint(playerid);
+			SetWeapons(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
+		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 6 || GetPVarInt(killerid, "IsAtEvent") == 6) {
+
+			ClearAnimations(playerid);
+			ResetPlayerWeapons(playerid);
+
+			switch (GetPlayerTeam(killerid)) {
+
+				case 1: {
+
+					static Float:armorData[MAX_PLAYERS];
+					GetPlayerArmour(playerid, armorData[killerid]);
+
+					if (armorData[killerid] < 90) {
+
+						GameTextForPlayer(killerid, "~g~Immune +15", 3000, 3);
+						SetPlayerArmour(killerid, (armorData[killerid]+15));
+					}
+					else {
+
+						GameTextForPlayer(killerid, "~g~Killer!", 3000, 3);
+					}
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has killed "RED"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
+				}
+				case 2: {
+
+					evTeam[playerid] = 2;
+					zombie_EventData[eventAlive] --;
+
+					foreach (new id : Player) if (IsPlayerSpawned(id) && GetPVarInt(id, "IsAtEvent") == 6) {
+						
+						Zombie_UpdateTD(id);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "GREEN"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
+					}
+					SetPlayerTeam(playerid, evTeam[playerid]);
+					SetPlayerColor(playerid, RemoveAlpha(X11_RED));
+
+					GameTextForPlayer(playerid, "~r~Infected!", 3000, 3);
+					GameTextForPlayer(killerid, "~g~Injected!", 3000, 3);
+				}
+			}
+			if (!zombie_EventData[eventAlive]) {
+
+				static getTeam[][] = { ""GREEN"Human", ""RED"Zombie" };
+				zombie_EventData[eventWinner] = evTeam[killerid];
+
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: %s "YELLOW"is won!", getTeam[zombie_EventData[eventWinner]-1]);
+
+				foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
+
+					if (evTeam[id] == zombie_EventData[eventWinner]) {
+						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
+					}
+					else {
+						GiveMoney(id, zombie_EventData[eventPrice]);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
+					}
+					
+					TogglePlayerSpectating(id, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
+
+					evTeam[id] = 0;
+					Zombie_DisplayTD(id, false);
+					Zombie_ToggleAntiCheat(id, false);
+
+					SetPlayerTeam(id,0);
+					SetPlayerColor(id, COLOR_DEFAULT);
+					SetCameraBehindPlayer(id);
+					SetPlayerPositionEx(id, PlayerData[id][pPos][0], PlayerData[id][pPos][1], PlayerData[id][pPos][2]);
+					SetPlayerHealth(id, PlayerData[id][pHealth]);
+					SetPlayerArmour(id, PlayerData[id][pArmor]);
+					SetPlayerVirtualWorld(id, PlayerData[id][pWorld]);
+					SetPlayerInterior(id, PlayerData[id][pInterior]);
+					SetPlayerSkin(id, PlayerData[id][pSkin]);
+
+					if (PlayerData[id][pOnDuty]) {
+
+						SetFactionColor(id);
+						SetPlayerSkin(id, PlayerData[id][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(id);
+					GivePlayerMoney(id, PlayerData[id][pMoney]);
+					ResetPlayerWeapons(id);
+					SetWeapons(id);
+					SetPVarInt(id, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();
+			}
+			else {
+
+				if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
+
+					SetSpawnInfo(playerid, evTeam[playerid], PlayerData[playerid][pSkin], zombie_EventData[eventPosX][evTeam[playerid]-1], zombie_EventData[eventPosY][evTeam[playerid]-1], zombie_EventData[eventPosZ][evTeam[playerid]-1], zombie_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
+					TogglePlayerSpectating(playerid, 1);
+
+					SetPlayerVirtualWorld(playerid, (playerid+evTeam[playerid]));
+					SetTimerEx("Event_RespawnPlayer", 3000, false, "d", playerid);
+				}
+			}
+		}
+	}
+	else {
+		
+		if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+
+			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
+			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
+
+			TogglePlayerSpectating(playerid, 1);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			evTeam[playerid] = 0;
+			tdm_EventData[eventEntry]--;		
+			if (tdm_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					evTeam[i] = 0;
+					TDM_DisplayTD(i, false);
+					TDM_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, PlayerData[i][pMoney]);
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, tdm_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
+
+			TDM_DisplayTD(playerid, false);
+			TDM_ToggleAntiCheat(playerid, false);
+
+			SetPlayerTeam(playerid,0);
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
+
+			ResetPlayerMoney(playerid);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
+		}
+		else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
 			GameTextForPlayer(playerid, "~r~Disqualified!", 3500, 3);
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "ORANGE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
@@ -2595,193 +2832,286 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			dm_EventData[eventExp][playerid] = 0;
-			SetPlayerColor(playerid, COLOR_DEFAULT);
+			dm_EventData[eventEntry]--;		
+			if (dm_EventData[eventEntry] == 1) {
 
-			if (PlayerData[playerid][pOnDuty])
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 4)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					dm_EventData[eventExp][i] = 0;
+					DM_ToggleAntiCheat(playerid,false);
+					DM_DisplayTD(i, false);
+
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, dm_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(dm_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
+			DM_DisplayTD(playerid, false);
+			DM_ToggleAntiCheat(playerid, false);
+
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
 				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, GetMoney(playerid));
-
-			DM_DisplayTD(playerid, false);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 5) {
-
-		ClearAnimations(playerid);
-		ResetPlayerWeapons(playerid);
-
-		if (killerid != INVALID_PLAYER_ID) {
-
-			SetPlayerHealth(playerid, 100.0);
-			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been eliminated due killing a participant", GetName(killerid));
-
-			TogglePlayerSpectating(killerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 5000, false, "d", killerid);
-
-			SetPlayerColor(killerid, COLOR_DEFAULT);
-			SetPVarInt(killerid, "IsAtEvent", -1);
-
-			if (PlayerData[killerid][pOnDuty])
-				SetFactionColor(killerid);
-
-			ResetPlayerMoney(killerid);
-			GivePlayerMoney(killerid, GetMoney(killerid));
-		}
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
 
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+			Parachute_ToggleAntiCheat(playerid, false);
+			parachute_EventData[eventEntry] --;
+			if (parachute_EventData[eventEntry] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					Parachute_ToggleAntiCheat(playerid, false);
+
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+					DisablePlayerRaceCheckpoint(i);
+
+					GiveMoney(i, parachute_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
 
 			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetPVarInt(playerid, "IsAtEvent", -1);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-			if (PlayerData[playerid][pOnDuty])
+			if (PlayerData[playerid][pOnDuty]) {
+
 				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, GetMoney(playerid));
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			DisablePlayerRaceCheckpoint(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-		parachute_EventData[eventEntry] --;
-	}
-    if (GetPVarInt(playerid, "IsAtEvent") == 6 || GetPVarInt(killerid, "IsAtEvent") == 6) {
-
-        ClearAnimations(playerid);
-        ResetPlayerWeapons(playerid);
-
-        if (killerid != INVALID_PLAYER_ID) {
-
-            switch (GetPlayerTeam(killerid)) {
-
-                case 1: {
-
-                    static Float:armorData[MAX_PLAYERS];
-                    GetPlayerArmour(playerid, armorData[killerid]);
-
-                    if (armorData[killerid] < 90) {
-
-                        GameTextForPlayer(killerid, "~g~Immune +15", 3000, 3);
-                        SetPlayerArmour(killerid, (armorData[killerid]+15));
-                    }
-                    else {
-
-                        GameTextForPlayer(killerid, "~g~Killer!", 3000, 3);
-                    }
-                    SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has killed "RED"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
-                }
-                case 2: {
-
-                    evTeam[playerid] = 2;
-                    zombie_EventData[eventAlive] --;
-
-                    foreach (new id : Player) if (IsPlayerSpawned(id) && GetPVarInt(id, "IsAtEvent") == 6) {
-                        
-                        Zombie_UpdateTD(id);
-                        SendClientMessageEx(id, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has killed "GREEN"%s "YELLOW"with %s.", GetName(killerid), GetName(playerid), ReturnWeaponName(GetPlayerWeapon(killerid)));
-                    }
-                    SetPlayerTeam(playerid, evTeam[playerid]);
-					SetPlayerColor(playerid, RemoveAlpha(X11_RED));
-
-                    GameTextForPlayer(playerid, "~r~Infected!", 3000, 3);
-                    GameTextForPlayer(killerid, "~g~Injected!", 3000, 3);
-                }
-            }
-            if (!zombie_EventData[eventAlive]) {
-
-				static getTeam[][] = { ""GREEN"Human", ""RED"Zombie" };
-				zombie_EventData[eventWinner] = evTeam[killerid];
-
-                SendEventMessage(EventType, COLOR_SERVER, "EVENT: %s "YELLOW"is won!", getTeam[zombie_EventData[eventWinner]-1]);
-
-                foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
-
-                    if (evTeam[id] == zombie_EventData[eventWinner]) GiveMoney(id, zombie_EventData[eventPrice]+100);
-                    else GiveMoney(id, zombie_EventData[eventPrice]);
-                    
-                    TogglePlayerSpectating(id, 1);
-        			SetTimerEx("Event_RespawnPlayer", 3000, false, "d", id);
-
-					SetPlayerColor(id, COLOR_DEFAULT);
-					SetPlayerTeam(id,0);
-
-					if (PlayerData[id][pOnDuty])
-						SetFactionColor(id);
-
-					ResetPlayerMoney(id);
-					GivePlayerMoney(id, GetMoney(id));
-
-					Zombie_DisplayTD(id, false);
-					SetPVarInt(id, "IsAtEvent", -1);
-                }
-                Event_ForceEnd();
-            }
-            else {
-
-				if (GetPlayerState(playerid) == PLAYER_STATE_WASTED) {
-
-					SetSpawnInfo(playerid, evTeam[playerid], PlayerData[playerid][pSkin], zombie_EventData[eventPosX][evTeam[playerid]-1], zombie_EventData[eventPosY][evTeam[playerid]-1], zombie_EventData[eventPosZ][evTeam[playerid]-1], zombie_EventData[eventPosA][evTeam[playerid]-1], 0, 0, 0, 0, 0, 0);
-					TogglePlayerSpectating(playerid, 1);
-
-                    SetPlayerVirtualWorld(playerid, (playerid+evTeam[playerid]));
-					SetTimerEx("Event_RespawnPlayer", 3000, false, "d", playerid);
-				}
-            }
-        }
-		else {
+		else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
 			GameTextForPlayer(playerid, "~r~Disqualified!", 4000, 3);
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"%s has been disqualified due suicide.", GetName(playerid));
 
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
-			SetPlayerColor(playerid, COLOR_DEFAULT);
+			evTeam[playerid] = 0;
+			zombie_EventData[eventAlive] --; 
+			if (zombie_EventData[eventAlive] == 1) {
+
+				foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 6)
+				{
+					TogglePlayerSpectating(i, 1);
+					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+					evTeam[i] = 0;
+					Zombie_DisplayTD(i, false);
+					Zombie_ToggleAntiCheat(i, false);
+
+					SetPlayerTeam(i,0);
+					SetPlayerColor(i, COLOR_DEFAULT);
+					SetCameraBehindPlayer(i);
+					SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+					SetPlayerHealth(i, PlayerData[i][pHealth]);
+					SetPlayerArmour(i, PlayerData[i][pArmor]);
+					SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+					SetPlayerInterior(i, PlayerData[i][pInterior]);
+					SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+					if (PlayerData[i][pOnDuty]) {
+
+						SetFactionColor(i);
+						SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+					}
+
+					ResetPlayerMoney(i);
+					GivePlayerMoney(i, GetMoney(i));
+					ResetPlayerWeapons(i);
+					SetWeapons(i);
+
+					GiveMoney(i, zombie_EventData[eventPrice]),
+					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(zombie_EventData[eventPrice]));
+					SetPVarInt(i, "IsAtEvent", -1);
+				}
+				Event_ForceEnd();			
+			}
+			Zombie_DisplayTD(playerid, false);
+			Zombie_ToggleAntiCheat(playerid, false);
+
 			SetPlayerTeam(playerid,0);
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-			if (PlayerData[playerid][pOnDuty])
+			if (PlayerData[playerid][pOnDuty]) {
+
 				SetFactionColor(playerid);
-
-            if (evTeam[playerid] == 1)
-                zombie_EventData[eventAlive] --;
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
-			GivePlayerMoney(playerid, GetMoney(playerid));
-
-			Zombie_DisplayTD(playerid, false);
+			GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
 			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
-    }
-	return 1;
+	}
 }
 
 hook OnPlayerSpawn(playerid) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == -1 && (EventType == 1)) {
+	if (GetPVarInt(playerid, "IsAtEvent") == 1 && EventType == 1) {
 
 		evRaceCP[playerid] = -1;
-		race_EventData[evEntry] --;
+		race_EventData[evEntry]--;
 
+		if (race_EventData[evEntry] == 1) {
+
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 1)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				evRaceCP[i] = -1;
+				if (IsValidVehicle(evCar[i]))
+					Vehicle_Delete(evCar[i], false);
+
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, GetMoney(i));
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+				DisableRemoteVehicleCollisions(i, 0);
+				DisablePlayerRaceCheckpoint(i);
+
+				GiveMoney(i, race_EventData[evPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(race_EventData[evPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
+
+		if (IsValidVehicle(evCar[playerid]))
+			Vehicle_Delete(evCar[playerid], false);
+
+		SetPlayerColor(playerid, COLOR_DEFAULT);
+		SetCameraBehindPlayer(playerid);
 		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-
 		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
 		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
 		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
 		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-
-		DisableRemoteVehicleCollisions(playerid, 0);
-		DisablePlayerRaceCheckpoint(playerid);
-
 		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
-		SetCameraBehindPlayer(playerid);
-		
+
+		if (PlayerData[playerid][pOnDuty]) {
+
+			SetFactionColor(playerid);
+			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
+
+		ResetPlayerMoney(playerid);
+		GivePlayerMoney(playerid, GetMoney(playerid));
 		ResetPlayerWeapons(playerid);
 		SetWeapons(playerid);
+		DisableRemoteVehicleCollisions(playerid, 0);
+		DisablePlayerRaceCheckpoint(playerid);
+		SetPVarInt(playerid, "IsAtEvent", -1);
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 3 && EventType == 3) {
 
 		TDM_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -2800,27 +3130,7 @@ hook OnPlayerSpawn(playerid) {
 
 		SetTimerEx("TDM_Spawning", 5000, false, "d", playerid);
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == -1) {
-
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-
-		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-
-		evTeam[playerid] = 0;
-
-		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
-		SetCameraBehindPlayer(playerid);
-
-		TDM_ToggleAntiCheat(playerid, false);
-		
-		ResetPlayerWeapons(playerid);
-		SetWeapons(playerid);
-	}	
-	if (GetPVarInt(playerid, "IsAtEvent") == 4) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 4 && EventType == 4) {
 
 		DM_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -2839,43 +3149,33 @@ hook OnPlayerSpawn(playerid) {
 
 		SetTimerEx("DM_Spawning", 5000, false, "d", playerid);
 	}
-	else if (GetPVarInt(playerid, "IsAtEvent") == -1) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-
-		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-
-		SetCameraBehindPlayer(playerid);
-		DM_ToggleAntiCheat(playerid, false);
-		
-		ResetPlayerWeapons(playerid);
-		SetWeapons(playerid);
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == -1 && (EventType == 5)) {
-
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
-
-		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
-		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
-		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-
-		SetCameraBehindPlayer(playerid);
 		Parachute_ToggleAntiCheat(playerid, false);
-		
+
+		SetCameraBehindPlayer(playerid);
+		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+		if (PlayerData[playerid][pOnDuty]) {
+
+			SetFactionColor(playerid);
+			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
+
+		ResetPlayerMoney(playerid);
+		GivePlayerMoney(playerid, GetMoney(playerid));
 		ResetPlayerWeapons(playerid);
 		SetWeapons(playerid);
-
+		DisableRemoteVehicleCollisions(playerid, 0);
 		DisablePlayerRaceCheckpoint(playerid);
-
-		parachute_EventData[eventEntry] --;
+		SetPVarInt(playerid, "IsAtEvent", 0);
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 6 && EventType == 6) {
 
 		Zombie_ToggleAntiCheat(playerid, false);
 		GameTextForPlayer(playerid, "~w~Kembali dalam~n~5 detik", 5000, 6);
@@ -2898,25 +3198,39 @@ hook OnPlayerSpawn(playerid) {
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == -1) {
 
-		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		dm_EventData[eventExp][playerid] = 0;
+		evTeam[playerid] = 0;
+		evRaceCP[playerid] = -1;
+		if (IsValidVehicle(evCar[playerid]))
+			Vehicle_Delete(evCar[playerid], false);
 
+		Parachute_ToggleAntiCheat(playerid, false);
+		Zombie_ToggleAntiCheat(playerid, false);
+		TDM_ToggleAntiCheat(playerid, false);
+		DM_ToggleAntiCheat(playerid, false);
+				
+		SetCameraBehindPlayer(playerid);
+		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
 		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
-
 		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
 		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
-
-		evTeam[playerid] = 0;
-
 		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
-		SetCameraBehindPlayer(playerid);
 
-		Zombie_ToggleAntiCheat(playerid, false);
-		
+		if (PlayerData[playerid][pOnDuty]) {
+
+			SetFactionColor(playerid);
+			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
+
+		ResetPlayerMoney(playerid);
+		GivePlayerMoney(playerid, GetMoney(playerid));
 		ResetPlayerWeapons(playerid);
 		SetWeapons(playerid);
+		DisableRemoteVehicleCollisions(playerid, 0);
+		DisablePlayerRaceCheckpoint(playerid);
+		SetPVarInt(playerid, "IsAtEvent", 0);
 	}
-	return 1;
 }
 
 hook OnPlayerText(playerid, text[]) {
@@ -2927,7 +3241,7 @@ hook OnPlayerText(playerid, text[]) {
 
 		SendEventMessage(EventType, GetPlayerColor(playerid), "%s: "WHITE"%s", GetName(playerid), text);
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
 
 		if (GetPlayerVirtualWorld(playerid) != tdm_EventData[eventWorld] && EventStarted) {
 
@@ -2944,7 +3258,7 @@ hook OnPlayerText(playerid, text[]) {
 			}
 		}
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 4) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
 		if (GetPlayerVirtualWorld(playerid) != dm_EventData[eventWorld] && EventStarted) {
 
@@ -2955,25 +3269,25 @@ hook OnPlayerText(playerid, text[]) {
 
 		foreach (new id : Player) {
 
-			if (IsAtEvent(id) && GetPVarInt(playerid, "IsAtEvent") == GetPVarInt(id, "IsAtEvent")) {
+			if (GetPVarInt(id, "IsAtEvent") > 0 && GetPVarInt(playerid, "IsAtEvent") == GetPVarInt(id, "IsAtEvent")) {
 
 				SendClientMessageEx(id, GetPlayerColor(playerid), "%s: "WHITE"%s", GetName(playerid), text);
 			}
 		}
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
 
         text[0] = toupper(text[0]);
 
 		foreach (new id : Player) {
 
-		if (IsAtEvent(id) && GetPVarInt(id, "IsAtEvent") == 5) {
+		if (GetPVarInt(id, "IsAtEvent") > 0 && GetPVarInt(id, "IsAtEvent") == 5) {
 
 				SendClientMessage(id, GetPlayerColor(playerid), sprintf("%s: "WHITE"%s", GetName(playerid), text));
 			}
 		}		
 	}		
-	if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
 		if (GetPlayerVirtualWorld(playerid) != zombie_EventData[eventWorld] && EventStarted) {
 
@@ -2983,16 +3297,56 @@ hook OnPlayerText(playerid, text[]) {
         text[0] = toupper(text[0]);
 
 		SendEventMessage(EventType, GetPlayerColor(playerid), "%s: "WHITE"%s", GetName(playerid), text);
-	}		
-	return 0;
+	}	
+	return 0;	
 }
 
-hook OnPlayerDisconnect(playerid, reason) {
+hook OnPlayerDisconnectEx(playerid) {
 
     if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
 		evRaceCP[playerid] = -1;
 		race_EventData[evEntry] --;
+		
+		if (race_EventData[evEntry] == 1) {
+
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 1)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				evRaceCP[i] = -1;
+				if (IsValidVehicle(evCar[i]))
+					Vehicle_Delete(evCar[i], false);
+
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, GetMoney(i));
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+				DisableRemoteVehicleCollisions(i, 0);
+				DisablePlayerRaceCheckpoint(i);
+
+				GiveMoney(i, race_EventData[evPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(race_EventData[evPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
 
 		DisableRemoteVehicleCollisions(playerid, 0);
 		DisablePlayerRaceCheckpoint(playerid);
@@ -3001,17 +3355,12 @@ hook OnPlayerDisconnect(playerid, reason) {
 		ResetPlayerWeapons(playerid);
 
 		if (IsValidVehicle(evCar[playerid]))
-			DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
+			Vehicle_Delete(evCar[playerid], false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
     }
-	else {
-
-		if (GetPVarInt(playerid, "EditRaceCP") > 0)
-			DeletePVar(playerid, "EditRaceCP");
-	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
 
 		forex (td, 5) PlayerTextDrawDestroy(playerid, TDM_TD[playerid][td]);
 
@@ -3022,9 +3371,48 @@ hook OnPlayerDisconnect(playerid, reason) {
 		TDM_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has leave from event. (Disconnected/FC)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		tdm_EventData[eventEntry]--;		
+		if (tdm_EventData[eventEntry] == 1) {
+
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 3)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				evTeam[i] = 0;
+				TDM_DisplayTD(i, false);
+				TDM_ToggleAntiCheat(i, false);
+
+				SetPlayerTeam(i,0);
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, PlayerData[i][pMoney]);
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+
+				GiveMoney(i, tdm_EventData[eventPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
+		DeletePVar(playerid, "IsAtEvent");
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 4) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
 		forex (td, 6) PlayerTextDrawDestroy(playerid, DM_TD[playerid][td]);
 
@@ -3032,28 +3420,140 @@ hook OnPlayerDisconnect(playerid, reason) {
 		ResetPlayerWeapons(playerid);
 
 		dm_EventData[eventExp][playerid] = 0;
+		dm_EventData[eventEntry]--;		
+		if (dm_EventData[eventEntry] == 1) {
+
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 4)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				dm_EventData[eventExp][i] = 0;
+				DM_ToggleAntiCheat(playerid,false);
+				DM_DisplayTD(i, false);
+
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, GetMoney(i));
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+
+				GiveMoney(i, dm_EventData[eventPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(dm_EventData[eventPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
 		DM_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has leave from event. (Disconnected/FC)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
 
 		ResetPlayerStatistics(playerid);
 		ResetPlayerWeapons(playerid);
 
 		parachute_EventData[eventEntry] --;
-		Parachute_ToggleAntiCheat(playerid, false);
+		if (parachute_EventData[eventEntry] == 1) {
 
-		SetPVarInt(playerid, "IsAtEvent", -1);
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 5)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				Parachute_ToggleAntiCheat(playerid, false);
+
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, GetMoney(i));
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+				DisablePlayerRaceCheckpoint(i);
+
+				GiveMoney(i, parachute_EventData[eventPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
+
+		DeletePVar(playerid, "IsAtEvent");
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
 	}
-    if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+    else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
         forex (td, 4) PlayerTextDrawDestroy(playerid, ZombieTD[playerid][td]);
 
         if (evTeam[playerid] == 1)
             zombie_EventData[eventAlive] --, evTeam[playerid] = 0;
+
+		if (zombie_EventData[eventAlive] == 1) {
+
+			foreach (new i : Player) if (GetPVarInt(i, "IsAtEvent") == 6)
+			{
+				TogglePlayerSpectating(i, 1);
+				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", i);
+
+				evTeam[i] = 0;
+				Zombie_DisplayTD(i, false);
+				Zombie_ToggleAntiCheat(i, false);
+
+				SetPlayerTeam(i,0);
+				SetPlayerColor(i, COLOR_DEFAULT);
+				SetCameraBehindPlayer(i);
+				SetPlayerPositionEx(i, PlayerData[i][pPos][0], PlayerData[i][pPos][1], PlayerData[i][pPos][2]);
+				SetPlayerHealth(i, PlayerData[i][pHealth]);
+				SetPlayerArmour(i, PlayerData[i][pArmor]);
+				SetPlayerVirtualWorld(i, PlayerData[i][pWorld]);
+				SetPlayerInterior(i, PlayerData[i][pInterior]);
+				SetPlayerSkin(i, PlayerData[i][pSkin]);
+
+				if (PlayerData[i][pOnDuty]) {
+
+					SetFactionColor(i);
+					SetPlayerSkin(playerid, PlayerData[i][pFactionSkin]);
+				}
+
+				ResetPlayerMoney(i);
+				GivePlayerMoney(i, GetMoney(i));
+				ResetPlayerWeapons(i);
+				SetWeapons(i);
+
+				GiveMoney(i, zombie_EventData[eventPrice]),
+				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(zombie_EventData[eventPrice]));
+				SetPVarInt(i, "IsAtEvent", -1);
+			}
+			Event_ForceEnd();			
+		}
 
 		ResetPlayerStatistics(playerid);
 		ResetPlayerWeapons(playerid);
@@ -3062,9 +3562,12 @@ hook OnPlayerDisconnect(playerid, reason) {
 		Zombie_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		DeletePVar(playerid, "IsAtEvent");
     }
-	return 1;
+	else {
+		if (GetPVarInt(playerid, "EditRaceCP") > 0)
+			DeletePVar(playerid, "EditRaceCP");
+	}
 }
 
 hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
@@ -3116,7 +3619,7 @@ hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 			}*/
 		}
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 4) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
 
 		if (areaid == dm_EventData[eventArea] && GetPlayerVirtualWorld(playerid) == dm_EventData[eventWorld]) {
 
@@ -3127,7 +3630,7 @@ hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 			SendClientMessage(playerid, COLOR_SERVER, "WARNING: "TOMATO_1"Please don't escaping from event mode!");
 		}
 	}
-    if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+    else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
         if (areaid == zombie_EventData[eventArea] && GetPlayerVirtualWorld(playerid) == zombie_EventData[eventWorld]) {
 
@@ -3138,7 +3641,6 @@ hook OnPlayerLeaveDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 			SendClientMessage(playerid, COLOR_SERVER, "WARNING: "TOMATO_1"Please don't escaping from event mode!");
         }
     }
-	return 1;
 }
 
 stock DM_ToggleAntiCheat(playerid, bool:nyala = true) {
@@ -3270,8 +3772,8 @@ Dialog:DM_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 300) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		dm_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -3281,8 +3783,8 @@ Dialog:DM_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 300) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		dm_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -3427,7 +3929,7 @@ ptask DM_EventCountdown[1000](playerid) {
 
 hook OnPlayerEnterRaceCP(playerid) {
 
-	if (GetPVarInt(playerid, "IsAtEvent") == 1) {
+	if (GetPVarInt(playerid, "IsAtEvent") == 1 && EventType == 1) {
 
 		evRaceCP[playerid] ++;
 
@@ -3446,30 +3948,30 @@ hook OnPlayerEnterRaceCP(playerid) {
 
 					case 1: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 100),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"1st | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 100));
+						GiveMoney(playerid, race_EventData[evPrice]+1000000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"1st | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000000));
 					}
 					case 2: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 50),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"2nd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 50));
+						GiveMoney(playerid, race_EventData[evPrice]+5000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"2nd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+5000));
 					}
 					case 3: {
 
 						race_EventData[evTime] = 30;
 
-						GiveMoney(playerid, race_EventData[evPrice] + 30),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"3rd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 30));
+						GiveMoney(playerid, race_EventData[evPrice]+3000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"3rd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+3000));
 					}
 					case 4: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 20),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"4th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 20));
+						GiveMoney(playerid, race_EventData[evPrice]+2000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"4th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+2000));
 					}
 					case 5: {
 
-						GiveMoney(playerid, race_EventData[evPrice] + 10),
-						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"5th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice] + 10));
+						GiveMoney(playerid, race_EventData[evPrice]+1000),
+						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"5th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000));
 					}
 					default: {
 
@@ -3477,20 +3979,35 @@ hook OnPlayerEnterRaceCP(playerid) {
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish!", GetName(playerid));
 					}
 				}
-				if (IsValidVehicle(evCar[playerid]))
-					DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
-
 				TogglePlayerSpectating(playerid, 1);
 				SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
-				SetPlayerColor(playerid, COLOR_DEFAULT);
-				SetPVarInt(playerid, "IsAtEvent", -1);
+				evRaceCP[playerid] = -1;
+				if (IsValidVehicle(evCar[playerid]))
+					Vehicle_Delete(evCar[playerid], false);
 
-				if (PlayerData[playerid][pOnDuty])
+				SetPlayerColor(playerid, COLOR_DEFAULT);
+				SetCameraBehindPlayer(playerid);
+				SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+				SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+				SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+				SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+				SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+				SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+				if (PlayerData[playerid][pOnDuty]) {
+
 					SetFactionColor(playerid);
+					SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+				}
 
 				ResetPlayerMoney(playerid);
 				GivePlayerMoney(playerid, GetMoney(playerid));
+				ResetPlayerWeapons(playerid);
+				SetWeapons(playerid);
+				DisableRemoteVehicleCollisions(playerid, 0);
+				DisablePlayerRaceCheckpoint(playerid);
+				SetPVarInt(playerid, "IsAtEvent", -1);
 			}
 			default: {
 
@@ -3499,7 +4016,7 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 		}
 	}
-	if (GetPVarInt(playerid, "IsAtEvent") == 5) {
+	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
 		parachute_EventData[eventWinner] ++;
 
@@ -3520,14 +4037,14 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 			case 2: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-25);
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-25));
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-2500);
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-2500));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%dnd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			case 3: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-50);
-				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-50));
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-5000);
+				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-5000));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%drd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			default: {
@@ -3538,18 +4055,31 @@ hook OnPlayerEnterRaceCP(playerid) {
 			}
 		}
 		TogglePlayerSpectating(playerid, 1);
-		SetTimerEx("Event_RespawnPlayer", 3000, false, "d", playerid);
+		SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
+
+		Parachute_ToggleAntiCheat(playerid, false);
 
 		SetPlayerColor(playerid, COLOR_DEFAULT);
-		SetPVarInt(playerid, "IsAtEvent", -1);
+		SetCameraBehindPlayer(playerid);
+		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+		SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+		SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+		SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+		SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
 
-		if (PlayerData[playerid][pOnDuty])
+		if (PlayerData[playerid][pOnDuty]) {
+
 			SetFactionColor(playerid);
+			SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+		}
 
 		ResetPlayerMoney(playerid);
-		GivePlayerMoney(playerid, GetMoney(playerid));
+		GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
+		ResetPlayerWeapons(playerid);
+		SetWeapons(playerid);
+		SetPVarInt(playerid, "IsAtEvent", -1);
 	}
-	return 1;
 }
 
 stock Parachute_Attach(playerid) {
@@ -3610,8 +4140,8 @@ Dialog:Parachute_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 300) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$3.50)"), dialog_EventInfo(playerid, 1, 1, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
 
 		parachute_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -3621,8 +4151,8 @@ Dialog:Parachute_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 300) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$3.50)"), dialog_EventInfo(playerid, 1, 1, inputtext);
+		if ((strval(totalamount) < 5000 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, inputtext);
 
 		parachute_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -3635,15 +4165,33 @@ Dialog:Parachute_EvWinnerPrize(playerid, response, listitem, inputtext[]) {
 	if (!response)
 		return cmd_event(playerid, "info");
 
-	if (!IsNumeric(inputtext))
-		return SendErrorMessage(playerid, "Hanya karakter angka yang diperbolehkan!"), dialog_EventInfo(playerid, 1, 2, inputtext);
+	new
+		dollar, 
+		cent, 
+		totalamount[32];
 	
-	if ((strval(inputtext)-50 < parachute_EventData[eventPrice] || strval(inputtext) > 300))
-		return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (%d-300)", parachute_EventData[eventPrice]+50), dialog_EventInfo(playerid, 1, 2, inputtext);
+	if (strfind(inputtext, ".", true) != -1)
+	{
+		sscanf(inputtext, "p<.>dd", dollar, cent);
+		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-	parachute_EventData[eventWinnerPrice] = strval(inputtext);
-	cmd_event(playerid, "info");
+		if ((strval(totalamount) < 5000 || strval(totalamount) > parachute_EventData[eventPrice]))
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$%s)", FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
 
+		parachute_EventData[eventWinnerPrice] = strval(totalamount);
+		cmd_event(playerid, "info");
+	}
+	else
+	{
+		sscanf(inputtext, "d", dollar);
+		format(totalamount, sizeof(totalamount), "%d00", dollar);
+
+		if ((strval(totalamount) < 5000 || strval(totalamount) > parachute_EventData[eventPrice]))
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($50.00-$%s)", FormatNumber(parachute_EventData[eventPrice])), dialog_EventInfo(playerid, 1, 2, inputtext);
+
+		parachute_EventData[eventWinnerPrice] = strval(totalamount);
+		cmd_event(playerid, "info");
+	}
 	return 1;
 }
 
@@ -3738,40 +4286,48 @@ task Parachute_EventTimerCheck[1000]()
 
 hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
-	if (IsAtEvent(playerid) && (oldstate == PLAYER_STATE_DRIVER)) {
+	if ((GetPVarInt(playerid, "IsAtEvent") > 0) && (oldstate == PLAYER_STATE_DRIVER)) {
 
 		if (GetPVarInt(playerid, "IsAtEvent") == 1) {
 
-			DisableRemoteVehicleCollisions(playerid, 0);
-			DisablePlayerRaceCheckpoint(playerid);
-
 			SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been disqualified.", GetName(playerid));
 
-			if (IsValidVehicle(evCar[playerid]))
-				DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
-
 			TogglePlayerSpectating(playerid, 1);
-			SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
-
-			SetPlayerColor(playerid, COLOR_DEFAULT);
-			SetPVarInt(playerid, "IsAtEvent", -1);
-
-			if (PlayerData[playerid][pOnDuty])
-				SetFactionColor(playerid);
+			SetTimerEx("Event_RespawnPlayer", 4000, false, "d", playerid);
 
 			evRaceCP[playerid] = -1;
-			race_EventData[evEntry] --;
+			if (IsValidVehicle(evCar[playerid]))
+				Vehicle_Delete(evCar[playerid], false);
+
+			SetPlayerColor(playerid, COLOR_DEFAULT);
+			SetCameraBehindPlayer(playerid);
+			SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			SetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+			SetPlayerVirtualWorld(playerid, PlayerData[playerid][pWorld]);
+			SetPlayerInterior(playerid, PlayerData[playerid][pInterior]);
+			SetPlayerSkin(playerid, PlayerData[playerid][pSkin]);
+
+			if (PlayerData[playerid][pOnDuty]) {
+
+				SetFactionColor(playerid);
+				SetPlayerSkin(playerid, PlayerData[playerid][pFactionSkin]);
+			}
 
 			ResetPlayerMoney(playerid);
 			GivePlayerMoney(playerid, GetMoney(playerid));
+			ResetPlayerWeapons(playerid);
+			SetWeapons(playerid);
+			DisableRemoteVehicleCollisions(playerid, 0);
+			DisablePlayerRaceCheckpoint(playerid);
+			SetPVarInt(playerid, "IsAtEvent", -1);
 		}
 	}
-	return 1;
 }
 
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
-	if (EventHost != INVALID_PLAYER_ID && (EventType == 1)) {
+	if (strcmp(EventHost, "null", true) && (EventType == 1)) {
 
 		if (newkeys & KEY_FIRE) {
 
@@ -3791,7 +4347,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 				}
 				if (Iter_Count(RacesCP<id>) < 20) {
 
-					format (str, sizeof(str), "%s\nCP:-\t<< New checkpoint >>\tSan ANdreas", str);
+					format (str, sizeof(str), "%s\nCP:-\t<< New checkpoint >>\tSan Andreas", str);
 				}
 				Dialog_Show(playerid, Race_CreateCP, DIALOG_STYLE_TABLIST_HEADERS, "Create Race Map", str, "Move", "Save");
 
@@ -3825,7 +4381,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			}
 		}
 	}
-    if (GetPVarInt(playerid, "IsAtEvent") == 3) {
+    else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
 
         if ((newkeys & KEY_FIRE || newkeys & KEY_SECONDARY_ATTACK) && tdm_EventData[eventCD][playerid] > 0 && !EventStarted) {
 
@@ -3836,7 +4392,7 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			SendErrorMessage(playerid, "Please don't punching your teammate until event is started!");
         }
     }
-    if (GetPVarInt(playerid, "IsAtEvent") == 6) {
+    else if (GetPVarInt(playerid, "IsAtEvent") == 6) {
 
         if ((newkeys & KEY_FIRE || newkeys & KEY_SECONDARY_ATTACK) && zombie_EventData[eventCD][playerid] > 0 && !EventStarted) {
 
@@ -3847,7 +4403,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 			SendErrorMessage(playerid, "Please don't punching your teammate until event is started!");
         }
     }
-	return 1;
 }
 
 Race_Event_Add(const name[], const publisher[])
@@ -4011,8 +4566,8 @@ Dialog:Race_EventLimit(playerid, response, listitem, inputtext[])
 		if (!IsNumeric(inputtext))
 			return SendErrorMessage(playerid, "Hanya karakter angka yang diperbolehkan!"), dialog_EventInfo(playerid, 1, 0, "\1");
 	
-		if ((input < 10 || input > 50) && PlayerData[playerid][pAdmin] < 8)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (10-50)"), dialog_EventInfo(playerid, 1, 0, "\1");
+		if ((input < 2 || input > 50) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (2-50)"), dialog_EventInfo(playerid, 1, 0, "\1");
 
 		race_EventData[evLimit] = input;
 		cmd_event(playerid, "info");
@@ -4036,8 +4591,8 @@ Dialog:Race_EventPrice(playerid, response, listitem, inputtext[])
 			sscanf(inputtext, "p<.>dd", dollar, cent);
 			format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-			if ((strval(totalamount) < 50 || strval(totalamount) > 400) && PlayerData[playerid][pAdmin] < 8)
-				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.50-$4.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
+			if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
 
 			race_EventData[evPrice] = strval(totalamount);
 			cmd_event(playerid, "info");
@@ -4047,8 +4602,8 @@ Dialog:Race_EventPrice(playerid, response, listitem, inputtext[])
 			sscanf(inputtext, "d", dollar);
 			format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-			if ((strval(totalamount) < 50 || strval(totalamount) > 400) && PlayerData[playerid][pAdmin] < 8)
-				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.50-$4.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
+			if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+				return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 1, "\1");
 
 			race_EventData[evPrice] = strval(totalamount);
 			cmd_event(playerid, "info");
@@ -4088,7 +4643,7 @@ Dialog:Race_EventTime(playerid, response, listitem, inputtext[])
 		if (!IsNumeric(inputtext))
 			return SendErrorMessage(playerid, "Hanya karakter angka yang diperbolehkan!"), dialog_EventInfo(playerid, 1, 4, "\1");
 	
-		if ((input < 5 || input > 20) && PlayerData[playerid][pAdmin] < 8)
+		if ((input < 5 || input > 20) && PlayerData[playerid][pAdmin] < 7)
 			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. (5-20 [menit])"), dialog_EventInfo(playerid, 1, 4, "\1");
 
 		race_EventData[evTime] = (input * 60);
@@ -4311,7 +4866,7 @@ ptask Race_EventCountdown[1000](playerid)
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "YELLOW"Kamu mendapatkan hadiah sebesar {009000}$%s "YELLOW"karena telah menjadi partisipan event ini!", FormatNumber(race_EventData[evPrice]));
 
 				if (IsValidVehicle(evCar[playerid]))
-					DestroyVehicle(evCar[playerid]), evCar[playerid] = INVALID_VEHICLE_ID;
+					Vehicle_Delete(evCar[playerid], false);
 
 				TogglePlayerSpectating(playerid, 1);
 				SetTimerEx("Event_RespawnPlayer", 5000, false, "d", playerid);
@@ -4498,8 +5053,8 @@ Dialog:TDM_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 250) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		tdm_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4509,8 +5064,8 @@ Dialog:TDM_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 250) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		tdm_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4707,7 +5262,6 @@ hook OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid) {
 			SetPlayerHealth(damagedid,(health+amount)); // Mencegah Friendly Fire.
 		}
 	}
-	return 1;
 }
 
 forward Zombie_Spawning(playerid);
@@ -4839,8 +5393,8 @@ Dialog:Zombie_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "p<.>dd", dollar, cent);
 		format(totalamount, sizeof(totalamount), "%d%02d", dollar, cent);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 250) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		zombie_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -4850,8 +5404,8 @@ Dialog:Zombie_EventPrize(playerid, response, listitem, inputtext[]) {
 		sscanf(inputtext, "d", dollar);
 		format(totalamount, sizeof(totalamount), "%d00", dollar);
 
-		if ((strval(totalamount) < 20 || strval(totalamount) > 250) && PlayerData[playerid][pAdmin] < 7)
-			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.20-$2.50)"), dialog_EventInfo(playerid, 1, 2, inputtext);
+		if ((strval(totalamount) < 0 || strval(totalamount) > 50000) && PlayerData[playerid][pAdmin] < 7)
+			return SendErrorMessage(playerid, "Tidak dapat mengubah nilai. ($0.00-$500.00)"), dialog_EventInfo(playerid, 1, 2, inputtext);
 
 		zombie_EventData[eventPrice] = strval(totalamount);
 		cmd_event(playerid, "info");
@@ -5058,8 +5612,14 @@ task Zombie_EventTimer[60000]()
 
                 foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
 
-                    if (evTeam[id] == zombie_EventData[eventWinner]) GiveMoney(id, zombie_EventData[eventPrice]+100);
-                    else GiveMoney(id, zombie_EventData[eventPrice]);
+                    if (evTeam[id] == zombie_EventData[eventWinner]) {
+						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
+					}
+                    else {
+						GiveMoney(id, zombie_EventData[eventPrice]);
+						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
+					}
                     
                     TogglePlayerSpectating(id, 1);
         			SetTimerEx("Event_RespawnPlayer", 3000, false, "d", id);

@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum E_PUBLIC_GARAGE {
     garageID,
     Float:garageX,
@@ -11,6 +13,20 @@ new
     Iterator:Garage<MAX_PUBLIC_GARAGE>,
     g_NearGarage[MAX_PLAYERS];
 
+hook OnGameModeInit() {
+
+    if (IsSQLConnected()) {
+        Iter_Init(Garage);
+		mysql_tquery(sqlcon, "SELECT * FROM `garage`", "Garage_Load", "");
+    }
+}
+
+hook OnGameModeExit() {
+
+    if (IsSQLConnected()) {
+        Iter_Clear(Garage);
+    }
+}
 
 Garage_Create(Float:x, Float:y, Float:z) {
 

@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 #define                 MAX_ROCK                500
 
 enum E_ROCK_DATA {
@@ -13,6 +15,21 @@ enum E_ROCK_DATA {
 new
     RockData[MAX_ROCK][E_ROCK_DATA],
     Iterator:Rock<MAX_ROCK>;
+
+hook OnGameModeInit() {
+
+    if (IsSQLConnected()) {
+        Iter_Init(Rock);
+		mysql_tquery(sqlcon, "SELECT * FROM `rock`", "Rock_Load", "");
+    }
+}
+
+hook OnGameModeExit() {
+
+    if (IsSQLConnected()) {
+        Iter_Clear(Rock);
+    }
+}
 
 Rock_Create(Float:x, Float:y, Float:z) {
     new id = INVALID_ITERATOR_SLOT;

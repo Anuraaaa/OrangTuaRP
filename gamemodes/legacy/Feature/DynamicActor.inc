@@ -23,6 +23,21 @@ new Iterator:DynamicActor<MAX_ACTOR>,
 	g_PlayerRobbingActor[MAX_PLAYERS],
 	Timer:g_PlayerRobbingActorTimer[MAX_PLAYERS];
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		Iter_Init(DynamicActor);
+		mysql_tquery(sqlcon, "SELECT * FROM `actors`", "Actor_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+		Iter_Clear(DynamicActor);		
+	}
+}
+
 hook OnPlayerConnect(playerid) {
 	g_PlayerRobbingActor[playerid] = -1;
 	g_PlayerRobbingActorTimer[playerid] = Timer:-1;

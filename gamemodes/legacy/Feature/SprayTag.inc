@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum e_tag_data
 {
 	tagID,
@@ -20,6 +22,21 @@ new TagText[MAX_PLAYERS][64],
 	TagSize[MAX_PLAYERS],
 	TagBold[MAX_PLAYERS],
 	TagColor[MAX_PLAYERS];
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		Iter_Init(SprayTag);
+		mysql_tquery(sqlcon, "SELECT * FROM `tags`", "Tag_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+		Iter_Clear(SprayTag);
+	}
+}
 
 
 Tag_Create(playerid)

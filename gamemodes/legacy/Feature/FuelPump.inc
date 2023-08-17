@@ -150,6 +150,28 @@ Pump_GetBizID(real_id) {
 }
 /* Callback */
 
+hook OnGameModeInit() {
+    
+    if (IsSQLConnected()) {
+        Iter_Init(Pump);
+		mysql_tquery(sqlcon, "SELECT * FROM `fuelpump`", "Pump_Load", "");
+    }
+}
+
+hook OnGameModeExit() {
+
+    if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+        foreach(new i : Pump) {
+            Pump_Save(i);
+        }
+        printf("** Saved pump data in %dms", GetTickCount() - time);
+        Iter_Clear(Pump);
+    }
+}
+
 hook OnBusinessDeleted(bizid) {
 
     foreach(new i : Pump) if(PumpData[i][pumpBusiness] == BizData[bizid][bizID]) {

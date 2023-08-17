@@ -177,6 +177,26 @@ Weed_Save(id)
 	return 1;
 }
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `weed`", "Weed_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+		for(new i = 0; i < MAX_WEED; i ++) if(WeedData[i][weedExists]) {
+			Weed_Save(i);
+		}
+		printf("** Saved weed data  in %dms.", GetTickCount() - time);
+	}
+}
+
 hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 
 	for(new i = 0; i < MAX_WEED; i++) if(WeedData[i][weedExists]) {

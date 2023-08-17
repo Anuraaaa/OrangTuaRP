@@ -22,15 +22,19 @@ new Iterator:Zone<MAX_SAFEZONE>;
 
 hook OnGameModeInit()
 {
-	Iter_Init(Zone);
-	G_ZoneData[gzSafezone] = GangZoneCreate(-3000, -3000, 3000, 3000);
-    mysql_tquery(sqlcon, "SELECT * FROM `zones`", "Zone_Load", "");
+	if (IsSQLConnected()) {
+		Iter_Init(Zone);
+		G_ZoneData[gzSafezone] = GangZoneCreate(-3000, -3000, 3000, 3000);
+		mysql_tquery(sqlcon, "SELECT * FROM `zones`", "Zone_Load", "");
+	}
 }
 
 hook OnGameModeExit()
 {
-	GangZoneDestroy(G_ZoneData[gzSafezone]);
-	Iter_Clear(Zone);
+	if (IsSQLConnected()) {
+		GangZoneDestroy(G_ZoneData[gzSafezone]);
+		Iter_Clear(Zone);
+	}
 }
 
 hook OnPlayerConnect(playerid)

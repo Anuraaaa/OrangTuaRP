@@ -60,6 +60,9 @@ CMD:mask(playerid, params[])
 	if(PlayerData[playerid][pOnDuty] && !PlayerData[playerid][pMasked])
 		return SendErrorMessage(playerid, "You can't use mask since you onduty!");
 
+	if (GetPVarInt(playerid, "IsAtEvent") > 0)
+		return SendErrorMessage(playerid, "Kamu tidak bisa memakai mask saat event berlangsung");
+
 	SetupPlayerMask(playerid);
 	return 1;
 }

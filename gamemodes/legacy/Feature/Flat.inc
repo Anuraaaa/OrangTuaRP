@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 #define MAX_FLAT 					300
 #define MAX_PLAYER_FLAT 			1
 #define MAX_FLAT_STORAGE			6
@@ -51,6 +53,28 @@ enum {
 	FLAT_TYPE_MEDIUM,
 	FLAT_TYPE_HIGH
 };
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		Iter_Init(Flat);
+		mysql_tquery(sqlcon, "SELECT * FROM `flat`", "Flat_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+		foreach(new i :  Flat) {
+			Flat_Save(i);
+		}
+		printf("** Saved flat data in %dms", GetTickCount() - time);
+		Iter_Clear(Flat);
+	}
+}
 
 Flat_WeaponStorage(playerid, flatid)
 {

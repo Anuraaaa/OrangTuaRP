@@ -1,3 +1,5 @@
+#include <YSI_Coding\y_hooks>
+
 enum ddoor
 {
 	dName[128],
@@ -34,6 +36,13 @@ enum ddoor
 
 new drData[MAX_DOOR][ddoor],
 	Iterator: Doors<MAX_DOOR>;
+
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `doors`", "Doors_Load", "");
+	}
+}
 
 Doors_Save(id)
 {

@@ -196,6 +196,13 @@ CMD:atm(playerid, params[])
 	return 1;
 }
 
+hook OnGameModeInit() {
+
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `atm`", "ATM_Load", "");
+	}
+}
+
 hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
 	for(new i = 0; i < MAX_ATM; i++) if(AtmData[i][atmExists])
 	{

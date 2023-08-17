@@ -227,6 +227,26 @@ CMD:destroyspeed(playerid, params[])
 	return 1;
 }
 
+hook OnGameModeInit() {
+	
+	if (IsSQLConnected()) {
+		mysql_tquery(sqlcon, "SELECT * FROM `speedcameras`", "Speed_Load", "");
+	}
+}
+
+hook OnGameModeExit() {
+
+	if (IsSQLConnected()) {
+
+		new time = GetTickCount();
+
+		for(new i = 0; i < MAX_SPEEDCAM; i++) if(SpeedData[i][speedExists]) {
+			Speed_Save(i);
+		}
+		printf("** Saved speedcam data in %dms", GetTickCount() - time);
+	}
+}
+
 hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) { 
 
 	new speedid = Streamer_GetIntData(STREAMER_TYPE_AREA, areaid, E_STREAMER_EXTRA_ID),
