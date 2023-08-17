@@ -753,33 +753,66 @@ CMD:id(playerid, params[])
 
 CMD:admins(playerid, params[])
 {
-	new count = 0;
+	new count = 0, string[512];
 
-    SendClientMessage(playerid, X11_WHITE, ""GREY"============ [ "WHITE"Online Administrator "GREY"] ============");
-	foreach(new i : Player) if(PlayerData[i][pAdmin] && !PlayerData[i][pAhide]) {
+	if(PlayerData[playerid][pAdmin]) {
+		strcat(string, "Admin\tRank\tStatus\tHidden\n");
 
-		new p_status[34];
+		foreach(new i : Player) if(PlayerData[i][pAdmin]) {
 
-		if(PlayerData[i][pAduty]) {
-			p_status = ""RED"Admin Duty";
-		}
-		else {
-			if(IsPlayerPaused(i)) {
-				p_status = ""GOLD"Alt-tabbing";
-			}
-			else if(PlayerData[i][pAFK]) {
-				p_status = ""GOLD"Away from Keyboard";
+			new p_status[34];
+
+			if(PlayerData[i][pAduty]) {
+				p_status = "Admin Duty";
 			}
 			else {
-				p_status = ""LIGHTGREEN"Roleplaying";
+				if(IsPlayerPaused(i)) {
+					p_status = "Alt-tabbing";
+				}
+				else if(PlayerData[i][pAFK]) {
+					p_status = "Away from Keyboard";
+				}
+				else {
+					p_status = "Roleplaying";
+				}
 			}
+			strcat(string, sprintf("%s\t%s\t%s\t%s\n", GetUsername(i), GetAdminRank(i), p_status, (PlayerData[i][pAhide]) ? ("Yes") : ("No")));
+			count++;
 		}
-		SendClientMessageEx(playerid, X11_WHITE, ""TOMATO"%s "WHITE": %s(ID:%d) [ Status: %s"WHITE" ]", GetAdminRank(i), GetUsername(i), i, p_status);
-		count++;
-	}
 
-	if(!count)
-		SendErrorMessage(playerid, "There is no administrator online.");
+		if(count)
+			ShowPlayerDialog(playerid, DIALOG_NONE, DIALOG_STYLE_TABLIST_HEADERS, "Online Staff", string, "Close", "");
+
+		else 
+			SendErrorMessage(playerid, "Tidak ada staff yang online.");
+	}
+	else {
+		SendClientMessage(playerid, X11_WHITE, ""GREY"============ [ "WHITE"Online Administrator "GREY"] ============");
+		foreach(new i : Player) if(PlayerData[i][pAdmin] && !PlayerData[i][pAhide]) {
+
+			new p_status[34];
+
+			if(PlayerData[i][pAduty]) {
+				p_status = ""RED"Admin Duty";
+			}
+			else {
+				if(IsPlayerPaused(i)) {
+					p_status = ""GOLD"Alt-tabbing";
+				}
+				else if(PlayerData[i][pAFK]) {
+					p_status = ""GOLD"Away from Keyboard";
+				}
+				else {
+					p_status = ""LIGHTGREEN"Roleplaying";
+				}
+			}
+			SendClientMessageEx(playerid, X11_WHITE, ""TOMATO"%s "WHITE": %s(ID:%d) [ Status: %s"WHITE" ]", GetAdminRank(i), GetUsername(i), i, p_status);
+			count++;
+		}
+
+		if(!count)
+			SendErrorMessage(playerid, "There is no administrator online.");
+	}
 
 	return 1;
 }
