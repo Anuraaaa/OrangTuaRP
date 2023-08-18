@@ -91,6 +91,7 @@
 #include ".\legacy\Feature\ELM"
 #include ".\legacy\Feature\SealProperty"
 #include ".\legacy\Feature\Zona"
+#include ".\legacy\Feature\Newbieschool"
 /* Job Modules */
 #include ".\legacy\Job\Smuggler"
 #include ".\legacy\Job\Trucker"
