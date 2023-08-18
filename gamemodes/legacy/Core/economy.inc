@@ -58,7 +58,7 @@ ShowTrashmasterEconomy(playerid) {
 
 }
 CMD:seteconomy(playerid, params[]) {
-	if(PlayerData[playerid][pAdmin] < 6)
+	if(PlayerData[playerid][pAdmin] < 7)
 	    return SendErrorMessage(playerid, NO_PERMISSION);
 
     new str[512];
@@ -70,7 +70,21 @@ CMD:seteconomy(playerid, params[]) {
     return 1;
 }
 
+CMD:servertax(playerid, params[]) {
+	if(PlayerData[playerid][pAdmin] < 7)
+	    return SendErrorMessage(playerid, NO_PERMISSION);
 
+	new amount[32], real_amount;
+	if(sscanf(params, "s[32]", amount))
+		return SendSyntaxMessage(playerid, "/servertax [amount]");
+
+	real_amount = strcash(amount);
+
+	GovData[govTax] = real_amount;
+	SaveServerData();
+	SendAdminAction(playerid, "Server Tax diubah menjadi $%s", FormatNumber(real_amount));
+	return 1;
+}
 
 hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 	if(dialogid == DIALOG_ECONOMY) {
