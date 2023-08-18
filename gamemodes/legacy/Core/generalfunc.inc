@@ -870,6 +870,19 @@ timer ToggleFreeze[5000](playerid)
 LoadRemoveBuilding(playerid)
 {
 	RemoveVendingMachines(playerid);
+	/* Farmer */
+	RemoveBuildingForPlayer(playerid, 17054, -1440.810, -1460.109, 100.633, 0.250);
+	RemoveBuildingForPlayer(playerid, 17355, -1440.810, -1460.109, 100.633, 0.250);
+	RemoveBuildingForPlayer(playerid, 17060, -1457.689, -1485.760, 100.633, 0.250);
+	RemoveBuildingForPlayer(playerid, 17052, -1458.089, -1499.780, 100.633, 0.250);
+	RemoveBuildingForPlayer(playerid, 17352, -1458.089, -1499.780, 100.633, 0.250);
+	RemoveBuildingForPlayer(playerid, 17053, -1458.449, -1522.630, 100.750, 0.250);
+	RemoveBuildingForPlayer(playerid, 17354, -1458.449, -1522.630, 100.750, 0.250);
+	RemoveBuildingForPlayer(playerid, 3374, -1435.199, -1490.520, 102.164, 0.250);
+	RemoveBuildingForPlayer(playerid, 3374, -1435.150, -1499.290, 102.164, 0.250);
+	RemoveBuildingForPlayer(playerid, 3425, -1439.790, -1520.939, 112.125, 0.250);
+	RemoveBuildingForPlayer(playerid, 17059, -1458.770, -1535.569, 100.750, 0.250);
+	RemoveBuildingForPlayer(playerid, 17056, -1462.020, -1532.530, 101.905, 0.250);
 	/* Midday HS */
 	RemoveBuildingForPlayer(playerid, 3310, -2159.198, -2543.979, 31.656, 0.250);
 	RemoveBuildingForPlayer(playerid, 3325, -2159.198, -2543.979, 31.656, 0.250);

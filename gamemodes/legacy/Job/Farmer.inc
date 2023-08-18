@@ -6,38 +6,19 @@ new FARMER_RATE = 100;
 
 new Float:Field_1[] =
 {
-	-335.75, -1466.75,
-	-333.02, -1559.64,
-	-212.00, -1558.72,
-	-212.30, -1466.76
-};
-
-new Float:Field_2[] =
-{
-	-332.53, -1433.73,
-	-325.90, -1313.56,
-	-162.39, -1300.40,
-	-159.39, -1416.17
-};
-
-new Float:Field_3[] =
-{
-	-341.95, -1263.09,
-	-435.27, -1279.33,
-	-466.67, -1287.29,
-	-591.29, -1287.60,
-	-591.36, -1409.88,
-	-553.79, -1439.68,
-	-529.54, -1422.89,
-	-505.20, -1412.85,
-	-442.65, -1406.02,
-	-400.68, -1400.01,
-	-372.04, -1379.44
+	-1429.82, -1524.52,
+	-1433.42, -1451.37,
+	-1467.88, -1453.18,
+	-1466.70, -1472.83,
+	-1470.86, -1494.25,
+	-1472.03, -1511.06,
+	-1471.12, -1525.99,
+	-1467.40, -1526.38
 };
 
 
 new
-    STREAMER_TAG_AREA:fieldArea[3];
+    STREAMER_TAG_AREA:fieldArea;
 
 enum E_PLANT_DATA
 {
@@ -126,15 +107,8 @@ Plant_Sync(idx, type)
 }
 bool:IsPlayerInFieldArea(playerid)
 {
-    if(IsPlayerInDynamicArea(playerid, fieldArea[0]))
+    if(IsPlayerInDynamicArea(playerid, fieldArea))
 		return true;
-
-	if(IsPlayerInDynamicArea(playerid, fieldArea[1]))
-		return true;
-		
-	if(IsPlayerInDynamicArea(playerid, fieldArea[2]))
-        return true;
-
     return false;
 }
 
@@ -424,15 +398,16 @@ hook OnGameModeInit()
 {
     Iter_Init(Plant);
 
-    fieldArea[0] = CreateDynamicPolygon(Field_1);
-    fieldArea[1] = CreateDynamicPolygon(Field_2);
-    fieldArea[2] = CreateDynamicPolygon(Field_3);
+    fieldArea = CreateDynamicPolygon(Field_1);
 
-	CreateDynamicPickup(1239, 23, -347.8450,-1045.6550,59.8125, -1);
-	LabelData[labelFarmer] = CreateDynamic3DTextLabel(sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)), X11_YELLOW, -347.8450,-1045.6550,59.8125, 10.0);
-	
+	CreateDynamicPickup(1239, 23, -1425.6475,-1529.3163,102.2322, -1);
+	LabelData[labelFarmer] = CreateDynamic3DTextLabel(sprintf("[Farmer Store]\n{FFFFFF}/sellplant - to sell plants\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)), X11_YELLOW, -1425.6475,-1529.3163,102.2322, 10.0);
+
+	CreateDynamicPickup(1239, 23, -2144.2056,-2424.8894,30.6250, -1);
+	CreateDynamic3DTextLabel(sprintf("[Farmer Seeds]\n{FFFFFF}/buyseed untuk membeli seeds", FormatNumber(FARMER_RATE)), X11_YELLOW, -2144.2056,-2424.8894,30.6250, 10.0);
+
 	FARMER_RATE = RandomEx(1500, 3000);
-	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
+	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 }
 
 task Plant_updateProgress[15000]()

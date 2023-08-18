@@ -11098,7 +11098,7 @@ task OnServerDataUpdate[1800000]() {
 	woodPrice = RandomEx(2500, 5000);
 
 	FARMER_RATE = RandomEx(1500, 3000);
-	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
+	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 	return 1;
 }
 

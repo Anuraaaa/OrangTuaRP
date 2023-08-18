@@ -92631,3 +92631,141 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [15/08/2023 00:46:16] *********************
 [15/08/2023 00:46:16] *ColAndreas Unloaded*
 [15/08/2023 00:46:16] *********************
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18/08/2023 21:35:00] 
+[18/08/2023 21:35:00] Server Plugins
+[18/08/2023 21:35:00] --------------
+[18/08/2023 21:35:00]  Loading plugin: crashdetect
+[18/08/2023 21:35:00]   CrashDetect plugin 4.20
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: pawnraknet
+[18/08/2023 21:35:00] [Pawn.RakNet] plugin v1.5.1 loading...
+[18/08/2023 21:35:00] [Pawn.RakNet] 
+
+    | Pawn.RakNet 1.5.1 | 2016 - 2021
+    |--------------------------------
+    | Author and maintainer: katursis
+
+
+    | Compiled: Sep 26 2021 at 12:04:10
+    |--------------------------------------------------------------
+    | Repository: https://github.com/katursis/Pawn.RakNet
+    |--------------------------------------------------------------
+    | Wiki: https://github.com/katursis/Pawn.RakNet/wiki
+
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: pawn-memory
+[18/08/2023 21:35:00] ========================
+[18/08/2023 21:35:00] = Memory access plugin =
+[18/08/2023 21:35:00] =       Made by BigETI =
+[18/08/2023 21:35:00] = Loaded!              =
+[18/08/2023 21:35:00] ========================
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: streamer
+[18/08/2023 21:35:00] 
+
+*** Streamer Plugin v2.9.4 by Incognito loaded ***
+
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: sscanf
+[18/08/2023 21:35:00] 
+
+[18/08/2023 21:35:00]  ===============================
+
+[18/08/2023 21:35:00]       sscanf plugin loaded.     
+
+[18/08/2023 21:35:00]          Version:  2.8.3        
+
+[18/08/2023 21:35:00]   (c) 2018 Alex "Y_Less" Cole  
+
+[18/08/2023 21:35:00]  ===============================
+
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: mysql
+[18/08/2023 21:35:00]  >> plugin.mysql: R41-4 successfully loaded.
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: samp_bcrypt
+[18/08/2023 21:35:00] [SampBcrypt] [info]: Version: 0.3.4
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: samp-compat
+[18/08/2023 21:35:00]   -- samp-compat for 0.3.7-R2 initialized
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: chrono
+[18/08/2023 21:35:00]   Loaded.
+[18/08/2023 21:35:00]  Loading plugin: ColAndreas
+[18/08/2023 21:35:00] *********************
+[18/08/2023 21:35:00] ** Created By:     **
+[18/08/2023 21:35:00] ** [uL]Chris42O    **
+[18/08/2023 21:35:00] ** [uL]Slice       **
+[18/08/2023 21:35:00] ** [uL]Pottus      **
+[18/08/2023 21:35:00] *********************
+[18/08/2023 21:35:03] Loaded collision data.
+[18/08/2023 21:35:03] *********************
+[18/08/2023 21:35:03]   ColAndreas Loaded
+[18/08/2023 21:35:03]    v1.4.0
+[18/08/2023 21:35:03] *********************
+[18/08/2023 21:35:03]   Loaded.
+[18/08/2023 21:35:03]  Loaded 10 plugins.
+
+[18/08/2023 21:35:03] 
+[18/08/2023 21:35:03] Filterscripts
+[18/08/2023 21:35:03] ---------------
+[18/08/2023 21:35:03]   Loaded 0 filterscripts.
+
+[18/08/2023 21:35:04]  
+[18/08/2023 21:35:04]  
+[18/08/2023 21:35:04]  
+[18/08/2023 21:35:04]  ========================================== 
+[18/08/2023 21:35:04]  |                                        | 
+[18/08/2023 21:35:04]  |         YSI version 5.05.0005          | 
+[18/08/2023 21:35:04]  |         By Alex "Y_Less" Cole          | 
+[18/08/2023 21:35:04]  |                                        | 
+[18/08/2023 21:35:04]  | Unable to check the latest YSI version | 
+[18/08/2023 21:35:04]  | - please watch the forums and github:  | 
+[18/08/2023 21:35:04]  |                                        | 
+[18/08/2023 21:35:04]  |   https://git.io/5.x                   | 
+[18/08/2023 21:35:04]  |                                        | 
+[18/08/2023 21:35:04]  ========================================== 
+[18/08/2023 21:35:04]  
+[18/08/2023 21:35:04]   Filterscript '../scriptfiles/callbackfix.amx' loaded.
+[18/08/2023 21:35:04] [Database] Connected!
+[18/08/2023 21:35:04]  
+[18/08/2023 21:35:04] --------------------------------------
+[18/08/2023 21:35:04]  Anticheat Nex-AC loaded!
+[18/08/2023 21:35:04]  Anticheat version: 1.9.59
+[18/08/2023 21:35:04]  Author: Nexius
+[18/08/2023 21:35:04] --------------------------------------
+
+[18/08/2023 21:35:04] Loading Map.
+[18/08/2023 21:35:04] Loaded Map.                             
+[18/08/2023 21:35:04] [MAPPING] Loaded mappings in 20ms
+[18/08/2023 21:35:04] Economy Data Loaded.
+[18/08/2023 21:35:04] Number of vehicle models: 8
+[18/08/2023 21:35:04] [FACTION] Loaded 6 faction from database
+[18/08/2023 21:35:04] [BUSINESS] Loaded 11 Business from database
+[18/08/2023 21:35:04] [PUMP] Loaded 7 Fuel Pump from database
+[18/08/2023 21:35:04] [ACTOR] Loaded 100 Dynamic Actor from database
+[18/08/2023 21:35:04] [FACTIONGARAGE] Loaded 2 faction garage from database.
+[18/08/2023 21:35:04] [DEALER] Loaded 6 dealership from database
+[18/08/2023 21:35:04] [RENTAL] Loaded 2 Rental from database
+[18/08/2023 21:35:04] [FURNITURE] Loaded 6 furniture from database.
+[18/08/2023 21:35:04] [HOUSE] Loaded 62 House from the Database
+[18/08/2023 21:35:04] [GARAGE] Loaded 6 public garage from database.
+[18/08/2023 21:35:04] [FLAT] Loaded 10 Flat from database.
+[18/08/2023 21:35:04] [TREE] Loaded 71 tree from database
+[18/08/2023 21:35:04] [DROPITEM] Loaded 6 Dropped items from database.
+[18/08/2023 21:35:04] [ATM] Loaded 42 ATM from the database
+[18/08/2023 21:35:04] [SPEEDCAM] Loaded 6 Speed Camera from database
+[18/08/2023 21:35:04] [WORKSHOP] Loaded 1 workshop from database.
+[18/08/2023 21:35:04] [DOOR] Loaded 37 door from database
+[18/08/2023 21:35:04] [OBJECT] Loaded 3 Object from database
+[18/08/2023 21:35:04] [ROCK] Loaded 32 rock from database.
+[18/08/2023 21:35:04] [TRASH] Loaded 46 Trash from database
