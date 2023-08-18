@@ -113,7 +113,7 @@ Plant_Sync(idx, type)
 		case PLANT_GROW:
 		{
 			new Float:z;
-			if(IsValidDynamicObject(PlantData[idx][plantObject]))
+			if(IsValidDynamicObject(PlantData[idx][plantObject]) && Streamer_GetIntData(STREAMER_TYPE_OBJECT, PlantData[idx][plantObject], E_STREAMER_MODEL_ID) == 19473)
 			{
 				Streamer_GetFloatData(STREAMER_TYPE_OBJECT, PlantData[idx][plantObject], E_STREAMER_Z, z);
 				
@@ -435,11 +435,6 @@ hook OnGameModeInit()
 	UpdateDynamic3DTextLabelText(LabelData[labelFarmer], X11_YELLOW, sprintf("[Farmer Point]\n{FFFFFF}/sellplant - to sell plants\n/buyseed - to buy plant seeds\nHarga jual: "GREEN"$%s", FormatNumber(FARMER_RATE)));
 }
 
-hook OnPlayerEnterDynArea(playerid, STREAMER_TAG_AREA:areaid) {
-    if(IsPlayerInFieldArea(playerid) && CheckPlayerJob(playerid, JOB_FARMER)) {
-        SendClientMessage(playerid, X11_LIGHTBLUE, "(Farmer) "WHITE"Kamu memasuki area ladang, gunakan "YELLOW"/dig "WHITE"untuk menggali tanah.");
-    }
-}
 task Plant_updateProgress[15000]()
 {
     foreach(new i : Plant)
