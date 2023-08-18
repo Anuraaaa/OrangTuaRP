@@ -240,7 +240,7 @@ ptask OnSpectateUpdate[200](playerid) {
             GetPlayerArmour(targetid, armour);
             
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][1], sprintf("~y~~h~%s ~r~~h~(%d)", GetName(targetid), targetid));
-			PlayerTextDrawSetString(playerid, spectateTD[playerid][2], sprintf("~y~~h~Cash ~g~$%s", FormatNumber(GetMoney(targetid))));
+			PlayerTextDrawSetString(playerid, spectateTD[playerid][2], sprintf("~y~~h~Cash: ~g~$%s", FormatNumber(GetMoney(targetid))));
 
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][3], sprintf("~y~~h~Health: ~r~~h~%.2f", health));
 			PlayerTextDrawSetString(playerid, spectateTD[playerid][4], sprintf("~y~~h~Armour: ~w~~h~%.2f", armour));
