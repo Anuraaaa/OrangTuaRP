@@ -45,8 +45,8 @@ hook OnGameModeInit() {
 	fishPier = CreateDynamicPolygon(arr_fishPier);
 	fishSea = CreateDynamicPolygon(arr_fishSea);
 
-	FISH_RATE = RandomEx(10, 18);
-	fishPrice = RandomEx(10, 25);
+	FISH_RATE = RandomEx(3, 10);
+	fishPrice = RandomEx(3, 10);
 	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n"WHITE"Rate: %s\n/sellfish untuk menjual ikan", FormatNumber(fishPrice), FormatNumber(FISH_RATE)));
 }
 

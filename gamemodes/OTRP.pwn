@@ -11092,8 +11092,8 @@ timer OnAutoAimCheck[2000](playerid) {
 	return 1;
 }
 task OnServerDataUpdate[1800000]() {
-	fishPrice = RandomEx(10, 25);
-	FISH_RATE = RandomEx(10, 18);
+	fishPrice = RandomEx(3, 10);
+	FISH_RATE = RandomEx(3, 10);
 	UpdateDynamic3DTextLabelText(LabelData[labelFish], -1, sprintf("{FFFF00}[Fishing Factory]\n"WHITE"Harga ikan: "GREEN"$%s\n"WHITE"Rate: %s\n/sellfish untuk menjual ikan", FormatNumber(fishPrice), FormatNumber(FISH_RATE)));
 	woodPrice = RandomEx(2500, 5000);
 
