@@ -87,8 +87,7 @@ Plant_Sync(idx, type)
 	{
 		case PLANT_SPAWN:
 		{
-			if(!IsValidDynamicObject(PlantData[idx][plantObject]))
-				PlantData[idx][plantObject] = CreateDynamicObject(19473, PlantData[idx][plantPos][0], PlantData[idx][plantPos][1], PlantData[idx][plantPos][2] - 2.5, 0.0, 0.0, 0.0, -1, -1);
+			PlantData[idx][plantObject] = CreateDynamicObject(19473, PlantData[idx][plantPos][0], PlantData[idx][plantPos][1], PlantData[idx][plantPos][2] - 2.5, 0.0, 0.0, 0.0, -1, -1);
 
 		}
 		case PLANT_GROW:
@@ -115,7 +114,7 @@ bool:IsPlayerInFieldArea(playerid)
 Plant_GetNearest(playerid)
 {
     new idx = -1;
-	foreach(new i : Plant) if(IsPlayerInRangeOfPoint(playerid, 3.5, PlantData[i][plantPos][0], PlantData[i][plantPos][1], PlantData[i][plant_realZ])) {
+	foreach(new i : Plant) if(IsPlayerInRangeOfPoint(playerid, 1.7, PlantData[i][plantPos][0], PlantData[i][plantPos][1], PlantData[i][plant_realZ])) {
         idx = i;
         break;
     }
