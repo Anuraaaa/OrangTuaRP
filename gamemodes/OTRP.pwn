@@ -7922,19 +7922,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	if(dialogid == DIALOG_LOCK)
 	{
-		new Float:pos[3], i = g_ListedVehicle[playerid][listitem];
+		new Float:pos[3];
 		if(response)
 		{
-			GetVehiclePos(i, pos[0], pos[1], pos[2]);
-			if(IsPlayerInRangeOfPoint(playerid, 5.0, pos[0], pos[1], pos[2]))
-			{
-				PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-				VehicleData[i][vLocked] = !(VehicleData[i][vLocked]);
-				LockVehicle(i, VehicleData[i][vLocked]);
+			new i = i = g_ListedVehicle[playerid][listitem];
+			if(i != -1 && IsValidVehicle(i)) {
+				GetVehiclePos(i, pos[0], pos[1], pos[2]);
+				if(IsPlayerInRangeOfPoint(playerid, 5.0, pos[0], pos[1], pos[2]))
+				{
+					PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
+					VehicleData[i][vLocked] = !(VehicleData[i][vLocked]);
+					LockVehicle(i, VehicleData[i][vLocked]);
 
-				ShowMessage(playerid, sprintf("%s %s", GetVehicleName(i), (VehicleData[i][vLocked]) ? ("~r~Locked") : ("~g~Unlocked")), 3);
+					ShowMessage(playerid, sprintf("%s %s", GetVehicleName(i), (VehicleData[i][vLocked]) ? ("~r~Locked") : ("~g~Unlocked")), 3);
+				}
+				else SendErrorMessage(playerid, "Kamu tidak berada didekat kendaraan tersebut.");
 			}
-			else SendErrorMessage(playerid, "Kamu tidak berada didekat kendaraan tersebut.");
 		}
 	}
 	if(dialogid == DIALOG_BIZPRICE)
