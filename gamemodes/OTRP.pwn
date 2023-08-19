@@ -10212,6 +10212,9 @@ public OnPlayerText(playerid, text[])
 
 	if (GetPVarInt(playerid, "IsAtEvent") > 0)
 		return 0;
+
+	if (IsAtNewbieSchool(playerid))
+		return 0;
 		
 	if(gettime() < chat_floodProtect[playerid] && !PlayerData[playerid][pAdmin]) {
 		ShowMessage(playerid, "~r~ERROR: ~w~Dilarang spam text chat!", 3, 1);
@@ -11012,7 +11015,7 @@ ShowPlayerStats(playerid, targetid)
 	strcat(cat, str);
 	format(str, sizeof(str), "\n{F7FF00}Out of Character\n");
 	strcat(cat, str);
-	format(str, sizeof(str), "{FFFFFF}Username: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Registration Date: [{C6E2FF}%s %s %s %i, %02d:%02d:%02d{FFFFFF}]\n",
+	format(str, sizeof(str), "{FFFFFF}Username: [{C6E2FF}%s{FFFFFF}] ({FF8000}%d{FFFFFF}) | Registration Date: [{C6E2FF}%s %s %s %i{FFFFFF}]\n",
 	PlayerData[playerid][pUCP], UcpData[playerid][ucpID], ConvertTimestamp(Timestamp:UcpData[playerid][ucpTime]));
 	strcat(cat, str);
 	format(str, sizeof(str), "Time Played: [{C6E2FF}%d hours %d minutes %d seconds{FFFFFF}] | Mask ID: [{C6E2FF}Unknown_#%d{FFFFFF}] | Last Vehicle ID: [{C6E2FF}%d{FFFFFF}]\n",

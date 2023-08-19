@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+#include ".\legacy\Faction\Government"
+
 new salarySweeper = 1500,
     salaryBus = 5000,
     salaryTrashmaster = 1000,

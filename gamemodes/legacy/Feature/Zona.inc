@@ -292,15 +292,16 @@ CMD:zone(playerid, params[])
 	}
 	else if (!strcmp(tmp, "list", true, 4))
 	{
-		new zoneData[512];
+		new zoneData[24 * MAX_SAFEZONE];
 		foreach (new i : Zone) 
 		{
-			format(zoneData, sizeof(zoneData), "%s\n%d\t%s\t%s\t%.1fm", zoneData, ZoneData[i][zoneID], ZoneData[i][zoneName], GetZoneTypeName(i), ZoneData[i][zonePos][3]);
+			format(zoneData, sizeof(zoneData), "%s%d\t%s\t%s\t%.1fm\n", zoneData, i, ZoneData[i][zoneName], GetZoneTypeName(i), ZoneData[i][zonePos][3]);
 		}
 		if (!Iter_Count(Zone))
 			return SendErrorMessage(playerid, "Tidak ada zona area yang ditemukan.");
 
-		Dialog_Show(playerid, Null, DIALOG_STYLE_TABLIST_HEADERS, "Zone List", sprintf("Zone ID\tZone Name\tZone Type\tZone Size\n%s", zoneData), "Close", "");
+		format(zoneData, sizeof(zoneData), "ID\tName\tType\tSize\n%s", zoneData);
+		Dialog_Show(playerid, Null, DIALOG_STYLE_TABLIST_HEADERS, "Zone List", zoneData, "Close", "");
 	}
 	else SendSyntaxMessage(playerid, "/zone [create/edit/list/destroy]");
 
