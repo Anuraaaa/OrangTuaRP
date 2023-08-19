@@ -1994,8 +1994,8 @@ CMD:pay(playerid, params[])
 		if(strval(totalcash) < 1)
 			return SendErrorMessage(playerid, "Jumlah tidak bisa kurang dari $1,00");
 
-		if(strval(totalcash) > 5000000)
-			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $50.000,00");
+		if(strval(totalcash) > 1000000)
+			return SendErrorMessage(playerid, "Jumlah tidak bisa diatas $10.000,00");
 
 		if(GetMoney(playerid) < strval(totalcash))
 			return SendErrorMessage(playerid, "Kamu tidak memiliki uang sebanyak itu.");

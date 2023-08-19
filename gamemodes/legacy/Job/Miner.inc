@@ -48,10 +48,10 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         new chance_rock = random(15) + 1, hasil_tambang = 0;
         switch(chance_rock) {
-            case 1, 2, 3, 4, 7, 8, 9, 10: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN)), hasil_tambang = 1;
-            case 12, 13, 14, 15: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY)), hasil_tambang = 2;
-            case 5, 11: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD)), hasil_tambang = 3;
-            case 6: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN)), hasil_tambang = 4;
+            case 1, 2,  4, 8: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_BROWN)), hasil_tambang = 1;
+            case 12, 3, 9, 15: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GREY)), hasil_tambang = 2;
+            case 5, 11, 13, 14: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_GOLD)), hasil_tambang = 3;
+            case 6, 10, 7: SetPlayerAttachedObject(playerid, 9, 2936, 5, 0.105, 0.086, 0.22, -80.3, 3.3, 28.7, 0.35, 0.35, 0.35, RGBAToARGB(X11_CYAN)), hasil_tambang = 4;
         }
 
         SetPVarInt(playerid, "HasilTambang", hasil_tambang);
@@ -81,22 +81,22 @@ hook OnPlayerEnterCheckpoint(playerid) {
             StockData[stockRock]++;
 
             new rock_type = GetPVarInt(playerid, "HasilTambang"),
-                rock_price[] = {0, 1000, 1500, 3500, 6000},
+                rock_price[] = {0, 1000, 1500, 2500, 4000},
                 gaji = 0,
                 bonus;
 
             switch(rock_type) {
                 case 1: {
-                    bonus = RandomEx(1, 300);
+                    bonus = RandomEx(100, 1000);
                 }
                 case 2: {
-                    bonus = RandomEx(1, 500);
+                    bonus = RandomEx(1000, 2500);
                 }
                 case 3: {
-                    bonus = RandomEx(1, 1000);
+                    bonus = RandomEx(2500, 3500);
                 }
                 case 4: {
-                    bonus = RandomEx(1, 2000);
+                    bonus = RandomEx(3500, 5000);
                 }
             }
             gaji = rock_price[rock_type] + bonus;
@@ -112,7 +112,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
 
         PlayerData[playerid][pThirst] -= 1.6;
 
-        PlayerData[playerid][pMineDelay] = 60;
+        PlayerData[playerid][pMineDelay] = 15;
 
         MinedRock[playerid] = -1;
     }
@@ -175,7 +175,7 @@ function OnRockMined(playerid) {
     new id = MinedRock[playerid];
 
     RockData[id][rockMined] = INVALID_PLAYER_ID;
-    RockData[id][rockTime] = 900;
+    RockData[id][rockTime] = 600;
     
     if(!IsMining[playerid]) {
         return 0;
