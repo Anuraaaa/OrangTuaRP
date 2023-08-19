@@ -346,7 +346,7 @@ CMD:buyseed(playerid, params[]) {
     if(!CheckPlayerJob(playerid, JOB_FARMER))
         return SendErrorMessage(playerid, "Kamu tidak bekerja sebagai farmer!");   
 
-    if(!IsPlayerInRangeOfPoint(playerid, 3.0, -347.8450,-1045.6550,59.8125))
+    if(!IsPlayerInRangeOfPoint(playerid, 3.0, -2144.2056,-2424.8894,30.6250))
         return SendErrorMessage(playerid, "Kamu tidak berada pada farmer point!"); 
 
     new amount;
@@ -370,7 +370,7 @@ CMD:sellplant(playerid, params[])
     if(!CheckPlayerJob(playerid, JOB_FARMER))
         return SendErrorMessage(playerid, "Kamu tidak bekerja sebagai farmer!");   
 
-    if(!IsPlayerInRangeOfPoint(playerid, 3.0, -347.8450,-1045.6550,59.8125))
+    if(!IsPlayerInRangeOfPoint(playerid, 3.0, -1425.6475,-1529.3163,102.2322))
         return SendErrorMessage(playerid, "Kamu tidak berada pada farmer point!"); 
 
     if(isnull(params))   

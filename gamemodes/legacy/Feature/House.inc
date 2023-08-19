@@ -778,7 +778,7 @@ House_Refresh(houseid)
 			Streamer_SetFloatData(STREAMER_TYPE_CP, HouseData[houseid][houseParkCP], E_STREAMER_Y, HouseData[houseid][houseParkPos][1]);
 			Streamer_SetFloatData(STREAMER_TYPE_CP, HouseData[houseid][houseParkCP], E_STREAMER_Z, HouseData[houseid][houseParkPos][2]);
 		}
-		if(!HouseData[houseid][houseOwner])
+		if(HouseData[houseid][houseOwner] == 0)
 		{
 			format(string, sizeof(string), "[ID: %d]\n{33CC33}This house for sell\n{FFFFFF}House Type: {FFFF00}%s\n{FFFFFF}Address: {FFFF00}%s\n{FFFFFF}Price: {FFFF00}$%s\n{FFFFFF}Parking Slot: {FF6347}%d\n{FFFFFF}Type /house buy to purchase", houseid, House_GetType(HouseData[houseid][houseType]), GetLocation(HouseData[houseid][housePos][0], HouseData[houseid][housePos][1], HouseData[houseid][housePos][2]), FormatNumber(HouseData[houseid][housePrice]), HouseData[houseid][housePark]);
 		}
@@ -1159,7 +1159,7 @@ CMD:edithouse(playerid, params[])
 		mysql_tquery(sqlcon, string);
 
 		HouseData[id][houseOwner] = 0;
-		format(HouseData[id][houseOwner], 24, "No Owner");
+		format(HouseData[id][houseOwnerName], 24, "No Owner");
 		House_Refresh(id);
 		House_Save(id);
 		SendAdminMessage(COLOR_LIGHTRED, "AdmCmd: %s has aselled house ID: %d", PlayerData[playerid][pUCP], id);
