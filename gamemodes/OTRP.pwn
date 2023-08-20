@@ -10642,6 +10642,36 @@ Flat_FurnitureCount(id)
 	return count;
 }
 
+ColouredText(text[])
+{
+    new
+        pos = -1,
+        string[144]
+    ;
+    strmid(string, text, 0, 128, (sizeof(string) - 16));
+
+    while((pos = strfind(string, "#", true, (pos + 1))) != -1)
+    {
+        new
+            i = (pos + 1),
+            hexCount
+        ;
+        for( ; ((string[i] != 0) && (hexCount < 6)); ++i, ++hexCount)
+        {
+            if(!(('a' <= string[i] <= 'f') || ('A' <= string[i] <= 'F') || ('0' <= string[i] <= '9')))
+            {
+                    break;
+            }
+        }
+        if((hexCount == 6) && !(hexCount < 6))
+        {
+            string[pos] = '{';
+            strins(string, "}", i);
+        }
+    }
+    return string;
+}
+
 FixText(text[])
 {
     new len = strlen(text);
