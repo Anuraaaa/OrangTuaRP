@@ -79,11 +79,14 @@ CMD:servertax(playerid, params[]) {
 	new amount;
 
 	if(sscanf(params, "d", amount))
-		return SendSyntaxMessage(playerid, "/servertax [amount] (current: %d%%)", GovData[govTax]);
+		return SendSyntaxMessage(playerid, "/servertax [amount in percent] (current: %d%)", GovData[govTax]);
+
+	if (amount < 0 || amount > 100)
+		return SendErrorMessage(playerid, "Server tax can't below 0 percent or above 100 percent");
 
 	GovData[govTax] = amount;
 	SaveServerData();
-	SendAdminAction(playerid, "Server Tax diubah menjadi %d%%", FormatNumber(amount));
+	SendAdminAction(playerid, "Server Tax diubah menjadi %d persen", amount);
 	return 1;
 }
 
