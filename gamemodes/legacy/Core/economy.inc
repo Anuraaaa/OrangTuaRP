@@ -76,15 +76,14 @@ CMD:servertax(playerid, params[]) {
 	if(PlayerData[playerid][pAdmin] < 7)
 	    return SendErrorMessage(playerid, NO_PERMISSION);
 
-	new amount[32], real_amount;
-	if(sscanf(params, "s[32]", amount))
-		return SendSyntaxMessage(playerid, "/servertax [amount]");
+	new amount;
 
-	real_amount = strcash(amount);
+	if(sscanf(params, "d", amount))
+		return SendSyntaxMessage(playerid, "/servertax [amount] (current: %d%%)", GovData[govTax]);
 
-	GovData[govTax] = real_amount;
+	GovData[govTax] = amount;
 	SaveServerData();
-	SendAdminAction(playerid, "Server Tax diubah menjadi $%s", FormatNumber(real_amount));
+	SendAdminAction(playerid, "Server Tax diubah menjadi %d%%", FormatNumber(amount));
 	return 1;
 }
 
