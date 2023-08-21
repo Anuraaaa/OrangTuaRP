@@ -1138,3 +1138,14 @@ task biz_OnTaxUpdate[10000]() {
     }
     return 1;
 }
+
+CMD:biztaxinit(playerid, params[]) {
+	if(PlayerData[playerid][pAdmin] > 6) {
+		for(new i = 0; i < MAX_BUSINESS; i++) if(BizData[i][bizExists] && BizData[i][bizOwner] != 0) {
+			BizData[i][bizTaxDate] = gettime() + (14 * 86400);
+			BizData[i][bizTaxState] = TAX_STATE_COOLDOWN;
+			BizData[i][bizTaxPaid] = true;
+		}
+	}
+	return 1;
+}
