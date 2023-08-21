@@ -103,7 +103,7 @@ CMD:ans(playerid, params[])
 	    
 	SendClientMessageEx(userid, COLOR_SERVER, "(Answer) {FFFFFF}%s", text);
 	SendAdminMessage(COLOR_LIGHTRED, "%s Answer To %s: %s", PlayerData[playerid][pUCP], GetName(userid), text);
-	LogAssist_DCChannel(Str_Format("[%s]\nASK: %s has answered %s's question: %s.", ReturnDate(), GetUsername(playerid), GetName(userid), params));
+	LogAssist_DCChannel(Str_Format("[%s]\nASK: %s has answered %s's question: %s.", ReturnDate(), GetUsername(playerid), GetName(userid), text));
 	PlayerData[userid][pAsking] = false;
 	PlayerData[playerid][pAdminPoint]++;
 	return 1;

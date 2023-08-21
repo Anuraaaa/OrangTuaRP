@@ -1617,7 +1617,7 @@ GiveMoney(playerid, amount, string:reason[] = "")
 	if(strlen(reason) > 0) {
 		printf("[CASH UPDATE] %s(%s) | Before: $%s | After: $%s | Reason: %s", GetName(playerid), GetUsername(playerid), FormatNumber(GetMoney(playerid)), FormatNumber(GetMoney(playerid) + amount), reason);
 	}
-	LogPay_DCChannel(Str_Format("[%s]\nCASH UPDATE: %s (%s) [%s] has been updated cash, prev cash: $%s, current cash: $%s, reason: %s.", ReturnDate(), GetName(playerid), GetUsername(playerid), FormatNumber(GetMoney(playerid)), FormatNumber(GetMoney(playerid) + amount), reason));
+	LogPay_DCChannel(Str_Format("[%s]\nCASH UPDATE: %s (%s) [%s] has been updated cash, prev cash: $%s, current cash: $%s, reason: %s.", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(GetMoney(playerid)), FormatNumber(GetMoney(playerid) + amount), reason));
 	PlayerData[playerid][pMoney] += amount;
 	GivePlayerMoney(playerid, amount);
 	PlayerTextDrawSetString(playerid, MONEYTD[playerid], sprintf("$%s", FormatNumber(PlayerData[playerid][pMoney])));
