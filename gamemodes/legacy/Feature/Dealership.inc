@@ -457,6 +457,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 				Vehicle_SetType(vehicleid, VEHICLE_TYPE_PLAYER);
 				VehicleData[vehicleid][vPrice] = DealerVehicle[id][index][dealer_veh_price];
 
+				LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has purchased vehicle %s, modelid: %d, price: $%s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnVehicleModelName(DealerVehicle[id][index][dealer_veh_model]), DealerVehicle[id][index][dealer_veh_model], FormatNumber(DealerVehicle[id][index][dealer_veh_price])));
 				SendServerMessage(playerid, "Kamu berhasil membeli {FFFF00}%s {FFFFFF}dengan harga {00FF00}$%s", ReturnVehicleModelName(DealerVehicle[id][index][dealer_veh_model]), FormatNumber(DealerVehicle[id][index][dealer_veh_price]));
 				GiveMoney(playerid, -DealerVehicle[id][index][dealer_veh_price], "Membeli kendaraan");
 				DealerData[id][dealerVault] += DealerVehicle[id][index][dealer_veh_price];

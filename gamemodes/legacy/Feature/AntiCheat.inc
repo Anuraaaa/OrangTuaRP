@@ -183,6 +183,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_airbreak[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                 hack_airbreak[playerid] = 0;
 
@@ -196,6 +197,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_airbreak[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                 hack_airbreak[playerid] = 0;
 
@@ -221,6 +223,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
                 if(++hack_teleport[playerid] >= 3)
                 {
                     SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+    				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                     hack_teleport[playerid] = 0;
 
@@ -238,6 +241,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             {
                 SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport hack.", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
                 KickEx(playerid);
                 return 1;
             }
@@ -248,6 +252,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         case 4: {
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible wrap vehicle hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
             KickEx(playerid);
         }
 
@@ -255,6 +260,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         case 5: {
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible vehicle teleport to player hack.", GetName(playerid)); 
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
             KickEx(playerid);
         }
         
@@ -263,6 +269,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_fly[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                 hack_fly[playerid] = 0;
 
@@ -276,6 +283,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_fly[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                 hack_fly[playerid] = 0;
 
@@ -289,6 +297,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++speed_hack[playerid] >= 5) {
                 SendAdminDutyMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
                 speed_hack[playerid] = 0;   
                 KickEx(playerid);  
             }
@@ -308,6 +317,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_vehiclehealth[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
                 hack_vehiclehealth[playerid] = 0;
                 KickEx(playerid);
                 return 1;
@@ -323,6 +333,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_health[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
                 hack_health[playerid] = 0;
                 KickEx(playerid);
                 return 1;
@@ -338,6 +349,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if(++hack_armour[playerid] >= 3)
             {
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
 
                 hack_armour[playerid] = 0;
 
@@ -353,6 +365,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             if (++ac_weapon_h[playerid] >= 3) {
 
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+				LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
                 ac_weapon_h[playerid] = 0;
                 KickEx(playerid);
             }
@@ -361,6 +374,7 @@ public OnCheatDetected(playerid, ip_address[], type, code)
         case 18: {
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s is using special animations hack.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
             KickEx(playerid);
         }
         //Rapid fire hack
@@ -371,15 +385,18 @@ public OnCheatDetected(playerid, ip_address[], type, code)
             }
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s possible rapid fire hack.", GetName(playerid)); 
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
             KickEx(playerid);   
         }
         case 40: {
             SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s is using sandboxie.", GetName(playerid));
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (%s)", GetCodeAC(code));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
             KickEx(playerid);
         }
     }
     SendAdminDutyMessage(X11_TOMATO, "Anticheat: %s (%s) possible %s", GetName(playerid), ReturnIP(playerid), GetCodeAC(code));
+    LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), GetCodeAC(code)));
     return 1;
 }
 
@@ -504,6 +521,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 		if (AC_GetPlayerSpeed(playerid) > 350.0 && PlayerData[playerid][pAdmin] < 1)
 		{
             SendAdminMessage(X11_TOMATO, "AdmWarning: Cheat detected on {FFFF00}%s (%s) [%s] {FF6347}(%s)", GetName(playerid, false), GetUsername(playerid), ReturnIP(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack"));
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), (IsPlayerInAnyVehicle(playerid)) ? ("Vehicle Speedhack") : ("Onfoot Speedhack")));
 		    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
             KickEx(playerid);
 		}
@@ -520,6 +538,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
             if(++speed_hack[playerid] > 5) {
                 SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Vehicle Speedhack)", GetName(playerid));
                 SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (SpeedHack)");
+                LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected Vehicle Speedhack", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid)));
                 speed_hack[playerid] = 0;   
                 KickEx(playerid);  
             }
@@ -534,6 +553,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 
             SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(%s)", GetName(playerid), tipcrasher);
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), tipcrasher));
             KickEx(playerid);
         }
         if(AC_PlayerHasWeapon(playerid, WEAPON_BOMB) && !PlayerData[playerid][pAdmin]) {
@@ -567,6 +587,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
     else {
         if(AC_GetPlayerSpeed(playerid) > 1.0) {
             SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Fake Spawn)");
+            LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected Fake Spawn", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid)));
             KickEx(playerid);
         }
     }
@@ -576,6 +597,7 @@ ptask OnCheckAntiCheat[1000](playerid) {
 function OnPlayerCrasher(playerid) {
     SendAdminMessage(X11_TOMATO, "AntiCheat: "GREY"Cheat detected on {FFFF00}%s {FF6347}(Crasher)", GetName(playerid));
     SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Crasher)");
+    LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected Crasher", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid)));
     KickEx(playerid);
     return 1;
 }

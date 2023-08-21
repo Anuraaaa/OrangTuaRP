@@ -5,6 +5,7 @@ AddSalary(playerid, name[], amount)
 	mysql_tquery(sqlcon, query);
 	PlayerData[playerid][pSalary] += amount;
 
+	LogSalary_DCChannel(Str_Format("[%s]\nSALARY: %s has received salary, amount: $%s, reason: %s, total: $%s", ReturnDate(), GetName(playerid), FormatNumber(amount), name, FormatNumber(PlayerData[playerid][pSalary])));
 	Log_Write("Logs/salary_log.txt", "[%s] %s(%s) has issued $%s salary from %s.", ReturnDate(), GetName(playerid, false), GetUsername(playerid), FormatNumber(amount), name);
 	return 1;
 }

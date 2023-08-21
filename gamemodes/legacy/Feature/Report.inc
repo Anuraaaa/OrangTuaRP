@@ -99,6 +99,7 @@ CMD:report(playerid, params[]) {
 	if(index == INVALID_ITERATOR_SLOT)
 		return SendErrorMessage(playerid, "Server ini tidak bisa menampung lebih banyak report.");
 
+	LogAssist_DCChannel(Str_Format("[%s]\nREPORT: %s (%s): %s", ReturnDate(), GetName(playerid), GetUsername(playerid), params));
 	if(strlen(reason) > 64) {
 		if(CountAdminDuty() > 1) {
 			SendAdminDutyMessage(X11_LIGHTBLUE, "[REPORT] "YELLOW"%s(%d): "WHITE"%.64s", GetName(playerid), playerid, reason);

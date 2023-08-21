@@ -122,6 +122,7 @@
 #include ".\legacy\Core\generalcmd_admin"
 #include ".\legacy\Core\mapping"
 #include ".\legacy\Core\serverstuff"
+#include ".\legacy\Core\logger"
 
 /* Raknet */
 

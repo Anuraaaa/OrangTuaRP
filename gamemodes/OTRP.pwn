@@ -17,7 +17,7 @@
 
 ------------------------ World of Space Roleplay ------------------------
 * Developed by Anwar Fauzan (Anuraaaa), Arif Hudaya (LuminouZ307)
-* Script Version: v14.18.15
+* Script Version: v15.19.15
 * Developed Since: 2023
 * Server Owner: Puur, Sam Simarmata
 
@@ -107,6 +107,7 @@ enum E_LOGLEVEL
 #include <PreviewModelDialog2>
 #include <OPA>
 #include <easyDialog>
+#include <discord-connector>
 
 #if !defined OnClientCheckResponse
 	forward OnClientCheckResponse(playerid, actionid, memaddr, retndata);
@@ -3620,14 +3621,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(listitem == 0) {
 			SendAdminMessage(COLOR_CLIENT, "[REPORT] {FFFFFF}%s telah {00FF00}menerima {FFFFFF}report dari {FFFF00}%s(%d)", GetUsername(playerid), GetName(ReportData[index][reportOwner]), ReportData[index][reportOwner]);
 			SendServerMessage(ReportData[index][reportOwner], "Laporanmu telah {00FF00}diterima {FFFFFF}oleh %s.", GetUsername(playerid));
+	        LogAssist_DCChannel(Str_Format("[%s]\nREPORT: %s has responded to %s's report issue.", ReturnDate(), GetUsername(playerid), GetName(ReportData[index][reportOwner])));
 			PlayerData[playerid][pAdminPoint]++;
 		}
 		if(listitem == 1) {
 			SendAdminMessage(COLOR_CLIENT, "[REPORT] {FFFFFF}%s telah {FF0000}menolak {FFFFFF}report dari {FFFF00}%s(%d)", GetUsername(playerid), GetName(ReportData[index][reportOwner]), ReportData[index][reportOwner]);
 			SendServerMessage(ReportData[index][reportOwner], "Laporanmu telah {00FF00}ditolak {FFFFFF}oleh %s.", GetUsername(playerid));
+	        LogAssist_DCChannel(Str_Format("[%s]\nREPORT: %s has rejected to %s's report issue.", ReturnDate(), GetUsername(playerid), GetName(ReportData[index][reportOwner])));
 		}
 		if(listitem == 2) {
 			SendAdminMessage(COLOR_CLIENT, "[REPORT] {FFFFFF}%s telah {FF0000}mengabaikan {FFFFFF}report dari {FFFF00}%s(%d)", GetUsername(playerid), GetName(ReportData[index][reportOwner]), ReportData[index][reportOwner]);
+	        LogAssist_DCChannel(Str_Format("[%s]\nREPORT: %s has ignored to %s's report issue.", ReturnDate(), GetUsername(playerid), GetName(ReportData[index][reportOwner])));
 		}
 		Report_Remove(index, false);
 	}
@@ -5604,6 +5608,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlayerData[playerid][pBank] -= strval(totalcash);
 				SendClientMessageEx(playerid, COLOR_SERVER, "(ATM) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
 				SendClientMessageEx(targetid, COLOR_SERVER, "(ATM) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+				LogBank_DCChannel(Str_Format("[%s]\nTRANSFER: %s (%s) [%s] has transferred $%s to %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(strval(totalcash)), GetName(targetid), GetUsername(targetid), ReturnIP(targetid)));
 			}
 			else
 			{
@@ -5623,6 +5628,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlayerData[playerid][pBank] -= strval(totalcash);
 				SendClientMessageEx(playerid, COLOR_SERVER, "(ATM) {FFFFFF}You have successfully transfer {00FF00}$%s {FFFFFF}to {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(targetid));
 				SendClientMessageEx(targetid, COLOR_SERVER, "(ATM) {FFFFFF}You've received {00FF00}$%s {FFFFFF}from {FFFF00}%s", FormatNumber(strval(totalcash)), GetName(playerid));
+				LogBank_DCChannel(Str_Format("[%s]\nTRANSFER: %s (%s) [%s] has transferred $%s to %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(strval(totalcash)), GetName(targetid), GetUsername(targetid), ReturnIP(targetid)));
 			}			
 		}
 		else
@@ -10899,6 +10905,7 @@ function OnSalaryReceived(playerid) {
 	}
 	new taxval = total_salary/100*GovData[govTax];
 
+	LogSalary_DCChannel(Str_Format("[%s]\nPAYCHECK: %s (%s) has received paycheck, Old Balance: $%s, Total Salary: $%s, Bank Interest: $%s, New Balance: $%s, Tax: $%s", ReturnDate(), GetName(playerid), GetUsername(playerid), FormatNumber(PlayerData[playerid][pBank]), FormatNumber(total_salary), FormatNumber(total_salary-taxval), FormatNumber(PlayerData[playerid][pBank] + total_salary-taxval), FormatNumber(taxval)));
 	PlayerData[playerid][pBank] += total_salary-taxval;
 	PlayerData[playerid][pPaycheck] = 3600;
 	PlayerData[playerid][pSalary] = 0;

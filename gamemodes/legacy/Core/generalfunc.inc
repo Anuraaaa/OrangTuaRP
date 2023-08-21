@@ -2107,3 +2107,10 @@ function ShowGateReq(playerid) {
 	}
 	return 1;
 }
+
+Str_Format(const text[], va_args<>)
+{
+    new str[2048];
+    va_format(str, sizeof(str), text, va_start<1>);
+    return str;
+}

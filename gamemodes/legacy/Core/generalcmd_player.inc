@@ -1134,6 +1134,7 @@ CMD:accept(playerid, params[])
 		HouseData[houseid][houseTaxState] = TAX_STATE_COOLDOWN;
 		HouseData[houseid][houseTaxPaid] = true;
 
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept house (ID: %d), from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), houseid, GetName(sellerid), GetUsername(sellerid)));
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept house(ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), houseid, GetName(sellerid), GetUsername(sellerid));
 
 		House_Refresh(houseid);
@@ -1170,6 +1171,7 @@ CMD:accept(playerid, params[])
 		Flat_Save(flatid);
 
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept flat (ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), flatid, GetName(sellerid), GetUsername(sellerid));
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept flat (ID: %d), from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), flatid, GetName(sellerid), GetUsername(sellerid)));
 
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci flat dari %s.", ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci flat, sekarang flat tersebut miliknya.", ReturnName(playerid));
@@ -1196,6 +1198,7 @@ CMD:accept(playerid, params[])
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci kendaraan %s dari %s.", GetVehicleName(vehicleid), ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci %s, sekarang kendaraan tersebut miliknya.", ReturnName(playerid), GetVehicleName(vehicleid));
 
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept vehicle %s, modelid: %d, from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnVehicleModelName(vehicleid), GetVehicleModel(vehicleid), GetName(sellerid), GetUsername(sellerid)));
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept vehicle(%s) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), GetVehicleName(vehicleid), GetName(sellerid), GetUsername(sellerid));
 
 		PlayerData[playerid][pVehicleOffer] = -1;
@@ -1665,6 +1668,7 @@ CMD:pm(playerid, params[])
 		SendClientMessageEx(i, X11_GREEN_YELLOW, "PM: %s (%d) to %s (%d): %s", GetName(playerid, false), playerid, GetName(targetid, false), targetid, msg);
 	}
 	PlayerPlaySound(targetid, 1085, 0.0, 0.0, 0.0);
+	LogPM_DCChannel(Str_Format("[%s]\nPlayerPM: %s (%s) has pm-ing %s (%s): %s", ReturnDate(), GetName(playerid), GetUsername(playerid), GetName(targetid), GetUsername(targetid), msg));
 	return 1;
 }
 
@@ -2012,6 +2016,7 @@ CMD:pay(playerid, params[])
 		Log_Write("Logs/pay_log.txt", "[%s] %s(%s) has paid to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		ShowMessage(playerid, sprintf("~w~Kamu telah memberikan ~g~$%s ~w~ kepada %s", FormatNumber(strval(totalcash)), ReturnName(id)));
         ShowMessage(id, sprintf("~w~Kamu telah menerima ~g~$%s ~w~ dari %s", FormatNumber(strval(totalcash)), ReturnName(playerid)));
+		LogPay_DCChannel(Str_Format("[%s]\nPAYINFO: %s (%s) [%s] has paid $%s to %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(strval(totalcash)), GetName(id), GetUsername(id), ReturnIP(id)));
 		if(!IsPlayerInAnyVehicle(playerid))
         	SetPlayerToFacePlayer(playerid, id);
 
@@ -2042,6 +2047,7 @@ CMD:pay(playerid, params[])
 		PlayerPlaySound(id, 1052, 0.0, 0.0, 0.0);
         ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
         ApplyAnimation(id, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
+		LogPay_DCChannel(Str_Format("[%s]\nPAYINFO: %s (%s) [%s] has paid $%s to %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(strval(totalcash)), GetName(id), GetUsername(id), ReturnIP(id)));
 		Log_Write("Logs/pay_log.txt", "[%s] %s(%s) has paid to %s(%s) with amount $%s", ReturnDate(), GetName(playerid, false), GetUsername(playerid), GetName(id, false), GetUsername(id), FormatNumber(strval(totalcash)));
 		
         if(!IsPlayerInAnyVehicle(playerid))

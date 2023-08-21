@@ -56,7 +56,7 @@
 				"OTRP"
 			],
 			"plugins": [
-				"crashdetect", "pawnraknet", "pawn-memory", "streamer", "sscanf", "mysql", "samp_bcrypt", "samp-compat", "chrono", "ColAndreas"
+				"crashdetect", "pawnraknet", "pawn-memory", "streamer", "sscanf", "mysql", "samp_bcrypt", "samp-compat", "chrono", "ColAndreas", "discord-connector"
 			],
 			"rcon_password": "orturp",
 			"port": 7777,
@@ -65,7 +65,7 @@
 			"language": "Bahasa Indonesia",
 			"mapname": "San Andreas",
 			"weburl": "",
-			"gamemodetext": "OTRP v14.18.15",
+			"gamemodetext": "OTRP v15.19.15",
 			"announce": true,
 			"lanmode": false,
 			"query": true,
@@ -96,7 +96,8 @@
 				"long_call_time": "0",
 				"useartwork": "1",
 				"profiler_gamemodes": "OTRP",
-				"profiler_outputformat": "html"
+				"profiler_outputformat": "html",
+				"discord_bot_token" : "MTEzMjY5MTE3MDYwNzIzOTIyOA.Gv1Tzc.e3wtOFT2BqGv0uLQCrQnI5O8JHIBg04Gm1BK_w"
 			}
 		}
 	],

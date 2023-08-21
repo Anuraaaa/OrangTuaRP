@@ -203,10 +203,12 @@ Inventory_Remove(playerid, item[], quantity = 1)
 	{
 	    if (InventoryData[playerid][itemid][invQuantity] > 0)
 	    {
+			LogItem_DCChannel(Str_Format("[%s]\nITEM: %s [%s] has been updated item %s, prev amount: %d, current amount: %d.", ReturnDate(), GetName(playerid), ReturnIP(playerid), InventoryData[playerid][itemid][invItem], InventoryData[playerid][itemid][invQuantity], InventoryData[playerid][itemid][invQuantity]-quantity));
 	        InventoryData[playerid][itemid][invQuantity] -= quantity;
 		}
 		if (quantity == -1 || InventoryData[playerid][itemid][invQuantity] < 1)
 		{
+			LogItem_DCChannel(Str_Format("[%s]\nITEM: %s [%s] has been deleted item %s, amount: %d.", ReturnDate(), GetName(playerid), ReturnIP(playerid), InventoryData[playerid][itemid][invItem]));
 		    InventoryData[playerid][itemid][invExists] = false;
 		    InventoryData[playerid][itemid][invModel] = 0;
 		    InventoryData[playerid][itemid][invQuantity] = 0;
@@ -264,6 +266,7 @@ Inventory_Add(playerid, item[], model, quantity = 1)
 
 			format(string, sizeof(string), "INSERT INTO `inventory` (`ID`, `invItem`, `invModel`, `invQuantity`) VALUES('%d', '%s', '%d', '%d')", PlayerData[playerid][pID], item, model, quantity);
 			mysql_tquery(sqlcon, string, "OnInventoryAdd", "dd", playerid, itemid);
+			LogItem_DCChannel(Str_Format("[%s]\nITEM: %s [%s] has been added item %s, amount: %d.", ReturnDate(), GetName(playerid), ReturnIP(playerid), InventoryData[playerid][itemid][invItem], InventoryData[playerid][itemid][invQuantity]));
 	        return itemid;
 		}
 		SendErrorMessage(playerid, "Kamu tidak bisa membawa lebih banyak item lagi!");
@@ -273,6 +276,7 @@ Inventory_Add(playerid, item[], model, quantity = 1)
 	{
 	    format(string, sizeof(string), "UPDATE `inventory` SET `invQuantity` = `invQuantity` + %d WHERE `ID` = '%d' AND `invID` = '%d'", quantity, PlayerData[playerid][pID], InventoryData[playerid][itemid][invID]);
 	    mysql_tquery(sqlcon, string);
+		LogItem_DCChannel(Str_Format("[%s]\nITEM: %s [%s] has been updated item %s, prev amount: %d, current amount: %d.", ReturnDate(), GetName(playerid), ReturnIP(playerid), InventoryData[playerid][itemid][invItem], InventoryData[playerid][itemid][invQuantity], InventoryData[playerid][itemid][invQuantity]-quantity));
 
 	    InventoryData[playerid][itemid][invQuantity] += quantity;
 	}

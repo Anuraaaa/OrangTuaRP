@@ -61,6 +61,7 @@ CMD:ask(playerid, params[])
 	SendServerMessage(playerid, "Berhasil mengirim pertanyaan ke Administrator!");
 	askDelay[playerid] = 180;
 
+    LogAssist_DCChannel(Str_Format("[%s]\nASK: %s (%s) has sended question: %s.", ReturnDate(), GetName(playerid), GetUsername(playerid), params));
 	if(strlen(params) > 64) {
         if(CountAdminDuty() > 1) {
             SendAdminDutyMessage(COLOR_YELLOW, "ASK from {00FFFF}%s [%d]: {FFFFFF}%.64s", GetName(playerid), playerid, params);
@@ -102,6 +103,7 @@ CMD:ans(playerid, params[])
 	    
 	SendClientMessageEx(userid, COLOR_SERVER, "(Answer) {FFFFFF}%s", text);
 	SendAdminMessage(COLOR_LIGHTRED, "%s Answer To %s: %s", PlayerData[playerid][pUCP], GetName(userid), text);
+	LogAssist_DCChannel(Str_Format("[%s]\nASK: %s has answered %s's question: %s.", ReturnDate(), GetUsername(playerid), GetName(userid), params));
 	PlayerData[userid][pAsking] = false;
 	PlayerData[playerid][pAdminPoint]++;
 	return 1;
@@ -152,6 +154,7 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 
             SendClientMessageEx(targetid, COLOR_SERVER, "(Answer) {FFFFFF}%s", inputtext);
             SendAdminMessage(COLOR_LIGHTRED, "%s Answer To %s: %s", PlayerData[playerid][pUCP], GetName(targetid), inputtext);
+        	LogAssist_DCChannel(Str_Format("[%s]\nASK: %s has answered %s's question: %s.", ReturnDate(), GetUsername(playerid), GetName(targetid), inputtext));
             PlayerData[targetid][pAsking] = false;
             PlayerData[playerid][pAdminPoint]++;
         }
