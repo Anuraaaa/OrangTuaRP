@@ -65,7 +65,7 @@
 			"language": "Bahasa Indonesia",
 			"mapname": "San Andreas",
 			"weburl": "",
-			"gamemodetext": "OTRP v15.19.15",
+			"gamemodetext": "OTRP v15.19.18",
 			"announce": true,
 			"lanmode": false,
 			"query": true,
@@ -97,7 +97,7 @@
 				"useartwork": "1",
 				"profiler_gamemodes": "OTRP",
 				"profiler_outputformat": "html",
-				"discord_bot_token" : "???"
+				"discord_bot_token" : "MTEzNzYzMzQyMjAwNTc2NDEyOA.Gej_8D.BCWVkyle9nRcCsiW_00iEFuxH5ZV6V2RWUc6dA"
 			}
 		}
 	],

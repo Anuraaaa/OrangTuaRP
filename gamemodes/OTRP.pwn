@@ -17,7 +17,7 @@
 
 ------------------------ World of Space Roleplay ------------------------
 * Developed by Anwar Fauzan (Anuraaaa), Arif Hudaya (LuminouZ307)
-* Script Version: v15.19.15
+* Script Version: v15.19.18
 * Developed Since: 2023
 * Server Owner: Puur, Sam Simarmata
 
@@ -8994,9 +8994,25 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				ShowPlayerDialog(playerid, DIALOG_CHAR_DELETE, DIALOG_STYLE_INPUT, "OT - Remove Character", "Berikan alasan-mu menghapus karakter yang valid:\n\nNote: Saat menekan \"Confirm\" tandanya kamu menyetujui semua wealth/aset yang hilang\nketika karakter dihapus, karakter yang dihapus tidak dapat dikembalikan dalam cara dan bentuk apapun.\nPastikan kamu memikirkan matang-matang untuk penghapusan karakter.", "Confirm", "Back");
 			}
 			case 2: {
-				new query[256];
-				mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `JailTime` = '60', `JailBy` = 'Server', `JailReason` = 'Force Jail' WHERE `Name` = '%e'", PlayerChar[playerid][PlayerData[playerid][pChar]]);
-				mysql_tquery(sqlcon, query, "OnForceJail", "d", playerid);	
+				new query[256], Cache:execute, jailtime, jailby[MAX_PLAYER_NAME], jailreason[128];
+
+				mysql_format(sqlcon, query, sizeof(query), "SELECT * FROM `characters` WHERE `Name` = '%e' AND `JailTime` != '0' LIMIT 1;", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+				execute = mysql_query(sqlcon, query);
+
+				if(cache_num_rows()) {
+					cache_get_value_name_int(0, "JailTime", jailtime);
+					cache_get_value_name(0, "JailBy", jailby);
+					cache_get_value_name(0, "JailReason", jailreason);
+				}
+				cache_delete(execute);
+				if (!jailtime) {
+					mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `JailTime` = '60', `JailBy` = 'Server', `JailReason` = 'Force Jail' WHERE `Name` = '%e'", PlayerChar[playerid][PlayerData[playerid][pChar]]);
+					mysql_tquery(sqlcon, query, "OnForceJail", "d", playerid);	
+				}
+				else {
+					mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `JailTime` = '%d', `JailBy` = '%e', `JailReason` = '%e' WHERE `Name` = '%e'", jailtime + 60, jailby, jailreason, PlayerChar[playerid][PlayerData[playerid][pChar]]);
+					mysql_tquery(sqlcon, query, "OnForceJail", "d", playerid);	
+				}
 			}
 		}
 	}

@@ -520,9 +520,7 @@ function LoadCharacterData(playerid)
 
 function OnForceJail(playerid) {
 
-	print("forcejail");
 	if(cache_affected_rows()) {
-		print("affect");
 		new cQuery[256];
 		mysql_format(sqlcon, cQuery, sizeof(cQuery), "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1;", PlayerChar[playerid][PlayerData[playerid][pChar]]);
 		mysql_tquery(sqlcon, cQuery, "LoadCharacterData", "d", playerid);	
