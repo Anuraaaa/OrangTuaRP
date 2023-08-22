@@ -10439,11 +10439,6 @@ public OnVehicleSpawn(vehicleid)
 							SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Player terdekat saat kendaraanmu hancur adalah "RED"%s", GetName(nearest, false));
 						}
 
-						if (killerid != INVALID_PLAYER_ID && IsNearestKillerVehicle(killerid, vehicleid))
-							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
-
-						else
-							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been updated to insurance, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
 
 						break;
 					}
@@ -10457,6 +10452,13 @@ public OnVehicleSpawn(vehicleid)
 						if(nearest != INVALID_PLAYER_ID) {
 							SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Player terdekat saat kendaraanmu hancur adalah "RED"%s", GetName(nearest, false));
 						}
+
+						if (killerid != INVALID_PLAYER_ID && IsNearestKillerVehicle(killerid, vehicleid))
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
+
+						else
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
+
 						break;
 					}
 					Vehicle_Delete(vehicleid, true);
@@ -10508,7 +10510,7 @@ public OnVehicleSpawn(vehicleid)
 					LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (rental) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
 
 				else
-					LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (rental) has been updated to insurance, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
+					LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (rental) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
 
 				break;
 			}
