@@ -947,7 +947,7 @@ CMD:house(playerid, params[])
 			PlayerData[targetid][pHouseOffer] = index;
 			PlayerData[targetid][pHouseOfferID] = playerid;
 			SendServerMessage(targetid, "%s telah menawarkan kunci rumah miliknya, \"/accept house\" untuk menerima.", ReturnName(playerid));
-			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has trying offer house (ID: %d), to: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), index, GetName(targetid), GetUsername(targetid)));
+			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has trying offer house (ID: %d), to: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), index, GetName(targetid), GetUsername(targetid), ReturnIP(targetid)));
 			SendServerMessage(playerid, "Kamu telah menawarkan kunci rumah kepada %s.", ReturnName(targetid));
 		}
 		else SendErrorMessage(playerid, "Kamu harus didekat point rumah-mu!");

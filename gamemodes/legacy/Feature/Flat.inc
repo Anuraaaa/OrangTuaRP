@@ -822,7 +822,7 @@ CMD:flat(playerid, params[]) {
 
 			GiveMoney(playerid, -FlatData[index][flatPrice], "Membeli Flat");
 			SendServerMessage(playerid, "Kamu berhasil membeli Flat dengan type %s seharga "GREEN"$%s", Flat_ReturnType(FlatData[index][flatType]), FormatNumber(FlatData[index][flatPrice]));
-			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has purchased flat (ID: %d), price: $%s, type: %s", ReturnDate(), GetName(playerid), GetUsername(playerid), FormatNumber(FlatData[index][flatPrice]), Flat_ReturnType(FlatData[index][flatType])));
+			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has purchased flat (ID: %d), price: $%s, type: %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), index, FormatNumber(FlatData[index][flatPrice]), Flat_ReturnType(FlatData[index][flatType])));
 			SendServerMessage(playerid, "Jangan lupa untuk membayar pajak Flat setiap 14 hari!");
 			
 			FlatData[index][flatOwner] = PlayerData[playerid][pID];
@@ -860,7 +860,7 @@ CMD:flat(playerid, params[]) {
 			PlayerData[targetid][pFlatOffer] = index;
 			PlayerData[targetid][pFlatOfferID] = playerid;
 			SendServerMessage(targetid, "%s telah menawarkan kunci flat miliknya, \"/accept flat\" untuk menerima.", ReturnName(playerid));
-			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has trying offer flat (ID: %d), to: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), index, GetName(targetid), GetUsername(targetid)));
+			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has trying offer flat (ID: %d), to: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), index, GetName(targetid), GetUsername(targetid), ReturnIP(targetid)));
 			SendServerMessage(playerid, "Kamu telah menawarkan kunci flat kepada %s.", ReturnName(targetid));
 		}
 		else SendErrorMessage(playerid, "Kamu harus didekat point flat-mu!");

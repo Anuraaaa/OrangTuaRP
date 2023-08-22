@@ -10960,7 +10960,7 @@ function OnSalaryReceived(playerid) {
 	}
 	new taxval = total_salary/100*GovData[govTax];
 
-	LogSalary_DCChannel(Str_Format("[%s]\nPAYCHECK: %s (%s) has received paycheck, Old Balance: $%s, Total Salary: $%s, Bank Interest: $%s, New Balance: $%s, Tax: $%s", ReturnDate(), GetName(playerid), GetUsername(playerid), FormatNumber(PlayerData[playerid][pBank]), FormatNumber(total_salary), FormatNumber(total_salary-taxval), FormatNumber(PlayerData[playerid][pBank] + total_salary-taxval), FormatNumber(taxval)));
+	LogSalary_DCChannel(Str_Format("[%s]\nPAYCHECK: %s (%s) [%s] has received paycheck, Old Balance: $%s, Total Salary: $%s, Bank Interest: $%s, New Balance: $%s, Tax: $%s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), FormatNumber(PlayerData[playerid][pBank]), FormatNumber(total_salary), FormatNumber(total_salary-taxval), FormatNumber(PlayerData[playerid][pBank] + total_salary-taxval), FormatNumber(taxval)));
 	PlayerData[playerid][pBank] += total_salary-taxval;
 	PlayerData[playerid][pPaycheck] = 3600;
 	PlayerData[playerid][pSalary] = 0;

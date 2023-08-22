@@ -1134,7 +1134,7 @@ CMD:accept(playerid, params[])
 		HouseData[houseid][houseTaxState] = TAX_STATE_COOLDOWN;
 		HouseData[houseid][houseTaxPaid] = true;
 
-		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept house (ID: %d), from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), houseid, GetName(sellerid), GetUsername(sellerid)));
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has accept house (ID: %d), from: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), houseid, GetName(sellerid), GetUsername(sellerid), ReturnIP(sellerid)));
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept house(ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), houseid, GetName(sellerid), GetUsername(sellerid));
 
 		House_Refresh(houseid);
@@ -1171,7 +1171,7 @@ CMD:accept(playerid, params[])
 		Flat_Save(flatid);
 
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept flat (ID:%d) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), flatid, GetName(sellerid), GetUsername(sellerid));
-		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept flat (ID: %d), from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), flatid, GetName(sellerid), GetUsername(sellerid)));
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has accept flat (ID: %d), from: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), flatid, GetName(sellerid), GetUsername(sellerid), ReturnIP(sellerid)));
 
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci flat dari %s.", ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci flat, sekarang flat tersebut miliknya.", ReturnName(playerid));
@@ -1198,7 +1198,7 @@ CMD:accept(playerid, params[])
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci kendaraan %s dari %s.", GetVehicleName(vehicleid), ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci %s, sekarang kendaraan tersebut miliknya.", ReturnName(playerid), GetVehicleName(vehicleid));
 
-		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has accept vehicle %s, modelid: %d, from: %s (%s)", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnVehicleModelName(vehicleid), GetVehicleModel(vehicleid), GetName(sellerid), GetUsername(sellerid)));
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has accept vehicle %s, modelid: %d, from: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), ReturnVehicleModelName(vehicleid), GetVehicleModel(vehicleid), GetName(sellerid), GetUsername(sellerid), ReturnIP(sellerid)));
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept vehicle(%s) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), GetVehicleName(vehicleid), GetName(sellerid), GetUsername(sellerid));
 
 		PlayerData[playerid][pVehicleOffer] = -1;
