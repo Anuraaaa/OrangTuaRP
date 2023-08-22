@@ -506,6 +506,28 @@ ptask OnCheckAntiCheat[1000](playerid) {
 
     if(IsPlayerSpawned(playerid)) {            
 
+        new
+            ac_weapon[13],
+            ac_ammo[13]
+            ;
+
+        for(new i = 0; i < 13; i++) {
+            GetPlayerWeaponData(playerid, i, ac_weapon[i], ac_ammo[i]);
+
+            if(ac_weapon[i] && PlayerData[playerid][pGuns][g_aWeaponSlots[ac_weapon[i]]] != ac_weapon[i] && GetPVarInt(playerid, "IsAtEvent") == 0) {
+                SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack", GetName(playerid));
+                LogCheat_DCChannel(Str_Format("[%s]\nANTICHEAT: %s (%s) [%s] is possible detected weapon hack %s", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), ReturnWeaponName(ac_weapon[i])));
+                defer AC_SetWeaponBack[1000](playerid);
+                ac_weapon_h[playerid]++;
+
+                if(ac_weapon_h[playerid] >= 3) {
+                    SendAdminMessage(X11_TOMATO, "Anticheat: %s is possible using weapon hack (has been kicked)", GetName(playerid));
+                    ac_weapon_h[playerid] = 0;
+                    SendClientMessageEx(playerid, X11_YELLOW, "(AntiCheat) "GREY"You have been kicked from the server because of using some suspicious programs (Weapon Hack)");
+                    KickEx(playerid);
+                }
+            }
+        }        
         if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 		    new Float: ghX, Float: ghY, Float: ghZ;
