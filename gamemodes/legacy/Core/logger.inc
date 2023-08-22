@@ -11,6 +11,7 @@ new DCC_Channel:adsLog;
 new DCC_Channel:bankLog;
 new DCC_Channel:salaryLog;
 new DCC_Channel:itemLog;
+new DCC_Channel:vehDeathLog;
 
 hook OnGameModeInit()
 {
@@ -24,6 +25,7 @@ hook OnGameModeInit()
     assistLog = DCC_FindChannelById("1142329715517046865");
     propertyLog = DCC_FindChannelById("1142329782261006407");
     adsLog = DCC_FindChannelById("1000014125503627294");
+	vehDeathLog = DCC_FindChannelById("1143359718287482973");
 }
 
 hook OnPlayerDeath(playerid, killerid, reason) {
@@ -195,6 +197,15 @@ stock LogItem_DCChannel(msg[])
 
     format(str, sizeof(str), "```\n%s\n```", msg);
     return DCC_SendChannelMessage(itemLog, str);
+}
+
+stock LogVehicleDeath_DCChannel(msg[])
+{
+    new 
+        str[MAX_PLAYER_NAME + 5064];
+
+    format(str, sizeof(str), "```\n%s\n```", msg);
+    return DCC_SendChannelMessage(vehDeathLog, str);
 }
 
 task UpdateBotPresence[2000]()

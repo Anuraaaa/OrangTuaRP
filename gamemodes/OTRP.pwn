@@ -10396,6 +10396,17 @@ public OnVehicleSpawn(vehicleid)
 
 				if(VehicleData[vehicleid][vInsurance] > 0)
 				{
+					foreach (new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
+					{
+
+						if (killerid != INVALID_PLAYER_ID && IsNearestKillerVehicle(killerid, vehicleid))
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been updated to insurance, modelid: %d, prev insu: %d, current insu: %d, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), VehicleData[vehicleid][vInsurance], VehicleData[vehicleid][vInsurance]-1, GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
+
+						else
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been updated to insurance, modelid: %d, prev insu: %d, current insu: %d, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), VehicleData[vehicleid][vInsurance], VehicleData[vehicleid][vInsurance]-1, GetName(pid), GetUsername(pid), ReturnIP(pid)));
+
+						break;
+					}
 					VehicleData[vehicleid][vInsurance] --;
 					VehicleData[vehicleid][vInsuTime] = gettime() + (1 * 10800);
 					mysql_tquery(sqlcon, sprintf("DELETE FROM `crates` WHERE `Vehicle` = '%d'", VehicleData[vehicleid][vID]));
@@ -10411,6 +10422,13 @@ public OnVehicleSpawn(vehicleid)
 						if(nearest != INVALID_PLAYER_ID) {
 							SendClientMessageEx(pid, X11_LIGHTBLUE, "(Vehicle) "WHITE"Player terdekat saat kendaraanmu hancur adalah "RED"%s", GetName(nearest, false));
 						}
+
+						if (killerid != INVALID_PLAYER_ID && IsNearestKillerVehicle(killerid, vehicleid))
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
+
+						else
+							LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (owned) has been updated to insurance, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
+
 						break;
 					}
 					Vehicle_Delete(vehicleid, false);
@@ -10462,10 +10480,20 @@ public OnVehicleSpawn(vehicleid)
 		}
 		else if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_RENTAL)
 		{
+			new
+				killerid = VehicleData[vehicleid][vKillerID];
+
 			foreach(new pid : Player) if (VehicleData[vehicleid][vExtraID] == PlayerData[pid][pID])
 			{
 				GiveMoney(pid, -250, "Denda rental");
 				SendServerMessage(pid, "Kendaraan Rental milikmu (%s) telah hancur, kamu dikenai denda sebesar {009000}$250,0!", GetVehicleName(vehicleid));
+
+				if (killerid != INVALID_PLAYER_ID && IsNearestKillerVehicle(killerid, vehicleid))
+					LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (rental) has been destroyed, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by %s (%s) [%s].", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid), GetName(killerid), GetUsername(killerid), ReturnIP(killerid)));
+
+				else
+					LogVehicleDeath_DCChannel(Str_Format("[%s]\nVEHICLE DEATH: %s (rental) has been updated to insurance, modelid: %d, insu: 0, owner: %s (%s) [%s], reason: destroyed by death.", ReturnDate(), GetVehicleName(vehicleid), GetVehicleModel(vehicleid), GetName(pid), GetUsername(pid), ReturnIP(pid)));
+
 				break;
 			}
 			Vehicle_Delete(vehicleid, true);
@@ -10502,6 +10530,17 @@ GetNearestPlayerFromCar(vehicleid) {
 	}
 	return playerid;
 }
+
+IsNearestKillerVehicle(killerid, vehicleid) {
+	new Float:x, Float:y, Float:z;
+	GetVehiclePos(vehicleid, x, y, z);
+
+	if (killerid != INVALID_PLAYER_ID && IsPlayerInRangeOfPoint(killerid, 25.0, x, y, z) && GetPlayerVirtualWorld(killerid) == GetVehicleVirtualWorld(vehicleid)) {
+		return 1;
+	}
+	return 0;
+}
+
 ReturnBizTypeToCargo(biztype) {
 	new type;
 
