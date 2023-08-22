@@ -206,9 +206,12 @@ SQL_SavePlayerPos(playerid) {
 		if (GetPVarInt(playerid, "IsAtEvent") == 0) {
 
 			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
 		}
-		GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+		else {
+			SetBack_OldDataPlayerEvent(playerid);			
+		}
 
 		new query[1012];
 		mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET `PosX` = '%.4f', `PosY` = '%.4f', `PosZ` = '%.4f', `Health` = '%.4f', `Armor` = '%.4f'",
@@ -236,9 +239,12 @@ SQL_SaveCharacter(playerid)
 		if (GetPVarInt(playerid, "IsAtEvent") == 0) {
 
 			GetPlayerPos(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
+			GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
+			GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
 		}
-		GetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
-		GetPlayerArmour(playerid, PlayerData[playerid][pArmor]);
+		else {
+			SetBack_OldDataPlayerEvent(playerid);			
+		}
 
 		mysql_format(sqlcon, query, sizeof(query), "UPDATE `characters` SET ");
 		mysql_format(sqlcon, query, sizeof(query), "%s`PosX`='%f', ", query, PlayerData[playerid][pPos][0]);

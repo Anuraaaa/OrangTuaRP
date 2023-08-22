@@ -2,6 +2,19 @@
 #include <YSI_Coding\y_timers>
 
 
+enum e_eventPlayer {
+	Float:event_oldPos[3],
+	Float:event_oldHealth,
+	Float:event_oldArmor,
+	event_oldInterior,
+	event_oldWorld,
+	event_oldGuns[13],
+	event_oldDurability[13],
+	event_oldAmmo[13],
+	event_oldHighVelocity[13]
+}
+new oldPlayerDataEvent[MAX_PLAYERS][e_eventPlayer];
+
 /*==============================================================================
 	Dearby Mode Enumemators.
 ==============================================================================*/
@@ -241,6 +254,58 @@ new evTeam[MAX_PLAYERS] = {0 , ...},
 	evRaceCP[MAX_PLAYERS] = {-1 , ...},
 	evCar[MAX_PLAYERS] = {INVALID_VEHICLE_ID , ...};
 
+Reset_OldDataPlayerEvent(playerid) {
+
+	oldPlayerDataEvent[playerid][event_oldHealth] = 0.0;
+	oldPlayerDataEvent[playerid][event_oldArmor] = 0.0;
+	oldPlayerDataEvent[playerid][event_oldInterior] = 0;
+	oldPlayerDataEvent[playerid][event_oldWorld] = 0;
+	for (new i = 0; i < 3; i++) {
+		oldPlayerDataEvent[playerid][event_oldPos][i] = 0.0;
+	}
+	for (new i = 0; i < 13; i++) {
+		oldPlayerDataEvent[playerid][event_oldGuns][i] = 0;
+		oldPlayerDataEvent[playerid][event_oldDurability][i] = 0;
+		oldPlayerDataEvent[playerid][event_oldAmmo][i] = 0;
+		oldPlayerDataEvent[playerid][event_oldHighVelocity][i] = 0;
+	}
+	return 1;
+}
+
+Get_OldDataPlayerEvent(playerid) {
+	oldPlayerDataEvent[playerid][event_oldHealth] = PlayerData[playerid][pHealth];
+	oldPlayerDataEvent[playerid][event_oldArmor] = PlayerData[playerid][pArmor];
+	oldPlayerDataEvent[playerid][event_oldInterior] = PlayerData[playerid][pInterior];
+	oldPlayerDataEvent[playerid][event_oldWorld] = PlayerData[playerid][pWorld];
+	for (new i = 0; i < 3; i++) {
+		oldPlayerDataEvent[playerid][event_oldPos][i] = PlayerData[playerid][pPos][i];
+	}
+	for (new i = 0; i < 13; i++) {
+		oldPlayerDataEvent[playerid][event_oldGuns][i] = PlayerData[playerid][pGuns][i];
+		oldPlayerDataEvent[playerid][event_oldDurability][i] = PlayerData[playerid][pDurability][i];
+		oldPlayerDataEvent[playerid][event_oldAmmo][i] = PlayerData[playerid][pAmmo][i];
+		oldPlayerDataEvent[playerid][event_oldHighVelocity][i] = PlayerData[playerid][pHighVelocity][i];
+	}
+	return 1;
+}
+
+SetBack_OldDataPlayerEvent(playerid) {
+	PlayerData[playerid][pHealth] = oldPlayerDataEvent[playerid][event_oldHealth];
+	PlayerData[playerid][pArmor] = oldPlayerDataEvent[playerid][event_oldArmor];
+	PlayerData[playerid][pInterior] = oldPlayerDataEvent[playerid][event_oldInterior];
+	PlayerData[playerid][pWorld] = oldPlayerDataEvent[playerid][event_oldWorld];
+	for (new i = 0; i < 3; i++) {
+		PlayerData[playerid][pPos][i] = oldPlayerDataEvent[playerid][event_oldPos][i];
+	}
+	for (new i = 0; i < 13; i++) {
+		PlayerData[playerid][pGuns][i] = oldPlayerDataEvent[playerid][event_oldGuns][i];
+		PlayerData[playerid][pDurability][i] = oldPlayerDataEvent[playerid][event_oldDurability][i];
+		PlayerData[playerid][pAmmo][i] = oldPlayerDataEvent[playerid][event_oldAmmo][i];
+		PlayerData[playerid][pHighVelocity][i] = oldPlayerDataEvent[playerid][event_oldHighVelocity][i];
+	}
+	return 1;
+}
+
 hook OnGameModeInit()
 {
 	EventCreated = 0;
@@ -334,6 +399,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			SetPlayerHealth(playerid, 100.0);
 			SetPlayerArmour(playerid, 0.0);
@@ -386,6 +452,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			SetPlayerHealth(playerid, 100.0);
 			SetPlayerArmour(playerid, 0.0);
@@ -437,6 +504,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			if (tdm_EventData[eventSelection]) {
 
@@ -518,6 +586,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			SetPlayerHealth(playerid, 200.0);
 			SetPlayerArmour(playerid, 0.0);
@@ -567,6 +636,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			SetPlayerHealth(playerid, 100.0);
 			SetPlayerArmour(playerid, 0.0);
@@ -617,6 +687,7 @@ CMD:event(playerid, params[])
 
 			PlayerData[playerid][pWorld] = GetPlayerVirtualWorld(playerid);
 			PlayerData[playerid][pInterior] = GetPlayerInterior(playerid);
+			Get_OldDataPlayerEvent(playerid);
 
 			if (zombie_EventData[eventEntry] <= zombie_EventData[eventAlive]) {
 
@@ -2407,6 +2478,7 @@ hook OnPlayerConnect(playerid) {
 
 	DeletePVar(playerid, "IsAtEvent");
 	DeletePVar(playerid, "EditRaceCP");
+	Reset_OldDataPlayerEvent(playerid);
 
 	return 1;
 }
@@ -3044,6 +3116,7 @@ hook OnPlayerSpawn(playerid) {
 
 		evRaceCP[playerid] = -1;
 		race_EventData[evEntry]--;
+		SetBack_OldDataPlayerEvent(playerid);
 
 		if (race_EventData[evEntry] == 1) {
 
@@ -3151,6 +3224,7 @@ hook OnPlayerSpawn(playerid) {
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 5 && EventType == 5) {
 
+		SetBack_OldDataPlayerEvent(playerid);
 		Parachute_ToggleAntiCheat(playerid, false);
 
 		SetCameraBehindPlayer(playerid);
@@ -3209,6 +3283,7 @@ hook OnPlayerSpawn(playerid) {
 		TDM_ToggleAntiCheat(playerid, false);
 		DM_ToggleAntiCheat(playerid, false);
 				
+		SetBack_OldDataPlayerEvent(playerid);
 		SetCameraBehindPlayer(playerid);
 		SetPlayerPositionEx(playerid, PlayerData[playerid][pPos][0], PlayerData[playerid][pPos][1], PlayerData[playerid][pPos][2]);
 		SetPlayerHealth(playerid, PlayerData[playerid][pHealth]);
@@ -3358,6 +3433,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			Vehicle_Delete(evCar[playerid], false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
+		Reset_OldDataPlayerEvent(playerid);
 		DeletePVar(playerid, "IsAtEvent");
     }
 	else if (GetPVarInt(playerid, "IsAtEvent") == 3) {
@@ -3410,6 +3486,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			}
 			Event_ForceEnd();			
 		}
+		Reset_OldDataPlayerEvent(playerid);
 		DeletePVar(playerid, "IsAtEvent");
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 4) {
@@ -3461,6 +3538,7 @@ hook OnPlayerDisconnectEx(playerid) {
 		DM_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has leave from event. (Disconnected/FC)", GetName(playerid));
+		Reset_OldDataPlayerEvent(playerid);
 		DeletePVar(playerid, "IsAtEvent");
 	}
 	else if (GetPVarInt(playerid, "IsAtEvent") == 5) {
@@ -3506,6 +3584,7 @@ hook OnPlayerDisconnectEx(playerid) {
 			Event_ForceEnd();			
 		}
 
+		Reset_OldDataPlayerEvent(playerid);
 		DeletePVar(playerid, "IsAtEvent");
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
 	}
@@ -3562,6 +3641,7 @@ hook OnPlayerDisconnectEx(playerid) {
 		Zombie_ToggleAntiCheat(playerid,false);
 
 		SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"has leave from event. (Disconnected/Timeout)", GetName(playerid));
+		Reset_OldDataPlayerEvent(playerid);
 		DeletePVar(playerid, "IsAtEvent");
     }
 	else {
