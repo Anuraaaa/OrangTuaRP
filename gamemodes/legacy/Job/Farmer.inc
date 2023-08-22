@@ -359,7 +359,7 @@ CMD:buyseed(playerid, params[]) {
         return SendErrorMessage(playerid, "Kamu tidak memiliki uang yang cukup.");
 
     if(Inventory_Add(playerid, "Plant Seed", 1577, amount) != -1) {
-        GiveMoney(playerid, -amount * 150);
+        GiveMoney(playerid, -amount * 150, sprintf("Membeli %d Plant Seed", amount));
         SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Farmer) "WHITE"Kamu telah membeli %d bibit dengan harga "GREEN"$%s", amount, FormatNumber(amount * 150));
     }
     return 1;

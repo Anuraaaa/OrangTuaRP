@@ -918,7 +918,7 @@ CMD:house(playerid, params[])
 
 		HouseData[id][houseOwner] = PlayerData[playerid][pID];
 		format(HouseData[id][houseOwnerName], 64, PlayerData[playerid][pName]);
-		GiveMoney(playerid, -HouseData[id][housePrice]);
+		GiveMoney(playerid, -HouseData[id][housePrice], "Membeli Rumah");
 		SendServerMessage(playerid, "Kamu berhasil membeli house ini dengan harga {00FF00}$%s", FormatNumber(HouseData[id][housePrice]));
 		SendServerMessage(playerid, "Jangan lupa untuk membayar pajak rumah ini setiap 14 hari!");
 		

@@ -454,7 +454,7 @@ timer Actor_GiveRobberCash[4000](playerid, actorid) {
 		format(msg, sizeof(msg), "Uang perampokan diterima! (+$%s)", FormatNumber(rob_cash));
 		notification.Show(playerid, "Robbery Update", msg, "hud:radar_cash");
 
-		GiveMoney(playerid, rob_cash);
+		GiveMoney(playerid, rob_cash, "Robbery Actor");
 		if(++ActorData[actorid][actorGettingRob] >= 10) {
 			Actor_StopRobbery(actorid);
 			stop g_PlayerRobbingActorTimer[playerid];

@@ -129,7 +129,7 @@ hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
 			return SendErrorMessage(playerid, "Minuman tidak sesuai dengan yang dipesan!");
 
 		new cash = RandomEx(300, 600);
-		GiveMoney(playerid, cash);
+		GiveMoney(playerid, cash, "Vendor Sell Product");
 		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu mendapatkan {00FF00}$%s {FFFFFF}dari menjual {FFFF00}%s {FFFFFF}dan {FFFF00}%s", FormatNumber(cash), FoodName[VendorData[vendorid][vendorFood]], DrinkName[VendorData[vendorid][vendorDrink]]);
 		
 		Streamer_SetIntData(STREAMER_TYPE_ACTOR, VendorData[vendorid][vendorActor], E_STREAMER_MODEL_ID, g_aMaleSkins[random(sizeof(g_aMaleSkins))]);

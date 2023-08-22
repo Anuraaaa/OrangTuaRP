@@ -1598,7 +1598,7 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 		{
 			Aksesoris_Create(playerid, modelid, GetAksesorisNameByModel(modelid));
 
-			GiveMoney(playerid, -PlayerData[playerid][pSkinPrice]);
+			GiveMoney(playerid, -PlayerData[playerid][pSkinPrice], "Membeli Aksesoris");
 			cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(PlayerData[playerid][pSkinPrice]), ProductName[PlayerData[playerid][pInBiz]][1]));
 			BizData[PlayerData[playerid][pInBiz]][bizStock]--;		
 			BizData[PlayerData[playerid][pInBiz]][bizVault] += PlayerData[playerid][pSkinPrice];
@@ -2781,7 +2781,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(GetMoney(playerid) < price)
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang!");
 
-			GiveMoney(playerid, -price);
+			GiveMoney(playerid, -price, "Unimpound Vehicle");
 			SendServerMessage(playerid, "Kamu telah mengeluarkan kendaraan mu dari impound lot.");
 
 			new str[256];
@@ -3161,7 +3161,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			SetPlayerArrest(userid);
 
-			GiveMoney(userid, -price);
+			GiveMoney(userid, -price, "Arrest Charge");
 
 			PlayerData[userid][pArrest] = 1;
 			PlayerData[userid][pJailTime] = time * 60;
@@ -4625,7 +4625,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(GetMoney(playerid) < price)
 					return SendErrorMessage(playerid, "Kamu membutuhkan $%s untuk upgrade.", FormatNumber(price));
 
-				GiveMoney(playerid, -price);
+				GiveMoney(playerid, -price, "Flat Upgrade");
 				FlatData[flat_id][flatFurnitureLevel] ++;
 
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", FlatData[flat_id][flatFurnitureLevel], FormatNumber(price));
@@ -4711,7 +4711,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(GetMoney(playerid) < price)
 					return SendErrorMessage(playerid, "Kamu membutuhkan $%s untuk upgrade.", FormatNumber(price));
 
-				GiveMoney(playerid, -price);
+				GiveMoney(playerid, -price, "House Upgrade");
 				HouseData[id][houseFurnitureLevel] ++;
 
 				SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Furniture) "WHITE"Slot furniture berhasil di-upgrade ke level "YELLOW"%d "WHITE"dengan harga "GREEN"$%s", HouseData[id][houseFurnitureLevel], FormatNumber(price));
@@ -4907,7 +4907,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-			GiveMoney(playerid, -2500);
+			GiveMoney(playerid, -2500, "DMV TEST");
 			ShowPlayerDialog(playerid, DIALOG_TEST_STAGE_1, DIALOG_STYLE_TABLIST_HEADERS, "Question 1 of 7",
 			"Mengapa kita saat mengemudi harus memperlambat kendaraan saat tikungan ?\
 			\nA. Untuk menghemat ke-ausan pada Ban\
@@ -6120,7 +6120,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				PlayerData[playerid][pPhoneNumber] = NumberIndex[playerid][listitem];
 				SendServerMessage(playerid, "Your new phone number is {FFFF00}#%d", NumberIndex[playerid][listitem]);
-				GiveMoney(playerid, -price);
+				GiveMoney(playerid, -price, "Membeli Nomor Baru");
 				BizData[bid][bizStock]--;
 				BizData[bid][bizVault] += price;
 				if(Inventory_Count(playerid, "Cellphone") < 1)
@@ -8215,7 +8215,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 	    {
-	        GiveMoney(playerid, -PlayerData[playerid][pSkinPrice]);
+	        GiveMoney(playerid, -PlayerData[playerid][pSkinPrice], "Buy Clothes");
 			cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(PlayerData[playerid][pSkinPrice]), ProductName[PlayerData[playerid][pInBiz]][0]));
 			BizData[PlayerData[playerid][pInBiz]][bizStock]--;
 
@@ -8643,7 +8643,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							PlayerData[playerid][pHunger] += 20;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 							PlayerPlaySound(playerid, 32200, 0.0, 0.0, 0.0);
@@ -8656,7 +8656,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							PlayerData[playerid][pHunger] += 40;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 							PlayerPlaySound(playerid, 32200, 0.0, 0.0, 0.0);
@@ -8669,7 +8669,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							PlayerData[playerid][pThirst] += 15;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 							ApplyAnimation(playerid, "VENDING", "VEND_DRINK2_P", 4.1, 0, 0, 0, 0, 0, 1);
@@ -8683,7 +8683,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8693,7 +8693,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8704,7 +8704,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							PlayerData[playerid][pMaskID] = PlayerData[playerid][pID]+random(90000) + 10000;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 							Log_Write("Logs/maskid_log.txt", "[%s] %s(%s) new maskid: %d", ReturnDate(), GetName(playerid, false), GetUsername(playerid), PlayerData[playerid][pMaskID]);
@@ -8715,7 +8715,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8725,7 +8725,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;							
 						}
@@ -8735,7 +8735,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}
@@ -8745,7 +8745,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}
@@ -8755,7 +8755,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}
@@ -8802,7 +8802,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8812,7 +8812,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8820,7 +8820,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						{
 							PlayerData[playerid][pCredit] += 50;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8830,7 +8830,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8849,7 +8849,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							GiveWeaponToPlayer(playerid, WEAPON_BAT, 1, 500);
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8866,7 +8866,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							GiveWeaponToPlayer(playerid, WEAPON_FLOWER, 1, 500);
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;		
 						}
@@ -8882,7 +8882,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 							GiveWeaponToPlayer(playerid, WEAPON_POOLSTICK, 1, 500);
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}
@@ -8890,7 +8890,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							
 							Inventory_Set(playerid, "Cigarettes", 19896, 20);
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8902,7 +8902,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
 						}
@@ -8911,7 +8911,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							if(Inventory_Add(playerid, "Reinforced Engine Block", 19917, 1) == -1)
 								return 1;
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;		
 						}
@@ -8921,7 +8921,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 								return 1;
 
 							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price);
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}

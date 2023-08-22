@@ -199,7 +199,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -1500);
+			GiveMoney(playerid, -1500, "Membeli Cargo Electonic");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Electronic Cargo seharga {00FF00}$15.0");
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1826.1199,1455.6929,7.1875))
@@ -212,7 +212,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -1500);
+			GiveMoney(playerid, -1500, "Membeli Cargo Spare Parts");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Spareparts Cargo seharga {00FF00}$15.0");			
 		}	
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1790.5422, 1429.7609, 7.1841))
@@ -225,7 +225,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -1500);
+			GiveMoney(playerid, -1500, "Membeli Cargo Clothes");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Clothes Cargo seharga {00FF00}$15.0");			
 		}		
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1835.1539, 1429.7806, 7.1841))
@@ -238,7 +238,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -2000);
+			GiveMoney(playerid, -2000, "Membeli Cargo 24/7");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli 24/7 Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1741.8209, 1429.7811, 7.1875))
@@ -251,7 +251,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -2000);
+			GiveMoney(playerid, -2000, "Membeli Cargo Fast Food");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Fast Food Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1886.6575,1444.1444,7.1842))
@@ -264,7 +264,7 @@ CMD:cargo(playerid, params[])
 			if(id == -1)
 				return SendErrorMessage(playerid, "Server tidak dapat membuat lebih banyak cargo.");
 
-			GiveMoney(playerid, -2000);
+			GiveMoney(playerid, -2000, "Membeli Cargo Equipment");
 			SendClientMessage(playerid, COLOR_SERVER, "(Cargo) {FFFFFF}Kamu berhasil membeli Equipment Cargo seharga {00FF00}$20.0");			
 		}
 		else if(IsPlayerInRangeOfPoint(playerid, 3.0, -1304.1875,2491.8530,87.1437)) {

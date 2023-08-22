@@ -2114,7 +2114,7 @@ task Dearby_EventTimer[1000]()
 				ResetPlayerMoney(i);
 				GivePlayerMoney(i, PlayerData[i][pMoney]);
 
-				GiveMoney(i, dearby_EventData[evPrice]);
+				GiveMoney(i, dearby_EventData[evPrice], "Event Dearby as Time Out");
 				SetWeapons(i);
 
 				SendClientMessageEx(i, COLOR_SERVER, "EVENT: "YELLOW"Tidak ada pemenang, kamu mendapatkan {33aa33}$%s "YELLOW"karena sudah mengikuti mode ini.", FormatNumber(dearby_EventData[evPrice]));
@@ -2179,7 +2179,7 @@ ptask Dearby_EventCountdown[1000](playerid)
 				ResetPlayerMoney(playerid);
 				GivePlayerMoney(playerid, PlayerData[playerid][pMoney]);
 
-				GiveMoney(playerid, dearby_EventData[evPrice]);
+				GiveMoney(playerid, dearby_EventData[evPrice], "Event Dearby as Eliminated");
 				SetWeapons(playerid);
 
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "RED"%s "YELLOW"has been eliminated. (Blow up engine)", GetName(playerid));
@@ -2479,12 +2479,12 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
 							if (evTeam[id] == tdm_EventData[eventWinner]) {
 
-								GiveMoney(id, tdm_EventData[eventPrice]*2);
+								GiveMoney(id, tdm_EventData[eventPrice]*2, "Event Team Deathmatch as Winner");
 								SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Tim kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {33aa33}$%s!", FormatNumber(tdm_EventData[eventPrice]*2));
 							}
 							else {
 
-								GiveMoney(id, tdm_EventData[eventPrice]);
+								GiveMoney(id, tdm_EventData[eventPrice], "Event Team Deathmatch as Participant");
 								SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {33aa33}$%s", FormatNumber(tdm_EventData[eventPrice]));
 							}
 
@@ -2563,10 +2563,10 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 
 					if (id != dm_EventData[eventWinner]) {
 
-						GiveMoney(id, dm_EventData[eventPrice]);
+						GiveMoney(id, dm_EventData[eventPrice], "Event Deathmatch as Participant");
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
 					}
-					else GiveMoney(id, dm_EventData[eventPrice]+10000);
+					else GiveMoney(id, dm_EventData[eventPrice]+10000, "Event Deathmatch as Winner");
 				
 					TogglePlayerSpectating(id, 1);
 					SetTimerEx("Event_RespawnPlayer", 4000, false, "d", id);
@@ -2695,11 +2695,11 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 				foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
 
 					if (evTeam[id] == zombie_EventData[eventWinner]) {
-						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						GiveMoney(id, zombie_EventData[eventPrice]+10000, "Event Zombie as Winner");
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
 					}
 					else {
-						GiveMoney(id, zombie_EventData[eventPrice]);
+						GiveMoney(id, zombie_EventData[eventPrice], "Event Zombie as Participant");
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
 					}
 					
@@ -2791,7 +2791,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 					ResetPlayerWeapons(i);
 					SetWeapons(i);
 
-					GiveMoney(i, tdm_EventData[eventPrice]),
+					GiveMoney(i, tdm_EventData[eventPrice], "Event Team Deathmatch as Server Force End"),
 					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
@@ -2864,7 +2864,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 					ResetPlayerWeapons(i);
 					SetWeapons(i);
 
-					GiveMoney(i, dm_EventData[eventPrice]),
+					GiveMoney(i, dm_EventData[eventPrice], "Event Deathmatch as Server Force End"),
 					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(dm_EventData[eventPrice]));
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
@@ -2933,7 +2933,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 					SetWeapons(i);
 					DisablePlayerRaceCheckpoint(i);
 
-					GiveMoney(i, parachute_EventData[eventPrice]),
+					GiveMoney(i, parachute_EventData[eventPrice], "Event Parachute as Server Force End"),
 					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
@@ -3004,7 +3004,7 @@ hook OnPlayerDeath(playerid, killerid, reason) {
 					ResetPlayerWeapons(i);
 					SetWeapons(i);
 
-					GiveMoney(i, zombie_EventData[eventPrice]),
+					GiveMoney(i, zombie_EventData[eventPrice], "Event Zombie as Server Force End"),
 					SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(zombie_EventData[eventPrice]));
 					SetPVarInt(i, "IsAtEvent", -1);
 				}
@@ -3078,7 +3078,7 @@ hook OnPlayerSpawn(playerid) {
 				DisableRemoteVehicleCollisions(i, 0);
 				DisablePlayerRaceCheckpoint(i);
 
-				GiveMoney(i, race_EventData[evPrice]),
+				GiveMoney(i, race_EventData[evPrice], "Event Race as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(race_EventData[evPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3341,7 +3341,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				DisableRemoteVehicleCollisions(i, 0);
 				DisablePlayerRaceCheckpoint(i);
 
-				GiveMoney(i, race_EventData[evPrice]),
+				GiveMoney(i, race_EventData[evPrice], "Event Race as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(race_EventData[evPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3404,7 +3404,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				ResetPlayerWeapons(i);
 				SetWeapons(i);
 
-				GiveMoney(i, tdm_EventData[eventPrice]),
+				GiveMoney(i, tdm_EventData[eventPrice], "Event Team Deathmatch as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(tdm_EventData[eventPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3452,7 +3452,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				ResetPlayerWeapons(i);
 				SetWeapons(i);
 
-				GiveMoney(i, dm_EventData[eventPrice]),
+				GiveMoney(i, dm_EventData[eventPrice], "Event Deathmatch as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(dm_EventData[eventPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3499,7 +3499,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				SetWeapons(i);
 				DisablePlayerRaceCheckpoint(i);
 
-				GiveMoney(i, parachute_EventData[eventPrice]),
+				GiveMoney(i, parachute_EventData[eventPrice], "Event Parachute as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(parachute_EventData[eventPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3548,7 +3548,7 @@ hook OnPlayerDisconnectEx(playerid) {
 				ResetPlayerWeapons(i);
 				SetWeapons(i);
 
-				GiveMoney(i, zombie_EventData[eventPrice]),
+				GiveMoney(i, zombie_EventData[eventPrice], "Event Zombie as Server Force End"),
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: Server has force end event, there is only you in this event, you won "GREEN"$%s", FormatNumber(zombie_EventData[eventPrice]));
 				SetPVarInt(i, "IsAtEvent", -1);
 			}
@@ -3948,34 +3948,34 @@ hook OnPlayerEnterRaceCP(playerid) {
 
 					case 1: {
 
-						GiveMoney(playerid, race_EventData[evPrice]+1000000),
+						GiveMoney(playerid, race_EventData[evPrice]+1000000, "Event Race as Winner 1st"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"1st | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000000));
 					}
 					case 2: {
 
-						GiveMoney(playerid, race_EventData[evPrice]+5000),
+						GiveMoney(playerid, race_EventData[evPrice]+5000, "Event Race as Winner 2nd"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"2nd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+5000));
 					}
 					case 3: {
 
 						race_EventData[evTime] = 30;
 
-						GiveMoney(playerid, race_EventData[evPrice]+3000),
+						GiveMoney(playerid, race_EventData[evPrice]+3000, "Event Race as Winner 3rd"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"3rd | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+3000));
 					}
 					case 4: {
 
-						GiveMoney(playerid, race_EventData[evPrice]+2000),
+						GiveMoney(playerid, race_EventData[evPrice]+2000, "Event Race as Winner 4th"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"4th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+2000));
 					}
 					case 5: {
 
-						GiveMoney(playerid, race_EventData[evPrice]+1000),
+						GiveMoney(playerid, race_EventData[evPrice]+1000, "Event Race as Winner 5th"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish "RED"5th | {009000}$%s", GetName(playerid), FormatNumber(race_EventData[evPrice]+1000));
 					}
 					default: {
 
-						GiveMoney(playerid, race_EventData[evPrice]),
+						GiveMoney(playerid, race_EventData[evPrice], "Event Race as Participant"),
 						SendEventMessage(EventType, COLOR_SERVER, "EVENT: "GREEN"%s "YELLOW"telah mencapai garis finish!", GetName(playerid));
 					}
 				}
@@ -4031,25 +4031,25 @@ hook OnPlayerEnterRaceCP(playerid) {
 
 			case 1: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]);
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice], "Event Parachute as Winner 1st");
 				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%dst "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			case 2: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-2500);
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-2500, "Event Parachute as Winner 2nd");
 				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-2500));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%dnd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			case 3: {
 
-				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-5000);
+				GiveMoney(playerid, parachute_EventData[eventWinnerPrice]-5000, "Event Parachute as Winner 3nd");
 				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventWinnerPrice]-5000));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%drd "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
 			default: {
 
-				GiveMoney(playerid, parachute_EventData[eventPrice]);
+				GiveMoney(playerid, parachute_EventData[eventPrice], "Event Parachute as Participant");
 				SendClientMessageEx(playerid, COLOR_SERVER, "EVENT: "YELLOW"You have earned {009000}$%s "YELLOW"for participate this mode!", FormatNumber(parachute_EventData[eventPrice]));
 				SendEventMessage(EventType, COLOR_SERVER, "EVENT: "PURPLE"%s "YELLOW"has finish at {009000}%dth "YELLOW"on checkpoint destination.", GetName(playerid), parachute_EventData[eventWinner]);
 			}
@@ -5576,7 +5576,7 @@ task Zombie_EventTimer[60000]()
 
                 foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6) {
 
-                    GiveMoney(id, zombie_EventData[eventPrice]);
+                    GiveMoney(id, zombie_EventData[eventPrice], "Event Zombie as Participant");
                     SendClientMessage(id, COLOR_SERVER, "EVENT: "WHITE"Event was ended premature, not equal participant");
                     
                     TogglePlayerSpectating(id, 1);
@@ -5613,11 +5613,11 @@ task Zombie_EventTimer[60000]()
                 foreach (new id : Player) if (GetPVarInt(id, "IsAtEvent") == 6 && zombie_EventData[eventWinner] > 0) {
 
                     if (evTeam[id] == zombie_EventData[eventWinner]) {
-						GiveMoney(id, zombie_EventData[eventPrice]+10000);
+						GiveMoney(id, zombie_EventData[eventPrice]+10000, "Event Zombie as Winner");
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah memenangkan mode ini dan mendapatkan hadiah sebesar {009000}$%s", FormatNumber(dm_EventData[eventPrice]+10000));
 					}
                     else {
-						GiveMoney(id, zombie_EventData[eventPrice]);
+						GiveMoney(id, zombie_EventData[eventPrice], "Event Zombie as Participant");
 						SendClientMessageEx(id, COLOR_SERVER, "EVENT: "YELLOW"Kamu telah berpartisipasi dalam mode ini dan mendapatkan {009000}$%s", FormatNumber(dm_EventData[eventPrice]));
 					}
                     

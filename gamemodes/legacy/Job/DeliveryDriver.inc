@@ -87,7 +87,7 @@ hook OnPlayerEnterCheckpoint(playerid) {
             VehicleData[PlayerData[playerid][pRumpoVehicle]][vLoadedCrate] = 0;
 
             new payment = GetPVarInt(playerid, "BoxPayment");
-            GiveMoney(playerid, payment);
+            GiveMoney(playerid, payment, "Delivery Crate Rumpo Sidejob");
             SendServerMessage(playerid, "Kamu berhasil menyelesaikan pekerjaan dan mendapatkan "GREEN"$%s", FormatNumber(payment));
             DisablePlayerCheckpoint(playerid);
             

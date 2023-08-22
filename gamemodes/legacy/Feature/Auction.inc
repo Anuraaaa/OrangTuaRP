@@ -722,7 +722,7 @@ function AuctionTimer()
                     if(!strcmp(AuctionHighest, GetName(id), true))
                     {
                         SendClientMessageEx(id, X11_TURQUOISE_1, "AUCTION: "WHITE"Anda telah memenangkan %s - "GREEN"$%s", AuctionLelang, FormatNumber(AuctionStart));
-                        GiveMoney(id, -AuctionStart);
+                        GiveMoney(id, -AuctionStart, "Auction Winner");
                     }
                 }
                 Auction_Reset();
@@ -822,7 +822,7 @@ CMD:auction(playerid, params[])
         if(GetMoney(playerid) < 100) 
             return SendErrorMessage(playerid, "Anda tidak memiliki modal uang $1.00 untuk mengikuti auction ini.");
 
-        GiveMoney(playerid, -100);
+        GiveMoney(playerid, -100, "Auction Join");
         SendClientMessageEx(playerid, X11_TURQUOISE_1, "AUCTION: "WHITE"Gunakan perintah "YELLOW"'/auction bid' "WHITE"untuk memenangkan auction.");
 
         FollowAuction[playerid] = 1;

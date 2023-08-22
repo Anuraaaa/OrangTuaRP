@@ -99,7 +99,7 @@ CMD:ad(playerid, params[])
 	if(GetMoney(playerid) < strlen(params)*50)
 	    return SendErrorMessage(playerid, "You need $%s to make advertisement", FormatNumber(strlen(params)*50));
 
-	GiveMoney(playerid, -strlen(params)*50);
+	GiveMoney(playerid, -strlen(params)*50, "Advertisement");
 	new time = 1;
 	Advert_Create(PlayerData[playerid][pPhoneNumber], params, PlayerData[playerid][pID], GetName(playerid, false), time);
 	SendClientMessageEx(playerid, COLOR_SERVER, "(Advertisement) {FFFFFF}Your advertisement will be appear %d minutes from now.", time);

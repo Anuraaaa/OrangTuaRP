@@ -240,7 +240,7 @@ CMD:buyweed(playerid, params[])
 				
 	Inventory_Add(playerid, "Weed Seed", 1279, amount);
 	SendClientMessageEx(playerid, COLOR_SERVER, "(Drugs) {FFFFFF}Kamu berhasil membeli {FF0000}%d Weed seeds {FFFFFF}seharga {00FF00}$%s", amount, FormatNumber(amount*500));
-	GiveMoney(playerid, -amount*500);
+	GiveMoney(playerid, -amount*500, sprintf("Membeli %d Weed Seed", amount));
 	return 1;
 }
 

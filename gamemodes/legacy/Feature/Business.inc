@@ -834,7 +834,7 @@ CMD:biz(playerid, params[])
                 format(BizData[i][bizOwnerName], MAX_PLAYER_NAME, GetName(playerid));
                 SendServerMessage(playerid, "Kamu berhasil membeli Business ini seharga {00FF00}$%s", FormatNumber(BizData[i][bizPrice]));
 				LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has purchased business (ID: %d), name: %s, price: $%s, type: %s", ReturnDate(), GetName(playerid), GetUsername(playerid), i, BizData[i][bizName], FormatNumber(BizData[i][bizPrice]), GetBizType(BizData[i][bizType])));
-                GiveMoney(playerid, -BizData[i][bizPrice]);
+                GiveMoney(playerid, -BizData[i][bizPrice], "Membeli Business");
                 Business_Refresh(i);
                 Business_Save(i);
 

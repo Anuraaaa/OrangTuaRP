@@ -820,7 +820,7 @@ CMD:flat(playerid, params[]) {
 			if(GetMoney(playerid) < FlatData[index][flatPrice])
 				return SendErrorMessage(playerid, "Kamu tidak memiliki cukup uang untuk membeli flat ini.");
 
-			GiveMoney(playerid, -FlatData[index][flatPrice]);
+			GiveMoney(playerid, -FlatData[index][flatPrice], "Membeli Flat");
 			SendServerMessage(playerid, "Kamu berhasil membeli Flat dengan type %s seharga "GREEN"$%s", Flat_ReturnType(FlatData[index][flatType]), FormatNumber(FlatData[index][flatPrice]));
 			LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) has purchased flat (ID: %d), price: $%s, type: %s", ReturnDate(), GetName(playerid), GetUsername(playerid), FormatNumber(FlatData[index][flatPrice]), Flat_ReturnType(FlatData[index][flatType])));
 			SendServerMessage(playerid, "Jangan lupa untuk membayar pajak Flat setiap 14 hari!");

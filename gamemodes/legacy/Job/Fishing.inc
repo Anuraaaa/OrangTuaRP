@@ -235,7 +235,7 @@ CMD:buybait(playerid, params[])
 		return 1;
 
 	SendServerMessage(playerid, "You have successfully purchase %d Bait for {00FF00}$%s", amount, FormatNumber(amount * 50));
-	GiveMoney(playerid, -amount * 50);
+	GiveMoney(playerid, -amount * 50, sprintf("Membeli %d Bait", amount));
 	return 1;
 }
 
