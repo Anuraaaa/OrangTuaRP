@@ -32,15 +32,17 @@ CheckAccount(playerid)
 
 function OnCheckBanned(playerid) {
 	if(cache_num_rows()) {
-		new string[451], date[26], admin[24], ip[26];
+		new string[451], date[26], admin[24], ip[26], reason[256];
 		cache_get_value_name(0, "Admin", admin);
 		cache_get_value_name(0, "Date", date);
 		cache_get_value_name(0, "IP", ip);
+		cache_get_value_name(0, "Reason", reason);
 
 		strcat(string, sprintf(""WHITE"Akun anda "GREY"(%s) "WHITE"telah dibanned dari server.\n\n", GetName(playerid)));
 		strcat(string, sprintf(""GREY"Username: "WHITE"%s\n", GetName(playerid)));
 		strcat(string, sprintf(""GREY"IP Address: "WHITE"%s\n", ip));
 		strcat(string, sprintf(""GREY"Admin yang menindak: "WHITE"%s\n", admin));
+		strcat(string, sprintf(""GREY"Alasan: "WHITE"%s\n", reason));
 		strcat(string, sprintf(""GREY"Dibanned pada: "WHITE"%s\n\n\n", date));
 		strcat(string, ""WHITE"Untuk membuka blokir/banned pada akun anda dapat dilakukan dengan melakukan...\n");
 		strcat(string, "unbanned appeals pada discord Orang Tua Roleplay");
