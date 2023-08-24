@@ -1198,7 +1198,7 @@ CMD:accept(playerid, params[])
 		SendServerMessage(playerid, "Kamu menerima tawaran kunci kendaraan %s dari %s.", GetVehicleName(vehicleid), ReturnName(sellerid));
 		SendServerMessage(sellerid, "%s telah menerima tawaran kunci %s, sekarang kendaraan tersebut miliknya.", ReturnName(playerid), GetVehicleName(vehicleid));
 
-		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has accept vehicle %s, modelid: %d, from: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), ReturnVehicleModelName(vehicleid), GetVehicleModel(vehicleid), GetName(sellerid), GetUsername(sellerid), ReturnIP(sellerid)));
+		LogProperty_DCChannel(Str_Format("[%s]\nPROPERTY: %s (%s) [%s] has accept vehicle %s, modelid: %d, from: %s (%s) [%s]", ReturnDate(), GetName(playerid), GetUsername(playerid), ReturnIP(playerid), ReturnVehicleModelName(GetVehicleModel(vehicleid)), GetVehicleModel(vehicleid), GetName(sellerid), GetUsername(sellerid), ReturnIP(sellerid)));
 		Log_Write("Logs/give_veh.txt", "[%s] %s(%s) accept vehicle(%s) from %s(%s)", ReturnDate(), GetName(playerid,false), GetUsername(playerid), GetVehicleName(vehicleid), GetName(sellerid), GetUsername(sellerid));
 
 		PlayerData[playerid][pVehicleOffer] = -1;
