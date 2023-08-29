@@ -917,13 +917,6 @@ public OnPlayerConnect(playerid)
 {
 	LewatClass[playerid] = false;
 
-    if((GetTickCount() - PlayerData[playerid][pLeaveTime]) < 3000 && !strcmp(ReturnIP(playerid), UcpData[playerid][uLeaveIP]))
-    {
-        SendAdminMessage(X11_TOMATO_1, "AdmWarn: %s (%s) was kicked for possible rejoin hacks.", ReturnName(playerid), ReturnIP(playerid));
-        KickEx(playerid);
-        return 1;
-    }
-
 	ResetPlayerStatistics(playerid);
 	PreloadAnimations(playerid);
 	ResetFlyModeData(playerid);
@@ -3750,8 +3743,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        new total = GetPVarInt(playerid, "FishPrice");
 
 			PlayerData[playerid][pFishDelay] = 1800;
-			AddSalary(playerid, "Sell Fish", total);
-			SendClientMessageEx(playerid, COLOR_SERVER, "(Fish) {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}on your {FFFF00}/salary", FormatNumber(total));
+			GiveMoney(playerid, total, "Sell Fish");
+			SendClientMessageEx(playerid, COLOR_SERVER, "(Fish) {FFFFFF}You have sold all the fish and earn {009000}$%s {FFFFFF}", FormatNumber(total));
 			DeletePVar(playerid, "FishPrice");
 
 	        for(new i = 0; i < MAX_FISH; i++)
@@ -9235,7 +9228,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return ShowPlayerDialog(playerid, DIALOG_MAKECHAR, DIALOG_STYLE_INPUT, "Character Name", "Silahkan masukan nama karaktermu:\n(note) nama karakter harus nama Roleplay!", "Submit", "Cancel");
 
 			new characterQuery[178];
-			mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `characters` WHERE `Name` = '%s'", inputtext);
+			mysql_format(sqlcon, characterQuery, sizeof(characterQuery), "SELECT * FROM `characters` WHERE `Name` = '%e'", inputtext);
 			mysql_tquery(sqlcon, characterQuery, "InsertPlayerName", "ds", playerid, inputtext);
 
 		    format(PlayerData[playerid][pUCP], 22, GetName(playerid));
