@@ -53,7 +53,7 @@ SetSweeperPoint(playerid) {
 		SweeperIndex[playerid] = 0;
 		SetVehicleToRespawn(vid);
 		VehicleData[vid][vFuel] = 10.0;
-		AddSalary(playerid, "Street Sweeper", salarySweeper);
+		GiveMoney(playerid, salarySweeper, "Salary Sweeper");
 		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s", FormatNumber(salarySweeper));
 		DisablePlayerCheckpoint(playerid);
 		PlayerData[playerid][pSweeperDelay] = 900;

@@ -299,8 +299,8 @@ SetBusCheckpointRoute(playerid)
 			vehicleid = GetPlayerVehicleID(playerid);
 			
 		PlayerData[playerid][pBusDelay] = 900;
-		AddSalary(playerid, "Bus SideJob", salaryBus);
-		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s {FFFFFF}pada pending salary.", FormatNumber(salaryBus));
+		GiveMoney(playerid, salaryBus, "Bus SideJob");
+		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s.", FormatNumber(salaryBus));
 		
 		VehicleData[vehicleid][vFuel] = 10.0;
 		SetVehicleToRespawn(vehicleid);

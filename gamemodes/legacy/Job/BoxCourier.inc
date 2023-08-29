@@ -111,8 +111,8 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 }
 hook OnPlayerEnterCheckpoint(playerid) {
     if(IsPlayerInRangeOfPoint(playerid,  5.0, -1945.0291,-1085.2745,30.7779) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER && IsCourierVehicle(GetPlayerVehicleID(playerid))  && g_CourierState[playerid] == COURIER_STATE_ONFINISH) {
-        AddSalary(playerid, "Box Courier", g_TotalSalary[playerid]);
-        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Box Courier) "WHITE"Kamu telah menyelesaikan pekerjaan! "GREEN"$%s "WHITE"dimasukkan pada pending salary.",  FormatNumber(g_TotalSalary[playerid]));
+        GiveMoney(playerid, g_TotalSalary[playerid], "Box Courier");
+        SendClientMessageEx(playerid, X11_LIGHTBLUE, "(Box Courier) "WHITE"Kamu telah menyelesaikan pekerjaan, dan telah mendapatkan "GREEN"$%s "WHITE".",  FormatNumber(g_TotalSalary[playerid]));
         g_TotalSalary[playerid] = 0;
         g_CarryBox[playerid] =  false;
         g_CourierState[playerid] = COURIER_STATE_NOT_STARTED;

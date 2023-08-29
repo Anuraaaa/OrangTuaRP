@@ -354,7 +354,7 @@ function TrashDone(playerid)
 	cash = LoadedTrash[vehicleid] * salaryTrashmaster;
 	SendClientMessage(playerid, COLOR_JOB, string);
 	format(reson, sizeof reson, "Trashmaster (%d Trash bag)", LoadedTrash[vehicleid]);
-	AddSalary(playerid, reson, cash);
+	GiveMoney(playerid, cash, reson);
 	FactoryCurrent += LoadedTrash[vehicleid];
 	LoadedTrash[vehicleid] = 0;
 	Trash_ShowCapacity(playerid);

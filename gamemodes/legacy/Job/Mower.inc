@@ -71,7 +71,7 @@ SetMowerCheckpoint(playerid) {
 		MowerIndex[playerid] = 0;
 		SetVehicleToRespawn(vid);
 		VehicleData[vid][vFuel] = 10.0;
-		AddSalary(playerid, "Mower", salaryMower);
+		GiveMoney(playerid, salaryMower, "Mower");
 		SendClientMessageEx(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu berhasil menyelesaikan pekerjaan dan mendapatkan {00FF00}$%s", FormatNumber(salaryMower));
 		DisablePlayerCheckpoint(playerid);
 		PlayerData[playerid][pMowerDelay] = 900;
