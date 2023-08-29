@@ -8704,36 +8704,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						}
 						if(listitem == 3)
 						{
-							if(Inventory_Add(playerid, "Rolling Paper", 19873, 1) == -1)
-								return 1;
-
-							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
-							BizData[bid][bizStock]--;
-							BizData[bid][bizVault] += price;
-						}
-						if(listitem == 4)
-						{
-							if(Inventory_Add(playerid, "Axe", 19631, 1) == -1)
-								return 1;
-
-							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
-							BizData[bid][bizStock]--;
-							BizData[bid][bizVault] += price;							
-						}
-						if(listitem == 5)
-						{
-							if(Inventory_Add(playerid, "Fish Rod", 18632, 1) == -1)
-								return 1;
-
-							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
-							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
-							BizData[bid][bizStock]--;
-							BizData[bid][bizVault] += price;	
-						}
-						if(listitem == 6)
-						{
 							if(Inventory_Add(playerid, "Fuel Can", 1650, 1) == -1)
 								return 1;
 
@@ -8742,7 +8712,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;	
 						}
-						if(listitem == 7)
+						if(listitem == 4)
 						{
 							if(Inventory_Add(playerid, "Bandage", 1580, 1) == -1)
 								return 1;
@@ -8886,6 +8856,36 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
 							BizData[bid][bizStock]--;
 							BizData[bid][bizVault] += price;
+						}
+						if(listitem == 4)
+						{
+							if(Inventory_Add(playerid, "Rolling Paper", 19873, 1) == -1)
+								return 1;
+
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;
+						}
+						if(listitem == 5)
+						{
+							if(Inventory_Add(playerid, "Axe", 19631, 1) == -1)
+								return 1;
+
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;							
+						}
+						if(listitem == 6)
+						{
+							if(Inventory_Add(playerid, "Fish Rod", 18632, 1) == -1)
+								return 1;
+
+							cmd_ame(playerid, sprintf("* %s has paid $%s and purchased a %s.", ReturnName(playerid), FormatNumber(price), prodname));
+							GiveMoney(playerid, -price, sprintf("Membeli Produk Bisnis %s", prodname));
+							BizData[bid][bizStock]--;
+							BizData[bid][bizVault] += price;	
 						}
 					}
 					case 6: {

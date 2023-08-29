@@ -148,7 +148,7 @@ SetProductName(playerid)
 		}
 		case 2:
 		{
-		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
                 ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -158,13 +158,7 @@ SetProductName(playerid)
 	            ProductName[bid][3],
 	            FormatNumber(BizData[bid][bizProduct][3]),
 	        	ProductName[bid][4],
-	            FormatNumber(BizData[bid][bizProduct][4]),
-	        	ProductName[bid][5],
-	            FormatNumber(BizData[bid][bizProduct][5]),
-	        	ProductName[bid][6],
-	            FormatNumber(BizData[bid][bizProduct][6]),
-	        	ProductName[bid][7],
-	            FormatNumber(BizData[bid][bizProduct][7])
+	            FormatNumber(BizData[bid][bizProduct][4])
 			);
 		}
 		case 3:
@@ -190,7 +184,7 @@ SetProductName(playerid)
 			);
 		}
 		case 5: {
-		    format(string, sizeof(string), "Product\tPrice\n%s (Bat)\t$%s\n%s (Flower)\t$%s\n%s (Pool Cue)\t$%s\n%s (Cigarettes)\t$%s",
+		    format(string, sizeof(string), "Product\tPrice\n%s (Bat)\t$%s\n%s (Flower)\t$%s\n%s (Pool Cue)\t$%s\n%s (Cigarettes)\t$%s\n%s (Rolling Paper)\t$%s\n%s (Axe)\t$%s\n%s (Fish Rod)\t$%s",
                 ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -198,7 +192,13 @@ SetProductName(playerid)
 	            ProductName[bid][2],
 	            FormatNumber(BizData[bid][bizProduct][2]),
 	            ProductName[bid][3],
-	            FormatNumber(BizData[bid][bizProduct][3])
+	            FormatNumber(BizData[bid][bizProduct][3]),
+	            ProductName[bid][4],
+	            FormatNumber(BizData[bid][bizProduct][4]),
+	            ProductName[bid][5],
+	            FormatNumber(BizData[bid][bizProduct][5]),
+	            ProductName[bid][6],
+	            FormatNumber(BizData[bid][bizProduct][6])
 			);
 		}
 		case 6: {
@@ -263,11 +263,8 @@ Business_Create(playerid, type, price)
 					format(ProductName[i][0], 24, "Snack");
 					format(ProductName[i][1], 24, "Mineral Water");
 					format(ProductName[i][2], 24, "Mask");
-					format(ProductName[i][3], 24, "Rolling Paper");
-					format(ProductName[i][4], 24, "Axe");
-					format(ProductName[i][5], 24, "Fish Rod");
-					format(ProductName[i][6], 24, "Fuel Can");
-					format(ProductName[i][7], 24, "Bandage");
+					format(ProductName[i][3], 24, "Fuel Can");
+					format(ProductName[i][4], 24, "Bandage");
 				}
 				else if(type == 3)
 				{
@@ -298,6 +295,9 @@ Business_Create(playerid, type, price)
 					format(ProductName[i][1], 24, "Flower");
 					format(ProductName[i][2], 24, "Pool Cue");
 					format(ProductName[i][3], 24, "Pack of Cigarettes");
+					format(ProductName[i][4], 24, "Rolling Paper");
+					format(ProductName[i][5], 24, "Axe");
+					format(ProductName[i][6], 24, "Fish Rod");
 				}
 				else if(type == 6) {
                 	BizData[i][bizInt][0] = 640.2902;
@@ -646,7 +646,7 @@ SetProductPrice(playerid)
 		}
 		case 2:
 		{
-		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
                 ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -656,13 +656,7 @@ SetProductPrice(playerid)
 	            ProductName[bid][3],
 	            FormatNumber(BizData[bid][bizProduct][3]),
 	        	ProductName[bid][4],
-	            FormatNumber(BizData[bid][bizProduct][4]),
-	        	ProductName[bid][5],
-	            FormatNumber(BizData[bid][bizProduct][5]),
-	        	ProductName[bid][6],
-	            FormatNumber(BizData[bid][bizProduct][6]),
-	        	ProductName[bid][7],
-	            FormatNumber(BizData[bid][bizProduct][7])
+	            FormatNumber(BizData[bid][bizProduct][4])
 			);
 		}
 		case 3:
@@ -688,7 +682,7 @@ SetProductPrice(playerid)
 			);
 		}
 		case 5: {
-			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
 				ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -696,7 +690,13 @@ SetProductPrice(playerid)
 				ProductName[bid][2],
 				FormatNumber(BizData[bid][bizProduct][2]),
 				ProductName[bid][3],
-				FormatNumber(BizData[bid][bizProduct][3])
+				FormatNumber(BizData[bid][bizProduct][3]),
+				ProductName[bid][4],
+				FormatNumber(BizData[bid][bizProduct][4]),
+				ProductName[bid][5],
+				FormatNumber(BizData[bid][bizProduct][5]),
+				ProductName[bid][6],
+				FormatNumber(BizData[bid][bizProduct][6])
 			);
 		}
 		case 6: {
@@ -735,7 +735,7 @@ ShowBusinessMenu(playerid)
 		}
 		case 2://anjime
 		{
-		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+		    format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
                 ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -745,13 +745,7 @@ ShowBusinessMenu(playerid)
 	            ProductName[bid][3],
 	            FormatNumber(BizData[bid][bizProduct][3]),
 	        	ProductName[bid][4],
-	            FormatNumber(BizData[bid][bizProduct][4]),
-	        	ProductName[bid][5],
-	            FormatNumber(BizData[bid][bizProduct][5]),
-	        	ProductName[bid][6],
-	            FormatNumber(BizData[bid][bizProduct][6]),
-	        	ProductName[bid][7],
-	            FormatNumber(BizData[bid][bizProduct][7])
+	            FormatNumber(BizData[bid][bizProduct][4])
 			);
 		}
 		case 3:
@@ -777,7 +771,7 @@ ShowBusinessMenu(playerid)
 			);
 		}
 		case 5: {
-			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
+			format(string, sizeof(string), "Product\tPrice\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s\n%s\t$%s",
 				ProductName[bid][0],
 				FormatNumber(BizData[bid][bizProduct][0]),
 				ProductName[bid][1],
@@ -785,7 +779,13 @@ ShowBusinessMenu(playerid)
 				ProductName[bid][2],
 				FormatNumber(BizData[bid][bizProduct][2]),
 				ProductName[bid][3],
-				FormatNumber(BizData[bid][bizProduct][3])
+				FormatNumber(BizData[bid][bizProduct][3]),
+				ProductName[bid][4],
+				FormatNumber(BizData[bid][bizProduct][4]),
+				ProductName[bid][5],
+				FormatNumber(BizData[bid][bizProduct][5]),
+				ProductName[bid][6],
+				FormatNumber(BizData[bid][bizProduct][6])
 			);
 		}
 		case 6: {
