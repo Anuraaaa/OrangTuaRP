@@ -850,6 +850,11 @@ public OnGameModeExit()
 	return 1;
 }
 
+public OnPlayerFinishedDownloading(playerid, virtualworld) 
+{
+	return 1;
+}
+
 public OnPlayerCommandReceived(playerid, cmdtext[])
 {
 	if(!IsPlayerSpawned(playerid))

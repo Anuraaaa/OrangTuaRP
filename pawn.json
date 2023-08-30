@@ -9,7 +9,7 @@
 	"output": "gamemodes/OTRP.amx",
 	"local": true,
 	"runtime": {
-		"version": "0.3.7",
+		"version": "0.3.DL",
 		"mode": "server",
 		"rcon_password": "password",
 		"port": 7777,
@@ -49,7 +49,7 @@
 	"runtimes": [
 		{
 			"name": "dev",
-			"version": "0.3.7",
+			"version": "0.3.DL",
 			"mode": "server",
 			"echo": "Loading server configuration...",
 			"gamemodes": [
