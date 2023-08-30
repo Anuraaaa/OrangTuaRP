@@ -309,22 +309,6 @@ SetBusCheckpoint(playerid, mode)
 	return 1;
 }
 
-RespawnPlayerBusVehicle(playerid)
-{
-	currentBRoute[playerid] = 0;
-
-    VehicleData[PlayerData[playerid][pLastVehicleID]][vFuel] = GetVehicleFuelMax(GetVehicleModel(PlayerData[playerid][pLastVehicleID]));
-
-	if((IsBusVehicle(PlayerData[playerid][pLastVehicleID]) || IsBus2Vehicle(PlayerData[playerid][pLastVehicleID])) && GetVehicleDriver(PlayerData[playerid][pLastVehicleID]) == INVALID_PLAYER_ID)
-		SetVehicleToRespawn(PlayerData[playerid][pLastVehicleID]);
-		
-    RepairVehicle(PlayerData[playerid][pLastVehicleID]);
-
-    DisablePlayerRaceCheckpoint(playerid);
-    StopPlayerWorkInBus(playerid);
-    return 1;
-}
-
 SetBusCheckpointRoute(playerid)
 {
 	currentBRoute[playerid] ++;
