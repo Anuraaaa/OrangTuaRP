@@ -2,7 +2,8 @@
 
 new
     bool:OnMower[MAX_PLAYERS] = {false, ...},
-    MowerIndex[MAX_PLAYERS] = {0, ...};
+    MowerIndex[MAX_PLAYERS] = {0, ...},
+    MowerWarn[MAX_PLAYERS] = {0, ...};
 
 
 enum E_MOWER_CP {
@@ -44,6 +45,7 @@ IsMowerVehicle(vehicleid)
 hook OnPlayerConnect(playerid) {
     OnMower[playerid] = false;
     MowerIndex[playerid] = 0;
+    MowerWarn[playerid] = 0;
 }
 
 hook OnPlayerDisconnectEx(playerid) {
@@ -52,6 +54,7 @@ hook OnPlayerDisconnectEx(playerid) {
         VehicleData[GetPlayerVehicleID(playerid)][vFuel] = 10.0;
         SetVehicleToRespawn(GetPlayerVehicleID(playerid));
         OnMower[playerid] = false;
+        MowerWarn[playerid] = 0;
     }
 }
 
@@ -59,6 +62,67 @@ hook OnPlayerEnterCheckpoint(playerid) {
     if(IsPlayerConnected(playerid) && OnMower[playerid] && IsMowerVehicle(GetPlayerVehicleID(playerid))) {
         SetMowerCheckpoint(playerid);
     }
+}
+
+hook OnVehDmgStatusUpdate(vehicleid, playerid) {
+
+    if (OnMower[playerid] && IsMowerVehicle(GetPlayerVehicleID(playerid))) {
+
+        SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Hati-hati kamu bisa gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena kendaraan lecet!");
+        if (++MowerWarn[playerid] >= 3) {
+
+            SetVehicleToRespawn(vehicleid);
+            VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
+            SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena kendaraan lecet!");
+            OnMower[playerid] = false;
+            MowerIndex[playerid] = 0;
+            MowerWarn[playerid] = 0;
+            DisablePlayerCheckpoint(playerid);
+        }            
+    }
+}
+
+hook OnPlayerStateChange(playerid, newstate, oldstate) {
+
+    if (oldstate == PLAYER_STATE_DRIVER) {
+
+		new vehicleid = PlayerData[playerid][pLastVehicleID];
+		if(OnMower[playerid] && IsMowerVehicle(vehicleid))
+		{
+			SetVehicleToRespawn(vehicleid);
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena mencoba keluar dari kendaraan!");
+			OnMower[playerid] = false;
+			MowerIndex[playerid] = 0;
+            MowerWarn[playerid] = 0;
+			DisablePlayerCheckpoint(playerid);
+		}
+    }
+    else if (newstate == PLAYER_STATE_DRIVER) {
+
+	    new vehicleid = GetPlayerVehicleID(playerid);
+		if(IsMowerVehicle(vehicleid))
+		{
+			if(!OnMower[playerid])
+			{	
+
+				if(PlayerData[playerid][pMasked])
+					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
+
+				if(PlayerData[playerid][pMowerDelay] > 0)
+					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pMowerDelay]/60), RemovePlayerFromVehicle(playerid);
+
+
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
+					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
+
+				ShowPlayerDialog(playerid, DIALOG_MOWER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Mower Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
+			}
+		}		
+    }
+    return 1;
 }
 
 SetMowerCheckpoint(playerid) {
@@ -69,6 +133,7 @@ SetMowerCheckpoint(playerid) {
 
 		OnMower[playerid] = false;
 		MowerIndex[playerid] = 0;
+        MowerWarn[playerid] = 0;
 		SetVehicleToRespawn(vid);
 		VehicleData[vid][vFuel] = 10.0;
 		GiveMoney(playerid, salaryMower, "Mower");

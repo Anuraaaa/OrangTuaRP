@@ -1,5 +1,7 @@
 #include <YSI_Coding\y_hooks>
 
+new WarnSweeper[MAX_PLAYERS] = {0, ...};
+
 IsSweeperVehicle(vehicleid)
 {
 	forex(i, sizeof(SweeperVehicle))
@@ -62,6 +64,10 @@ SetSweeperPoint(playerid) {
 	return 1;
 }
 
+hook OnPlayerConnect(playerid) {
+	WarnSweeper[playerid] = 0;
+}
+
 hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 {
 	if(!ispassenger && IsSweeperVehicle(vehicleid) && GetVehicleDriver(vehicleid) != INVALID_PLAYER_ID && OnSweeping[GetVehicleDriver(vehicleid)]) {
@@ -69,4 +75,63 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 		FreezePlayer(playerid, 2000);
 		SendErrorMessage(playerid, "Dilarang melakukan car-jacking ke pengendara sweeper!");
 	}
+}
+
+hook OnVehDmgStatusUpdate(vehicleid, playerid) {
+
+	if (OnSweeping[playerid] && IsSweeperVehicle(GetPlayerVehicleID(playerid))) {
+
+		SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Hati-hati kamu bisa gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena kendaraan lecet!");
+		if (++WarnSweeper[playerid] >= 3) {
+
+			SetVehicleToRespawn(vehicleid);
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena kendaraan lecet!");
+			OnSweeping[playerid] = false;
+			WarnSweeper[playerid] = 0;
+			SweeperIndex[playerid] = 0;
+			DisablePlayerCheckpoint(playerid);
+		}
+	}
+}
+
+hook OnPlayerStateChange(playerid, newstate, oldstate) {
+
+	if (oldstate == PLAYER_STATE_DRIVER) {
+
+		new vehicleid = PlayerData[playerid][pLastVehicleID];
+		if(OnSweeping[playerid] && IsSweeperVehicle(vehicleid))
+		{
+			SetVehicleToRespawn(vehicleid);
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena mencoba keluar dari kendaraan!");
+			OnSweeping[playerid] = false;
+			WarnSweeper[playerid] = 0;
+			SweeperIndex[playerid] = 0;
+			DisablePlayerCheckpoint(playerid);
+		}
+	}	
+	else if (newstate == PLAYER_STATE_DRIVER) {
+
+	    new vehicleid = GetPlayerVehicleID(playerid);
+		if(IsSweeperVehicle(vehicleid))
+		{
+			if(!OnSweeping[playerid])
+			{	
+				if(PlayerData[playerid][pMasked])
+					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
+
+				if(PlayerData[playerid][pSweeperDelay] > 0)
+					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pSweeperDelay]/60), RemovePlayerFromVehicle(playerid);
+
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
+					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
+
+				ShowPlayerDialog(playerid, DIALOG_SWEEPER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Sweeper Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
+			}
+		}		
+	}
+	return 1;
 }

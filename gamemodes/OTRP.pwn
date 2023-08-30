@@ -1152,52 +1152,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 {
 	if(oldstate == PLAYER_STATE_DRIVER)
 	{
-		if(IsValidDynamicMapIcon(FactoryIcons[playerid]))
-		{
-			DestroyDynamicMapIcon(FactoryIcons[playerid]);
-			FactoryIcons[playerid] = -1;
-		}		
-				
-		for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
-		{
-			DestroyDynamicMapIcon(TrashIcons[playerid][i]);
-			TrashIcons[playerid][i] = STREAMER_TAG_MAP_ICON:INVALID_STREAMER_ID;
-		}
-
-		TogglePlayerDynamicCP(playerid, FactoryCP, 0);
-
-		PlayerTextDrawHide(playerid, CapacityText[playerid]);
-		HidePlayerProgressBar(playerid, CapacityBar[playerid]);
-
-		Trash_ResetPlayer(playerid);
 		new vehicleid = PlayerData[playerid][pLastVehicleID];
-		if(OnMower[playerid] && IsMowerVehicle(vehicleid))
-		{
-			SetVehicleToRespawn(vehicleid);
-			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
-			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Mower {FFFFFF}karena mencoba keluar dari kendaraan!");
-			OnMower[playerid] = false;
-			MowerIndex[playerid] = 0;
-			DisablePlayerCheckpoint(playerid);
-		}
-
-		if(OnSweeping[playerid] && IsSweeperVehicle(vehicleid))
-		{
-			SetVehicleToRespawn(vehicleid);
-			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));
-			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Street Sweeper {FFFFFF}karena mencoba keluar dari kendaraan!");
-			OnSweeping[playerid] = false;
-			SweeperIndex[playerid] = 0;
-			DisablePlayerCheckpoint(playerid);
-		}
-		if(IsPlayerWorkInBus(playerid) && (IsBusVehicle(vehicleid) || IsBus2Vehicle(vehicleid)))
-		{
-			RespawnPlayerBusVehicle(playerid);
-			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena mencoba keluar dari kendaraan!");
-			OnBus[playerid] = false;
-			BusIndex[playerid] = 0;
-			DisablePlayerRaceCheckpoint(playerid);
-		}
 		if(PlayerData[playerid][pOnDMV] && vehicleid == PlayerData[playerid][pVehicleDMV])
 		{
 			PlayerData[playerid][pOnDMV] = false;
@@ -1246,91 +1201,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		if(Iter_Contains(Vehicle, vehicleid) && Vehicle_GetType(vehicleid) == VEHICLE_TYPE_PLAYER && VehicleData[vehicleid][vTireLock]) {
 			RemovePlayerFromVehicle(playerid);
 			SendErrorMessage(playerid, "Kendaraan ini sedang di tire-locked!");
-		}
-		if(IsSweeperVehicle(vehicleid))
-		{
-			if(!OnSweeping[playerid])
-			{	
-				if(PlayerData[playerid][pMasked])
-					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
-
-				if(PlayerData[playerid][pSweeperDelay] > 0)
-					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pSweeperDelay]/60), RemovePlayerFromVehicle(playerid);
-
-				if(IsHungerOrThirst(playerid)) {
-					RemovePlayerFromVehicle(playerid);
-					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
-				}
-
-				ShowPlayerDialog(playerid, DIALOG_SWEEPER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Sweeper Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
-			}
-		}		
-		if(IsMowerVehicle(vehicleid))
-		{
-			if(!OnMower[playerid])
-			{	
-
-				if(PlayerData[playerid][pMasked])
-					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
-
-				if(PlayerData[playerid][pMowerDelay] > 0)
-					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pMowerDelay]/60), RemovePlayerFromVehicle(playerid);
-
-
-				if(IsHungerOrThirst(playerid)) {
-					RemovePlayerFromVehicle(playerid);
-					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
-				}
-
-				ShowPlayerDialog(playerid, DIALOG_MOWER, DIALOG_STYLE_MSGBOX, "{FFFFFF}Mower Sidejob", "{FFFFFF}Pekerjaan ini mengharuskan kamu untuk mengikuti semua petunjuk(Checkpoint)\nSelalu gunakan RP Drive & jangan abuse kendaraan jika tidak ingin\nDi beri punishment oleh {FF0000}Administrator","Start", "Cancel");
-			}
-		}		
-		if(IsTrashmasterVehicle(vehicleid))
-		{
-			if(OnTrash[playerid] < 1)
-			{
-				if(PlayerData[playerid][pMasked])
-					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
-
-				if(PlayerData[playerid][pTrashmasterDelay] > 0)
-					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pTrashmasterDelay]/60), RemovePlayerFromVehicle(playerid);
-
-				if(IsHungerOrThirst(playerid)) {
-					RemovePlayerFromVehicle(playerid);
-					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
-				}
-
-				ShowPlayerDialog(playerid, DIALOG_TRASH, DIALOG_STYLE_MSGBOX, "Trashmaster Sidejob", "Pekerjaan ini mengharuskan kamu untuk mengambil sampah dan mengirimnya ke pengelolahan sampah kota!", "Start", "Cancel");
-			}
-		}
-	    if(IsTrashmasterVehicle(vehicleid) && OnTrash[playerid] > 0)
-	    {
-		    if(LoadedTrash[vehicleid] > 9)
-		    {
-				SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat menjual semua kantong sampah pada tanda truk di-peta.");
-				
-				for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
-				{
-					DestroyDynamicMapIcon(TrashIcons[playerid][i]);
-					TrashIcons[playerid][i] = -1;
-				}
-
-				FactoryIcons[playerid] = CreateDynamicMapIcon(-1864.8846, -1668.9028, 22.3015 + 0.5, 51, 0, _, _, playerid, 8000.0, MAPICON_GLOBAL);
-				TogglePlayerDynamicCP(playerid, FactoryCP, 1);
-				OnTrash[playerid] = 2;
-		    }
-		    else
-		    {
-		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat mengumpulkan kantong sampah lalu menjualnya ke pabrik daur ulang.");
-		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Cari tempat sampah lalu ambil kantong sampah dengan "YELLOW"/pickup");
-		    	
-				for(new i = 0; i < MAX_TRASH; i++) if(TrashData[i][TrashExists] && TrashData[i][TrashLevel] > 0)
-				{					
-					TrashIcons[playerid][i] = CreateDynamicMapIcon(TrashData[i][TrashX], TrashData[i][TrashY], TrashData[i][TrashZ] + 0.5, 56, 0, _, _, playerid, 8000.0, MAPICON_GLOBAL);
-				}	
-			}
-						
-			Trash_ShowCapacity(playerid);
 		}
 		if(Vehicle_GetType(vehicleid) == VEHICLE_TYPE_FACTION && VehicleData[vehicleid][vFactionType] != GetFactionType(playerid)) {
 			if(PlayerData[playerid][pAdmin] && PlayerData[playerid][pAduty]) {
@@ -7171,11 +7041,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if (!sscanf(inputtext, "'Paintjob ID:'i", paintjobid)) {
 				ChangeVehiclePaintjob(vehicleid, paintjobid);
 				VehicleData[vehicleid][vPaintjob] = paintjobid;
-				SendServerMessage(playerid, "Kamu berhasil menginstall "GREEN"Paintjob ID %d"WHITE" pada kendaraan "YELLOW"%s.", paintjob, GetVehicleName(vehicleid));
+				SendServerMessage(playerid, "Kamu berhasil menginstall "GREEN"Paintjob ID %d"WHITE" pada kendaraan "YELLOW"%s.", paintjobid, GetVehicleName(vehicleid));
 			}
 			else {
 				ChangeVehiclePaintjob(vehicleid, 3);
-				SendServerMessage(playerid, "Kamu berhasil melepas paintjob pada kendaraan "YELLOW"%s.", paintjob, GetVehicleName(vehicleid));
+				SendServerMessage(playerid, "Kamu berhasil melepas paintjob pada kendaraan "YELLOW"%s.", GetVehicleName(vehicleid));
 				VehicleData[vehicleid][vPaintjob] = -1;
 			}
 

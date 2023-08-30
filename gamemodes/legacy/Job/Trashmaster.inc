@@ -9,7 +9,8 @@ new Text3D: FactoryLabel,
 	FactoryCurrent,
 	FactoryCP,
 	FactoryIcons[MAX_PLAYERS],
-	TrashIcons[MAX_PLAYERS][MAX_TRASH];
+	TrashIcons[MAX_PLAYERS][MAX_TRASH],
+	WarnTrashmaster[MAX_PLAYERS] = {0, ...};
 
 enum E_TRASH_DATA
 {
@@ -277,6 +278,7 @@ Trash_ResetPlayer(playerid, removeUI = 0)
 		DestroyDynamicCP(TrashCP[playerid]);
 
 	HasTrash[playerid] = false;
+	WarnTrashmaster[playerid] = 0;
 	TrashCP[playerid] = -1;
 
 	if(removeUI)
@@ -491,6 +493,10 @@ hook OnGameModeInit() {
 	}
 }
 
+hook OnPlayerConnect(playerid) {
+	WarnTrashmaster[playerid] = 0;
+}
+
 hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	if((newkeys & KEY_NO) && HasTrash[playerid])
 	{
@@ -498,4 +504,98 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 		SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu telah membuang kantung sampah.");
 	}
 	return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
+hook OnVehDmgStatusUpdate(vehicleid, playerid) {
+
+	if (OnTrash[playerid] > 0 && IsTrashmasterVehicle(GetPlayerVehicleID(playerid))) {
+
+		SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Hati-hati kamu bisa gagal bekerja sebagai {FFFF00}Trashmaster {FFFFFF}karena kendaraan lecet!");
+
+		if (++WarnTrashmaster[playerid] >= 3) {
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Trashmaster {FFFFFF}karena kendaraan lecet!");
+			Trash_ResetPlayer(playerid);		
+		}
+	}
+}
+
+hook OnPlayerStateChange(playerid, newstate, oldstate) {
+
+	if (oldstate == PLAYER_STATE_DRIVER) {
+
+		if (OnTrash[playerid] > 0) {
+
+			if(IsValidDynamicMapIcon(FactoryIcons[playerid]))
+			{
+				DestroyDynamicMapIcon(FactoryIcons[playerid]);
+				FactoryIcons[playerid] = -1;
+			}		
+					
+			for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
+			{
+				DestroyDynamicMapIcon(TrashIcons[playerid][i]);
+				TrashIcons[playerid][i] = STREAMER_TAG_MAP_ICON:INVALID_STREAMER_ID;
+			}
+
+			TogglePlayerDynamicCP(playerid, FactoryCP, 0);
+
+			PlayerTextDrawHide(playerid, CapacityText[playerid]);
+			HidePlayerProgressBar(playerid, CapacityBar[playerid]);
+
+			Trash_ResetPlayer(playerid);		
+		}
+	}
+	else if (newstate == PLAYER_STATE_DRIVER) {
+
+		new vehicleid = GetPlayerVehicleID(playerid);
+
+		if(IsTrashmasterVehicle(vehicleid))
+		{
+			if(OnTrash[playerid] < 1)
+			{
+				if(PlayerData[playerid][pMasked])
+					return SendErrorMessage(playerid, "Buka maskermu terlebih dahulu!"), RemovePlayerFromVehicle(playerid);
+
+				if(PlayerData[playerid][pTrashmasterDelay] > 0)
+					return SendErrorMessage(playerid, "Kamu harus menunggu %d menit sebelum bekerja kembali!", PlayerData[playerid][pTrashmasterDelay]/60), RemovePlayerFromVehicle(playerid);
+
+				if(IsHungerOrThirst(playerid)) {
+					RemovePlayerFromVehicle(playerid);
+					return SendErrorMessage(playerid, "Kamu terlalu lelah untuk bekerja.");
+				}
+
+				ShowPlayerDialog(playerid, DIALOG_TRASH, DIALOG_STYLE_MSGBOX, "Trashmaster Sidejob", "Pekerjaan ini mengharuskan kamu untuk mengambil sampah dan mengirimnya ke pengelolahan sampah kota!", "Start", "Cancel");
+			}
+		}
+	    if(IsTrashmasterVehicle(vehicleid) && OnTrash[playerid] > 0)
+	    {
+		    if(LoadedTrash[vehicleid] > 9)
+		    {
+				SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat menjual semua kantong sampah pada tanda truk di-peta.");
+				
+				for(new i = 0; i < MAX_TRASH; i++) if(IsValidDynamicMapIcon(TrashIcons[playerid][i]))
+				{
+					DestroyDynamicMapIcon(TrashIcons[playerid][i]);
+					TrashIcons[playerid][i] = -1;
+				}
+
+				FactoryIcons[playerid] = CreateDynamicMapIcon(-1864.8846, -1668.9028, 22.3015 + 0.5, 51, 0, _, _, playerid, 8000.0, MAPICON_GLOBAL);
+				TogglePlayerDynamicCP(playerid, FactoryCP, 1);
+				OnTrash[playerid] = 2;
+		    }
+		    else
+		    {
+		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Kamu dapat mengumpulkan kantong sampah lalu menjualnya ke pabrik daur ulang.");
+		        SendClientMessage(playerid, COLOR_JOB, "(Trashmaster) {FFFFFF}Cari tempat sampah lalu ambil kantong sampah dengan "YELLOW"/pickup");
+		    	
+				for(new i = 0; i < MAX_TRASH; i++) if(TrashData[i][TrashExists] && TrashData[i][TrashLevel] > 0)
+				{					
+					TrashIcons[playerid][i] = CreateDynamicMapIcon(TrashData[i][TrashX], TrashData[i][TrashY], TrashData[i][TrashZ] + 0.5, 56, 0, _, _, playerid, 8000.0, MAPICON_GLOBAL);
+				}	
+			}
+						
+			Trash_ShowCapacity(playerid);
+		}
+	}
+	return 1;
 }

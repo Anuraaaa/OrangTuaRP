@@ -10,7 +10,8 @@ new
 	busRoute[MAX_PLAYERS] = {0, ...},
 	busCounter[MAX_PLAYERS] = {0, ...},
 	currentBRoute[MAX_PLAYERS] = {0, ...},
-	busSelect[MAX_PLAYERS] = {0, ...};
+	busSelect[MAX_PLAYERS] = {0, ...},
+	busWarn[MAX_PLAYERS] = {0, ...};
 
 enum array_busRoute
 {
@@ -146,8 +147,8 @@ hook OnPlayerConnect(playerid)
 	busRoute[playerid] = 0;
 	busCounter[playerid] = 0;
 	currentBRoute[playerid] = 0;
-    PlayerData[playerid][pLastVehicleID] = INVALID_VEHICLE_ID;
 	busSelect[playerid] = 0;
+	busWarn[playerid] = 0;
 }
 
 hook OnPlayerDisconnectEx(playerid, reason)
@@ -157,8 +158,6 @@ hook OnPlayerDisconnectEx(playerid, reason)
 		DisablePlayerRaceCheckpoint(playerid);
 
 		SetVehicleToRespawn(GetPlayerVehicleID(playerid));
-
-		PlayerData[playerid][pLastVehicleID] = INVALID_VEHICLE_ID;
 
 	}
 }
@@ -172,9 +171,47 @@ hook OnPlayerEnterVehicle(playerid, vehicleid, ispassenger) {
 	}
 }
 
+hook OnVehDmgStatusUpdate(vehicleid, playerid) 
+{
+	if(IsPlayerWorkInBus(playerid) && (IsBusVehicle(GetPlayerVehicleID(playerid)) || IsBus2Vehicle(GetPlayerVehicleID(playerid))))
+	{
+		SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Hati-hati kamu bisa gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena kendaraan lecet!");
+		if (++busWarn[playerid] >= 3) {
+
+			RepairVehicle(vehicleid);
+			VehicleData[vehicleid][vFuel] = GetVehicleFuelMax(GetVehicleModel(vehicleid));				
+			SetVehicleToRespawn(vehicleid);
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena kendaraan lecet!");
+			currentBRoute[playerid] = 0;
+			StopPlayerWorkInBus(playerid);
+			OnBus[playerid] = false;
+			BusIndex[playerid] = 0;
+			busWarn[playerid] = 0;
+			DisablePlayerRaceCheckpoint(playerid);
+		}
+	}	
+}
+
 hook OnPlayerStateChange(playerid, newstate, oldstate)
 {
-    if(newstate == PLAYER_STATE_DRIVER && (IsBusVehicle(GetPlayerVehicleID(playerid)) || IsBus2Vehicle(GetPlayerVehicleID(playerid))))
+	if (oldstate == PLAYER_STATE_DRIVER) {
+
+		new vehicleid = PlayerData[playerid][pLastVehicleID];
+		if(IsPlayerWorkInBus(playerid) && (IsBusVehicle(vehicleid) || IsBus2Vehicle(vehicleid)))
+		{
+			RepairVehicle(GetPlayerVehicleID(playerid));
+			VehicleData[GetPlayerVehicleID(playerid)][vFuel] = GetVehicleFuelMax(GetVehicleModel(GetPlayerVehicleID(playerid)));				
+			SetVehicleToRespawn(GetPlayerVehicleID(playerid));
+			SendClientMessage(playerid, COLOR_SERVER, "(Sidejob) {FFFFFF}Kamu gagal bekerja sebagai {FFFF00}Bus Driver {FFFFFF}karena mencoba keluar dari kendaraan!");
+			currentBRoute[playerid] = 0;
+			StopPlayerWorkInBus(playerid);
+			OnBus[playerid] = false;
+			BusIndex[playerid] = 0;
+			busWarn[playerid] = 0;
+			DisablePlayerRaceCheckpoint(playerid);
+		}
+	}
+    else if(newstate == PLAYER_STATE_DRIVER && (IsBusVehicle(GetPlayerVehicleID(playerid)) || IsBus2Vehicle(GetPlayerVehicleID(playerid))))
     {
 		if(IsHungerOrThirst(playerid)) {
 			RemovePlayerFromVehicle(playerid);
@@ -285,7 +322,6 @@ RespawnPlayerBusVehicle(playerid)
 
     DisablePlayerRaceCheckpoint(playerid);
     StopPlayerWorkInBus(playerid);
-    PlayerData[playerid][pLastVehicleID] = INVALID_VEHICLE_ID;
     return 1;
 }
 
@@ -345,7 +381,6 @@ hook OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]) {
 		SetPlayerWorkInBus(playerid);
 
 		SetBusCheckpoint(playerid, 0);
-		PlayerData[playerid][pLastVehicleID] = vehicleid;
 		OnBus[playerid] = true;
 
 		SwitchVehicleEngine(vehicleid,true);
