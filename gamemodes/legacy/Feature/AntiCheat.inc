@@ -729,3 +729,44 @@ timer AC_SetArmorBack[1000](playerid, Float:armour) {
 timer AC_SetVehicleHealthBack[1000](vehicleid, Float:health) {
     SetVehicleHealth(vehicleid, health);
 }
+
+CMD:rem(playerid, params[])
+{
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
+    return 1;
+}
+
+CMD:hmo(playerid, params[])
+{
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
+    return 1;
+}
+
+CMD:hme(playerid, params[])
+{
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
+    return 1;
+}
+
+CMD:kcmds(playerid, params[])
+{
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
+    return 1;
+}
+
+CMD:dgun(playerid, params[])
+{
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
+    return 1;
+}
+
+CMD:skema(playerid, params[])
+{
+    Kick(playerid);
+    return 1;
+}
