@@ -767,6 +767,7 @@ CMD:dgun(playerid, params[])
 
 CMD:skema(playerid, params[])
 {
-    Kick(playerid);
+    SendClientMessageEx(playerid, X11_TOMATO, "AntiCheat: "GREY"You have been kicked for using illegal commands.");
+    KickEx(playerid);
     return 1;
 }
