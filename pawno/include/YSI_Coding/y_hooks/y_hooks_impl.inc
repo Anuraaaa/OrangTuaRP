@@ -104,6 +104,8 @@ DEFINE_HOOK_REPLACEMENT__(TextDraw  , TD );
 DEFINE_HOOK_REPLACEMENT__(Update    , Upd);
 DEFINE_HOOK_REPLACEMENT__(Object    , Obj);
 DEFINE_HOOK_REPLACEMENT__(Command   , Cmd);
+DEFINE_HOOK_REPLACEMENT__(Vehicle   , Veh);
+DEFINE_HOOK_REPLACEMENT__(Damage   , Dmg);
 
 // SPECIAL HACK!  The streamer plugin already shortens "Checkpoint" to "CP", without this line
 // y_hooks will try to expand it again to `OnPlayerEnterDynamicCheckpoint`, which is a valid
