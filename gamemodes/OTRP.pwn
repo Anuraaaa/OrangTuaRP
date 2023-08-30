@@ -7146,6 +7146,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			
 		if (!sscanf(inputtext, "i", componentid)) {
 			AddVehicleComponent(vehicleid, componentid);
+			SendServerMessage(playerid, "Kamu berhasil menginstall "GREEN"Bodypart %s"WHITE" pada kendaraan "YELLOW"%s.", GetVehObjectNameByModel(componentid), GetVehicleName(vehicleid));
 		}
 		
 		switch (componentid)
@@ -7155,8 +7156,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		SaveVehicleComponent(vehicleid, componentid);
 		PlayerPlaySound(playerid,1133,0.0,0.0,0.0);
 
-		if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-			Inventory_Remove(playerid, "Component", 50);
+		Inventory_Remove(playerid, "Component", 50);
 
 		ShowMechanicMenuInfo(playerid);
 	}
@@ -7171,14 +7171,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if (!sscanf(inputtext, "'Paintjob ID:'i", paintjobid)) {
 				ChangeVehiclePaintjob(vehicleid, paintjobid);
 				VehicleData[vehicleid][vPaintjob] = paintjobid;
+				SendServerMessage(playerid, "Kamu berhasil menginstall "GREEN"Paintjob ID %d"WHITE" pada kendaraan "YELLOW"%s.", paintjob, GetVehicleName(vehicleid));
 			}
 			else {
 				ChangeVehiclePaintjob(vehicleid, 3);
+				SendServerMessage(playerid, "Kamu berhasil melepas paintjob pada kendaraan "YELLOW"%s.", paintjob, GetVehicleName(vehicleid));
 				VehicleData[vehicleid][vPaintjob] = -1;
 			}
 
-			if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-				Inventory_Remove(playerid, "Component", 30);
+			Inventory_Remove(playerid, "Component", 30);
 
 			PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
 			ShowMechanicMenuInfo(playerid);
@@ -7202,8 +7203,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(PlayerData[playerid][pMechPrice][0] < 1)
 				    return SendErrorMessage(playerid, "This Vehicle doesn't need to repaired!");
 				    
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][0]);
+				Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][0]);
 
 		        SetTimerEx("TimeRepairEngine", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Engine", 1000);
@@ -7218,8 +7218,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(VehicleData[vehicleid][vRepair])
 		            return SendErrorMessage(playerid, "This vehicle is being repaired!");
 		            
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][1]);
+				Inventory_Remove(playerid, "Component", PlayerData[playerid][pMechPrice][1]);
 		        
 				SetTimerEx("TimeRepairBody", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Body", 1000);
@@ -7234,8 +7233,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        if(VehicleData[vehicleid][vRepair])
 		            return SendErrorMessage(playerid, "This vehicle is being repaired!");
 		            
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 15);
+				Inventory_Remove(playerid, "Component", 15);
 
 		        SetTimerEx("TimeRepairTire", 10000, false, "dd", playerid, vehicleid);
 		        StartPlayerLoadingBar(playerid, 10, "Repairing_Tires", 1000);
@@ -7343,8 +7341,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
 				SendServerMessage(playerid, "Kamu berhasil menginstall nitro pada kendaraan %s.", GetVehicleName(vehicleid));
 				
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 150);
+				Inventory_Remove(playerid, "Component", 150);
 
 				ShowMechanicMenuInfo(playerid);
 			}
@@ -7516,8 +7513,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				Vehicle_SetNeon(vehicleid, true, VehicleData[vehicleid][vNeonColor], 2);
 				SendServerMessage(playerid, "Neon berhasil dipasang pada kendaraan %s.", GetVehicleName(vehicleid));
 
-				if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-					Inventory_Remove(playerid, "Component", 200);
+				Inventory_Remove(playerid, "Component", 200);
 
 				Streamer_Update(playerid, STREAMER_TYPE_OBJECT);
 
@@ -7554,8 +7550,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		SendServerMessage(playerid, "Berhasil mengubah rims kendaraan %s menjadi "YELLOW"%s", GetVehicleName(vehicleid), g_WheelData[listitem][wheelName]);
 		
-		if(PlayerData[playerid][pAdmin] <  6 && !PlayerData[playerid][pAduty])
-			Inventory_Remove(playerid, "Component", 100);
+		Inventory_Remove(playerid, "Component", 100);
 	    
 		ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
 	    PlayerPlaySound(playerid, 1133, 0.0,0.0,0.0);
